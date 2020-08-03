@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+</head>
+<body>
+	<div>
+		<a href="/kakao/login"><img
+			src="./images/kakao_login_medium_narrow.png"></a> <img
+			src="./images/kakao_login_medium_narrow.png"
+			onclick="popupKakaoLogin()">
+		<script>
+			function popupKakaoLogin() {
+				window.open('${loginUrl}', 'popupKakaoLogin')
+			}
+		</script>
+		<iframe src='https://tv.naver.com/embed/14982924?autoPlay=true'
+			frameborder='no' scrolling='no' marginwidth='0' marginheight='0'
+			WIDTH='544' HEIGHT='306' allow='autoplay' allowfullscreen></iframe>
+		<iframe src='https://tv.naver.com/embed/14957731?autoPlay=false'
+			frameborder='no' scrolling='no' marginwidth='0' marginheight='0'
+			WIDTH='544' HEIGHT='306' allow='autoplay' allowfullscreen></iframe>
+		<div>
+			<a href="/search/naver/임영웅" name="임영웅">임영웅</a> <a
+				href="/search/naver/송가인" name="송가인">송가인</a>
+		</div>
+		<div>
+			<a href="/search/naver/news/임영웅" name="임영웅">임영웅뉴스</a> 
+			<a href="http://localhost:8081/" >http://localhost:8081/</a>
+		</div>
+	</div>
+</body>
+</html>

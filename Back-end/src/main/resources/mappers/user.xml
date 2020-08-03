@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 	
+		 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.web.curation.dao.UserDao">
+	
+ 	<insert id="join" parameterType="com.web.curation.dto.UserDto">
+ 		insert into UserInfo(u_email,u_pw,u_name) 
+ 		values(#{u_email},#{u_pw},#{u_name});
+ 	</insert>
+ 		<!-- insert into UserInfo(u_email,u_pw,u_pw2,u_name) 
+ 		values(#{u_email},#{u_pw},#{u_pw2},#{u_name}); -->
+ 	
+ 	<select id="getUserInfoSuc" parameterType="String" resultType="com.web.curation.dto.UserDto">
+ 		select u_email, u_pw, u_name from UserInfo
+ 		where u_email = #{email};
+ 	</select>
+ 	
+ 	
+ 	<!-- 회원정보 수정 -->
+ 	<update id="edit">
+ 		
+ 	</update>
+ 	
+ 	<!-- 회원탈퇴 -->
+ 	<delete id="delete">
+ 		
+ 	</delete>
+ 	
+ 	<!-- 비밀번호 찾기 -->
+ 	<select id="findpassword" resultType="String">
+ 		select u_pw 
+ 		from UserInfo
+ 		where 1=1
+ 		and u_email = #{email}
+ 	</select>
+ 	
+ 	<!-- 비밀번호 변경 -->
+ 	<update id="changepassword">
+ 		update UserInfo set u_pw = #{u_pw},u_pw2 = #{u_pw}
+ 		where 1=1
+ 		and u_email = #{u_email} 
+ 	</update>
+ </mapper>
+        
