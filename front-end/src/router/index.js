@@ -10,7 +10,10 @@ import ErrorView from '@/views/ErrorView.vue'
 
 import Login from '../views/accounts/Login.vue'
 import Signup from '../views/accounts/Signup.vue'
-import CommunityView from '../views/community/CommunityView.vue'
+import CommunityIndexView from '../views/community/CommunityIndexView.vue'
+import CommunityDetailView from '../views/community/CommunityDetailView.vue'
+import CommunityCreateView from '../views/community/CommunityCreateView.vue'
+import CommunityUpdateView from '../views/community/CommunityUpdateView.vue'
 import VoteView from '../views/vote/VoteView.vue'
 import SingerDetailView from '../views/main/SingerDetailView.vue'
 import UserDetailView from '../views/accounts/UserDetailView.vue'
@@ -27,7 +30,7 @@ Vue.use(VueRouter)
   },
   {
     // path: '/article/:articleId',
-    path: '/article',
+    path: '/article/:articleId',
     name: 'ArticleDetailView',
     component: ArticleDetailView
   },
@@ -49,8 +52,23 @@ Vue.use(VueRouter)
   },
   {
     path: '/community',
-    name: 'CommunityView',
-    component: CommunityView
+    name: 'CommunityIndexView',
+    component: CommunityIndexView
+  },
+  {
+    path: '/community/:communityId',
+    name: 'CommunityDetailView',
+    component: CommunityDetailView
+  },
+  {
+    path: '/create/community',
+    name: 'CommunityCreateView',
+    component: CommunityCreateView
+  },
+  {
+    path: '/update/:communityId',
+    name: 'CommunityUpdateView',
+    component: CommunityUpdateView
   },
   {
     path: '/vote',
