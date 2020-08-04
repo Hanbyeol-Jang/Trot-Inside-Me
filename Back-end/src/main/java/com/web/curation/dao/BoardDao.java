@@ -16,9 +16,11 @@ public interface BoardDao {
 
 	int followDelete(String userid);
 
-	int goodClick(int boardIdx);
+	/* 좋아요 클릭 */
+	int goodClick(BoardPK boardPK);
 
-	int goodClickCancel(int b_idx);
+	/* 좋아요 취소 */
+	int goodClickCancel(BoardPK boardPK);
 
 	/* 좋아요 수 표시 */
 	int goodCount(BoardPK boardPK);

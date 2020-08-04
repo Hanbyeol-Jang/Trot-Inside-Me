@@ -14,14 +14,18 @@ public interface BoardService {
 
 	boolean followDelete(String string);
 
-	boolean goodClick(int b_idx);
+	/* 좋아요 클릭 */
+	boolean goodClick(BoardPK boardPK);
+	
+	/* 좋아요 취소 */
+	boolean goodClickCancel(BoardPK boardPK);
 
 	/* 좋아요 수 표시 */
 	int goodCount(BoardPK boardPK);
 
 	boolean goodAuserConnect(int b_idx, String userEmail);
 
-	boolean goodClickCancel(int b_idx);
+
 
 	boolean goodAuserConnectDelete(int b_idx, String userEmail);
 

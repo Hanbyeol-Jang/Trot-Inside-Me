@@ -30,8 +30,13 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public boolean goodClick(int boardIdx) {
-		return dao.goodClick(boardIdx) == 1;
+	public boolean goodClick(BoardPK boardPK) {
+		return dao.goodClick(boardPK) == 1;
+	}
+
+	@Override
+	public boolean goodClickCancel(BoardPK boardPK) {
+		return dao.goodClickCancel(boardPK) == 1;
 	}
 
 	@Override
@@ -45,11 +50,6 @@ public class BoardServiceImpl implements BoardService {
 		map.put("b_idx", b_idx);
 		map.put("userEmail", userEmail);
 		return dao.goodAuserConnect(map) == 1;
-	}
-
-	@Override
-	public boolean goodClickCancel(int b_idx) {
-		return dao.goodClickCancel(b_idx) == 1;
 	}
 
 	@Override

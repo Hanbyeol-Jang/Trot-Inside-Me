@@ -33,8 +33,13 @@ public class BoardDaoImpl implements BoardDao {
 	}
 
 	@Override
-	public int goodClick(int boardIdx) {
-		return session.update(ns + "goodClick", boardIdx);
+	public int goodClick(BoardPK boardPK) {
+		return session.update(ns + "goodClick", boardPK);
+	}
+
+	@Override
+	public int goodClickCancel(BoardPK boardPK) {
+		return session.delete(ns + "goodClickCancel", boardPK);
 	}
 
 	@Override
@@ -45,11 +50,6 @@ public class BoardDaoImpl implements BoardDao {
 	@Override
 	public int goodAuserConnect(HashMap<String, Object> map) {
 		return session.insert(ns + "goodAuserConnect", map);
-	}
-
-	@Override
-	public int goodClickCancel(int b_idx) {
-		return session.update(ns + "goodClickCancel", b_idx);
 	}
 
 	@Override

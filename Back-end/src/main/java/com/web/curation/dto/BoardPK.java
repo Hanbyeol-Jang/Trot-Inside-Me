@@ -6,4 +6,5 @@ import lombok.Data;
 public class BoardPK {
 	private int b_type;
 	private int b_idx;
+	private String u_email;
 }

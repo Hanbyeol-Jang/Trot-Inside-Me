@@ -4,21 +4,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.web.curation.dao.BoardDao">
 	<!-- 게시물 좋아요 클릭 -->
-	<update id="goodClick" parameterType="int"> 
+	<insert id="goodClick">
 		insert into Good(b_type, b_idx, u_email)
 		value(#{b_type}, #{b_idx}, #{u_email});
-
-		update Board
-		set b_good=b_good+1
-		where b_idx=#{boardIdx};
-	</update>
+	</insert>
 	
 	<!-- 게시물 좋아요 클릭취소 -->
-	<update id="goodClickCancel" parameterType="int">
-		update Board
-		set b_good=b_good-1
-		where b_idx=#{boardIdx};
-	</update>
+	<delete id="goodClickCancel">
+		delete	from Good
+		where 	b_type = #{b_type} AND
+				b_idx = #{b_idx} AND 
+				u_email = #{u_email};
+	</delete>
 
 	<!-- 좋아요 연결 => 게시물 번호와 유저  -->
 	<insert id="goodAuserConnect" parameterType="hashmap"> 
