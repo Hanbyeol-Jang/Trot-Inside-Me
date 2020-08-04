@@ -1,8 +1,11 @@
 package com.web.curation.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,8 +38,7 @@ public class BroadCastingSchedule {
 	@Autowired
 	TimeService service;
 
-	@Scheduled(cron = "50 05 22 * * ?")
-//	@Scheduled(cron = "0 0 0 * * ?")
+	@Scheduled(cron = "0 0 0 * * ?")
 	public void insertTodaySchedule() throws Exception {
 		service.deleteYesterDaySchedule();
 
@@ -74,7 +76,7 @@ public class BroadCastingSchedule {
 
 	// 하루에 한번 스케쥴 넣기
 //	@Scheduled(cron = "0 0 0 * * ?")
-	@Scheduled(cron = "50 05 22 * * ?")
+	@Scheduled(cron = "55 53 13 * * ?")
 	public void insertSingerSchedule() throws Exception {
 		// db 가수 리스트 받아옴.
 		List<SingerDto> dsList = service.selectSinger();
@@ -94,29 +96,54 @@ public class BroadCastingSchedule {
 		List<BroadCastingDto> slist = new ArrayList<>();
 		for (int i = 0; i < dsList.size(); i++) {
 			System.out.println(dsList.get(i).getS_name());
-			driver.get(dsList.get(i).getS_cafeUrl()); // URL로 접속하기
-
+			driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+			driver.get(dsList.get(i).getS_cafeUrl());
+			
 			// System.out.println(driver.getPageSource());
 			List<WebElement> schedule_detail_list = driver.findElements(By.className("schedule_detail"));
 			for (WebElement web : schedule_detail_list) {
-				String txt_day = web.findElement(By.className("txt_day")).getText();
-				int a = web.findElements(By.className("inner_tit")).size();
-				for (int idx = 0; idx < a; idx++) {
-					BroadCastingDto time = new BroadCastingDto();
-					time.setBc_date(txt_day);
-					String inner_tit = web.findElement(By.className("inner_tit")).getText();
-					time.setBc_time(inner_tit);
-					String tit_subject = web.findElement(By.className("tit_subject")).getText();
-					time.setBc_title(tit_subject);
-					time.setBc_member(dsList.get(i).getS_name());
-					slist.add(time);
-				}
+//				String str = web.getText();
+//				BufferedReader reader = new BufferedReader(new StringReader(str));
+//				String r = null;
+//				List<String> data = new ArrayList<>();
+//				while((r=reader.readLine()) != null) {
+//					data.add(r);
+//					System.out.println(r);
+//				}
+//				System.out.println("..."+data.size());
+//				
+//				for (int j = 0; j < data.size()/4; j++) {
+//					BroadCastingDto time = new BroadCastingDto();
+//					time.setBc_date(data.get(j+0));
+//					time.setBc_time(data.get(j+1));
+//					time.setBc_title(data.get(j+2));
+//					time.setBc_member(dsList.get(i).getS_name());
+//					slist.add(time);
+//				}
+				
+				
+//				String txt_day = web.findElement(By.className("txt_day")).getText();
+//				int a = web.findElements(By.className("inner_tit")).size();
+//				System.out.println("t& a :  "+txt_day+"       "+a);
+//				for (int idx = 0; idx < a; idx++) {
+//					BroadCastingDto time = new BroadCastingDto();
+//					time.setBc_date(txt_day);
+//					String inner_tit = web.findElement(By.className("inner_tit")).getText();
+//					time.setBc_time(inner_tit);
+//					String tit_subject = web.findElement(By.className("tit_subject")).getText();
+//					time.setBc_title(tit_subject);
+//					time.setBc_member(dsList.get(i).getS_name());
+//					slist.add(time);
+//					System.out.println(txt_day+"   "+inner_tit+"   "+tit_subject);
+//					
+//				}
+//				System.out.println("\n");
 			}
 		}
 		driver.quit();
 
 		// 가수 리스트 디비 저장
-		service.insertSingerSchedule(slist);
+		//service.insertSingerSchedule(slist);
 	}
 
 	
