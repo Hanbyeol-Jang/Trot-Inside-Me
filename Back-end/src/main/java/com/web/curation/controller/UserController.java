@@ -1,5 +1,7 @@
 package com.web.curation.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +11,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.curation.dto.FollowDto;
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.UserService;
 
@@ -49,6 +53,26 @@ public class UserController {
 		}
 		
 	}
+	
+	@GetMapping("/followlist")
+	public ResponseEntity<List<FollowDto>> followlist(HttpServletRequest request){
+		
+		String tokenInfo_userEmail = service.getTokenInfo(request);
+		if(tokenInfo_userEmail.equals("F")) {
+			return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+		}else {
+			List<FollowDto> list = service.getFollowList(tokenInfo_userEmail);
+			return new ResponseEntity<List<FollowDto>>(list, HttpStatus.OK );
+		}
+	}
+	
+	@GetMapping("/follow/{s_idx}")
+	public ResponseEntity<FollowDto> singerDetail(@RequestParam int s_idx) {
+		
+		
+		return null;
+	}
+
 	
 //수정
 //	@PostMapping("/accounts/logout")
