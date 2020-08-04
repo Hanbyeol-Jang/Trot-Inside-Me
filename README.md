@@ -72,3 +72,7 @@
 
 - 가수 디테일에서 해당 가수의 영상 및 뉴스 확인 가능
 
+
+#### 덕명동 파워레인저  
+
+![덕명동 파워레인저의 힘을 보여줄겠다](https://lab.ssafy.com/s03-webmobile2-sub3/s03p13b202/blob/master/%E3%84%B1('%E3%85%81')%E3%84%B4/%EB%8D%95%EB%AA%85%EB%8F%99%ED%8C%8C%EC%9B%8C%EB%A0%88%EC%9D%B8%EC%A0%80.png)
