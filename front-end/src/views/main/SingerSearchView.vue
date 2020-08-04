@@ -1,6 +1,5 @@
 <template>
 <div class="container">
-    <h1>가수 검색</h1>
     <SingerSearch @search-singers="searchSingers"/>
     <div class="d-flex justify-center">
         <v-btn @click="getSinger" color="pink"><h4>전체 가수 보기</h4></v-btn>

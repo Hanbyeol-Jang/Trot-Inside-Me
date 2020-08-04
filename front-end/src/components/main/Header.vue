@@ -1,11 +1,11 @@
 <template>
   <div>
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       app
       right
       v-model="drawer"
       dark
-      src="../../assets/image/rainbow_background.jpg"
+      src="@/assets/image/rainbow_background.jpg"
       >
       <div class="my-2 ml-3">
         <v-btn text @click="closeDrawer"><i class="fas fa-times mr-2"></i>닫기</v-btn>
@@ -25,48 +25,32 @@
             </v-list-item-content>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
     <v-app-bar
-      app
+      absolute
       color="white"
+      elevate-on-scroll
+      scroll-target="#scrolling-techniques-7"
       height="50px"
     >
+      <v-btn v-if="navBool" icon><i class="fas fa-bell fa-lg"></i></v-btn>
       <v-btn v-if="!navBool" icon @click="goBack"><i class="fas fa-chevron-left fa-lg"></i></v-btn>
       <v-spacer></v-spacer>
-      <v-app-bar-nav-icon v-if="navBool" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title
+        class="d-flex align-center"
+        >
+        <img v-if="routeName === 'Home'" src="@/assets/image/trot_logo.png" alt=""
+          width="90px" class="main-logo">
+        <span v-if="routeName === 'SingerSearchView'" class="">가수 검색</span>
+        <span v-if="routeName === 'VoteView'" class="">투표</span>
+        <span v-if="routeName === 'CommunityView'" class="">수다방</span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn v-if="navBool" icon><i class="fas fa-user fa-lg"></i></v-btn>
+      <!-- <v-app-bar-nav-icon v-if="navBool" @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
       <v-btn v-else icon @click="goHome"><i class="fas fa-home fa-lg"></i></v-btn>
       <v-btn v-if="navSetting" icon @click="goSettings"><i class="fas fa-cog fa-lg"></i></v-btn>
-      
-
-      <template v-if="navBool" v-slot:extension>
-        <v-tabs
-          background-color="pink lighten-5"
-          centered
-          color="basil"
-          icons-and-text
-          height="60px"
-        >
-        <v-tabs-slider></v-tabs-slider>
-        <v-tab href="#tab-1" @click="goHome">
-          홈
-          <i class="fas fa-home fa-lg"></i>
-        </v-tab>
-        <v-tab href="#tab-2" @click="goCommunity">
-          수다방
-          <i class="fas fa-comment fa-lg"></i>
-        </v-tab>
-        <v-tab href="#tab-3" @click="goVote">
-          투표
-          <i class="fas fa-vote-yea fa-lg"></i>
-        </v-tab>
-        <v-tab href="#tab-4" @click="goSearch">
-          검색
-          <i class="fas fa-search fa-lg"></i>
-        </v-tab>
-      </v-tabs>
-      </template>
     </v-app-bar>
-    
   </div>
 </template>
 
@@ -75,14 +59,12 @@ export default {
     name: 'Header',
     data() {
         return {
-            page: window.location.pathname,
-            drawer : false,
-            userId : '/accounts/1',
-            items: [
-              ['mdi-account', '로그인', 'Login'],
-              ['mdi-account-plus', '회원가입', 'Signup'],
-              ['mdi-account-circle', '나의 페이지'],
-            ],
+          drawer : false,
+          userId : '/accounts/1',
+          items: [
+            ['mdi-account', '로그인', 'Login'],
+            ['mdi-account-circle', '나의 페이지'],
+          ],
         }
     },
     methods: {
@@ -94,24 +76,9 @@ export default {
             this.$router.push({ name: 'Home' }).catch(()=>{})
           }
         },
-        goCommunity() {
-          if (this.$route.name !== 'CommunityView') {
-            this.$router.push({ name: 'CommunityView' }).catch(()=>{})
-          }
-        },
-        goVote() {
-          if (this.$route.name !== 'VoteView') {
-            this.$router.push({ name: 'VoteView' }).catch(()=>{})
-          }
-        },
         goSettings() {
           if (this.$route.name !== 'UserSettingView') {
             this.$router.push({ name: 'UserSettingView' }).catch(()=>{})
-          }
-        },
-        goSearch() {
-          if (this.$route.name !== 'SingerSearchView') {
-            this.$router.push({ name: 'SingerSearchView' }).catch(()=>{})
           }
         },
         goLogin() {
@@ -140,6 +107,9 @@ export default {
 
     },
     computed: {
+      routeName() {
+        return this.$route.name
+      },
       navBool() {
         if (this.$route.name === 'Home'
           || this.$route.name === 'CommunityView' || this.$route.name === 'VoteView'
@@ -161,7 +131,6 @@ export default {
 </script>
 
 <style scoped>
-@import '../../assets/style/burger-button.css';
 
 .close-btn{
   padding-top: 20px;
@@ -187,6 +156,10 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+.main-logo {
+  bottom: 0;
 }
 
 </style>

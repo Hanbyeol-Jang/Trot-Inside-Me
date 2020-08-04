@@ -3,7 +3,6 @@
     <Header/>
     <v-main class="mt-4">
       <v-container
-        v-if="containerBool"
         fluid
       >
         <v-row
@@ -19,30 +18,26 @@
           </v-col>
         </v-row>
       </v-container>
-      <div v-else><router-view></router-view></div>
     </v-main>
+    <BottomNav />
   </v-app>
 </template>
 
 <script>
 import Header from './components/main/Header'
+import BottomNav from './components/main/BottomNav'
+
 export default {
   name: 'App',
 
   components: {
     Header,
+    BottomNav,
   },
   data: () => ({
     //
   }),
   computed: {
-      containerBool() {
-        if (this.$route.name === 'Login' || this.$route.name === 'Signup'){
-          return false
-        } else {
-          return true
-        }
-      },
     },
 };
 </script>
