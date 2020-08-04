@@ -3,6 +3,7 @@ package com.web.curation.dao;
 import java.util.List;
 
 import com.web.curation.dto.BoardDto;
+import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.SingerDto;
 
 public interface SearchDao {
@@ -16,4 +17,5 @@ public interface SearchDao {
 	public boolean isUrl(String vno,String name); // 네이버 동영상 vno가 db에 있는지 확인
 	boolean isUrl2(String url, String name); // 네이버 기사 url이 db에 있는지 확인
 	BoardDto videoDetail(int s_idx, int b_idx); // 가수(s_idx)에 대한 동영상(b_idx)
+	List<BroadCastingDto> broadCastAllList(); //편성표 전체 출력
 }

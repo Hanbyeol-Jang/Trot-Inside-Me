@@ -73,6 +73,35 @@ public class UserController {
 		return null;
 	}
 
+//	임시로 팔로우 넣어줌 
+//	@GetMapping("/follow/apply")
+//	public ResponseEntity<String> Follow() {
+//		// 임영웅 꺼를 눌렀다고 가정
+//		// 유저 아이디가 a1234 라고 가정
+//		// favorite 테이블에 입력
+//		FollowDto dto = new FollowDto();
+//		dto.setU_email("a1234");
+//		dto.setS_idx(1);
+//
+//		if (service.followApply(dto)) {
+//			return new ResponseEntity<>("팔로우 추가 성공", HttpStatus.OK);
+//		} else {
+//			return new ResponseEntity<>("팔로우 추가 실패", HttpStatus.NOT_FOUND);
+//		}
+//	}
+//
+//	@GetMapping("/follow/delete")
+//	public Object FollowDelete() {
+//		// 유저 아이디가 a1234 라고 가정
+//		// favorite 테이블에서 삭제
+//		if (service.followDelete("a1234")) {
+//			return new ResponseEntity<>("팔로우 삭제 성공", HttpStatus.OK);
+//		} else {
+//			return new ResponseEntity<>("팔로우 삭제 실패", HttpStatus.NOT_FOUND);
+//		}
+//	}
+	
+	
 	
 //수정
 //	@PostMapping("/accounts/logout")

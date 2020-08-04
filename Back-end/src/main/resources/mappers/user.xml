@@ -48,5 +48,16 @@
  	<select id="getFollowList" parameterType="String" resultType="com.web.curation.dto.FollowDto">
  		select * from Following where u_email = #{userEmail};
  	</select>
+ 	
+ 	<!-- 팔로우 등록 -->
+ 	<insert id="followApply" parameterType="com.web.curation.dto.FollowDto">
+ 		insert into Following(u_email, s_idx) 
+ 		values(#{u_email},#{s_idx});
+ 	</insert>
+ 
+ 	<!-- 팔로우 취소 -->
+ 	<delete id="followDelete" parameterType="String">
+ 		delete from Following where u_email= #{u_email};
+ 	</delete>
  </mapper>
         
