@@ -2,13 +2,15 @@
 <div class="container">
     <SingerSearch @search-singers="searchSingers"/>
     <div class="d-flex justify-center">
-        <v-btn @click="getSinger" color="pink"><h4>전체 가수 보기</h4></v-btn>
+        <v-btn @click="fetchSingers" color="pink" dark><h4>전체 가수 보기</h4></v-btn>
     </div>
-    <SingerList :Singers="Singers"/>
+    <SingerList :singers="singers"/>
 </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+
 import axios from 'axios'
 import SERVER from '@/api/drf'
 import SingerList from '@/components/main/SingerList.vue'
@@ -25,17 +27,11 @@ export default {
             Singers:[],
         }
     },
+    computed: {
+        ...mapState(['singers'])
+    },
     methods:{
-        getSinger(){
-            axios.get(`${SERVER.URL}/search/singerlist`)
-            .then((response)=>{
-                console.log(response)
-                this.Singers = response.data
-            })
-            .catch((err)=>{
-                console.error(err)
-            }) 
-        },
+        ...mapActions(['fetchSingers']),
         searchSingers(keyword) {
             axios.get(`${SERVER.URL}/search/singerlist`)
                 .then(response => {
@@ -46,10 +42,10 @@ export default {
             .catch((err)=>{
                 console.error(err)
             })             
-            },
+        },
     },
     created(){
-        this.getSinger()
+        this.fetchSingers()
     }
 }
 </script>

@@ -1,6 +1,10 @@
 export default{
     URL:'http://localhost:8080',
     ROUTES: {
-        login: '/login/',
+        // auth
+        login: '/login',
+
+        // singer
+        singerList: '/singer',
     }
 }

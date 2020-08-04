@@ -1,0 +1,29 @@
+<template>
+  <div>
+    <ArticleFeed :singerId="singerId"/>
+  </div>
+</template>
+
+<script>
+import ArticleFeed from '@/components/main/singer/ArticleFeed'
+
+export default {
+    name: "ArticleListView",
+    data() {
+      return {
+      }
+    },
+    components: {
+      ArticleFeed,
+    },
+    computed: {
+      singerId() {
+        return this.$route.params.singerId
+      }
+    }
+}
+</script>
+
+<style>
+
+</style>

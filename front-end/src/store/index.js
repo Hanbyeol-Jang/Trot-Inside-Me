@@ -12,15 +12,20 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
+    singers: [],
   },
   getters: {
     isLoggedIn: state => !!state.authToken,
-    config: state => ({ headers: { Authorization: `Token ${state.authToken}` } })
+    config: state => ({ headers: { Authorization: `Token ${state.authToken}` } }),
+    singersLength: state => state.singers.length
   },
   mutations: {
     SET_TOKEN(state, token) {
       state.authToken = token
       cookies.set('auth-token', token)
+    },
+    SET_SINGERS(state, singers) {
+      state.singers = singers
     },
   },
   actions: {
@@ -32,6 +37,13 @@ export default new Vuex.Store({
           router.push({ name: 'Home' })
         })
         .catch(err => console.log(err.response.data))
+    },
+    fetchSingers({ getters, commit }) {
+      if (getters.singersLength < 1) {
+        axios.get(SERVER.URL + SERVER.ROUTES.singerList)
+            .then(res =>{ commit('SET_SINGERS', res.data) })
+            .catch(err=>{ console.error(err) })
+      }
     },
   },
   modules: {

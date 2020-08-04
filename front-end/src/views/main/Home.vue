@@ -3,14 +3,16 @@
     <div class="text-center">
       <v-carousel 
         height="200px"
-        hide-delimiters>
+        hide-delimiters
+        cycle
+        >
         <v-carousel-item
           v-for="(item,i) in items"
           :key="i"
           :src="item.src"
         ></v-carousel-item>
       </v-carousel>
-      <v-container>
+      <v-container class="mt-4">
         <v-row no-gutters>
           <template v-for="menu in menus">
             <v-col :key="menu.id">
@@ -82,8 +84,10 @@ export default {
   methods: {
     goMenu(m_idx) {
       console.log(m_idx)
+      if (m_idx === 3) {
+        this.$router.push({ name: 'TvtableDetailView' })
+      }
     },
-
   },
 }
 </script>

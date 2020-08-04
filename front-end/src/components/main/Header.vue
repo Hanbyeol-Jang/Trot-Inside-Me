@@ -1,36 +1,10 @@
 <template>
   <div>
-    <!-- <v-navigation-drawer
-      app
-      right
-      v-model="drawer"
-      dark
-      src="@/assets/image/rainbow_background.jpg"
-      >
-      <div class="my-2 ml-3">
-        <v-btn text @click="closeDrawer"><i class="fas fa-times mr-2"></i>닫기</v-btn>
-      </div>
-      <v-list>
-        <v-list-item
-          v-for="([icon, text, route], i) in items"
-          :key="i"
-          link
-          @click="$router.push({ name: route }).catch(err => {})"
-        >
-            <v-list-item-icon>
-              <v-icon>{{ icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>{{ text }}</v-list-item-title>
-            </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer> -->
     <v-app-bar
+      fixed
       absolute
       color="white"
       elevate-on-scroll
-      scroll-target="#scrolling-techniques-7"
       height="50px"
     >
       <v-btn v-if="navBool" icon><i class="fas fa-bell fa-lg"></i></v-btn>
@@ -47,7 +21,6 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-if="navBool" icon><i class="fas fa-user fa-lg"></i></v-btn>
-      <!-- <v-app-bar-nav-icon v-if="navBool" @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
       <v-btn v-else icon @click="goHome"><i class="fas fa-home fa-lg"></i></v-btn>
       <v-btn v-if="navSetting" icon @click="goSettings"><i class="fas fa-cog fa-lg"></i></v-btn>
     </v-app-bar>
@@ -59,12 +32,7 @@ export default {
     name: 'Header',
     data() {
         return {
-          drawer : false,
-          userId : '/accounts/1',
-          items: [
-            ['mdi-account', '로그인', 'Login'],
-            ['mdi-account-circle', '나의 페이지'],
-          ],
+
         }
     },
     methods: {
@@ -80,27 +48,6 @@ export default {
           if (this.$route.name !== 'UserSettingView') {
             this.$router.push({ name: 'UserSettingView' }).catch(()=>{})
           }
-        },
-        goLogin() {
-          if (this.$route.name !== 'Login') {
-            this.$router.push({ name: 'Login' }).catch(()=>{})
-          }
-        },
-        goSignup() {
-          if (this.$route.name !== 'Signup') {
-            this.$router.push({ name: 'Signup' }).catch(()=>{})
-          }
-        },
-        addItem(item) {
-          const removed = this.items.splice(0, 1)
-          this.items.push(
-            ...this.more.splice(this.more.indexOf(item), 1)
-          )
-          this.more.push(...removed)
-          this.$nextTick(() => { this.currentItem = 'tab-' + item })
-        },
-        closeDrawer() {
-          this.drawer = false
         },
     },
     components: {

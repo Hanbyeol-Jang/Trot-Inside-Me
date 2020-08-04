@@ -59,7 +59,26 @@
             this.$router.push({ name: 'SingerSearchView' }).catch(()=>{})
           }
         },
+        changeTab() {
+          if (this.routeName === 'Home') {
+            this.activeBtn = 0
+          } else if (this.routeName === 'SingerSearchView' ) {
+            this.activeBtn = 1
+          } else if (this.routeName === 'VoteView' ) {
+            this.activeBtn = 2
+          } else if (this.routeName === 'CommunityView' ) {
+            this.activeBtn = 3
+          }
+        }
     },
+    computed: {
+      routeName() {
+        return this.$route.name
+      }
+    },
+    mounted() {
+      this.changeTab()
+    }
   }
 </script>
 

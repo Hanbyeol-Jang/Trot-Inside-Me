@@ -17,6 +17,8 @@ import SingerDetailView from '@/views/main/SingerDetailView.vue'
 import UserDetailView from '@/views/accounts/UserDetailView.vue'
 import SignupCompleteView from '@/views/accounts/SignupCompleteView.vue'
 import UserSettingView from '@/views/accounts/UserSettingView.vue'
+import VideoListView from '@/views/main/VideoListView.vue'
+import ArticleListView from '@/views/main/ArticleListView.vue'
 
 Vue.use(VueRouter)
 
@@ -91,6 +93,16 @@ Vue.use(VueRouter)
     path: '/accounts/:userId/settings',
     name: 'UserSettingView',
     component: UserSettingView
+  },
+  {
+    path: '/singer/:singerId/videos',
+    name: 'VideoListView',
+    component: VideoListView
+  },
+  {
+    path: '/singer/:singerId/articles',
+    name: 'ArticleListView',
+    component: ArticleListView
   },
   {
     path : '*',

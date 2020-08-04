@@ -19,7 +19,7 @@
         </v-row>
       </v-container>
     </v-main>
-    <BottomNav />
+    <BottomNav v-if="bottomNav"/>
   </v-app>
 </template>
 
@@ -38,7 +38,16 @@ export default {
     //
   }),
   computed: {
-    },
+    bottomNav() {
+      let routeName = this.$route.name
+      if (routeName === 'Home' || routeName === 'SingerSearchView'
+        || routeName === 'VoteView' || routeName === 'CommunityView') {
+          return true
+        } else {
+          return false
+        }
+    }
+  },
 };
 </script>
 

@@ -3,10 +3,8 @@
         hover 
         @click="goDetail"
     >
-        <iframe :src="videoThumbnail"
-            frameborder='no' scrolling='no' marginwidth='0' marginheight='0' 
-            WIDTH=100% allow='autoplay' allowfullscreen></iframe>
-
+        <img :src="videoThumbnail" alt="video thumbnail" 
+            width="100%"/>
         <v-card-title>
         {{ videoTitle }}
         </v-card-title>
@@ -16,14 +14,12 @@
         justify="end"
         class="mr-5 pb-3"
         >
+        {{ videoDate }}
         <v-icon class="mr-1">mdi-heart</v-icon>
-        <span class="subheading mr-2">256</span>
+        <span class="subheading mr-2">{{ videoLikes }}</span>
         <span class="mr-1">·</span>
         <i class="fas fa-comment fa-lg mr-1"></i>
-        <span class="subheading mr-2">256</span>
-        <span class="mr-1">·</span>
-        <v-icon class="mr-1">mdi-share-variant</v-icon>
-        <span class="subheading">45</span>
+        <span class="subheading mr-2">{{ videoReplysss }}</span>
         </v-row>
     </v-card>
 </template>
@@ -33,15 +29,23 @@ export default {
     name: 'VideoFeedItem',
     props: {
         video: Object,
-        videoId: Number,
     },
     computed: {
         videoTitle() {
-            return this.video.v_title
+            return this.video.b_title
         },
         videoThumbnail() {
-            return this.video.v_url
+            return this.video.b_thumbnail
         },
+        videoLikes() {
+            return this.video.b_good
+        },
+        videoReply() {
+            return this.video.b_reply
+        },
+        videoDate() {
+            return this.video.b_date
+        }
     },
     methods: {
         goDetail() {
