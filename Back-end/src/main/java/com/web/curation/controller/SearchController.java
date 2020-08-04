@@ -126,5 +126,15 @@ public class SearchController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
+	@GetMapping("/schedule/singerScheduleList/{s_idx}")
+	public ResponseEntity<List<BroadCastingDto>> singerScheduleList(@PathVariable("s_idx") int s_idx) {
+		SingerDto singerDto = searchService.singerSearch(s_idx);
+		List<BroadCastingDto> list =searchService.singerScheduleList(singerDto.getS_name());
+		if (list!=null) {
+			return  new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
 	
 }

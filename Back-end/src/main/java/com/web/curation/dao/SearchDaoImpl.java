@@ -77,4 +77,9 @@ public class SearchDaoImpl implements SearchDao {
 	public List<BroadCastingDto> broadCastAllList() {
 		return sqlSession.selectList(ns+".broadCastAllList");
 	}
+
+	@Override
+	public List<BroadCastingDto> singerScheduleList(String s_name) {
+		return sqlSession.selectList(ns+".singerScheduleList",s_name);
+	}
 }

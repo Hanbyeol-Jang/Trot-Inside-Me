@@ -1,8 +1,6 @@
 package com.web.curation.util;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -75,8 +73,8 @@ public class BroadCastingSchedule {
 
 
 	// 하루에 한번 스케쥴 넣기
-	@Scheduled(cron = "0 0 0 * * ?")
-//	@Scheduled(cron = "50 32 14 * * ?")
+//	@Scheduled(cron = "0 0 0 * * ?")
+	@Scheduled(cron = "50 45 15 * * ?")
 	public void insertSingerSchedule() throws Exception {
 		// db 가수 리스트 받아옴.
 		List<SingerDto> dsList = service.selectSinger();

@@ -162,4 +162,9 @@ public class SearchServiceImpl implements SearchService {
 		return searchDao.broadCastAllList();
 	}
 
+	@Override
+	public List<BroadCastingDto> singerScheduleList(String s_name) {
+		return searchDao.singerScheduleList(s_name);
+	}
+
 }
