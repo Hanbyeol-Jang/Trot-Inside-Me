@@ -63,5 +63,15 @@
 		and b_type = 2
 		order by b_idx desc;
 	</select>
+	
+	<!-- 동영상 디테일 -->
+	<select id="videodetail" resultType="BoardDto">
+		select * 
+		from Board
+		where 1=1
+		and b_type = 1
+		and b_idx = #{b_idx}
+		and b_member = (select s_name from Singer where s_idx = #{s_idx})
+	</select>
  </mapper>
         
