@@ -1,4 +1,4 @@
-package com.web.curation.service;
+package com.web.curation.util;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
