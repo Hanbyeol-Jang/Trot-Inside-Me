@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dto.BoardDto;
+import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.SingerDto;
 import com.web.curation.service.SearchService;
 
@@ -25,26 +26,6 @@ public class SearchController {
 
 	@Autowired
 	private SearchService searchService;
-
-	@GetMapping("/search/singerlist")
-	public ResponseEntity<List<SingerDto>> singerlist() {
-		List<SingerDto> list = searchService.singerAllList();
-		if (list != null) {
-			return new ResponseEntity<List<SingerDto>>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-	}
-
-	@GetMapping("/search/singerSearch")
-	public ResponseEntity<SingerDto> singerSearch(@RequestParam int s_idx) {
-		SingerDto dto = searchService.singerSearch(s_idx);
-		if (dto != null) {
-			return new ResponseEntity<SingerDto>(dto, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-	}
 
 	// 가수 리스트
 	@GetMapping("/singer")
@@ -135,4 +116,25 @@ public class SearchController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("/schedule/todayList")
+	public ResponseEntity<List<BroadCastingDto>> todaylist() {
+		List<BroadCastingDto> list =searchService.broadCastAllList();
+		if (list!=null) {
+			return  new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+	@GetMapping("/schedule/singerScheduleList/{s_idx}")
+	public ResponseEntity<List<BroadCastingDto>> singerScheduleList(@PathVariable("s_idx") int s_idx) {
+		SingerDto singerDto = searchService.singerSearch(s_idx);
+		List<BroadCastingDto> list =searchService.singerScheduleList(singerDto.getS_name());
+		if (list!=null) {
+			return  new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+	
 }

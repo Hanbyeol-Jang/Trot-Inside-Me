@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.web.curation.dto.BoardDto;
+import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.SingerDto;
 
 @Repository
@@ -70,5 +71,15 @@ public class SearchDaoImpl implements SearchDao {
 		map.put("s_idx", s_idx);
 		map.put("b_idx", b_idx);
 		return sqlSession.selectOne(ns + ".videodetail", map);
+	}
+
+	@Override
+	public List<BroadCastingDto> broadCastAllList() {
+		return sqlSession.selectList(ns+".broadCastAllList");
+	}
+
+	@Override
+	public List<BroadCastingDto> singerScheduleList(String s_name) {
+		return sqlSession.selectList(ns+".singerScheduleList",s_name);
 	}
 }

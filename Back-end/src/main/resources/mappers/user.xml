@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.web.curation.dao.UserDao">
 	
+	<!-- 관리자 회원가입 -->
  	<insert id="join" parameterType="com.web.curation.dto.UserDto">
  		insert into UserInfo(u_email,u_pw,u_name) 
  		values(#{u_email},#{u_pw},#{u_name});
@@ -11,6 +12,7 @@
  		<!-- insert into UserInfo(u_email,u_pw,u_pw2,u_name) 
  		values(#{u_email},#{u_pw},#{u_pw2},#{u_name}); -->
  	
+ 	<!-- 이메일로 회원 정보 찾기 -->
  	<select id="getUserInfoSuc" parameterType="String" resultType="com.web.curation.dto.UserDto">
  		select u_email, u_pw, u_name from UserInfo
  		where u_email = #{email};
@@ -41,5 +43,21 @@
  		where 1=1
  		and u_email = #{u_email} 
  	</update>
+ 	
+ 	<!-- 팔로우 전체 리스트 출력 -->
+ 	<select id="getFollowList" parameterType="String" resultType="com.web.curation.dto.FollowDto">
+ 		select * from Following where u_email = #{userEmail};
+ 	</select>
+ 	
+ 	<!-- 팔로우 등록 -->
+ 	<insert id="followApply" parameterType="com.web.curation.dto.FollowDto">
+ 		insert into Following(u_email, s_idx) 
+ 		values(#{u_email},#{s_idx});
+ 	</insert>
+ 
+ 	<!-- 팔로우 취소 -->
+ 	<delete id="followDelete" parameterType="String">
+ 		delete from Following where u_email= #{u_email};
+ 	</delete>
  </mapper>
         

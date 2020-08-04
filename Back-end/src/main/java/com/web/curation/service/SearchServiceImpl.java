@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.web.curation.dao.SearchDao;
 import com.web.curation.dto.BoardDto;
+import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.SingerDto;
 
 @Service
@@ -153,6 +154,17 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public BoardDto videoDetail(int s_idx, int b_idx) {
 		return searchDao.videoDetail(s_idx, b_idx);
+	}
+
+	//편성표 전체 출력
+	@Override
+	public List<BroadCastingDto> broadCastAllList() {
+		return searchDao.broadCastAllList();
+	}
+
+	@Override
+	public List<BroadCastingDto> singerScheduleList(String s_name) {
+		return searchDao.singerScheduleList(s_name);
 	}
 
 }

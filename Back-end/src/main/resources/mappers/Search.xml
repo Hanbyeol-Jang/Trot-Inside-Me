@@ -73,5 +73,15 @@
 		and b_idx = #{b_idx}
 		and b_member = (select s_name from Singer where s_idx = #{s_idx})
 	</select>
+	
+	<!-- 편성표 리스트 출력 -->
+	<select id="broadCastAllList" resultType="com.web.curation.dto.BroadCastingDto">
+		select * from BroadCasting where bc_member = "";
+	</select>
+	
+	<!-- 가수 스케줄 출력 -->
+	<select id="singerScheduleList" parameterType="String" resultType="com.web.curation.dto.BroadCastingDto">
+		select * from BroadCasting where bc_member = #{s_name};
+	</select>
  </mapper>
         
