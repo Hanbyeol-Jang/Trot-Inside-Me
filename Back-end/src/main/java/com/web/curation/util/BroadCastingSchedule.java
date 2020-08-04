@@ -75,8 +75,8 @@ public class BroadCastingSchedule {
 
 
 	// 하루에 한번 스케쥴 넣기
-//	@Scheduled(cron = "0 0 0 * * ?")
-	@Scheduled(cron = "20 23 14 * * ?")
+	@Scheduled(cron = "0 0 0 * * ?")
+//	@Scheduled(cron = "50 32 14 * * ?")
 	public void insertSingerSchedule() throws Exception {
 		// db 가수 리스트 받아옴.
 		List<SingerDto> dsList = service.selectSinger();
@@ -99,7 +99,7 @@ public class BroadCastingSchedule {
 			driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 			driver.get(dsList.get(i).getS_cafeUrl());
 			
-			// System.out.println(driver.getPageSource());
+//			 System.out.println(driver.getPageSource());
 			List<WebElement> schedule_detail_list = driver.findElements(By.className("schedule_detail"));
 			for (WebElement web : schedule_detail_list) {
 				String txt_day = web.findElement(By.className("txt_day")).getText();
