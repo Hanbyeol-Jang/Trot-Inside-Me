@@ -8,10 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.ArticleDto;
 import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.FollowDto;
@@ -27,32 +29,50 @@ public class BoardController {
 
 	@GetMapping("/schedule/todayList")
 	public ResponseEntity<List<BroadCastingDto>> todaylist() {
-		List<BroadCastingDto> list =service.broadCastAllList();
-		if (list!=null) {
-			return  new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
+		List<BroadCastingDto> list = service.broadCastAllList();
+		if (list != null) {
+			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
 
 	// 좋아요 클릭
-	@GetMapping("/board/good")
-	public ResponseEntity<HashMap<String, Object>> goodClick(
-			@RequestBody int b_idx, @RequestBody String userEmail) {
+	@GetMapping("/board/good/{b_type}/{b_idx}")
+	public ResponseEntity<HashMap<String, Object>> goodClick(@PathVariable("b_type") int b_type,
+			@PathVariable("b_idx") int b_idx) {
+//			, @PathVariable("u_email") String u_email) {
+
 		// 임시정보 클릭했다고 가정 ->
 //		int b_idx = 1;// (김호중 기사)
 //		String userEmail = "a1234";
 
-		if (service.goodClick(b_idx)) {
-			if (service.goodAuserConnect(b_idx, userEmail)) {
-				int like_count = service.goodCount(b_idx);
-				HashMap<String, Object> map = new HashMap<>();
-				map.put("like_count", like_count);
-				map.put("like_boolean", true);
-				return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-			}
+//		if (service.goodClick(b_idx)) {
+//			if (service.goodAuserConnect(b_idx, userEmail)) {
+//				BoardPK boardPK = new BoardPK();
+//				boardPK.setB_type(b_type);
+//				boardPK.setB_idx(b_idx);
+//				int like_count = service.goodCount(boardPK);
+//				HashMap<String, Object> map = new HashMap<>();
+//				map.put("like_count", like_count);
+//				map.put("like_boolean", true);
+//				return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+//			} else {
+//				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//			}
+//		} else {
+//			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//		}
+
+		if (true) {
+			BoardPK boardPK = new BoardPK();
+			boardPK.setB_type(b_type);
+			boardPK.setB_idx(b_idx);
+			int like_count = service.goodCount(boardPK);
+			HashMap<String, Object> map = new HashMap<>();
+			map.put("like_count", like_count);
+			map.put("like_boolean", true);
+			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
@@ -67,7 +87,8 @@ public class BoardController {
 
 		if (service.goodClickCancel(b_idx)) {
 			if (service.goodAuserConnectDelete(b_idx, userEmail)) {
-				int like_count = service.goodCount(b_idx);
+//				int like_count = service.goodCount(b_idx);
+				int like_count = 1;
 				HashMap<String, Object> map = new HashMap<>();
 				map.put("like_count", like_count);
 				map.put("like_boolean", false);
@@ -108,30 +129,32 @@ public class BoardController {
 		}
 	}
 //	임시로 팔로우 넣어줌. 
-	
+
 	@GetMapping("/board/ArticleAllList")
 	public ResponseEntity<List<ArticleDto>> ArticleAllList() {
-		List<ArticleDto> list =service.articleAllList();
-		if (list!=null) {
-			return  new ResponseEntity<List<ArticleDto>>(list, HttpStatus.OK);
+		List<ArticleDto> list = service.articleAllList();
+		if (list != null) {
+			return new ResponseEntity<List<ArticleDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
+
 	@GetMapping("/board/ArticleSearchList")
 	public ResponseEntity<List<ArticleDto>> ArticleSearchList(@RequestParam int s_idx) {
-		List<ArticleDto> list =service.articleSearchList(s_idx);
-		if (list!=null) {
-			return  new ResponseEntity<List<ArticleDto>>(list, HttpStatus.OK);
+		List<ArticleDto> list = service.articleSearchList(s_idx);
+		if (list != null) {
+			return new ResponseEntity<List<ArticleDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
+
 	@GetMapping("/board/VideoAllList")
 	public ResponseEntity<List<VideoDto>> VideoAllList() {
-		List<VideoDto> list =service.videoAllList();
-		if (list!=null) {
-			return  new ResponseEntity<List<VideoDto>>(list, HttpStatus.OK);
+		List<VideoDto> list = service.videoAllList();
+		if (list != null) {
+			return new ResponseEntity<List<VideoDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
@@ -139,9 +162,9 @@ public class BoardController {
 
 	@GetMapping("/board/VideoSearchList")
 	public ResponseEntity<List<VideoDto>> VideoSearchList(@RequestParam int s_idx) {
-		List<VideoDto> list =service.videoSearchList(s_idx);
-		if (list!=null) {
-			return  new ResponseEntity<List<VideoDto>>(list, HttpStatus.OK);
+		List<VideoDto> list = service.videoSearchList(s_idx);
+		if (list != null) {
+			return new ResponseEntity<List<VideoDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
