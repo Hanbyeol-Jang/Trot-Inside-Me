@@ -14,7 +14,7 @@
  	
  	<!-- 이메일로 회원 정보 찾기 -->
  	<select id="getUserInfoSuc" parameterType="String" resultType="com.web.curation.dto.UserDto">
- 		select u_email, u_pw, u_name from UserInfo
+ 		select * from UserInfo
  		where u_email = #{email};
  	</select>
  	
@@ -56,8 +56,11 @@
  	</insert>
  
  	<!-- 팔로우 취소 -->
- 	<delete id="followDelete" parameterType="String">
- 		delete from Following where u_email= #{u_email};
+ 	<delete id="followDelete" parameterType="com.web.curation.dto.FollowDto">
+ 		delete from Following 
+ 		where u_email= #{u_email} and s_idx = #{s_idx};
  	</delete>
+ 	
+ 	
  </mapper>
         

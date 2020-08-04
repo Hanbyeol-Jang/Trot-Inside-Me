@@ -28,5 +28,11 @@ public interface UserDao {
 	//팔로우 전체 리스트 출력
 	public List<FollowDto> getFollowList(String userEmail);
 
+	//팔로우 추가
+	public int followApply(FollowDto dto);
+
+	//팔로우 삭제
+	public int followDelete(FollowDto dto);
+
 	
 }

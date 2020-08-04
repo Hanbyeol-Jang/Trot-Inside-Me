@@ -34,5 +34,11 @@ public interface UserService {
 	//팔로우 리스트
 	public List<FollowDto> getFollowList(String tokenInfo_userEmail);
 
+	//팔로우 추가
+	public boolean followApply(FollowDto dto); 
+
+	//팔로우 삭제
+	public boolean followDelete(FollowDto dto);
+
 
 }
