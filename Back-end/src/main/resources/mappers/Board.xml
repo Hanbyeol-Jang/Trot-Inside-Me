@@ -25,7 +25,21 @@
 		where	b.b_type = #{b_type} and
 				b.b_idx	 = #{b_idx};
 	</select>
- 	
 	
+	<!-- 댓글 작성 -->
+	<insert id="addcomment">
+		insert into Reply (r_content, u_email, b_type, b_idx)
+		value(#{r_content}, #{u_email}, #{b_type}, #{b_idx});
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deletecomment">
+		delete	from Reply
+		where 	r_idx = #{r_idx} AND
+				b_type = #{b_type} AND
+				b_idx = #{b_idx} AND 
+				u_email = #{u_email} ;
+	</delete>
+ 	
  </mapper>
         

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.web.curation.dto.BoardPK;
+import com.web.curation.dto.ReplyDto;
 
 @Repository
 public class BoardDaoImpl implements BoardDao {
@@ -27,6 +28,16 @@ public class BoardDaoImpl implements BoardDao {
 	@Override
 	public int goodCount(BoardPK boardPK) {
 		return session.selectOne(ns + "goodCount", boardPK);
+	}
+
+	@Override
+	public int addComment(ReplyDto replyDto) {
+		return session.insert(ns + "addcomment", replyDto);
+	}
+	
+	@Override
+	public int deleteComment(ReplyDto replyDto) {
+		return session.insert(ns + "deletecomment", replyDto);
 	}
 
 }
