@@ -3,6 +3,7 @@ package com.web.curation.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,11 +32,14 @@ public class AdminController {
 	private AdminServcie adminService;
 	
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody UserDto user, HttpServletRequest request) {
+	public ResponseEntity<String> login(@RequestBody UserDto user, HttpServletRequest request, HttpSession session) {
 		
 		//관리자 로그인 할때 다음 페이지가 관리자가 아니면 안넘어갈 수 있도록 하는 방법이 있는 지 찾아보기. -> 인터 셉터?
-		
 		String token = userService.createToken(user.getU_email(), user.getU_pw());
+		if(token != null) {
+			session.setAttribute("u_email", user.getU_email());
+			session.setAttribute("u_name", user.getU_name());
+		}
         return new ResponseEntity<>(token, HttpStatus.OK);
 	}
 
