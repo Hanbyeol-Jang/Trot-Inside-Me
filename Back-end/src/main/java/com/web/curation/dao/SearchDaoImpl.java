@@ -11,12 +11,15 @@ import org.springframework.stereotype.Repository;
 import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.SingerDto;
+import com.web.curation.service.SearchService;
 
 @Repository
 public class SearchDaoImpl implements SearchDao {
 	@Autowired
 	private SqlSession sqlSession;
 	String ns = "com.web.curation.dao.SearchDao";
+	@Autowired
+	private SearchService searchService;
 
 	@Override
 	public List<SingerDto> singerAllList() {
@@ -75,11 +78,32 @@ public class SearchDaoImpl implements SearchDao {
 
 	@Override
 	public List<BroadCastingDto> broadCastAllList() {
-		return sqlSession.selectList(ns+".broadCastAllList");
+		return sqlSession.selectList(ns + ".broadCastAllList");
 	}
 
 	@Override
 	public List<BroadCastingDto> singerScheduleList(String s_name) {
-		return sqlSession.selectList(ns+".singerScheduleList",s_name);
+		return sqlSession.selectList(ns + ".singerScheduleList", s_name);
 	}
+
+	@Override
+	public int checklist(int b_type, int s_idx) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("s_idx", s_idx);
+		map.put("b_type", b_type);
+
+		if (s_idx == 0) { // 전체 리스트
+			return sqlSession.selectOne(ns + ".countallvideoarticle", map);
+		} else if (s_idx > 0) {
+			return sqlSession.selectOne(ns + ".countmembervideoarticle", map);
+		} else {
+			return -1;
+		}
+	}
+
+	@Override
+	public List<BoardDto> videoArticleGood(int b_type) {
+		return sqlSession.selectList(ns + ".videogood", b_type);
+	}
+
 }

@@ -65,12 +65,26 @@ public class SearchController {
 			searchService.insertVideo(singerDto.getS_name());
 		}
 		list = searchService.selectVideoList(singerDto.getS_name());
+//		page = 5 * page - 5;
+//		for (int i = page; i < page + 5; i++) {
+//			System.out.println(list.get(i));
+//			showList.add(list.get(i));
+//		}
+		int lastPageRemain = list.size() % 5;
+		int lastPage = list.size() - lastPageRemain;
 		page = 5 * page - 5;
-		for (int i = page; i < page + 5; i++) {
-			System.out.println(list.get(i));
-			showList.add(list.get(i));
+		// 5개씩 보여주기
+		if (page < lastPage) {
+			for (int i = page; i < page + 5; i++) {
+				System.out.println("5개");
+				showList.add(list.get(i));
+			}
+		} else if (page == lastPage) {
+			System.out.println("나머지");
+			for (int i = page; i < page + lastPageRemain; i++) {
+				showList.add(list.get(i));
+			}
 		}
-		System.out.println("logger - showList" + showList.toString());
 
 		if (showList != null) {
 			return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
@@ -104,37 +118,97 @@ public class SearchController {
 			searchService.insertArticle(singerDto.getS_name());
 		}
 		list = searchService.selectArticleList(singerDto.getS_name());
-		page = 5 * page - 5;
+//		page = 5 * page - 5;
+//
+//		// 5개씩 보여주기
+//		for (int i = page; i < page + 5; i++) {
+//			showList.add(list.get(i));
+//		}
 
+		int lastPageRemain = list.size() % 5;
+		int lastPage = list.size() - lastPageRemain;
+		page = 5 * page - 5;
 		// 5개씩 보여주기
-		for (int i = page; i < page + 5; i++) {
-			showList.add(list.get(i));
+		if (page < lastPage) {
+			for (int i = page; i < page + 5; i++) {
+				System.out.println("5개");
+				showList.add(list.get(i));
+			}
+		} else if (page == lastPage) {
+			System.out.println("나머지");
+			for (int i = page; i < page + lastPageRemain; i++) {
+				showList.add(list.get(i));
+			}
 		}
+
 		if (showList != null) {
 			return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@GetMapping("/schedule/todayList")
 	public ResponseEntity<List<BroadCastingDto>> todaylist() {
-		List<BroadCastingDto> list =searchService.broadCastAllList();
-		if (list!=null) {
-			return  new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
+		List<BroadCastingDto> list = searchService.broadCastAllList();
+		if (list != null) {
+			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
+
 	@GetMapping("/schedule/singerScheduleList/{s_idx}")
 	public ResponseEntity<List<BroadCastingDto>> singerScheduleList(@PathVariable("s_idx") int s_idx) {
 		SingerDto singerDto = searchService.singerSearch(s_idx);
-		List<BroadCastingDto> list =searchService.singerScheduleList(singerDto.getS_name());
-		if (list!=null) {
-			return  new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
+		List<BroadCastingDto> list = searchService.singerScheduleList(singerDto.getS_name());
+		if (list != null) {
+			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
+	// #### Board에 있는 영상 전체 개수
+	// #### Board에 있는 기사 전체 개수
+	// #### Board에 있는 가수별 영상 개수
+	// #### Board에 있는 가수별 기사 개수
+	@GetMapping("/board/count")
+	@ApiOperation(value = "b_type 1 = 동영상, 2 = 기사 && s_idx 0 = 전체, 나머지는 숫자 입력")
+	public ResponseEntity<Integer> checklist(@RequestParam int b_type, @RequestParam int s_idx) {
+		if (b_type == 1 || b_type == 2) {
+			int boardDto = searchService.checklist(b_type, s_idx);
+			return new ResponseEntity<Integer>(boardDto, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Integer>(-1, HttpStatus.NOT_FOUND);
+		}
+
+	}
+//	Board에 있는 좋아요순 (전체 영상, 전체 기사에 대한 좋아요순)
+
+	@GetMapping("{b_type}/good")
+	@ApiOperation(value = "영상 좋아요순으로 정렬")
+	public ResponseEntity<List<BoardDto>> videogood(@PathVariable int b_type, @RequestParam int page) {
+		List<BoardDto> showList = new LinkedList<BoardDto>();
+		if (b_type == 1 || b_type == 2) {
+			List<BoardDto> list = searchService.videoArticleGood(b_type);
+			int lastPageRemain = list.size() % 5;
+			int lastPage = list.size() - lastPageRemain;
+			page = 5 * page - 5;
+			// 5개씩 보여주기
+			if (page < lastPage) {
+				for (int i = page; i < page + 5; i++) {
+					showList.add(list.get(i));
+				}
+			} else if (page == lastPage) {
+				for (int i = page; i < page + lastPageRemain; i++) {
+					showList.add(list.get(i));
+				}
+			}
+
+			return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
 }
