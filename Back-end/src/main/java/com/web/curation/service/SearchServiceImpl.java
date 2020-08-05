@@ -156,7 +156,7 @@ public class SearchServiceImpl implements SearchService {
 		return searchDao.videoDetail(s_idx, b_idx);
 	}
 
-	//편성표 전체 출력
+	// 편성표 전체 출력
 	@Override
 	public List<BroadCastingDto> broadCastAllList() {
 		return searchDao.broadCastAllList();
@@ -165,6 +165,16 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public List<BroadCastingDto> singerScheduleList(String s_name) {
 		return searchDao.singerScheduleList(s_name);
+	}
+
+	@Override
+	public int checklist(int b_type, int s_idx) {
+		return searchDao.checklist(b_type, s_idx);
+	}
+
+	@Override
+	public List<BoardDto> videoArticleGood(int b_type) {
+		return searchDao.videoArticleGood(b_type);
 	}
 
 }

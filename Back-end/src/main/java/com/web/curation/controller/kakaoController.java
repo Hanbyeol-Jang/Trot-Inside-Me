@@ -1,28 +1,121 @@
 package com.web.curation.controller;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+
+import javax.net.ssl.SSLEngineResult.Status;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.web.curation.service.UserService;
+import com.web.curation.dto.KakaoDto;
+import com.web.curation.service.KakaoService;
+import com.web.curation.util.JwtTokenProvider;
+import com.web.curation.util.KakaoAPI;
 
-@CrossOrigin(origins = {"*"}, maxAge = 6000)
+@CrossOrigin(origins = { "*" }, maxAge = 6000)
 @Controller
 public class kakaoController {
+
 	@Autowired
-	private UserService userService;
-	
-	@RequestMapping("/kakao/login")
+	private KakaoAPI kakao;
+	@Autowired
+	KakaoService kakaoService;
+	private HttpSession session;
+	@Autowired
+	private JwtTokenProvider jtp;
+
+	@GetMapping("/social/login")
 	public String login() throws SQLException {
-		System.out.println("logger - " + "/kakao/login");
 		String URL = "https://kauth.kakao.com/oauth/authorize?client_id=78183e66919b34b25f731ea9f2d99f0e"
-				+ "&redirect_uri=http://localhost:8080/login"
-				+ "&response_type=code";
-		System.out.println(URL);
-		return "redirect:"+URL;
+				+ "&redirect_uri=http://localhost:8080/social/login/kakao" + "&response_type=code";
+//		System.out.println(URL);
+		return "redirect:" + URL;
 	}
-	
+
+	@GetMapping("/social/login/kakao")
+	public ResponseEntity<String> login(@RequestParam("code") String code) throws SQLException {
+		System.out.println("logger - kakao login 후에 getCode");
+		System.out.println("code : " + code);
+		System.out.println("logger - code를 기반으로 getAccessToken");
+		String access_Token = "";
+		try {
+			access_Token = kakao.getAccessToken(code);
+			System.out.println("controller access_token : " + access_Token);
+			return new ResponseEntity<String>(access_Token, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+		}
+	}
+
+//	localhost:8080/kakao/login/getInfo?access_Token=vGINGV1x5eCA_GkxqLp81f7kIWN2NGIop8v4DwopyNkAAAFzucQu6w
+	@PostMapping("/kakao/login/getInfo")
+	public ResponseEntity<HashMap<String, Object>> getInfo(@RequestParam String access_Token) throws SQLException {
+		HashMap<String, Object> userInfo = null;
+		KakaoDto kakaoDto = new KakaoDto();
+		session = null;
+		try {
+//    	userInfo = kakao.getUserInfo(access_Token);
+			kakaoDto = kakao.getUserInfo(access_Token);
+
+			System.out.println("login Controller : " + userInfo);
+//      클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
+//  if (userInfo.get("email") != null) {
+//      session.setAttribute("userId", userInfo.get("email"));
+//      session.setAttribute("access_Token", access_Token);
+//  }
+			return new ResponseEntity<HashMap<String, Object>>(userInfo, HttpStatus.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<HashMap<String, Object>>(userInfo, HttpStatus.NOT_FOUND);
+		}
+
+	}
+
+//	signController
+	// access_Token을 받아 얻어온 user의 정보가 db에 있는지 확인
+	@PostMapping(value = "/signin/kakao")
+	public ResponseEntity<String> signinByProvider(@RequestParam String access_Token) {
+		KakaoDto kakaoDto = kakao.getUserInfo(access_Token);
+		System.out.println(kakaoDto);
+		if (kakaoService.isId(kakaoDto.getId())) {
+			System.out.println("db에 있습니다");
+			
+			String Token = jtp.createToken(kakaoDto.getId());
+			System.out.println(Token);
+			return new ResponseEntity<String>(Token, HttpStatus.OK);
+		} else {
+			System.out.println("db에 없습니다.");
+			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
+		}
+
+	}
+
+	// access_Token을 받아 user의 정보가 없을 때 signup
+	@PostMapping(value = "/signup/kakao")
+	public ResponseEntity<String> signupByProvider(@RequestParam String access_Token) {
+		KakaoDto kakaoDto = kakao.getUserInfo(access_Token);
+		System.out.println(kakaoDto);
+		if (kakaoService.isId(kakaoDto.getId())) {
+			System.out.println("db에 있습니다");
+			return new ResponseEntity<String>("success", HttpStatus.OK);
+		} else {
+			System.out.println("db에 없습니다.");
+			kakaoService.insertKakao(kakaoDto);
+			System.out.println("db삽입");
+			return new ResponseEntity<String>("success", HttpStatus.OK);
+		}
+
+	}
 }

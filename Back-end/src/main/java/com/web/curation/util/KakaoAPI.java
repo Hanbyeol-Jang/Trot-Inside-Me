@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.web.curation.dto.KakaoDto;
  
 @Service
 public class KakaoAPI {
@@ -35,7 +36,7 @@ public class KakaoAPI {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=78183e66919b34b25f731ea9f2d99f0e");
-            sb.append("&redirect_uri=http://localhost:8080/login");
+            sb.append("&redirect_uri=http://localhost:8080/social/login/kakao");
             sb.append("&code=" + authorize_code);
             bw.write(sb.toString());
             bw.flush();
@@ -58,12 +59,11 @@ public class KakaoAPI {
             //    Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
-            
             access_Token = element.getAsJsonObject().get("access_token").getAsString();
             refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
             
-            System.out.println("access_token : " + access_Token);
-            System.out.println("refresh_token : " + refresh_Token);
+//            System.out.println("access_token : " + access_Token);
+//            System.out.println("refresh_token : " + refresh_Token);
             
             br.close();
             bw.close();
@@ -75,10 +75,12 @@ public class KakaoAPI {
         return access_Token;
     }
     
-	public HashMap<String, Object> getUserInfo (String access_Token) {
+//	public HashMap<String, Object> getUserInfo (String access_Token) {
+		public KakaoDto getUserInfo (String access_Token) {
 	    
 	    //    요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
-	    HashMap<String, Object> userInfo = new HashMap<>();
+//	    HashMap<String, Object> userInfo = new HashMap<>();
+	    KakaoDto kakaoDto = new KakaoDto();
 	    String reqURL = "https://kapi.kakao.com/v2/user/me";
 	    
 	    System.out.println("[logger - getUserInfo method]");
@@ -112,16 +114,23 @@ public class KakaoAPI {
 	        
 	        String nickname = properties.getAsJsonObject().get("nickname").getAsString();
 	        String email = kakao_account.getAsJsonObject().get("email").getAsString();
-	        
-	        userInfo.put("nickname", nickname);
-	        userInfo.put("email", email);
-	        System.out.println(userInfo);
-	        System.out.println(userInfo.toString());
+	      
+	        kakaoDto.setId(element.getAsJsonObject().get("id").getAsString());
+	        kakaoDto.setNickname(properties.getAsJsonObject().get("nickname").getAsString());
+	        kakaoDto.setThumbnail_image(properties.getAsJsonObject().get("thumbnail_image").getAsString());
+	        kakaoDto.setProfile_image(properties.getAsJsonObject().get("profile_image").getAsString());
+//	        kakaoDto.setProperties(properties);
+	        System.out.println("logger - kakaoDto 정보: "+kakaoDto);
+//	        userInfo.put("nickname", nickname);
+//	        userInfo.put("email", email);
+//	        System.out.println(userInfo);
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }
 	    
-	    return userInfo;
+//	    return userInfo;
+	    System.out.println("logger - checkPoint");
+	    return kakaoDto;
 	}
 
 }

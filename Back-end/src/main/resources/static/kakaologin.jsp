@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,9 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<div>
-		<a href="/social/login"><img
-			src="./images/kakao_login_medium_narrow.png"></a> 
-	</div>
+
 </body>
 </html>
