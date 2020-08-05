@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import com.web.curation.dto.UserDto;
 import com.web.curation.service.AdminServcie;
 import com.web.curation.service.UserService;
 
+@CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -43,6 +45,12 @@ public class AdminController {
         return new ResponseEntity<>(token, HttpStatus.OK);
 	}
 
+	@GetMapping("/logout")
+	public ResponseEntity<String> logout(HttpSession session) {
+		session.invalidate();
+        return new ResponseEntity<>("로그아웃", HttpStatus.OK);
+	}
+	
 	@GetMapping("/test")
 	public ResponseEntity<UserDto> test(HttpServletRequest request){
 		String tokenInfo = userService.getTokenInfo(request);
