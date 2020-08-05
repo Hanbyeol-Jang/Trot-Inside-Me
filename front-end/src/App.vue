@@ -1,7 +1,9 @@
 <template>
   <v-app id="app">
     <Header/>
-    <v-main class="mt-4">
+    <v-main 
+      id="scrolling-techniques-7"
+      class="mt-4">
       <v-container
         fluid
       >
