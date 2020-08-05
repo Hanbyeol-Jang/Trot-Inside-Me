@@ -5,8 +5,12 @@
       <v-btn x-large color="primary" @click="createCommunity"><v-icon class="mr-2">mdi-pencil</v-icon>게시글 작성</v-btn>
     </div>
       <div class="mt-5">
-          <!-- <CommunityDetailItem @community-delete="communityDelete" v-for="community in communities" :key="community.id" :community="community"/> -->
-          <CommunityDetailItem/>
+          <!-- <div v-for="community in communities" :key="community.id">
+            <router-link :to="{ name: 'CommunityDetailView', params: { communityId: community.id }}">
+              <CommunityDetail :community="community"/>
+            </router-link>  
+          </div> -->
+          <CommunityDetail/>
           <div class="my-5 text-center">
             <p class="mt-2" v-if="!communities.length">No results :(</p>
             <infinite-loading v-if="communities.length" @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
@@ -17,14 +21,14 @@
 
 <script>
 import axios from 'axios'
-import CommunityDetailItem from '@/components/community/CommunityDetailItem.vue'
+import CommunityDetail from '@/components/community/CommunityDetail.vue'
 import InfiniteLoading from 'vue-infinite-loading'
 import SERVER from '@/api/drf'
 
 export default {
     name: 'CommunityIndexView',
     components: {
-      CommunityDetailItem,
+      CommunityDetail,
       InfiniteLoading,
     },  
     data(){

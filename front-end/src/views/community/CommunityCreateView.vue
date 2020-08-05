@@ -1,18 +1,19 @@
 <template>
-  <div>
+  <div class="my-5">
     <h1 class="d-flex">커뮤니티 생성</h1>
   <v-card
     class="mx-auto mt-5"
     max-width="500"
   >
-    <v-card-text>
-      <v-textarea solo label="여기를 눌러 새로운 소식을 남겨보세요." height="400" v-model="content"></v-textarea>
-      <v-img :src="change_image" width="100%" height="100%" v-show="flag"></v-img>
-      <v-file-input show-size counter multiple label="사진을 등록 할 수 있습니다." type="file" id="file" ref="file" @change="communityImage()"></v-file-input>
-    </v-card-text>
+
     <v-card-actions class="d-flex flex-row-reverse">
         <v-btn text color="deep-purple accent-4" @click="createCommunity"><v-icon class="mr-2">mdi-pencil</v-icon>글 작성하기</v-btn>
     </v-card-actions>
+    <v-card-text>
+      <v-textarea solo label="여기를 눌러 새로운 소식을 남겨보세요." height="300" v-model="content"></v-textarea>
+      <v-img :src="change_image" width="100%" height="100%" v-show="flag"></v-img>
+      <v-file-input show-size counter multiple label="사진을 등록 할 수 있습니다." type="file" id="file" ref="file" @change="communityImage()"></v-file-input>
+    </v-card-text>
   </v-card>
   </div>
 </template>
