@@ -16,18 +16,11 @@
                   {{likeCnt}}
                 </v-btn>
               </div>
-
-              <div @click="showBookmarkChange()">
-                <v-btn icon>
-                  <v-icon v-show="!showBookmark">mdi-bookmark</v-icon>
-                  <v-icon v-show="showBookmark" color="yellow">mdi-bookmark</v-icon>
-                </v-btn>
-              </div>
-
               <div  @click="showCommentsChange()">
                 <v-btn icon>
                   <v-icon v-show="!showComments">mdi-message-text</v-icon>
                   <v-icon v-show="showComments" large color="blue darken-2">mdi-message-text</v-icon>
+                  {{commentCnt}}
                 </v-btn>
               </div>
 
@@ -54,49 +47,22 @@ export default {
   data(){
     return {
       video: [],
-      bookmarkCnt:'',
       likeCnt:'',
+      commentCnt:'',
       showLike: false,
       showComments: false,
-      showBookmark: false,
       // id : this.$router.params.videoId,
-      id:1
+      id:1,
+      axiosConfig : {
+          headers:{
+          Authorization : `Token ${this.$cookies.get('auth-token')}`
+          },
+      }
     }
   },
   methods: {
-    checkBookmarklike(){
-      const axiosConfig = {
-          headers:{
-          Authorization : `Token ${this.$cookies.get('auth-token')}`
-          },
-      }
-      axios.get(SERVER.URL + '/',this.article.id,axiosConfig)
-      .then((response)=>{
-        this.showBookmark = response.data.data
-        this.showLike = response.data.data
-      })
-      .catch((err) => {console.log(err.response.data)})
-    },
-    showBookmarkChange(){
-      const axiosConfig = {
-          headers:{
-          Authorization : `Token ${this.$cookies.get('auth-token')}`
-          },
-      }
-      axios.post(SERVER.URL+'/',this.article.id,axiosConfig)
-      .then((response)=>{
-        this.showBookmark = response.data.data
-        this.bookmarkCnt = response.data.data
-      })
-      .catch((err) => {console.log(err.response.data)})
-    },
     showLikeChange(){
-      const axiosConfig = {
-          headers:{
-          Authorization : `Token ${this.$cookies.get('auth-token')}`
-          },
-      }
-      axios.post(SERVER.URL+'/',this.article.id,axiosConfig)
+      axios.post(SERVER.URL+'/',`/${this.id}/`,this.axiosConfig)
       .then((response)=>{
         this.showLike = response.data.data
         this.likeCnt = response.data.data
@@ -104,14 +70,12 @@ export default {
       .catch((err) => {console.log(err.response.data)})
     },
     getVideo(){
-      //////////////////////////////////////////////////////////////////////////////////////
-      axios.get(SERVER.URL + `/${this.id}/`)
-      ///////////////////////////////////////////////////////////////////////////////////////
+      axios.get(SERVER.URL + `/${this.id}/`,this.axiosConfig)
         .then((response) => {
             this.video = response.data.data
-            this.bookmarkCnt = response.data.data
             this.likeCnt = response.data.data
-            this.checkBookmarklike()
+            this.commentCnt = response.data.data
+            this.showLike = response.data.data
         })
         .catch((err) => {console.log(err.response.data)})
     },

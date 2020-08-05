@@ -30,7 +30,7 @@ Vue.use(VueRouter)
   },
   {
     // path: '/article/:articleId',
-    path: '/article',
+    path: '/article/:articleId',
     name: 'ArticleDetailView',
     component: ArticleDetailView
   },
@@ -56,8 +56,23 @@ Vue.use(VueRouter)
   },
   {
     path: '/community',
-    name: 'CommunityView',
-    component: CommunityView
+    name: 'CommunityIndexView',
+    component: CommunityIndexView
+  },
+  {
+    path: '/community/:communityId',
+    name: 'CommunityDetailView',
+    component: CommunityDetailView
+  },
+  {
+    path: '/create/community',
+    name: 'CommunityCreateView',
+    component: CommunityCreateView
+  },
+  {
+    path: '/update/:communityId',
+    name: 'CommunityUpdateView',
+    component: CommunityUpdateView
   },
   {
     path: '/vote',
