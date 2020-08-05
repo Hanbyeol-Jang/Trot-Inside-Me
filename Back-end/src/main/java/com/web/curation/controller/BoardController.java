@@ -1,7 +1,6 @@
 package com.web.curation.controller;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dto.BoardPK;
-import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.service.BoardService;
 
 import io.swagger.annotations.ApiOperation;
@@ -26,7 +24,6 @@ public class BoardController {
 
 	@Autowired
 	private BoardService service;
-
 
 	/* 좋아요 수 표시 */
 	@ApiOperation("좋아요 수 표시")
@@ -49,7 +46,6 @@ public class BoardController {
 		}
 	}
 
-
 	/* 좋아요 클릭 */
 	@ApiOperation("좋아요 클릭")
 	@PostMapping("/board/good")
@@ -67,7 +63,6 @@ public class BoardController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-
 
 	/* 좋아요 취소 */
 	@ApiOperation("좋아요 취소")
