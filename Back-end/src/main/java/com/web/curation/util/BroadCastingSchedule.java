@@ -18,33 +18,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.web.curation.dto.AdminDto;
 import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.SingerDto;
+import com.web.curation.service.AdminServcie;
 import com.web.curation.service.TimeService;
 
 @Component
 public class BroadCastingSchedule {
-	static String[][] broad4 = { { "뽕숭아학당",
-			"https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=%EB%BD%95%EC%88%AD%EC%95%84+%ED%95%99%EB%8B%B9+%ED%8E%B8%EC%84%B1%ED%91%9C" },
-			{ "신청곡을 불러드립니다 - 사랑의 콜센타",
-					"https://search.naver.com/search.naver?where=nexearch&query=%EC%82%AC%EB%9E%91%EC%9D%98+%EC%BD%9C%EC%84%BC%ED%84%B0+%ED%8E%B8%EC%84%B1%ED%91%9C&sm=tab_stc" },
-			{ "트롯신이 떴다",
-					"https://search.naver.com/search.naver?where=nexearch&sm=tab_etc&pkid=57&os=13857215&query=%ED%8A%B8%EB%A1%AF%EC%8B%A0%EC%9D%B4%20%EB%96%B4%EB%8B%A4" },
-			{ "보이스트롯",
-					"https://search.naver.com/search.naver?where=nexearch&query=%EB%B3%B4%EC%9D%B4%EC%8A%A4%ED%8A%B8%EB%A1%AF&ie=utf8&sm=tab_she&qdt=0" } };
 
 	@Autowired
-	TimeService service;
+	TimeService timeService;
 
+	@Autowired
+	AdminServcie adminService;
+	
 	@Scheduled(cron = "0 0 0 * * ?")
 	public void insertTodaySchedule() throws Exception {
-		service.deleteYesterDaySchedule();
+		// 편성표 삭제
+		timeService.deleteYesterDaySchedule();
+		
+		//편성표 url 리스트 가져옴. 
+		List<AdminDto> broad = adminService.getBroadScheduleList();
 
+		//크롤링 시작
 		ArrayList<BroadCastingDto> list = new ArrayList<>();
 		try {
-			for (int i = 0; i < broad4.length; i++) {
-				System.out.println(broad4[i][0]);
-				Document doc = Jsoup.connect(broad4[i][1]).get();
+			for (int i = 0; i < broad.size(); i++) {
+				System.out.println(broad.get(i).getA_broadName());
+				Document doc = Jsoup.connect(broad.get(i).getA_broadUrl()).get();
 				ArrayList<String> brlist = new ArrayList<>();
 				Elements elb = doc.select("td.first");
 				for (Element bel : elb) {
@@ -58,13 +60,13 @@ public class BroadCastingSchedule {
 						BroadCastingDto dto = new BroadCastingDto();
 						dto.setBc_company(brlist.get(cnt));
 						dto.setBc_time(ee.text());
-						dto.setBc_title(broad4[i][0]);
+						dto.setBc_title(broad.get(i).getA_broadName());
 						list.add(dto);
 					}
 					cnt++;
 				}
 			}
-			service.insertTodaySchedule(list);
+			timeService.insertTodaySchedule(list);
 		} catch (IOException e1) {
 			System.out.println("크롤링 실패");
 			e1.printStackTrace();
@@ -77,14 +79,14 @@ public class BroadCastingSchedule {
 	@Scheduled(cron = "50 45 15 * * ?")
 	public void insertSingerSchedule() throws Exception {
 		// db 가수 리스트 받아옴.
-		List<SingerDto> dsList = service.selectSinger();
+		List<SingerDto> dsList = timeService.selectSinger();
 		for (int i = 0; i < dsList.size(); i++) {
 			if(dsList.get(i).getS_cafeUrl()==null) {
 				dsList.remove(i);
 			}
 		}
 		// 스케줄 삭제
-		service.deleteSingerSchedule();
+		timeService.deleteSingerSchedule();
 
 		// 크롤링시작.
 		System.setProperty("webdriver.chrome.driver", "src/main/resources/driver/chromedriver.exe");
@@ -129,7 +131,7 @@ public class BroadCastingSchedule {
 		driver.quit();
 
 		// 가수 리스트 디비 저장
-		service.insertSingerSchedule(slist);
+		timeService.insertSingerSchedule(slist);
 	}
 
 	
