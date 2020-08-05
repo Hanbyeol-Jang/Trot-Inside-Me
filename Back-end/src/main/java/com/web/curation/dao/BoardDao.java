@@ -1,6 +1,7 @@
 package com.web.curation.dao;
 
 import com.web.curation.dto.BoardPK;
+
 import com.web.curation.dto.ReplyDto;
 
 public interface BoardDao {

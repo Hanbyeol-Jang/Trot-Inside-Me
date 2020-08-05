@@ -1,7 +1,5 @@
 package com.web.curation.dto;
 
-import com.google.gson.JsonObject;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
