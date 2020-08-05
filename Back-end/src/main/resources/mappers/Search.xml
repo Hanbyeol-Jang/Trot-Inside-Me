@@ -83,5 +83,23 @@
 	<select id="singerScheduleList" parameterType="String" resultType="com.web.curation.dto.BroadCastingDto">
 		select * from BroadCasting where bc_member = #{s_name};
 	</select>
+	
+	<!-- 영상 또는 기사 총 개수 -->
+	<select id="countallvideoarticle" resultType="Integer">
+		select Count(*) from Board where b_type = #{b_type}
+	</select> 
+	
+	<!-- 영상 또는 기사 가수별 개수 -->
+	<select id="countmembervideoarticle" resultType="Integer">
+	select Count(*) from Board where b_type = #{b_type}
+	and b_member = (select s_name from Singer where s_idx = #{s_idx})
+	</select> 
+	
+	<select id="videogood" resultType="BoardDto">
+		select * from Board
+		where 1=1
+		and b_type = #{b_type}
+		order by b_good desc;
+	</select>
  </mapper>
         
