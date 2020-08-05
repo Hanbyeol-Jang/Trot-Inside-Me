@@ -37,6 +37,12 @@ public class JwtTokenProvider {
          return token;
     }
     
+    // 카카오 로그인 시 헤더에서 access Token 얻어옴
+    public String getAccessToken(HttpServletRequest request) {
+    	String access_token = request.getHeader("access_token");
+    	return access_token;
+    }
+    
     public boolean validateToken(Jws<Claims> claims) {
         try {
             return !claims.getBody().getExpiration().before(new Date());

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.web.curation.dao.KakaoDao;
-import com.web.curation.dto.KakaoDto;
+import com.web.curation.dto.UserDto;
 
 @Service
 public class KakaoServiceImpl implements KakaoService {
@@ -13,13 +13,15 @@ public class KakaoServiceImpl implements KakaoService {
 	private KakaoDao kakaoDao;
 	
 	@Override
-	public Boolean isId(String id) {
-		return kakaoDao.isId(id);
+	public Boolean isEmail(String email) {
+		return kakaoDao.isEmail(email);
 	}
 
 	@Override
-	public void insertKakao(KakaoDto kakaoDto) {
-		kakaoDao.insertKakao(kakaoDto);
+	public void insertKakao(UserDto userDto) {
+		kakaoDao.insertKakao(userDto);
 	}
+
+
 
 }
