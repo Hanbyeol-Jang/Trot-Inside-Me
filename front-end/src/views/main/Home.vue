@@ -27,7 +27,7 @@
                 <MagazineIcon v-if="menu.id === 2" />
                 <TelevisionIcon v-if="menu.id === 3" />
                 <MicrophoneIcon v-if="menu.id === 4" />
-                <div>{{ menu.title }}</div>
+                <div class="menu-title">{{ menu.title }}</div>
               </v-card>
             </v-col>
             <v-responsive
@@ -93,5 +93,7 @@ export default {
 </script>
 
 <style scoped>
-
+.menu-title{
+  font-size: 25px;
+}
 </style>
