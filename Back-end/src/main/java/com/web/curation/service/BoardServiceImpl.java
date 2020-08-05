@@ -18,16 +18,6 @@ public class BoardServiceImpl implements BoardService {
 	BoardDao dao;
 
 	@Override
-	public boolean followApply(FollowDto dto) {
-		return dao.followApply(dto) == 1;
-	}
-
-	@Override
-	public boolean followDelete(String userid) {
-		return dao.followDelete(userid) == 1;
-	}
-
-	@Override
 	public boolean goodClick(BoardPK boardPK) {
 		return dao.goodClick(boardPK) == 1;
 	}
@@ -42,25 +32,5 @@ public class BoardServiceImpl implements BoardService {
 		return dao.goodCount(boardPK);
 	}
 
-	@Override
-	public boolean goodAuserConnect(int b_idx, String userEmail) {
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("b_idx", b_idx);
-		map.put("userEmail", userEmail);
-		return dao.goodAuserConnect(map) == 1;
-	}
-
-	@Override
-	public boolean goodAuserConnectDelete(int b_idx, String userEmail) {
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("b_idx", b_idx);
-		map.put("userEmail", userEmail);
-		return dao.goodAuserConnectDelete(map) == 1;
-	}
-
-	@Override
-	public List<BroadCastingDto> broadCastAllList() {
-		return dao.broadCastAllList();
-	}
 
 }
