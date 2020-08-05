@@ -16,7 +16,7 @@ export default new Vuex.Store({
   },
   getters: {
     isLoggedIn: state => !!state.authToken,
-    config: state => ({ headers: { Authorization: `Token ${state.authToken}` } }),
+    config: state => ({ headers: { token: `${state.authToken}` } }),
     singersLength: state => state.singers.length
   },
   mutations: {
@@ -45,6 +45,16 @@ export default new Vuex.Store({
             .catch(err=>{ console.error(err) })
       }
     },
+    getUser({ getters }) {
+      axios.get(SERVER.URL + "/test", getters.config)
+            .then(response => {
+                console.log(response)
+            })
+        .catch((err)=>{
+            console.error(err)
+        })    
+    }
+    
   },
   modules: {
   }

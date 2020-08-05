@@ -4,7 +4,7 @@
       fixed
       absolute
       color="white"
-      elevate-on-scroll
+      elevate-on-scroll 
       height="50px"
     >
       <v-btn v-if="navBool" icon><i class="fas fa-bell fa-lg"></i></v-btn>
