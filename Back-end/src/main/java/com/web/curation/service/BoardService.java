@@ -1,10 +1,7 @@
 package com.web.curation.service;
 
-import java.util.List;
-
 import com.web.curation.dto.BoardPK;
-import com.web.curation.dto.BroadCastingDto;
-import com.web.curation.dto.FollowDto;
+import com.web.curation.dto.ReplyDto;
 
 public interface BoardService {
 
@@ -17,5 +14,10 @@ public interface BoardService {
 	/* 좋아요 수 표시 */
 	int goodCount(BoardPK boardPK);
 
+	/* 댓글 작성 */
+	boolean addComment(ReplyDto replyDto);
+
+	/* 댓글 삭제 */
+	boolean deleteComment(ReplyDto replyDto);
 
 }

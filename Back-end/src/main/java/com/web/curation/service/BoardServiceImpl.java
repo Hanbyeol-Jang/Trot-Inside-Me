@@ -10,6 +10,7 @@ import com.web.curation.dao.BoardDao;
 import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.FollowDto;
+import com.web.curation.dto.ReplyDto;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -32,5 +33,14 @@ public class BoardServiceImpl implements BoardService {
 		return dao.goodCount(boardPK);
 	}
 
+	@Override
+	public boolean addComment(ReplyDto replyDto) {
+		return dao.addComment(replyDto) == 1;
+	}
+
+	@Override
+	public boolean deleteComment(ReplyDto replyDto) {
+		return dao.deleteComment(replyDto) == 1;
+	}
 
 }
