@@ -54,8 +54,17 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String createToken(String email, String password) {
-		UserDto member = userDao.getUserInfoSuc(email); 
-
+		System.out.println("email :"+email+",pw:"+password+",");
+		UserDto member = new UserDto();
+		try {
+			member = userDao.getUserInfoSuc(email); 
+			
+		} catch (Exception e) {
+			System.out.println("실패");
+			e.printStackTrace();
+		}
+		
+		System.out.println("회원정보 가져옴. "+member);
 		String token = "";
 		if (!password.equals(member.getU_pw())) { 
 			System.out.println("비밀번호 다름");
@@ -81,6 +90,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<FollowDto> getFollowList(String userEmail) {
 		return userDao.getFollowList(userEmail);
+	}
+
+	@Override
+	public boolean followApply(FollowDto dto) {
+		return userDao.followApply(dto)==1;
+	}
+
+	@Override
+	public boolean followDelete(FollowDto dto) {
+		// TODO Auto-generated method stub
+		return userDao.followDelete(dto)==1;
 	}
 
 }

@@ -19,15 +19,6 @@ public class BoardDaoImpl implements BoardDao {
 
 	String ns = "com.web.curation.dao.BoardDao.";
 
-	@Override
-	public int followApply(FollowDto dto) {
-		return session.insert(ns + "followApply", dto);
-	}
-
-	@Override
-	public int followDelete(String u_email) {
-		return session.delete(ns + "followDelete", u_email);
-	}
 
 	@Override
 	public int goodClick(BoardPK boardPK) {
@@ -42,26 +33,6 @@ public class BoardDaoImpl implements BoardDao {
 	@Override
 	public int goodCount(BoardPK boardPK) {
 		return session.selectOne(ns + "goodCount", boardPK);
-	}
-
-	@Override
-	public int goodAuserConnect(HashMap<String, Object> map) {
-		return session.insert(ns + "goodAuserConnect", map);
-	}
-
-	@Override
-	public int goodAuserConnectDelete(HashMap<String, Object> map) {
-		return session.delete(ns + "goodAuserConnectDelete", map);
-	}
-
-	@Override
-	public List<BroadCastingDto> broadCastAllList() {
-		return session.selectList(ns + "broadCastAllList");
-	}
-
-	@Override
-	public String searchSingerName(int s_idx) {
-		return session.selectOne(ns + "searchSingerName", s_idx);
 	}
 
 }

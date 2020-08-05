@@ -52,6 +52,16 @@ public class UserDaoImpl implements UserDao {
 	public List<FollowDto> getFollowList(String userEmail) {
 		return sqlSession.selectList(ns+"getFollowList", userEmail);
 	}
+
+	@Override
+	public int followApply(FollowDto dto) {
+		return sqlSession.insert(ns+"followApply",dto);
+	}
+
+	@Override
+	public int followDelete(FollowDto dto) {
+		return sqlSession.delete(ns+"followDelete",dto);
+	}
 	
 	
 }
