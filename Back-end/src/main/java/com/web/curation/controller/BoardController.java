@@ -27,15 +27,6 @@ public class BoardController {
 	@Autowired
 	private BoardService service;
 
-	@GetMapping("/schedule/todayList")
-	public ResponseEntity<List<BroadCastingDto>> todaylist() {
-		List<BroadCastingDto> list = service.broadCastAllList();
-		if (list != null) {
-			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-	}
 
 	/* 좋아요 수 표시 */
 	@ApiOperation("좋아요 수 표시")
@@ -58,27 +49,6 @@ public class BoardController {
 		}
 	}
 
-	/*
-	 * 좋아요 클릭
-	 * 
-	 * @PostMapping("/board/good/{u_email}/{b_type}/{b_idx}") public
-	 * ResponseEntity<HashMap<String, Object>> goodClick(@PathVariable("b_type") int
-	 * b_type,
-	 * 
-	 * @PathVariable("b_idx") int b_idx, @PathVariable("u_email") String u_email) {
-	 * try { BoardPK boardPK = new BoardPK(); boardPK.setB_type(b_type);
-	 * boardPK.setB_idx(b_idx); boardPK.setU_email(u_email);
-	 * 
-	 * 
-	 * 
-	 * int like_count = service.goodCount(boardPK); HashMap<String, Object> map =
-	 * new HashMap<>(); map.put("like_count", like_count); map.put("like_boolean",
-	 * true);
-	 * 
-	 * return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK); }
-	 * catch (Exception e) { return new ResponseEntity<>(null,
-	 * HttpStatus.NOT_FOUND); } }
-	 */
 
 	/* 좋아요 클릭 */
 	@ApiOperation("좋아요 클릭")
@@ -98,28 +68,6 @@ public class BoardController {
 		}
 	}
 
-////	좋아요 취소 
-//	@GetMapping("/board/goodCancel")
-//	public ResponseEntity<HashMap<String, Object>> goodClickCancel() {
-//		// 임시정보 취소했다고 가정 ->
-//		int b_idx = 1;// (김호중 기사)
-//		String userEmail = "a1234";
-//
-//		if (service.goodClickCancel(b_idx)) {
-//			if (service.goodAuserConnectDelete(b_idx, userEmail)) {
-////				int like_count = service.goodCount(b_idx);
-//				int like_count = 1;
-//				HashMap<String, Object> map = new HashMap<>();
-//				map.put("like_count", like_count);
-//				map.put("like_boolean", false);
-//				return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-//			} else {
-//				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//			}
-//		} else {
-//			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//		}
-//	}
 
 	/* 좋아요 취소 */
 	@ApiOperation("좋아요 취소")
