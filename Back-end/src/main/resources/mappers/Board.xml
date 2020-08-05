@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 	
+		 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.web.curation.dao.BoardDao">
+	<!-- 게시물 좋아요 클릭 -->
+	<insert id="goodClick">
+		insert into Good(b_type, b_idx, u_email)
+		value(#{b_type}, #{b_idx}, #{u_email});
+	</insert>
+	
+	<!-- 게시물 좋아요 클릭취소 -->
+	<delete id="goodClickCancel">
+		delete	from Good
+		where 	b_type = #{b_type} AND
+				b_idx = #{b_idx} AND 
+				u_email = #{u_email};
+	</delete>
+
+	<!-- 좋아요 연결 => 게시물 번호와 유저  -->
+	<insert id="goodAuserConnect" parameterType="hashmap"> 
+		insert into Good(b_idx, u_email)
+		value(#{b_idx}, #{u_email});
+	</insert>
+	
+	<!-- 좋아요 연결취소 => 게시물 번호와 유저  -->
+	<delete id="goodAuserConnectDelete" parameterType="hashmap"> 
+		delete from Good
+		where b_idx =#{b_idx} and u_email = #{u_email};
+	</delete>
+	
+	<!-- 좋아요 수 출력  -->
+	<select id="goodCount" parameterType="int" resultType="int">
+		SELECT 	count(u_email)
+		FROM 	Board b left outer join Good g
+				ON b.b_type =g.b_type and b.b_idx = g.b_idx
+		where	b.b_type = #{b_type} and
+				b.b_idx	 = #{b_idx};
+	</select>
+
+	<!-- 편성표 리스트 출력 -->
+	<select id="broadCastAllList" resultType="com.web.curation.dto.BroadCastingDto">
+		select * from BroadCasting;
+	</select>
+
+ 	<!-- 팔로우 등록 -->
+ 	<insert id="followApply" parameterType="com.web.curation.dto.FollowDto">
+ 		insert into Following(u_email, s_idx) 
+ 		values(#{u_email},#{s_idx});
+ 	</insert>
+ 
+ 	<delete id="followDelete" parameterType="String">
+ 		delete from Following where u_email= #{u_email};
+ 	</delete>
+ 	
+ 	<!-- 편성표 리스트 출력 -->
+	<select id="articleAllList" resultType="com.web.curation.dto.ArticleDto">
+		select * from Article;
+	</select>
+	<!-- 편성표 리스트 출력 -->
+	<select id="videoAllList" resultType="com.web.curation.dto.VideoDto">
+		select * from Video;
+	</select>
+	<!-- 편성표 리스트 출력 -->
+	<select id="articleSearchList" parameterType="String" resultType="com.web.curation.dto.ArticleDto">
+		select * from Article where a_member=#{a_member};
+	</select>
+	<!-- 편성표 리스트 출력 -->
+	<select id="videoSearchList" parameterType="String" resultType="com.web.curation.dto.VideoDto">
+		select * from Video where v_member=#{v_member};
+	</select>
+	
+	<select id="searchSingerName" parameterType="int" resultType="String">
+		select s_name from Singer where s_idx=#{s_idx};
+	</select>
+	
+ </mapper>
+        
