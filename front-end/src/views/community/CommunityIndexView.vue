@@ -7,10 +7,10 @@
       <div class="mt-5">
           <!-- <div v-for="community in communities" :key="community.id">
             <router-link :to="{ name: 'CommunityDetailView', params: { communityId: community.id }}">
-              <CommunityDetail :community="community"/>
+              <CommunityDetailItem :community="community"/>
             </router-link>  
           </div> -->
-          <CommunityDetail/>
+          <CommunityDetailItem/>
           <div class="my-5 text-center">
             <p class="mt-2" v-if="!communities.length">No results :(</p>
             <infinite-loading v-if="communities.length" @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
@@ -21,14 +21,14 @@
 
 <script>
 import axios from 'axios'
-import CommunityDetail from '@/components/community/CommunityDetail.vue'
+import CommunityDetailItem from '@/components/community/CommunityDetailItem.vue'
 import InfiniteLoading from 'vue-infinite-loading'
 import SERVER from '@/api/drf'
 
 export default {
     name: 'CommunityIndexView',
     components: {
-      CommunityDetail,
+      CommunityDetailItem,
       InfiniteLoading,
     },  
     data(){
