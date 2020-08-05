@@ -7,12 +7,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.google.common.base.Optional;
-import com.web.curation.dto.ArticleDto;
 import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.FollowDto;
-import com.web.curation.dto.VideoDto;
 
 @Repository
 public class BoardDaoImpl implements BoardDao {
@@ -60,26 +57,6 @@ public class BoardDaoImpl implements BoardDao {
 	@Override
 	public List<BroadCastingDto> broadCastAllList() {
 		return session.selectList(ns + "broadCastAllList");
-	}
-
-	@Override
-	public List<ArticleDto> articleAllList() {
-		return session.selectList(ns + "articleAllList");
-	}
-
-	@Override
-	public List<VideoDto> videoAllList() {
-		return session.selectList(ns + "videoAllList");
-	}
-
-	@Override
-	public List<ArticleDto> articleSearchList(String a_member) {
-		return session.selectList(ns + "articleSearchList", a_member);
-	}
-
-	@Override
-	public List<VideoDto> videoSearchList(String v_member) {
-		return session.selectList(ns + "videoSearchList", v_member);
 	}
 
 	@Override

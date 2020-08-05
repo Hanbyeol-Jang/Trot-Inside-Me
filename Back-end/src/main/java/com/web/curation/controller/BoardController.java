@@ -12,14 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dto.BoardPK;
-import com.web.curation.dto.ArticleDto;
 import com.web.curation.dto.BroadCastingDto;
-import com.web.curation.dto.FollowDto;
-import com.web.curation.dto.VideoDto;
 import com.web.curation.service.BoardService;
 
 import io.swagger.annotations.ApiOperation;
@@ -148,72 +144,4 @@ public class BoardController {
 
 	}
 
-//	임시로 팔로우 넣어줌 
-	@GetMapping("/follow/apply")
-	public ResponseEntity<String> Follow() {
-		// 임영웅 꺼를 눌렀다고 가정
-		// 유저 아이디가 a1234 라고 가정
-		// favorite 테이블에 입력
-		FollowDto dto = new FollowDto();
-		dto.setU_email("a1234");
-		dto.setS_idx(1);
-
-		if (service.followApply(dto)) {
-			return new ResponseEntity<>("팔로우 추가 성공", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("팔로우 추가 실패", HttpStatus.NOT_FOUND);
-		}
-	}
-
-	@GetMapping("/follow/delete")
-	public Object FollowDelete() {
-		// 유저 아이디가 a1234 라고 가정
-		// favorite 테이블에서 삭제
-		if (service.followDelete("a1234")) {
-			return new ResponseEntity<>("팔로우 삭제 성공", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("팔로우 삭제 실패", HttpStatus.NOT_FOUND);
-		}
-	}
-//	임시로 팔로우 넣어줌. 
-
-	@GetMapping("/board/ArticleAllList")
-	public ResponseEntity<List<ArticleDto>> ArticleAllList() {
-		List<ArticleDto> list = service.articleAllList();
-		if (list != null) {
-			return new ResponseEntity<List<ArticleDto>>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-	}
-
-	@GetMapping("/board/ArticleSearchList")
-	public ResponseEntity<List<ArticleDto>> ArticleSearchList(@RequestParam int s_idx) {
-		List<ArticleDto> list = service.articleSearchList(s_idx);
-		if (list != null) {
-			return new ResponseEntity<List<ArticleDto>>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-	}
-
-	@GetMapping("/board/VideoAllList")
-	public ResponseEntity<List<VideoDto>> VideoAllList() {
-		List<VideoDto> list = service.videoAllList();
-		if (list != null) {
-			return new ResponseEntity<List<VideoDto>>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-	}
-
-	@GetMapping("/board/VideoSearchList")
-	public ResponseEntity<List<VideoDto>> VideoSearchList(@RequestParam int s_idx) {
-		List<VideoDto> list = service.videoSearchList(s_idx);
-		if (list != null) {
-			return new ResponseEntity<List<VideoDto>>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-	}
 }
