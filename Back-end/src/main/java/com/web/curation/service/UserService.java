@@ -1,9 +1,11 @@
 package com.web.curation.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.web.curation.dto.FollowDto;
 import com.web.curation.dto.UserDto;
 
 public interface UserService {
@@ -28,6 +30,9 @@ public interface UserService {
 	//접속
 	public String getTokenInfo(HttpServletRequest request);
 	public UserDto getUserInfoToken(String tokenInfo);
+	
+	//팔로우 리스트
+	public List<FollowDto> getFollowList(String tokenInfo_userEmail);
 
 
 }
