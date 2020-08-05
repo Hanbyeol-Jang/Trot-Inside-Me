@@ -10,9 +10,9 @@
                                     width="200px">
                             </div>
                             <h4 class="msg-info pl-0 text-center">로그인해주세요 :)</h4>
-                            <div class="row justify-center px-3"><v-btn height="45px" block class="btn-kakao" color="amber lighten-2"><i class="fas fa-comment mr-2" @click="kakaoLogin"></i>카카오톡 로그인</v-btn></div>
+                            <div class="row justify-center px-3"><v-btn height="45px" block class="btn-kakao" color="amber lighten-2"><i class="fas fa-comment mr-2"></i>카카오톡 로그인</v-btn></div>
                                 <KakaoLogin
-                                api-key="78183e66919b34b25f731ea9f2d99f0e"
+                                api-key="3b520fb7e5e907ebebfde93be5b8a1aa"
                                 image="kakao_login_btn_large"
                                 :on-success=onSuccess
                                 :on-failure=onFailure
@@ -29,6 +29,7 @@
                 </div>
             </div>
         </div>
+        <button @click="kakaoLogin">확인</button>
     </div>
   
 </template>
@@ -40,16 +41,17 @@ import KakaoLogin from 'vue-kakao-login'
 
 import Swal from 'sweetalert2'
 import axios from 'axios'
-// import SERVER from '@/api/drf'
+import SERVER from '@/api/drf'
 
-let onSuccess = (data) => {
-  console.log(data)
-  console.log("success")
-}
-let onFailure = (data) => {
-  console.log(data)
-  console.log("failure")
-}
+// let onSuccess = (data) => {
+//   console.log(data)
+//   console.log("success")
+//   console.log(data.access_token)
+// }
+// let onFailure = (data) => {
+//   console.log(data)
+//   console.log("failure")
+// }
 
 export default {
     mixins: [validationMixin],
@@ -68,15 +70,38 @@ export default {
         return {
             email: '',
             password: '',
+            token:'',
         }
     },
     methods: {
-        onSuccess,
-        onFailure,
+        onSuccess(data){
+            console.log('야호')
+            console.log(data)
+            console.log("success")
+            this.token = data.access_token
+            const dataa = new FormData()
+            dataa.append('access_Token',this.token)
+            console.log(this.token)
+            axios.post(`${SERVER.URL}/kakao/login/getInfo`,dataa)
+            .then((res)=>{
+                console.log(444444444444444444444444444444444)
+                console.log(res)
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        },
+        onFailure(data){
+            console.log(data)
+            console.log("failure")
+        },
         kakaoLogin(){
             console.log(12343423)
-            axios.get("https://kauth.kakao.com/oauth/authorize?client_id=3b520fb7e5e907ebebfde93be5b8a1aa"
-            + "&redirect_uri=http://localhost:8080/social/login/kakao" + "&response_type=code")
+            console.log(this.token)
+            const data = new FormData()
+            data.append('access_Token',this.token)
+            console.log(data)
+            axios.post(`${SERVER.URL}/kakao/login/getInfo`,data)
             .then((res)=>{
                 console.log(444444444444444444444444444444444)
                 console.log(res)
