@@ -1,11 +1,13 @@
 package com.web.curation.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.web.curation.dto.FollowDto;
 import com.web.curation.dto.UserDto;
 
 @Repository
@@ -35,7 +37,7 @@ public class UserDaoImpl implements UserDao {
 	public void changePassword(UserDto userDto) {
 		sqlSession.update(ns+"changepassword", userDto);
 	}
-///////////////////////
+
 	@Override
 	public int join(UserDto user) {
 		return sqlSession.insert(ns+"join", user);
@@ -45,4 +47,11 @@ public class UserDaoImpl implements UserDao {
 	public UserDto getUserInfoSuc(String email) {
 		return sqlSession.selectOne(ns+"getUserInfoSuc", email);
 	}
+
+	@Override
+	public List<FollowDto> getFollowList(String userEmail) {
+		return sqlSession.selectList(ns+"getFollowList", userEmail);
+	}
+	
+	
 }
