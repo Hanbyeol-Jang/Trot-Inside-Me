@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.web.curation.dao.AdminDao;
 import com.web.curation.dto.AdminDto;
+import com.web.curation.dto.SingerDto;
 
 @Service
 public class AdminServiceImpl implements AdminServcie {
@@ -27,6 +28,21 @@ public class AdminServiceImpl implements AdminServcie {
 	@Override
 	public List<AdminDto> getBroadScheduleList() {
 		return admindao.getBroadScheduleList();
+	}
+
+	@Override
+	public boolean addSinger(SingerDto dto) {
+		return admindao.addSinger(dto)==1;
+	}
+
+	@Override
+	public boolean deleteSinger(int s_idx) {
+		return admindao.deleteSinger(s_idx)==1;
+	}
+
+	@Override
+	public List<SingerDto> getSingerList() {
+		return admindao.getSingerList();
 	}
 
 }

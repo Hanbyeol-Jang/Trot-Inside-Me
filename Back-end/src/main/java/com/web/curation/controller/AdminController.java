@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dto.AdminDto;
+import com.web.curation.dto.SingerDto;
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.AdminServcie;
 import com.web.curation.service.UserService;
@@ -34,14 +35,10 @@ public class AdminController {
 	private AdminServcie adminService;
 	
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody UserDto user, HttpServletRequest request, HttpSession session) {
+	public ResponseEntity<String> login(@RequestBody UserDto user, HttpServletRequest request) {
 		
 		//관리자 로그인 할때 다음 페이지가 관리자가 아니면 안넘어갈 수 있도록 하는 방법이 있는 지 찾아보기. -> 인터 셉터?
 		String token = userService.createToken(user.getU_email(), user.getU_pw());
-		if(token != null) {
-			session.setAttribute("u_email", user.getU_email());
-			session.setAttribute("u_name", user.getU_name());
-		}
         return new ResponseEntity<>(token, HttpStatus.OK);
 	}
 
@@ -64,7 +61,7 @@ public class AdminController {
 	
 
 	//관리자 - 편성표 주소 추가
-	@PostMapping("/broadSchedule")
+	@PostMapping("/broadSchedule/add")
 	public ResponseEntity<String> broadSchedule(@RequestBody AdminDto dto) {
 		if(adminService.addBroadSchedule(dto)) {
 			return new ResponseEntity<String>("편성표 추가 완료",HttpStatus.OK);
@@ -73,7 +70,7 @@ public class AdminController {
 		}
 	}
 	
-	@DeleteMapping("/broadSchedule/{a_idx}")
+	@DeleteMapping("/broadSchedule/delete/{a_idx}")
 	public ResponseEntity<String> DeleteBroadSchedule(@PathVariable int a_idx) {
 		if(adminService.deleteBroadSchedule(a_idx)) {
 			return new ResponseEntity<String>("편성표 삭제 완료",HttpStatus.OK);
@@ -92,4 +89,30 @@ public class AdminController {
 		}
 	}
 	
+	@GetMapping("/singer/list")
+	public ResponseEntity<List<SingerDto>> getSingerList(){
+		List<SingerDto> list = adminService.getSingerList();
+		if(list!=null) {
+			return new ResponseEntity<List<SingerDto>>(list, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+	@PostMapping("/singer/add")
+	public ResponseEntity<String> singerAdd(@RequestBody SingerDto dto) {
+		if(adminService.addSinger(dto)) {
+			return new ResponseEntity<String>("가수 추가 완료",HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>("가수 추가 에러 ",HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@DeleteMapping("/singer/delete/{s_idx}")
+	public ResponseEntity<String> deleteSinger(@PathVariable int s_idx) {
+		if(adminService.deleteSinger(s_idx)) {
+			return new ResponseEntity<String>("가수 삭제 완료",HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>("가수 삭제 에러 ",HttpStatus.NOT_FOUND);
+		}
+	}
 }

@@ -15,8 +15,24 @@
 	</delete>
 	
 	<!-- 관리자 편성표 리스트 출력 -->
-	<select id="getBroadScheduleList">
+	<select id="getBroadScheduleList" resultType="com.web.curation.dto.AdminDto">
 		select a_broadName, a_broadUrl from Admin ;
+	</select>
+	
+	<!-- 가수 추가-->
+	<insert id="addSinger" parameterType="com.web.curation.dto.SingerDto">
+		insert into Singer(s_name, s_cafeUrl)
+		value(#{s_name}, #{s_cafeUrl} );
+	</insert>
+	
+	<!-- 가수 삭제 -->
+	<delete id="deleteSinger" parameterType="int">
+		delete from Singer where s_idx = #{s_idx};
+	</delete>
+	
+	<!-- 가수 리스트 출력 -->
+	<select id="getSingerList" resultType="com.web.curation.dto.SingerDto">
+		select * from Singer ;
 	</select>
  </mapper>
         

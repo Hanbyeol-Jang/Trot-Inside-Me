@@ -2,8 +2,6 @@ package com.web.curation.controller;
 
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.ReplyDto;
 import com.web.curation.service.BoardService;
-import com.web.curation.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -134,7 +131,8 @@ public class BoardController {
 	/* 댓글 작성 */
 	@ApiOperation("댓글 삭제")
 	@DeleteMapping("/board/reply/{r_idx}/{b_type}/{b_idx}/{u_email}")
-	public ResponseEntity<HashMap<String, Object>> deleteComment(@PathVariable("r_idx") int r_idx,
+	public ResponseEntity<HashMap<String, Object>> deleteComment(@PathVariable(""
+			+ "") int r_idx,
 			@PathVariable("b_type") int b_type, @PathVariable("b_idx") int b_idx,
 			@PathVariable("u_email") String u_email) {
 		try {
