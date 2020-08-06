@@ -6,6 +6,7 @@
       color="white"
       elevate-on-scroll 
       height="50px"
+      scroll-target="#scrolling-techniques-7"
     >
       <v-btn v-if="navBool" icon><i class="fas fa-bell fa-lg"></i></v-btn>
       <v-btn v-if="!navBool" icon @click="goBack"><i class="fas fa-chevron-left fa-lg"></i></v-btn>
@@ -20,7 +21,7 @@
         <span v-if="routeName === 'CommunityView'" class="">수다방</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn v-if="navBool" icon><i class="fas fa-user fa-lg"></i></v-btn>
+      <v-btn v-if="navBool" icon @click="goUserDetail"><i class="fas fa-user fa-lg"></i></v-btn>
       <v-btn v-else icon @click="goHome"><i class="fas fa-home fa-lg"></i></v-btn>
       <v-btn v-if="navSetting" icon @click="goSettings"><i class="fas fa-cog fa-lg"></i></v-btn>
     </v-app-bar>
@@ -49,6 +50,11 @@ export default {
             this.$router.push({ name: 'UserSettingView' }).catch(()=>{})
           }
         },
+        goUserDetail() {
+          if (this.$route.name !== 'UserDetailView') {
+            this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
+          }
+        },
     },
     components: {
 
@@ -59,7 +65,7 @@ export default {
       },
       navBool() {
         if (this.$route.name === 'Home'
-          || this.$route.name === 'CommunityView' || this.$route.name === 'VoteView'
+          || this.$route.name === 'CommunityIndexView' || this.$route.name === 'VoteView'
           || this.$route.name === 'SingerSearchView'){
           return true
         } else {

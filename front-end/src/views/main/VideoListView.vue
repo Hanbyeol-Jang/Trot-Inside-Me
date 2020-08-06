@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import VideoFeed from '@/components/main/singer/VideoFeed'
+import VideoFeed from '@/components/main/VideoFeed'
 
 export default {
     name: "VideoListView",
@@ -20,7 +20,7 @@ export default {
       singerId() {
         return this.$route.params.singerId
       }
-    }
+    },
 }
 </script>
 

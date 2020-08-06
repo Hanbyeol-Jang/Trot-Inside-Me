@@ -47,11 +47,14 @@ export default {
         },
         videoDate() {
             return this.video.b_date
+        },
+        videoId() {
+            return this.video.b_idx
         }
     },
     methods: {
         goDetail() {
-            this.$router.push({ name: 'VideoDetailView', params: { videoId: this.videoId, video: this.video } })
+            this.$router.push({ name: 'VideoDetailView', params: { videoId: this.videoId } })
         },
     }
 }

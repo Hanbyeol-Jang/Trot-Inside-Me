@@ -43,12 +43,14 @@ export default {
     bottomNav() {
       let routeName = this.$route.name
       if (routeName === 'Home' || routeName === 'SingerSearchView'
-        || routeName === 'VoteView' || routeName === 'CommunityView') {
+        || routeName === 'VoteView' || routeName === 'CommunityIndexView') {
           return true
         } else {
           return false
         }
-    }
+    },
+  },
+  methods: {
   },
 };
 </script>

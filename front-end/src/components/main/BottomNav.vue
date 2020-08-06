@@ -45,8 +45,8 @@
           }
         },
         goCommunity() {
-          if (this.$route.name !== 'CommunityView') {
-            this.$router.push({ name: 'CommunityView' }).catch(()=>{})
+          if (this.$route.name !== 'CommunityIndexView') {
+            this.$router.push({ name: 'CommunityIndexView' }).catch(()=>{})
           }
         },
         goVote() {
@@ -66,7 +66,7 @@
             this.activeBtn = 1
           } else if (this.routeName === 'VoteView' ) {
             this.activeBtn = 2
-          } else if (this.routeName === 'CommunityView' ) {
+          } else if (this.routeName === 'CommunityIndexView' ) {
             this.activeBtn = 3
           }
         }

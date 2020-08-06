@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ArticleFeed from '@/components/main/singer/ArticleFeed'
+import ArticleFeed from '@/components/main/ArticleFeed'
 
 export default {
     name: "ArticleListView",

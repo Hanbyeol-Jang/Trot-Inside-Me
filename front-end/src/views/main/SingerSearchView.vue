@@ -11,8 +11,6 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 
-import axios from 'axios'
-import SERVER from '@/api/drf'
 import SingerList from '@/components/main/SingerList.vue'
 import SingerSearch from '@/components/main/SingerSearch.vue'
 
@@ -33,15 +31,8 @@ export default {
     methods:{
         ...mapActions(['fetchSingers']),
         searchSingers(keyword) {
-            axios.get(`${SERVER.URL}/search/singerlist`)
-                .then(response => {
-                    console.log(response)
-                const resultSingers = response.data.filter(data => data.s_name.includes(keyword))
-                this.Singers = resultSingers
-                })
-            .catch((err)=>{
-                console.error(err)
-            })             
+            const resultSingers = this.singers.filter(data => data.s_name.includes(keyword))
+            this.singers = resultSingers       
         },
     },
     created(){
