@@ -47,8 +47,8 @@ import { required, email, minLength } from 'vuelidate/lib/validators'
 import KakaoLogin from 'vue-kakao-login'
 
 import Swal from 'sweetalert2'
-// import axios from 'axios'
-// import SERVER from '@/api/drf'
+import axios from 'axios'
+import SERVER from '@/api/drf'
 
 export default {
     mixins: [validationMixin],
@@ -72,17 +72,17 @@ export default {
     },
     methods: {
         onSuccess(data){
-            console.log('야호')
-            console.log(data)
-            console.log("success")
             this.token = data.access_token
-            const dataa = new FormData()
-            dataa.append('access_Token',this.token)
-            console.log(this.token)
-            axios.post(`${SERVER.URL}/kakao/login/getInfo`,dataa)
+            const axiosConfig = {
+                headers:{
+                access_token : this.token
+                },
+            }
+            axios.post(`${SERVER.URL}/signin/kakao`,null,axiosConfig)
             .then((res)=>{
-                console.log(444444444444444444444444444444444)
-                console.log(res)
+                console.log(res.data)
+                this.$cookies.set("auth-token", res.data);
+
             })
             .catch((err)=>{
                 console.log(err)
