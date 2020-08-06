@@ -12,10 +12,16 @@ import CommunityDetailView from '@/views/community/CommunityDetailView.vue'
 import CommunityCreateView from '@/views/community/CommunityCreateView.vue'
 import CommunityUpdateView from '@/views/community/CommunityUpdateView.vue'
 
+import VoteCreateView from '@/views/vote/VoteCreateView.vue'
+import VoteLocalSelectView from '@/views/vote/VoteLocalSelectView.vue'
+import VoteOldrankView from '@/views/vote/VoteOldrankView.vue'
+import VoteResultView from '@/views/vote/VoteResultView.vue'
+import VoteView from '@/views/vote/VoteView.vue'
+
+
 import Login from '@/views/accounts/Login.vue'
 import AdminLogin from '@/views/accounts/admin/AdminLogin.vue'
 import Signup from '@/views/accounts/Signup.vue'
-import VoteView from '@/views/vote/VoteView.vue'
 import SingerDetailView from '@/views/main/SingerDetailView.vue'
 import UserDetailView from '@/views/accounts/UserDetailView.vue'
 import SignupCompleteView from '@/views/accounts/SignupCompleteView.vue'
@@ -81,6 +87,26 @@ Vue.use(VueRouter)
     path: '/vote',
     name: 'VoteView',
     component: VoteView
+  },
+  {
+    path: '/vote/local',
+    name: 'VoteLocalSelectView',
+    component: VoteLocalSelectView
+  },
+  {
+    path: '/vote/old',
+    name: 'VoteOldrankView',
+    component: VoteOldrankView
+  },
+  {
+    path: '/vote/result',
+    name: 'VoteResultView',
+    component: VoteResultView
+  },
+  {
+    path: '/vote/create',
+    name: 'VoteCreateView',
+    component: VoteCreateView
   },
   {
     path: '/tvtable',
