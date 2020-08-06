@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dto.AdminDto;
+import com.web.curation.dto.SingerDto;
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.AdminServcie;
 import com.web.curation.service.UserService;
@@ -92,4 +93,30 @@ public class AdminController {
 		}
 	}
 	
+	@GetMapping("/broadSchedule/list")
+	public ResponseEntity<List<SingerDto>> getSingerList(){
+		List<SingerDto> list = adminService.getSingerList();
+		if(list!=null) {
+			return new ResponseEntity<List<SingerDto>>(list, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+	@PostMapping("/singerAdd")
+	public ResponseEntity<String> singerAdd(@RequestBody SingerDto dto) {
+		if(adminService.addSinger(dto)) {
+			return new ResponseEntity<String>("가수 추가 완료",HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>("가수 추가 에러 ",HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@DeleteMapping("/singerDelete/{s_idx}")
+	public ResponseEntity<String> deleteSinger(@PathVariable int s_idx) {
+		if(adminService.deleteSinger(s_idx)) {
+			return new ResponseEntity<String>("가수 삭제 완료",HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>("가수 삭제 에러 ",HttpStatus.NOT_FOUND);
+		}
+	}
 }

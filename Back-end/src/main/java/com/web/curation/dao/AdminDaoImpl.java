@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.web.curation.dto.AdminDto;
+import com.web.curation.dto.SingerDto;
 
 @Repository
 public class AdminDaoImpl implements AdminDao{
@@ -29,6 +30,20 @@ public class AdminDaoImpl implements AdminDao{
 	public List<AdminDto> getBroadScheduleList() {
 		return session.selectList(ns+"getBroadScheduleList");
 	}
+	@Override
+	public List<SingerDto> getSingerList() {
+		return session.selectList(ns+"getSingerList");
+	}
 
+	@Override
+	public int addSinger(SingerDto dto) {
+		return session.insert(ns+"addSinger",dto);
+	}
 
+	@Override
+	public int deleteSinger(int s_idx) {
+		return session.delete(ns+"deleteSinger",s_idx);
+	}
+
+	
 }
