@@ -67,12 +67,26 @@ export default {
         return {
             email: '',
             password: '',
+            token:'',
         }
     },
     methods: {
         onSuccess(data){
+            console.log('야호')
             console.log(data)
             console.log("success")
+            this.token = data.access_token
+            const dataa = new FormData()
+            dataa.append('access_Token',this.token)
+            console.log(this.token)
+            axios.post(`${SERVER.URL}/kakao/login/getInfo`,dataa)
+            .then((res)=>{
+                console.log(444444444444444444444444444444444)
+                console.log(res)
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
         },
         onFailure(data){
             console.log(data)

@@ -27,7 +27,7 @@
                 <MagazineIcon v-if="menu.id === 2" />
                 <TelevisionIcon v-if="menu.id === 3" />
                 <MicrophoneIcon v-if="menu.id === 4" />
-                <div>{{ menu.title }}</div>
+                <div class="menu-title">{{ menu.title }}</div>
               </v-card>
             </v-col>
             <v-responsive
@@ -83,8 +83,11 @@ export default {
   },
   methods: {
     goMenu(m_idx) {
-      console.log(m_idx)
-      if (m_idx === 3) {
+      if (m_idx === 1) {
+        this.$router.push({ name: 'VideoListView', params: { singerId: 0 }})
+      } else if (m_idx === 2) {
+        this.$router.push({ name: 'ArticleListView', params: { singerId: 0 }})
+      } else if (m_idx === 3) {
         this.$router.push({ name: 'TvtableDetailView' })
       }
     },
@@ -93,5 +96,7 @@ export default {
 </script>
 
 <style scoped>
-
+.menu-title{
+  font-size: 25px;
+}
 </style>

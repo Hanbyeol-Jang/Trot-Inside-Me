@@ -4,8 +4,9 @@
       fixed
       absolute
       color="white"
-      elevate-on-scroll
+      elevate-on-scroll 
       height="50px"
+      scroll-target="#scrolling-techniques-7"
     >
       <v-btn v-if="navBool" icon><i class="fas fa-bell fa-lg"></i></v-btn>
       <v-btn v-if="!navBool" icon @click="goBack"><i class="fas fa-chevron-left fa-lg"></i></v-btn>
@@ -17,10 +18,14 @@
           width="90px" class="main-logo">
         <span v-if="routeName === 'SingerSearchView'" class="">가수 검색</span>
         <span v-if="routeName === 'VoteView'" class="">투표</span>
-        <span v-if="routeName === 'CommunityView'" class="">수다방</span>
+        <span v-if="routeName === 'CommunityIndexView'" class="">수다방</span>
+        <span v-if="routeName === 'TvtableDetailView'" class="">편성표 {{ todayDate }}</span>
+        <span v-if="routeName === 'VideoListView'" class="">영상 보기</span>
+        <span v-if="routeName === 'ArticleListView'" class="">기사 보기</span>
+        
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn v-if="navBool" icon><i class="fas fa-user fa-lg"></i></v-btn>
+      <v-btn v-if="navBool" icon @click="goUserDetail"><i class="fas fa-user fa-lg"></i></v-btn>
       <v-btn v-else icon @click="goHome"><i class="fas fa-home fa-lg"></i></v-btn>
       <v-btn v-if="navSetting" icon @click="goSettings"><i class="fas fa-cog fa-lg"></i></v-btn>
     </v-app-bar>
@@ -28,11 +33,16 @@
 </template>
 
 <script>
+var today = new Date()
+
 export default {
     name: 'Header',
     data() {
         return {
-
+          date: today.getDate(),
+          month: today.getMonth() + 1,
+          year: today.getFullYear(),
+          todayDate: '',
         }
     },
     methods: {
@@ -49,6 +59,11 @@ export default {
             this.$router.push({ name: 'UserSettingView' }).catch(()=>{})
           }
         },
+        goUserDetail() {
+          if (this.$route.name !== 'UserDetailView') {
+            this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
+          }
+        },
     },
     components: {
 
@@ -59,7 +74,7 @@ export default {
       },
       navBool() {
         if (this.$route.name === 'Home'
-          || this.$route.name === 'CommunityView' || this.$route.name === 'VoteView'
+          || this.$route.name === 'CommunityIndexView' || this.$route.name === 'VoteView'
           || this.$route.name === 'SingerSearchView'){
           return true
         } else {
@@ -74,6 +89,15 @@ export default {
         }
       },
     },
+    created() {
+      if (this.date < 10) {
+            this.date = '0' + this.date
+        }
+        if (this.month < 10) {
+            this.month = '0' + this.month
+        }
+        this.todayDate = this.month +'월 ' + this.date + '일'
+    }
 }
 </script>
 

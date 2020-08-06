@@ -9,8 +9,8 @@
               <strong>{{tvprogram.bc_time}}</strong>
             </v-col>
             <v-col>
-              <strong>{{tvprogram.bc_title}}</strong>
-              <div class="caption">{{tvprogram.bc_company}}</div>
+              <strong><h2>{{tvprogram.bc_title}}</h2></strong>
+              <div>{{tvprogram.bc_company}}</div>
             </v-col>
           </v-row>
         </v-timeline-item>

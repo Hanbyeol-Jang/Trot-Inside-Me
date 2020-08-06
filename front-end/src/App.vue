@@ -1,7 +1,9 @@
 <template>
   <v-app id="app">
     <Header/>
-    <v-main class="mt-4">
+    <v-main 
+      id="scrolling-techniques-7"
+      class="mt-4">
       <v-container
         fluid
       >
@@ -41,12 +43,14 @@ export default {
     bottomNav() {
       let routeName = this.$route.name
       if (routeName === 'Home' || routeName === 'SingerSearchView'
-        || routeName === 'VoteView' || routeName === 'CommunityView') {
+        || routeName === 'VoteView' || routeName === 'CommunityIndexView') {
           return true
         } else {
           return false
         }
-    }
+    },
+  },
+  methods: {
   },
 };
 </script>

@@ -3,7 +3,9 @@
         hover 
         @click="goDetail"
     >
-        <img :src="videoThumbnail" alt="video thumbnail" 
+        <img v-if="videoThumbnail" :src="videoThumbnail" alt="video thumbnail" 
+            width="100%"/>
+        <img v-else src="@/assets/image/content_default.png" alt="video thumbnail default"
             width="100%"/>
         <v-card-title>
         {{ videoTitle }}
@@ -19,7 +21,7 @@
         <span class="subheading mr-2">{{ videoLikes }}</span>
         <span class="mr-1">·</span>
         <i class="fas fa-comment fa-lg mr-1"></i>
-        <span class="subheading mr-2">{{ videoReplysss }}</span>
+        <span class="subheading mr-2">{{ videoReply }}</span>
         </v-row>
     </v-card>
 </template>
@@ -45,11 +47,14 @@ export default {
         },
         videoDate() {
             return this.video.b_date
+        },
+        videoId() {
+            return this.video.b_idx
         }
     },
     methods: {
         goDetail() {
-            this.$router.push({ name: 'VideoDetailView', params: { videoId: this.videoId, video: this.video } })
+            this.$router.push({ name: 'VideoDetailView', params: { videoId: this.videoId } })
         },
     }
 }

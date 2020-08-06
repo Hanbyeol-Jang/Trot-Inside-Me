@@ -8,10 +8,10 @@
           alt="John"
         >
       </v-avatar>
-      <h3 class="mt-4">{{ singer.s_name }}</h3>
+      <h2 class="mt-4">{{ singer.s_name }}</h2>
     </div>
     <div class="text-center mt-3">
-      <v-btn rounded color="pink" dark>내 가수 추가하기</v-btn>
+      <v-btn rounded color="pink" dark><h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3></v-btn>
     </div>
     <v-container>
       <v-row dense>
@@ -21,10 +21,10 @@
           cols="12">
           <v-card
             color="#FCE4EC"
-            class="rounded-xl"
+            raised
             @click="goMenuDetail(menu.id)"
           >
-            <v-card-title class="headline">{{ menu.title }}</v-card-title>
+            <v-card-title><h2><i :class="menu.icon" class="mr-2"></i>{{ menu.title }}</h2></v-card-title>
           </v-card>
         </v-col>
       </v-row>
@@ -43,9 +43,9 @@ export default {
       s_idx: this.$route.params.singerId,
       singer: {},
       menuItems: [ 
-        { id: 1, title: '영상 보기'},
-        { id: 2, title: '기사 보기'},
-        { id: 3, title: '스케줄 보기'},
+        { id: 1, title: '영상 보기', icon: 'fas fa-play-circle'},
+        { id: 2, title: '기사 보기', icon: 'fas fa-newspaper'},
+        { id: 3, title: '스케줄 보기', icon: 'far fa-calendar-alt'},
       ],
     }
   },
