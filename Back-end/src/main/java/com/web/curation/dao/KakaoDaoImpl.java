@@ -4,7 +4,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.web.curation.dto.KakaoDto;
+import com.web.curation.dto.UserDto;
 
 @Repository
 public class KakaoDaoImpl implements KakaoDao {
@@ -13,12 +13,12 @@ public class KakaoDaoImpl implements KakaoDao {
 	private SqlSession sqlSession;
 	String ns = "com.web.curation.dao.KakaoDao";
 	@Override
-	public Boolean isId(String id) {
-		return sqlSession.selectOne(ns+".isid",id);
+	public Boolean isEmail(String email) {
+		return sqlSession.selectOne(ns+".isemail",email);
 	}
 	@Override
-	public void insertKakao(KakaoDto kakaoDto) {
-		sqlSession.insert(ns+".insertkakao", kakaoDto);
+	public void insertKakao(UserDto userDto) {
+		sqlSession.insert(ns+".insertkakao", userDto);
 	}
 
 }

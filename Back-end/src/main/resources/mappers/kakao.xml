@@ -3,15 +3,18 @@
 		 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.web.curation.dao.KakaoDao">
-	<select id="isid" resultType="Boolean">
-	select Count(*) from Kakao
+
+	<!-- 이메일이 db에 있는지 확인 -->
+	<select id="isemail" resultType="Boolean">
+	select Count(*) from UserInfo
 	where 1=1
-	and k_id = #{id}
+	and u_email = #{email}
 	</select>
 
+	<!-- 카카오 유저정보 디비에 등록 -->
 	<insert id="insertkakao">
-		insert into Kakao (k_id,k_nickname,k_thumbnail_image,k_profile_image)
-		values (#{id},#{nickname},#{thumbnail_image},#{profile_image})
+		insert into UserInfo (u_email,u_name,u_thumbnail,u_profileImg)
+		values (#{u_email},#{u_name},#{u_thumbnail},#{u_profileImg})
 	</insert>
 </mapper>
         
