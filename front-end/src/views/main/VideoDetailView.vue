@@ -51,40 +51,62 @@ export default {
       commentCnt:'',
       showLike: false,
       showComments: false,
-      // id : this.$router.params.videoId,
-      id:1,
-      axiosConfig : {
-          headers:{
-          Authorization : `Token ${this.$cookies.get('auth-token')}`
-          },
-      }
+      email:"",
+      id:this.$route.params.videoId,
+      type:''
     }
   },
   methods: {
+    getuser(){
+      const axiosConfig = {
+          headers:{
+          token: `${this.$cookies.get('auth-token')}`
+          },
+      }
+      axios.get(SERVER.URL+"/admin/test",axiosConfig)
+      .then((response)=>{
+        this.email = response.data.u_email
+      })
+      .catch((err) => {console.log(err)})
+    },
+
+    getLikeCnt(){
+      axios.get(SERVER.URL+`/board/good/${this.type}/${this.$route.params.videoId}`)
+      .then((response)=>{
+        console.log(response)
+        this.likeCnt = response.data.like_count
+
+      })
+      .catch((err) => {console.log(err)})
+    },
+
     showLikeChange(){
       axios.post(SERVER.URL+'/',`/${this.id}/`,this.axiosConfig)
       .then((response)=>{
         this.showLike = response.data.data
-        this.likeCnt = response.data.data
       })
       .catch((err) => {console.log(err.response.data)})
     },
+
     getVideo(){
-      axios.get(SERVER.URL + `/${this.id}/`,this.axiosConfig)
+      axios.get(SERVER.URL +`/singer/videos/${this.$route.params.videoId}`)
         .then((response) => {
-            this.video = response.data.data
-            this.likeCnt = response.data.data
-            this.commentCnt = response.data.data
-            this.showLike = response.data.data
+          console.log(response)
+          this.video = response.data
+          this.type = response.data.b_type
+          this.getLikeCnt()
+          
         })
         .catch((err) => {console.log(err.response.data)})
     },
+
     showCommentsChange(){
       this.showComments = !this.showComments
     },
   },
   created(){
-    // this.getVideo()
+    this.getuser()
+    this.getVideo()
   },
 }
 </script>
