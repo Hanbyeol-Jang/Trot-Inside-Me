@@ -7,8 +7,9 @@ public class UserDto {
 
 	private String u_email;
 	private String u_name;
+	private String u_profileImg;
+	private String u_thumbnail;
 	private String u_pw;
-	private String u_pw2;
-	private String u_img;
+	private int u_isAdmin;
 
 }
