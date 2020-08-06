@@ -39,5 +39,10 @@ public class BoardDaoImpl implements BoardDao {
 	public int deleteComment(ReplyDto replyDto) {
 		return session.insert(ns + "deletecomment", replyDto);
 	}
+	
+	@Override
+	public int commentCount(BoardPK boardPK) {
+		return session.selectOne(ns + "commentcount", boardPK);
+	}
 
 }

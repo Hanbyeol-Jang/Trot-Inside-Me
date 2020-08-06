@@ -91,6 +91,28 @@ public class BoardController {
 		}
 	}
 
+	/* 댓글 수 표시 */
+	@ApiOperation("댓글 수 표시")
+	@GetMapping("/board/reply/{b_type}/{b_idx}")
+	public ResponseEntity<HashMap<String, Object>> commentCount(@PathVariable("b_type") int b_type,
+			@PathVariable("b_idx") int b_idx) {
+
+		try {
+			BoardPK boardPK = new BoardPK();
+			boardPK.setB_type(b_type);
+			boardPK.setB_idx(b_idx);
+
+			int like_count = boardService.commentCount(boardPK);
+			HashMap<String, Object> map = new HashMap<>();
+			map.put("comment_count", like_count);
+			map.put("comment_boolean", true);
+
+			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+
 	/* 댓글 작성 */
 	@ApiOperation("댓글 작성")
 	@PostMapping("/board/reply")
