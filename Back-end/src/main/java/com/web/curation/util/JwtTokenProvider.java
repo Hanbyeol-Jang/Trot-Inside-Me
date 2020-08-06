@@ -38,7 +38,7 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest request) {
-         String token = request.getHeader("token");
+         String token = request.getHeader("auth-token");
          return token;
     }
     
