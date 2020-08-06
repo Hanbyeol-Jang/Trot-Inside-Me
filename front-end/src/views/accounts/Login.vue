@@ -10,22 +10,14 @@
                                     width="200px">
                             </div>
                             <h4 class="msg-info pl-0 text-center">로그인해주세요 :)</h4>
-                            <div class="row justify-center px-3"><v-btn height="45px" block class="btn-kakao" color="amber lighten-2"><i class="fas fa-comment mr-2" ></i>카카오톡 로그인</v-btn></div>
-    <KakaoLogin
-      api-key="3b520fb7e5e907ebebfde93be5b8a1aa"
-      image="kakao_login_btn_large"
-      :on-success=onSuccess
-      :on-failure=onFailure
-      />
-
-<a id="custom-login-btn" href="javascript:loginWithKakao()">
-  <img
-    src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
-    width="222"
-  />
-</a>
-<p id="token-result"></p>
-
+                            <!-- <div class="row justify-center px-3"><v-btn height="45px" block class="btn-kakao" color="amber lighten-2"><i class="fas fa-comment mr-2" ></i></v-btn></div> -->
+                            <div class="row justify-center px-3">
+                            <KakaoLogin
+                            api-key="3b520fb7e5e907ebebfde93be5b8a1aa"
+                            :on-success=onSuccess
+                            :on-failure=onFailure
+                            />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -37,7 +29,7 @@
                 </div>
             </div>
         </div>
-          <button class="api-btn" onclick="kakaoLogout()">로그아웃</button>
+          <!-- <button class="api-btn" onclick="kakaoLogout()">로그아웃</button> -->
     </div>
 </template>
 
