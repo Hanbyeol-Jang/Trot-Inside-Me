@@ -2,6 +2,7 @@ package com.web.curation.service;
 
 import java.util.List;
 
+import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
 import com.web.curation.dto.CommuDto;
 import com.web.curation.dto.CommuReplyUser;
@@ -20,5 +21,7 @@ public interface CommuService {
 	boolean addCommuReply(CoReplyDto dto);
 	//게시글 댓글 삭제 
 	boolean deleteCommuReply(CoReplyDto dto);
+	//좋아요 선택
+	boolean clickGood(CoGoodDto dto);
 
 }

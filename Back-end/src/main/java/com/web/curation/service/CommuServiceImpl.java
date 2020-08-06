@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.web.curation.dao.CommuDao;
+import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
 import com.web.curation.dto.CommuDto;
 import com.web.curation.dto.CommuReplyUser;
@@ -40,6 +41,10 @@ public class CommuServiceImpl implements CommuService {
 	@Override
 	public boolean deleteCommuReply(CoReplyDto dto) {
 		return commuDao.deleteCommuReply(dto)==1;
+	}
+	@Override
+	public boolean clickGood(CoGoodDto dto) {
+		return commuDao.clickGood(dto)==1;
 	}
 	
 }

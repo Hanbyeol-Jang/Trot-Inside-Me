@@ -1,5 +1,6 @@
 package com.web.curation.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
 import com.web.curation.dto.CommuDto;
 import com.web.curation.dto.CommuReplyUser;
-import com.web.curation.dto.UserDto;
 import com.web.curation.service.CommuService;
 import com.web.curation.service.UserService;
 
@@ -36,7 +38,7 @@ public class CommuController {
 	@Autowired
 	CommuService commuService;
 
-	// 게시글 리스트 출력
+	// 게시글 리스트 출력 + 좋아요 수 추가 + 댓글 수 추가 
 	@ApiOperation("게시글 리스트 출력")
 	@GetMapping("/list")
 	public ResponseEntity<List<CommuDto>> getCommuList() {
@@ -48,6 +50,29 @@ public class CommuController {
 		}
 	}
 
+	//게시글 좋아요
+	@ApiOperation("게시글 좋아요 선택 ")
+	@GetMapping("/good/{co_idx}")
+	public ResponseEntity<List<CommuDto>> getGood(@PathVariable int co_idx ,HttpServletRequest request) {
+		String u_email = userService.getTokenInfo(request);
+		if (u_email.equals("F")) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		} else {
+			CoGoodDto dto = new CoGoodDto(co_idx,u_email);
+			boolean flag = commuService.clickGood(dto);
+			
+			
+		}
+		List<CommuDto> list = commuService.getCommuList();
+		if (list != null) {
+			return new ResponseEntity<List<CommuDto>>(list, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+
+	
+	
 	// 게시글 추가
 	@ApiOperation("게시글 추가")
 	@PostMapping("/add")
@@ -77,13 +102,30 @@ public class CommuController {
 		}
 	}
 
-	// 게시글 디테일 + 댓글 리스트 출력
-	@ApiOperation("게시글 디테일 + 댓글 리스트 출력")
+	// 게시글 디테일 + 댓글 리스트 출력 + 댓글 수 추가 + 5개씩 페이징
+	@ApiOperation("게시글 디테일 + 댓글 리스트 출력 + 댓글 수 추가 + 5개씩 페이징 ")
 	@GetMapping("/detail/{co_idx}")
-	public ResponseEntity<List<CommuReplyUser>> getDetail(@PathVariable int co_idx) {
+	public ResponseEntity<List<CommuReplyUser>> getDetail(@PathVariable int co_idx , @RequestParam int page) {
 		List<CommuReplyUser> list = commuService.getCommuDetail(co_idx);
+		
 		if (list != null) {
-			return new ResponseEntity<List<CommuReplyUser>>(list, HttpStatus.OK);
+			List<CommuReplyUser> showList = new ArrayList<CommuReplyUser>();
+			int lastPageRemain = list.size() % 5;
+			int lastPage = list.size() - lastPageRemain;
+			page = 5 * page - 5;
+			// 5개씩 보여주기
+			if (page < lastPage) {
+				for (int i = page; i < page + 5; i++) {
+					System.out.println("5개");
+					showList.add(list.get(i));
+				}
+			} else if (page == lastPage) {
+				System.out.println("나머지");
+				for (int i = page; i < page + lastPageRemain; i++) {
+					showList.add(list.get(i));
+				}
+			}
+			return new ResponseEntity<List<CommuReplyUser>>(showList, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
@@ -127,5 +169,8 @@ public class CommuController {
 			}
 		}
 	}
+	
+	
+	
 
 }

@@ -28,7 +28,8 @@
 		uii.u_name as co_name, 
 		cc.cr_idx ,
 		cc.cr_content , 
-		cc.cr_name as cr_name
+		cc.cr_name as cr_name,
+		COUNT(cc.cr_idx) as cr_cnt
 		FROM 	(
 					SELECT 	c.co_idx , 
 							c.co_content ,
@@ -64,5 +65,9 @@
 		and		cr_idx = #{cr_idx};
 	</delete> 
 	
+	<!-- 게시글 좋아요 클릭 -->
+	<insert id="clickGood">
+		
+	</insert>
  </mapper>
         

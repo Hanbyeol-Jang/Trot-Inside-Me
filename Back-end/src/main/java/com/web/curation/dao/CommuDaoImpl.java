@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
 import com.web.curation.dto.CommuDto;
 import com.web.curation.dto.CommuReplyUser;
@@ -46,6 +47,11 @@ public class CommuDaoImpl implements CommuDao {
 	@Override
 	public int deleteCommuReply(CoReplyDto dto) {
 		return session.delete(ns+"deleteCommuReply", dto);
+	}
+
+	@Override
+	public int clickGood(CoGoodDto dto) {
+		return session.insert(ns+"clickGood",dto);
 	}
 
 }
