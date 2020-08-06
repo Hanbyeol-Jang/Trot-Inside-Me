@@ -47,7 +47,7 @@ export default {
     computed: {
       ...mapState(['contentsCount']),
       routeSingerId() {
-        return this.$route.params.singerId
+        return parseInt(this.$route.params.singerId)
       }
     },
     methods: {

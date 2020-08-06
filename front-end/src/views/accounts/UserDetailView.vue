@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center">
+  <div class="text-center mt-6">
      <v-avatar
       size="100px">
       <img
@@ -7,14 +7,8 @@
         alt="John"
       >
     </v-avatar>
-    <h3 class="mt-4">김싸피</h3>
-    <div class="mt-5 mb-6">
-      <v-tabs class="d-flex justify-center">
-        <v-tab>나의 가수</v-tab>
-        <v-tab>저장된 동영상</v-tab>
-        <v-tab>저장된 기사</v-tab>
-      </v-tabs>
-    </div>
+    <h3 class="mt-4">손님</h3>
+
   </div>
 </template>
 

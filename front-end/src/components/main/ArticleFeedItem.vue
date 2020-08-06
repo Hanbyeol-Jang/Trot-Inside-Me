@@ -1,15 +1,26 @@
 <template>
     <v-card
-        color="#385F73"
-        dark
+        color="#EEEEEE"
         v-if="article.b_title"
-        class="mb-3"
+        class="my-4"
         @click="goArticleoDetail"
+        shaped
         >
         <v-card-title class="">{{ article.b_title }}</v-card-title>
         <v-card-subtitle>{{ article.b_company }}</v-card-subtitle>
+        <v-row
+        align="center"
+        justify="end"
+        class="mr-5 pb-3"
+        >
+        {{ article.b_date }}
+        <v-icon class="mr-1">mdi-heart</v-icon>
+        <span class="subheading mr-2">{{ article.b_good }}</span>
+        <span class="mr-1">·</span>
+        <i class="fas fa-comment fa-lg mr-1"></i>
+        <span class="subheading mr-2">{{ article.b_reply }}</span>
+        </v-row>
     </v-card>
-  
 </template>
 
 <script>

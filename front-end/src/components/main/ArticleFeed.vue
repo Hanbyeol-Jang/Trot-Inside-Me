@@ -53,7 +53,7 @@ export default {
     computed: {
       ...mapState(['contentsCount']),
       routeSingerId() {
-        return this.$route.params.singerId
+        return parseInt(this.$route.params.singerId)
       }
     },
     methods: {
@@ -69,7 +69,7 @@ export default {
             })
             .catch(err => console.log(err))
         } else {
-          console.log('all')
+          console.log(this.routeSingerId)
           const options = { params: { page: this.page++ }}
           axios.get(SERVER.URL + `/${this.mediaType}/good`, options)
             .then(res => {
@@ -96,7 +96,7 @@ export default {
             $state.complete()
           }
         } else {
-          console.log('all')
+          console.log('all', this.routeSingerId)
           if (parseInt(this.contentsCount / 5) + 1 >= this.page){
             const options = {params: { page: this.page++ }}
             axios.get(SERVER.URL + `/${this.mediaType}/good`, options)
@@ -116,6 +116,7 @@ export default {
     created() {
         const info = { mediaType: 2, singerId: this.$route.params.singerId }
         this.getContentsCount(info)
+        console.log('check', this.routeSingerId)
         this.fetchArticleData()
     },
 

@@ -2,9 +2,10 @@
 <div class="container">
     <SingerSearch @search-singers="searchSingers"/>
     <div class="d-flex justify-center">
-        <v-btn @click="fetchSingers" color="pink" dark><h4>전체 가수 보기</h4></v-btn>
+        <v-btn @click="showAll" color="pink" dark><h4>전체 가수 보기</h4></v-btn>
     </div>
-    <SingerList :singers="singers"/>
+    <SingerList v-if="singersData.length === 0" :singers="singers"/>
+    <SingerList v-else :singers="singersData"/>
 </div>
 </template>
 
@@ -22,7 +23,7 @@ export default {
     },
     data(){
         return{
-            Singers:[],
+            singersData: [],
         }
     },
     computed: {
@@ -32,11 +33,15 @@ export default {
         ...mapActions(['fetchSingers']),
         searchSingers(keyword) {
             const resultSingers = this.singers.filter(data => data.s_name.includes(keyword))
-            this.singers = resultSingers       
+            this.singersData = resultSingers
         },
+        showAll() {
+            this.singersData = this.singers
+        }
     },
     created(){
         this.fetchSingers()
+        this.singersData = this.singers
     }
 }
 </script>
