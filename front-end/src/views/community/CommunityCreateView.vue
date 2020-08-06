@@ -32,7 +32,7 @@ export default {
             content:"",
             axiosConfig:{
               headers:{
-                Authorization : `Token ${this.$cookies.get('auth-token')}`
+                token : `${this.$cookies.get('auth-token')}`
               }
             },
         }
@@ -45,13 +45,15 @@ export default {
             }
         },
 
-        createCommunity(event){
-            event.preventDefault()
-            const data = new FormData()
-            data.append('content',this.content)
-            data.append('image',this.image)
-            axios.post(`${SERVER.URL}/community/`,data,this.axiosConfig)
+        createCommunity(){
+          console.log(this.image)
+            const data = {
+              'co_content' : this.content,
+              'co_img' : this.image
+            }
+            axios.post(`${SERVER.URL}/community/add`,data,this.axiosConfig)
             .then(()=>{
+              console.log(1231231)
                 this.$router.push({ name: 'CommunityIndexView'})
             })
             .catch((err)=>{
@@ -60,13 +62,13 @@ export default {
         },
 
         communityImage(){
-          this.image = this.$refs.file.$refs.input.files[0]
+          this.image = this.$refs.file.$refs.input.files[0].name
           this.change_image = URL.createObjectURL(this.image)
           this.flag = true
         },
     },
     created(){
-        // this.checklogin()
+        this.checklogin()
     },
 }
 </script>

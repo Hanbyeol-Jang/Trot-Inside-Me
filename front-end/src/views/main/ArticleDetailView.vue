@@ -50,11 +50,10 @@ export default {
       likeCnt:'',
       showLike: false,
       showComments: false,
-      // id : this.$router.params.articleId,
-      id:1,
+      id : this.$route.params.articleId,
       axiosConfig : {
           headers:{
-          Authorization : `Token ${this.$cookies.get('auth-token')}`
+          token : `${this.$cookies.get('auth-token')}`
           },
       }
     }
@@ -82,12 +81,10 @@ export default {
       .catch((err) => {console.log(err.response.data)})
     },
     getArticle(){
-      axios.get(SERVER.URL + `/${this.id}/`,this.axiosConfig)
+      axios.get(SERVER.URL +`/singer/articles/${this.$route.params.articleId}`)
         .then((response) => {
-            this.article = response.data.data
-            this.likeCnt = response.data.data
-            this.commentCnt = response.data.data
-            this.showLike = response.data.data
+            console.log(response.data)
+            this.article = response.data
         })
         .catch((err) => {console.log(err.response.data)})
     },
@@ -96,7 +93,7 @@ export default {
     },
   },
     created(){      
-      // this.getArticle()
+      this.getArticle()
     },
     
 }
