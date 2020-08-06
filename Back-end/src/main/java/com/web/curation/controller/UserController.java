@@ -10,13 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dto.FollowDto;
-import com.web.curation.dto.UserDto;
 import com.web.curation.service.UserService;
 
 
@@ -26,34 +22,6 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
-	
-	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody UserDto user, HttpServletRequest request) {
-		
-		String token = userService.createToken(user.getU_email(), user.getU_pw());
-        return new ResponseEntity<>(token, HttpStatus.OK);
-	}
-
-	@GetMapping("/test")
-	public ResponseEntity<UserDto> test(HttpServletRequest request){
-		String tokenInfo = userService.getTokenInfo(request);
-		if(tokenInfo.equals("F")) {
-			return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
-		}else {
-			UserDto user = userService.getUserInfoToken(tokenInfo);
-			return new ResponseEntity<>(user, HttpStatus.OK);
-		}
-	}
-	
-	@PostMapping("/join")
-	public ResponseEntity<String> join(@RequestBody UserDto user) {
-		if(userService.join(user)) {
-			 return new ResponseEntity<>("가입 성공", HttpStatus.OK);
-		}else {
-			 return new ResponseEntity<>("가입 실패", HttpStatus.NOT_FOUND);
-		}
-		
-	}
 	
 	@GetMapping("/follow/list")
 	public ResponseEntity<List<FollowDto>> followlist(HttpServletRequest request){

@@ -1,11 +1,8 @@
 package com.web.curation.dao;
 
-import java.util.HashMap;
-import java.util.List;
-
 import com.web.curation.dto.BoardPK;
-import com.web.curation.dto.BroadCastingDto;
-import com.web.curation.dto.FollowDto;
+
+import com.web.curation.dto.ReplyDto;
 
 public interface BoardDao {
 
@@ -17,5 +14,11 @@ public interface BoardDao {
 
 	/* 좋아요 수 표시 */
 	int goodCount(BoardPK boardPK);
+
+	/* 댓글 작성 */
+	int addComment(ReplyDto replyDto);
+
+	/* 댓글 삭제 */
+	int deleteComment(ReplyDto replyDto);
 
 }

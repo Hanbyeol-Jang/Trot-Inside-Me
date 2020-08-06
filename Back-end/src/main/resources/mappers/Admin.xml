@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 	
+		 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.web.curation.dao.AdminDao">
+	<!-- 관리자 편성표 추가-->
+	<insert id="addBroadSchedule" parameterType="com.web.curation.dto.AdminDto">
+		insert into Admin(a_broadName, a_broadUrl)
+		value(#{a_broadName}, #{a_broadUrl} );
+	</insert>
+	
+	<!-- 관리자 편성표 삭제 -->
+	<delete id="deleteBroadSchedule" parameterType="int">
+		delete from Admin where a_idx = #{a_idx};
+	</delete>
+	
+	<!-- 관리자 편성표 리스트 출력 -->
+	<select id="getBroadScheduleList">
+		select a_broadName, a_broadUrl from Admin ;
+	</select>
+ </mapper>
+        
