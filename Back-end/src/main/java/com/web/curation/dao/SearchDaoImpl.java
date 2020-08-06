@@ -68,10 +68,10 @@ public class SearchDaoImpl implements SearchDao {
 	}
 
 	@Override
-	public BoardDto videoDetail(int s_idx, int b_idx) {
-		System.out.println(s_idx + " " + b_idx);
+	public BoardDto videoDetail(int b_idx) {
+//		System.out.println(s_idx + " " + b_idx);
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("s_idx", s_idx);
+//		map.put("s_idx", s_idx);
 		map.put("b_idx", b_idx);
 		return sqlSession.selectOne(ns + ".videodetail", map);
 	}
