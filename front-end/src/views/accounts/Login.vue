@@ -47,8 +47,8 @@ import { required, email, minLength } from 'vuelidate/lib/validators'
 import KakaoLogin from 'vue-kakao-login'
 
 import Swal from 'sweetalert2'
-// import axios from 'axios'
-// import SERVER from '@/api/drf'
+import axios from 'axios'
+import SERVER from '@/api/drf'
 
 export default {
     mixins: [validationMixin],
