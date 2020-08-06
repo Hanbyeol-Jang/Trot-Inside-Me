@@ -21,4 +21,6 @@ public interface BoardDao {
 	/* 댓글 삭제 */
 	int deleteComment(ReplyDto replyDto);
 
+	/* 댓글 수 표시 */
+	int commentCount(BoardPK boardPK);
 }

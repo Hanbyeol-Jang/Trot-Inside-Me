@@ -43,4 +43,9 @@ public class BoardServiceImpl implements BoardService {
 		return dao.deleteComment(replyDto) == 1;
 	}
 
+	@Override
+	public int commentCount(BoardPK boardPK) {
+		return dao.commentCount(boardPK);
+	}
+
 }

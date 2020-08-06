@@ -20,4 +20,7 @@ public interface BoardService {
 	/* 댓글 삭제 */
 	boolean deleteComment(ReplyDto replyDto);
 
+	/* 댓글 수 표시 */
+	int commentCount(BoardPK boardPK);
+
 }

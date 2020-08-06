@@ -40,6 +40,15 @@
 				b_idx = #{b_idx} AND 
 				u_email = #{u_email} ;
 	</delete>
+	
+	<!-- 댓글 수 출력  -->
+	<select id="commentcount" parameterType="int" resultType="int">
+		SELECT 	COUNT(r.r_idx)
+		FROM 	Board b left outer join Reply r
+				ON b.b_type =r.b_type and b.b_idx = r.b_idx
+		where	b.b_type = #{b_type} AND
+				b.b_idx = #{b_idx};
+	</select>
  	
  </mapper>
         
