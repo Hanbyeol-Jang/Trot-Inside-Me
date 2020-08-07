@@ -1,21 +1,33 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/main/Home.vue'
+import Home from '@/views/main/Home.vue'
 import ArticleDetailView from '@/views/main/ArticleDetailView'
 import VideoDetailView from '@/views/main/VideoDetailView'
 import TvtableDetailView from '@/views/main/TvtableDetailView'
 import SingerSearchView from '@/views/main/SingerSearchView'
 import PageNotFound from '@/views/PageNotFound.vue'
 import ErrorView from '@/views/ErrorView.vue'
+import CommunityIndexView from '@/views/community/CommunityIndexView.vue'
+import CommunityDetailView from '@/views/community/CommunityDetailView.vue'
+import CommunityCreateView from '@/views/community/CommunityCreateView.vue'
+import CommunityUpdateView from '@/views/community/CommunityUpdateView.vue'
 
-import Login from '../views/accounts/Login.vue'
-import Signup from '../views/accounts/Signup.vue'
-import CommunityView from '../views/community/CommunityView.vue'
-import VoteView from '../views/vote/VoteView.vue'
-import SingerDetailView from '../views/main/SingerDetailView.vue'
-import UserDetailView from '../views/accounts/UserDetailView.vue'
-import SignupCompleteView from '../views/accounts/SignupCompleteView.vue'
-import UserSettingView from '../views/accounts/UserSettingView.vue'
+import VoteCreateView from '@/views/vote/VoteCreateView.vue'
+import VoteLocalSelectView from '@/views/vote/VoteLocalSelectView.vue'
+import VoteOldrankView from '@/views/vote/VoteOldrankView.vue'
+import VoteResultView from '@/views/vote/VoteResultView.vue'
+import VoteView from '@/views/vote/VoteView.vue'
+
+
+import Login from '@/views/accounts/Login.vue'
+import AdminLogin from '@/views/accounts/admin/AdminLogin.vue'
+import Signup from '@/views/accounts/Signup.vue'
+import SingerDetailView from '@/views/main/SingerDetailView.vue'
+import UserDetailView from '@/views/accounts/UserDetailView.vue'
+import SignupCompleteView from '@/views/accounts/SignupCompleteView.vue'
+import UserSettingView from '@/views/accounts/UserSettingView.vue'
+import VideoListView from '@/views/main/VideoListView.vue'
+import ArticleListView from '@/views/main/ArticleListView.vue'
 
 Vue.use(VueRouter)
 
@@ -27,7 +39,7 @@ Vue.use(VueRouter)
   },
   {
     // path: '/article/:articleId',
-    path: '/article',
+    path: '/article/:articleId',
     name: 'ArticleDetailView',
     component: ArticleDetailView
   },
@@ -36,7 +48,11 @@ Vue.use(VueRouter)
     name: 'VideoDetailView',
     component: VideoDetailView
   },
-
+  {
+    path: '/accounts/admin/login',
+    name: 'AdminLogin',
+    component: AdminLogin
+  },
   {
     path: '/accounts/login',
     name: 'Login',
@@ -49,13 +65,48 @@ Vue.use(VueRouter)
   },
   {
     path: '/community',
-    name: 'CommunityView',
-    component: CommunityView
+    name: 'CommunityIndexView',
+    component: CommunityIndexView
+  },
+  {
+    path: '/community/:communityId',
+    name: 'CommunityDetailView',
+    component: CommunityDetailView
+  },
+  {
+    path: '/create/community',
+    name: 'CommunityCreateView',
+    component: CommunityCreateView
+  },
+  {
+    path: '/update/:communityId',
+    name: 'CommunityUpdateView',
+    component: CommunityUpdateView
   },
   {
     path: '/vote',
     name: 'VoteView',
     component: VoteView
+  },
+  {
+    path: '/vote/local',
+    name: 'VoteLocalSelectView',
+    component: VoteLocalSelectView
+  },
+  {
+    path: '/vote/old',
+    name: 'VoteOldrankView',
+    component: VoteOldrankView
+  },
+  {
+    path: '/vote/result',
+    name: 'VoteResultView',
+    component: VoteResultView
+  },
+  {
+    path: '/vote/create',
+    name: 'VoteCreateView',
+    component: VoteCreateView
   },
   {
     path: '/tvtable',
@@ -86,6 +137,16 @@ Vue.use(VueRouter)
     path: '/accounts/:userId/settings',
     name: 'UserSettingView',
     component: UserSettingView
+  },
+  {
+    path: '/singer/:singerId/videos',
+    name: 'VideoListView',
+    component: VideoListView
+  },
+  {
+    path: '/singer/:singerId/articles',
+    name: 'ArticleListView',
+    component: ArticleListView
   },
   {
     path : '*',

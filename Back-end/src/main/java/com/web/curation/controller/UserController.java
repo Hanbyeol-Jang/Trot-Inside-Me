@@ -1,5 +1,7 @@
 package com.web.curation.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web.curation.dto.UserDto;
+import com.web.curation.dto.FollowDto;
 import com.web.curation.service.UserService;
 
 
@@ -20,35 +21,46 @@ import com.web.curation.service.UserService;
 public class UserController {
 	
 	@Autowired
-	private UserService service;
+	private UserService userService;
 	
-	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody UserDto user, HttpServletRequest request) {
+	@GetMapping("/follow/list")
+	public ResponseEntity<List<FollowDto>> followlist(HttpServletRequest request){
 		
-		String token = service.createToken(user.getU_email(), user.getU_pw());
-        return new ResponseEntity<>(token, HttpStatus.OK);
-	}
-
-	@GetMapping("/test")
-	public ResponseEntity<UserDto> test(HttpServletRequest request){
-		String tokenInfo = service.getTokenInfo(request);
-		if(tokenInfo.equals("F")) {
+		String u_email = userService.getTokenInfo(request);
+		if(u_email.equals("F")) {
 			return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
 		}else {
-			UserDto user = service.getUserInfoToken(tokenInfo);
-			return new ResponseEntity<>(user, HttpStatus.OK);
+			List<FollowDto> list = userService.getFollowList(u_email);
+			return new ResponseEntity<List<FollowDto>>(list, HttpStatus.OK );
 		}
 	}
 	
-	@PostMapping("/join")
-	public ResponseEntity<String> join(@RequestBody UserDto user) {
-		if(service.join(user)) {
-			 return new ResponseEntity<>("가입 성공", HttpStatus.OK);
+	@GetMapping("/follow/{s_idx}")
+	public ResponseEntity<String> followApply(@PathVariable int s_idx, HttpServletRequest request) {
+		FollowDto dto = new FollowDto();
+		String email = userService.getTokenInfo(request);
+		dto.setU_email(email);
+		dto.setS_idx(s_idx);
+		if(userService.followApply(dto)) {
+			return new ResponseEntity<>("팔로우 추가 성공", HttpStatus.OK);
 		}else {
-			 return new ResponseEntity<>("가입 실패", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("팔로우 추가 실패", HttpStatus.NOT_FOUND);
 		}
-		
 	}
+
+	@GetMapping("/follow/delete/{s_idx}")
+	public Object FollowDelete(@PathVariable int s_idx, HttpServletRequest request) {
+		FollowDto dto = new FollowDto();
+		dto.setU_email(userService.getTokenInfo(request));
+		dto.setS_idx(s_idx);
+		if (userService.followDelete(dto)) {
+			return new ResponseEntity<>("팔로우 삭제 성공", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("팔로우 삭제 실패", HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	
 	
 //수정
 //	@PostMapping("/accounts/logout")

@@ -1,6 +1,7 @@
 package com.web.curation.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.web.curation.dao.UserDao;
+import com.web.curation.dto.FollowDto;
 import com.web.curation.dto.UserDto;
 import com.web.curation.util.JwtTokenProvider;
 
@@ -16,6 +18,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
+	
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 
@@ -42,7 +45,6 @@ public class UserServiceImpl implements UserService {
 		System.out.println("=== changePassword ===");
 		userDao.changePassword(userDto);
 	}
-//////////////////////
 
 	@Override
 	public boolean join(UserDto user) {
@@ -52,18 +54,25 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String createToken(String email, String password) {
-		System.out.println("logger - createToken method " + email + " " + password);
-		UserDto member = userDao.getUserInfoSuc(email); // email로 등록된 회원을 찾는다.
-		System.out.println(member.toString());
-
+		System.out.println("email :"+email+",pw:"+password+",");
+		UserDto member = new UserDto();
+		try {
+			member = userDao.getUserInfoSuc(email); 
+			
+		} catch (Exception e) {
+			System.out.println("실패");
+			e.printStackTrace();
+		}
+		
+		System.out.println("회원정보 가져옴. "+member);
 		String token = "";
-		if (!password.equals(member.getU_pw())) { // 유저가 보유한 패스워드와 입력받은 패스워드가 일치하는 지 확인한다.
+		if (!password.equals(member.getU_pw())) { 
 			System.out.println("비밀번호 다름");
 		} else {
 			token = jwtTokenProvider.createToken(email);
 			System.out.println("비밀번호 같음 token : " + token);
 		}
-		return token; // email 정보만 가지고 token을 만든다.
+		return token; 
 	}
 
 
@@ -76,6 +85,22 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto getUserInfoToken(String email) {
 		return userDao.getUserInfoSuc(email);
+	}
+
+	@Override
+	public List<FollowDto> getFollowList(String userEmail) {
+		return userDao.getFollowList(userEmail);
+	}
+
+	@Override
+	public boolean followApply(FollowDto dto) {
+		return userDao.followApply(dto)==1;
+	}
+
+	@Override
+	public boolean followDelete(FollowDto dto) {
+		// TODO Auto-generated method stub
+		return userDao.followDelete(dto)==1;
 	}
 
 }

@@ -1,23 +1,32 @@
 <template>
 <div>
-    <h1>오늘의 트로트 티비 편성표</h1>
+    <v-card
+        color="#EEEEEE"
+        class="my-4"
+        raised
+        >
+        <div class="text-center">
+            <v-card-title>현재 보실 수 있는 프로그램은 <br />
+                <span class="highlight-program mr-3" color="pink">{{ Tvprograms[0].bc_title }}</span> 입니다.
+            </v-card-title>
+        </div>
+    </v-card>
     <TvtableSearch @search-programs="searchPrograms"/>
-      <v-tabs
+    <v-tabs
         color="pink"
         class="d-flex justify-center">
         <v-tab @click="getTvtable"><h4>시간 순으로 보기</h4></v-tab>
         <v-tab @click="getTvtableProgram"><h4>프로그램 별 보기</h4></v-tab>
-      </v-tabs>
-      <v-timeline
-        align-top
-        dense
-        v-for="tvprogram in Tvprograms" :key="Tvprograms.indexOf(tvprogram)"
-      >
-        <TvtableList :tvprogram="tvprogram" :tvprogramid="Tvprograms.indexOf(tvprogram)"/>
-      </v-timeline>
+    </v-tabs>
+    <v-timeline
+    align-top
+    dense
+    v-for="tvprogram in Tvprograms" :key="Tvprograms.indexOf(tvprogram)"
+    >
+    <TvtableList :tvprogram="tvprogram" :tvprogramid="Tvprograms.indexOf(tvprogram)"/>
+    </v-timeline>
 </div>
 </template>
-
 
 <script>
 import axios from 'axios'
@@ -35,7 +44,7 @@ export default {
     data(){
         return{
             Tvprograms:[],
-            now: ""
+            now: "",
         }
     },
     methods:{
@@ -102,6 +111,9 @@ export default {
 </script>
 
 
-<style>
-
+<style scoped>
+.highlight-program {
+    font-size: 25px !important;
+    color: #E91E63;
+}
 </style>
