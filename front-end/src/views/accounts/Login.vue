@@ -10,47 +10,15 @@
                                     width="200px">
                             </div>
                             <h4 class="msg-info pl-0 text-center">로그인해주세요 :)</h4>
-                            <form>
-                                <v-text-field
-                                    label="이메일"
-                                    placeholder="이메일 입력"
-                                    type="email"
-                                    v-model="email"
-                                    :error-messages="emailErrors"
-                                    @input="$v.email.$touch()"
-                                    @blur="$v.email.$touch()"
-                                    required
-                                    filled
-                                    rounded
-                                    dense
-                                    background-color="#F3E5F5"
-                                    height="50px"                          
-                                ></v-text-field>
-
-                                <v-text-field
-                                    label="비밀번호"
-                                    placeholder="비밀번호 입력"
-                                    type="password"
-                                    v-model="password"
-                                    :error-messages="passwordErrors"
-                                    @input="$v.password.$touch()"
-                                    @blur="$v.password.$touch()"
-                                    filled
-                                    rounded
-                                    dense
-                                    background-color="#F3E5F5"
-                                    required
-                                    height="50px"
-                                ></v-text-field>
-                                <div class="row justify-center px-3"><v-btn height="45px" block class="btn-color" @click="submit">로그인</v-btn></div>
-                                <div class="row justify-center px-3"><v-btn height="45px" block class="btn-kakao" color="amber lighten-2"><i class="fas fa-comment mr-2"></i>카카오톡 로그인</v-btn></div>
-                                <div class="row justify-center mt-2"> <a href="#"><small class="text-muted">비밀번호가 기억이 안나시나요?</small></a> </div>
-                            </form>
+                            <!-- <div class="row justify-center px-3"><v-btn height="45px" block class="btn-kakao" color="amber lighten-2"><i class="fas fa-comment mr-2" ></i></v-btn></div> -->
+                            <div class="row justify-center px-3">
+                            <KakaoLogin
+                            api-key="3b520fb7e5e907ebebfde93be5b8a1aa"
+                            :on-success=onSuccess
+                            :on-failure=onFailure
+                            />
+                            </div>
                         </div>
-                    </div>
-                    <div class="bottom text-center mb-5">
-                        <div href="#" class="sm-text mx-auto mb-3">아직 회원이 아니신가요?</div>
-                        <button class="btn btn-white" @click="goSignup">회원가입</button>
                     </div>
                 </div>
                 <div class="card card2 d-none d-lg-block">
@@ -61,15 +29,18 @@
                 </div>
             </div>
         </div>
+          <!-- <button class="api-btn" onclick="kakaoLogout()">로그아웃</button> -->
     </div>
-  
 </template>
 
 <script>
 import { validationMixin } from 'vuelidate'
 import { required, email, minLength } from 'vuelidate/lib/validators'
+import KakaoLogin from 'vue-kakao-login'
 
 import Swal from 'sweetalert2'
+import axios from 'axios'
+import SERVER from '@/api/drf'
 
 export default {
     mixins: [validationMixin],
@@ -81,13 +52,38 @@ export default {
         },
     },
     name: 'Login',
+    components: {
+        KakaoLogin
+    },
     data() {
         return {
             email: '',
             password: '',
+            token:'',
         }
     },
     methods: {
+        onSuccess(data){
+            this.token = data.access_token
+            const axiosConfig = {
+                headers:{
+                access_token : this.token
+                },
+            }
+            axios.post(`${SERVER.URL}/signin/kakao`,null,axiosConfig)
+            .then((res)=>{
+                console.log(res.data)
+                this.$cookies.set("auth-token", res.data);
+
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        },
+        onFailure(data){
+            console.log(data)
+            console.log("failure")
+        },
         goSignup() {
             this.$router.push({ name: 'Signup' })
             scroll(0, 0)

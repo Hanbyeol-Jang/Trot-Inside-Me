@@ -17,13 +17,6 @@
                 </v-btn>
               </div>
 
-              <div @click="showBookmarkChange()">
-                <v-btn icon>
-                  <v-icon v-show="!showBookmark">mdi-bookmark</v-icon>
-                  <v-icon v-show="showBookmark" color="yellow">mdi-bookmark</v-icon>
-                </v-btn>
-              </div>
-
               <div  @click="showCommentsChange()">
                 <v-btn icon>
                   <v-icon v-show="!showComments">mdi-message-text</v-icon>
@@ -54,38 +47,44 @@ export default {
   data(){
     return {
       article: [],
-      bookmarkCnt:'',
       likeCnt:'',
       showLike: false,
       showComments: false,
-      showBookmark: false,
-      // id : this.$router.params.articleId
-      id:1,
+      id : this.$route.params.articleId,
+      axiosConfig : {
+          headers:{
+          token : `${this.$cookies.get('auth-token')}`
+          },
+      }
     }
   },
   methods: {
-    checkBookmarklike(){
-      const axiosConfig = {
-          headers:{
-          Authorization : `Token ${this.$cookies.get('auth-token')}`
-          },
-      }
-      axios.get(SERVER.URL + '/',this.article.id,axiosConfig)
+    // checkBookmarklike(){
+    //   const axiosConfig = {
+    //       headers:{
+    //       Authorization : `Token ${this.$cookies.get('auth-token')}`
+    //       },
+    //   }
+    //   axios.get(SERVER.URL + '/',this.article.id,axiosConfig)
+    //   .then((response)=>{
+    //     this.showBookmark = response.data.data
+    //     this.showLike = response.data.data
+    //   })
+    //   .catch((err) => {console.log(err.response.data)})
+    // },
+    showLikeChange(){
+      axios.post(SERVER.URL + `/${this.id}/`,this.axiosConfig)
       .then((response)=>{
-        this.showBookmark = response.data.data
         this.showLike = response.data.data
+        this.likeCnt = response.data.data
       })
       .catch((err) => {console.log(err.response.data)})
     },
     getArticle(){
-      //////////////////////////////////////////////////////////////////////////////////////
-      axios.get(SERVER.URL + `/${this.id}/`)
-      ///////////////////////////////////////////////////////////////////////////////////////
+      axios.get(SERVER.URL +`/singer/articles/${this.$route.params.articleId}`)
         .then((response) => {
-            this.article = response.data.data
-            this.bookmarkCnt = response.data.data
-            this.likeCnt = response.data.data
-            this.checkBookmarklike()
+            console.log(response.data)
+            this.article = response.data
         })
         .catch((err) => {console.log(err.response.data)})
     },
@@ -93,33 +92,8 @@ export default {
       this.showComments = !this.showComments
     },
   },
-    showBookmarkChange(){
-      const axiosConfig = {
-          headers:{
-          Authorization : `Token ${this.$cookies.get('auth-token')}`
-          },
-      }
-      axios.post(SERVER.URL+'/',this.article.id,axiosConfig)
-      .then((response)=>{
-        this.showBookmark = response.data.data
-        this.bookmarkCnt = response.data.data
-      })
-      .catch((err) => {console.log(err.response.data)})
-    },
-    showLikeChange(){
-      const axiosConfig = {
-          headers:{
-          Authorization : `Token ${this.$cookies.get('auth-token')}`
-          },
-      }
-      axios.post(SERVER.URL+'/',this.article.id,axiosConfig)
-      .then((response)=>{
-        this.showLike = response.data.data
-        this.likeCnt = response.data.data
-      })
-      .catch((err) => {console.log(err.response.data)})
-    },
-    created(){      // this.getArticle()
+    created(){      
+      this.getArticle()
     },
     
 }
