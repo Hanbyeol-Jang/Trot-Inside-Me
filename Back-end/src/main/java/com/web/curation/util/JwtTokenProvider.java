@@ -10,6 +10,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
+
 @Component
 public class JwtTokenProvider {
 	private String secretKey = "webfirewood";
@@ -33,6 +35,12 @@ public class JwtTokenProvider {
     public String resolveToken(HttpServletRequest request) {
          String token = request.getHeader("token");
          return token;
+    }
+    
+    // 카카오 로그인 시 헤더에서 access Token 얻어옴
+    public String getAccessToken(HttpServletRequest request) {
+    	String access_token = request.getHeader("access_token");
+    	return access_token;
     }
     
     public boolean validateToken(Jws<Claims> claims) {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 	
+		 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.web.curation.dao.VoteDao">
+	<!-- 투표하기 -->
+	<insert id="voteClick">
+		insert into Vote(u_email, s_idx, v_area )
+		value(#{u_email}, #{s_idx}, #{v_area});
+	</insert>
+
+</mapper>
+        

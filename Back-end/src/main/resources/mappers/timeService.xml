@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 	
+		 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.web.curation.dao.TimeDao">
+
+	<insert id="insertTodaySchedule" parameterType="com.web.curation.dto.BroadCastingDto">
+ 		insert into BroadCasting(bc_company,bc_time,bc_title) 
+ 		value (#{bc_company},#{bc_time},#{bc_title})
+	</insert>
+
+ 	<delete id="deleteYesterDaySchedule" >
+ 		delete from BroadCasting where bc_member = "";
+ 	</delete>
+ 	
+ 	<insert id="insertSingerSchedule" parameterType="com.web.curation.dto.BroadCastingDto">
+ 		insert into BroadCasting(bc_date, bc_company,bc_time, bc_member, bc_title) 
+ 		value (#{bc_date},#{bc_company},#{bc_time},#{bc_member},#{bc_title})
+ 	</insert>
+ 	
+ 	<delete id="deleteSingerSchedule" >
+ 		delete from BroadCasting where bc_member != "";
+ 	</delete>
+ 	
+ 	<select id="selectSinger" resultType="com.web.curation.dto.SingerDto">
+ 		select * from Singer;
+ 	</select>
+ </mapper>
+        
