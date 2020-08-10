@@ -13,6 +13,7 @@ export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
     singers: [],
+    programs: [],
     contentsCount: 0,
     user: {},
   },
@@ -32,13 +33,16 @@ export default new Vuex.Store({
     SET_SINGERS(state, singers) {
       state.singers = singers
     },
+    SET_PROGRAMS(state, programs) {
+      state.programs = programs
+    },
     SET_CONTENTS_CNT(state, cnt) {
       state.contentsCount = cnt
-    }
+    },
   },
   actions: {
+    // Auth
     login({ commit }, loginData) {
-      console.log(loginData)
       axios.post(SERVER.URL + SERVER.ROUTES.login, loginData)
         .then(res => {
           console.log('Admin Login SUCCESS')
@@ -68,10 +72,10 @@ export default new Vuex.Store({
         .catch((err)=>{ console.log(err) })
     },
     kakaoLogout({ commit }) {
-      window.location.href = 'https://kauth.kakao.com/oauth/logout?client_id=78183e66919b34b25f731ea9f2d99f0e&logout_redirect_uri=http://localhost:8081/';
+      window.location.href = SERVER.ROUTES.kakaoLogout;
       console.log('Kakao Logout SUCCESS')
-      commit('SET_TOKEN', null)  // state 에서 삭제
-      cookies.remove('auth-token')  // 쿠키에서 삭제
+      commit('SET_TOKEN', null)
+      cookies.remove('auth-token')
       router.push({ name: 'Home' })
     },
     getUser({ getters, commit }) {
@@ -79,17 +83,62 @@ export default new Vuex.Store({
         .then(res => {  commit('SET_USER', res.data) })
         .catch((err)=>{ console.error(err) })    
     },
-    fetchSingers({ commit }) {
-      axios.get(SERVER.URL + SERVER.ROUTES.singerList)
-        .then(res => { commit('SET_SINGERS', res.data) })
-        .catch(err => { console.error(err) })
-    },
+
+    // Feed Data
     getContentsCount({ commit }, info) {
       const options = { params: { b_type: info.mediaType, s_idx: info.singerId }}
       axios.get(SERVER.URL + '/board/count', options)
         .then(res => { commit('SET_CONTENTS_CNT', res.data) })
         .catch(err => { console.error(err) })
-    }
+    },
+
+    // Singer Data
+    fetchSingers({ commit }) {
+      axios.get(SERVER.URL + SERVER.ROUTES.singerList)
+        .then(res => { commit('SET_SINGERS', res.data) })
+        .catch(err => { console.error(err) })
+    },
+    postSinger(context, singerData) {
+      axios.post(SERVER.URL + SERVER.ROUTES.singerCreate, singerData)
+        .then(() => {
+          console.log('Singer POST SUCCESS')
+          router.push({ name: 'SingerManageView' })
+        })
+        .catch(err => console.log(err))
+    },
+    deleteSinger(context, singerId) { 
+      axios.delete(SERVER.URL + SERVER.ROUTES.singerDelete + singerId)
+        .then(() => {
+          console.log('Singer DELETE SUCCESS')
+          location.reload(true)
+        })
+        .catch(err => console.log(err))
+    },
+    
+    // Program Data
+    fetchPrograms({ commit }) {
+      axios.get(SERVER.URL + SERVER.ROUTES.programList)
+        .then(res => { commit('SET_PROGRAMS', res.data) })
+        .catch(err => { console.error(err) })
+    },
+    postProgram(context, singerData) {
+      axios.post(SERVER.URL + SERVER.ROUTES.programCreate, singerData)
+        .then(() => {
+          console.log('Singer POST SUCCESS')
+          router.push({ name: 'ProgramManageView' })
+        })
+        .catch(err => console.log(err))
+    },
+    deleteSProgram(context, programId) { 
+      axios.delete(SERVER.URL + SERVER.ROUTES.programDelete + programId)
+        .then(() => {
+          console.log('Singer DELETE SUCCESS')
+          location.reload(true)
+        })
+        .catch(err => console.log(err))
+    },
+
+
   },
   modules: {
   }

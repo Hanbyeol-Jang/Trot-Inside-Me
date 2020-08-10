@@ -24,6 +24,8 @@
         <span v-if="routeName === 'UserDetailView'" class="">내 정보</span>
         <span v-if="routeName === 'SingerManageView'" class="">가수 관리</span>
         <span v-if="routeName === 'SingerCreateView'" class="">가수 등록</span>
+        <span v-if="routeName === 'ProgramManageView'" class="">프로그램 관리</span>
+        <span v-if="routeName === 'ProgramCreateView'" class="">프로그램 등록</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-if="navBool" icon @click="goUserDetail"><i class="fas fa-user fa-lg"></i></v-btn>

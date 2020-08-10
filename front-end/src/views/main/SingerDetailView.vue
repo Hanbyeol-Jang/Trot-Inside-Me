@@ -4,8 +4,13 @@
       <v-avatar
         size="150px">
         <img
+          v-if="singer.s_img"
           :src="singer.s_img"
-          alt="John"
+          alt="Singer Default"
+        >
+        <img
+          v-else
+          src="@/assets/image/user_default.png"
         >
       </v-avatar>
       <h2 class="mt-4">{{ singer.s_name }}</h2>

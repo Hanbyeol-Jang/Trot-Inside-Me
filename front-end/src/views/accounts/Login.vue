@@ -12,9 +12,9 @@
                             <h4 class="msg-info pl-0 text-center">로그인해주세요 :)</h4>
                             <div class="row justify-center px-3">
                             <KakaoLogin
-                            api-key="3b520fb7e5e907ebebfde93be5b8a1aa"
-                            :on-success=onSuccess
-                            :on-failure=onFailure
+                                api-key="3b520fb7e5e907ebebfde93be5b8a1aa"
+                                :on-success=onSuccess
+                                :on-failure=onFailure
                             />
                             </div>
                         </div>
@@ -22,7 +22,6 @@
                 </div>
             </div>
         </div>
-        <!-- <button class="api-btn" onclick="kakaoLogout()">로그아웃</button> -->
     </div>
 </template>
 

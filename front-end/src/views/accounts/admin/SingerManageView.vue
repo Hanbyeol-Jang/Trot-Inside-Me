@@ -23,16 +23,20 @@
                 class="my-3"
                 size="60">
                 <img
+                  v-if="singer.s_img"
                   :src="singer.s_img"
                   alt="Singer Default"
                 >
+                <img
+                  v-else
+                  src="@/assets/image/user_default.png">
               </v-avatar>
             </td>
             <td>{{ singer.s_name }}</td>
             <td v-if="singer.s_cafeUrl"><a :href="singer.s_cafeUrl">팬카페<i class="fas fa-external-link-alt ml-1"></i></a></td>
             <td v-else>미등록</td>
             <td class="text-center">
-              <v-btn icon><i class="fas fa-trash-alt"></i></v-btn>
+              <v-btn icon @click="deleteSinger(singer.s_idx)"><i class="fas fa-trash-alt"></i></v-btn>
             </td>
           </tr>
         </tbody>
@@ -58,7 +62,7 @@ export default {
         ...mapState(['singers']),
       },
   methods: {
-    ...mapActions(['fetchSingers']),
+    ...mapActions(['fetchSingers', 'deleteSinger']),
     goSingerCreate() {
       this.$router.push({ name: 'SingerCreateView' })
     }
