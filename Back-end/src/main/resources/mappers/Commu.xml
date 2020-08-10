@@ -3,66 +3,137 @@
 		 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.web.curation.dao.CommuDao">
-	<!-- 관리자 편성표 추가-->
-	<insert id="addCommu" parameterType="com.web.curation.dto.CommuDto">
+	<!-- 커뮤니티 게시글 추가-->
+	<insert id="addCommu" 
+	parameterType="com.web.curation.dto.CommuDto">
 		insert into Community(co_content, co_img, u_email)
-		value(#{co_content}, #{co_img} ,#{u_email});
+		value(#{co_content}, #{co_img} ,#{co_email});
 	</insert>
 	
-	<!-- 관리자 편성표 삭제 -->
+	<!-- 커뮤니티 게시글 삭제 -->
 	<delete id="deleteCommu" parameterType="int">
 		delete from Community where co_idx = #{co_idx};
 	</delete>
 	
-	<!-- 관리자 편성표 리스트 출력 -->
-	<select id="getCommuList" resultType="com.web.curation.dto.CommuDto">
-		select co_idx, co_content,u_email, co_date from Community ;
+	<!-- 커뮤니티 게시글 리스트 출력  + 댓글 수  + 좋아요 수 / 최신순 -->
+	<select id="getCommuList" 
+	parameterType="HashMap" resultType="com.web.curation.dto.CommuDto">
+		select 	c.co_idx ,
+				c.co_content ,
+				c.co_img ,
+				c.co_date ,
+				c.u_email as co_email,
+				(	select u_name 
+					from ssafy_trot.UserInfo ui 
+					where c.u_email =ui.u_email 
+				) as co_name,
+				(
+					SELECT  COUNT(cr_idx)
+					from 	ssafy_trot.CoReply cr 
+					where cr.co_idx  = c.co_idx 
+				) as cr_cnt,
+				(
+					SELECT 	COUNT(co_idx)
+					from	ssafy_trot.CoGood cg 
+					where cg.co_idx = c.co_idx  
+				) as good_cnt,
+				(
+					select count(*) 
+					from ssafy_trot.CoGood g 
+					where c.co_idx = g.co_idx 
+					and g.u_email  = #{u_email}
+				) as good_flag 
+		from ssafy_trot.Community c 
+		ORDER BY ${order} desc;
 	</select>
 	
 	<!-- 게시글 디테일(게시글 + 댓글 리스트 +유저 이름) -->
-	<select id="getCommuDetail" resultType="com.web.curation.dto.CommuReplyUser">
+	<select id="getCommuDetail" 
+	parameterType="com.web.curation.dto.CoGoodDto"
+	resultType="com.web.curation.dto.CommuReplyUser">
 		select 	cc.co_idx , 
-		cc.co_content ,
-		cc.co_img ,
-		cc.co_date ,
-		uii.u_name as co_name, 
-		cc.cr_idx ,
-		cc.cr_content , 
-		cc.cr_name as cr_name
-		FROM 	(
-					SELECT 	c.co_idx , 
-							c.co_content ,
-							c.co_img ,
-							c.co_date ,
-							c.u_email as co_email, 
-							cr.cr_idx ,
-							cr.cr_content , 
-							ui.u_name as cr_name
-					FROM 	CoReply cr 
-					left outer join UserInfo ui 
-									on cr.u_email = ui.u_email 
-					left outer join Community c 
-									on c.co_idx =cr.co_idx 
-					where 	c.co_idx =#{co_idx} 
-				) cc
-		left outer join UserInfo uii
-						on uii.u_email = cc.co_email ;
-				
+			cc.co_content ,
+			cc.co_img ,
+			cc.co_date ,
+			cc.co_email ,
+			uii.u_name as co_name, 
+			cc.cr_idx ,
+			cc.cr_content , 
+			cc.cr_email ,
+			cc.cr_name ,
+			(	select COUNT(*) 
+				from ssafy_trot.CoReply 
+				where co_idx = #{co_idx}
+			) as cr_cnt,
+			(	select count(*) 
+				from ssafy_trot.CoGood 
+				where co_idx = #{co_idx}
+			) as good_cnt,
+			(
+				select count(*) 
+				from ssafy_trot.CoGood g 
+				where g.co_idx =3 
+				and g.u_email  = #{u_email}
+			) as good_flag 
+			FROM 	(
+						SELECT 	c.co_idx , 
+								c.co_content ,
+								c.co_img ,
+								c.co_date ,
+								c.u_email as co_email, 
+								cr.cr_idx ,
+								cr.cr_content , 
+								ui.u_email as cr_email,
+								ui.u_name as cr_name
+						FROM 	ssafy_trot.CoReply cr 
+						left outer join ssafy_trot.UserInfo ui 
+										on cr.u_email = ui.u_email 
+						left outer join ssafy_trot.Community c 
+										on c.co_idx =cr.co_idx 
+						where 	c.co_idx =#{co_idx}
+					) cc
+			left outer join ssafy_trot.UserInfo uii
+							on uii.u_email = cc.co_email 
+			ORDER BY cc.cr_idx desc;
+		
 	</select>
 	
 	<!-- 댓글 추가-->
-	<insert id="addCommuReply" parameterType="com.web.curation.dto.CoReplyDto">
+	<insert id="addCommuReply" 
+	parameterType="com.web.curation.dto.CoReplyDto">
 		insert into CoReply (cr_content, u_email, co_idx)
 		value	(#{cr_content}, #{u_email}, #{co_idx} );
 	</insert>
 	
 	<!-- 댓글 삭제 -->
-	<delete id="deleteCommuReply" parameterType="com.web.curation.dto.CoReplyDto">
+	<delete id="deleteCommuReply" 
+	parameterType="com.web.curation.dto.CoReplyDto">
 		delete 	from CoReply 
 		where 	1=1
 		and 	co_idx = #{co_idx}
 		and		cr_idx = #{cr_idx};
 	</delete> 
 	
+	<!-- 게시글 좋아요 클릭 -->
+	<insert id="clickGood" 
+	parameterType="com.web.curation.dto.CoGoodDto">
+		insert into CoGood (co_idx, u_email)
+		value	(#{co_idx}, #{u_email});
+	</insert>
+	
+	<!-- 게시글 좋아요 취소 -->
+	<delete id="clickGoodCancel" 
+	parameterType="com.web.curation.dto.CoGoodDto">
+		delete 	from CoGood
+		where 	1=1
+		and		co_idx = #{co_idx} 
+		and		u_email = #{u_email};
+	</delete>
+	
+	<!-- 디테일에서 게시글 삭제  -->
+	<delete id="deleteDetail" parameterType="int">
+		delete 	from Community
+		where 	co_idx = #{co_idx} 
+	</delete>
  </mapper>
         
