@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 var today = new Date()
 
 export default {
@@ -60,8 +61,14 @@ export default {
           }
         },
         goUserDetail() {
-          if (this.$route.name !== 'UserDetailView') {
-            this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
+          if(this.isLoggedIn) {
+            if (this.$route.name !== 'UserDetailView') {
+              this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
+            }
+          } else {
+            if (this.$route.name !== 'Login') {
+              this.$router.push({ name: 'Login' }).catch(()=>{})
+            }
           }
         },
     },
@@ -69,6 +76,7 @@ export default {
 
     },
     computed: {
+      ...mapGetters(['isLoggedIn']),
       routeName() {
         return this.$route.name
       },

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="my-5 d-flex justify-sm-space-between">
-      <h1>커뮤니티</h1>            
+      <v-spacer></v-spacer>       
       <v-btn x-large color="primary" @click="createCommunity"><v-icon class="mr-2">mdi-pencil</v-icon>게시글 작성</v-btn>
     </div>
       <div class="mt-5">
@@ -48,8 +48,9 @@ export default {
 
       getCommunity(){
         const options = {params: {_page: this.page}}
-        axios.get(SERVER.URL + `/community/`, options)
+        axios.get(SERVER.URL + `/community/list`, options)
           .then((response) => {
+            console.log(response)
             this.communityNum = response.data.data
             this.communities.push(...response.data.data)
           })
@@ -88,7 +89,7 @@ export default {
     },
 
     created(){
-      // this.getCommunity()
+      this.getCommunity()
     },
 }
 </script>

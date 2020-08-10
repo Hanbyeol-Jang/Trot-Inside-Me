@@ -5,7 +5,7 @@ import cookies from 'vue-cookies'
 import router from '@/router'
 import axios from 'axios'
 
-import SERVER from '@/api/drf'
+import SERVER from '@/api/drf' 
 
 Vue.use(Vuex)
 
@@ -41,6 +41,21 @@ export default new Vuex.Store({
           router.push({ name: 'Home' })
         })
         .catch(err => console.log(err.response.data))
+    },
+    kakaoLogin({ commit }, accessToken) {
+      const axiosConfig = { headers:{ access_token : accessToken } }
+      axios.post(SERVER.URL + '/signin/kakao', null, axiosConfig)
+        .then((res)=>{
+            commit('SET_TOKEN', res.data)
+            router.push({ name: 'Home' })
+        })
+        .catch((err)=>{ console.log(err) })
+    },
+    kakaoLogout({ commit }) {
+      window.location.href = 'https://kauth.kakao.com/oauth/logout?client_id=78183e66919b34b25f731ea9f2d99f0e&logout_redirect_uri=http://localhost:8081/';
+      commit('SET_TOKEN', null)  // state 에서 삭제
+      cookies.remove('auth-token')  // 쿠키에서 삭제
+      router.push({ name: 'Home' })
     },
     fetchSingers({ getters, commit }) {
       if (getters.singersLength < 1) {
