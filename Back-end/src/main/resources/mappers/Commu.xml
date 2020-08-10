@@ -22,6 +22,9 @@
 				c.co_content ,
 				c.co_img ,
 				c.co_date ,
+				(	select COUNT(*) 
+					from Community
+				) as co_cnt,
 				c.u_email as co_email,
 				(	select u_name 
 					from ssafy_trot.UserInfo ui 

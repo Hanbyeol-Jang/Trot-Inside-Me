@@ -57,6 +57,7 @@ public class CommuController {
 				list = commuService.getCommuList(udto.getU_email(), "co_idx");
 			}
 			List<CommuDto> showList = new ArrayList<>();
+			
 			if (list != null) {
 				int lastPageRemain = list.size() % 5;
 				int lastPage = list.size() - lastPageRemain;
@@ -64,6 +65,7 @@ public class CommuController {
 				// 5개씩 보여주기
 				if (page < lastPage) {
 					for (int i = page; i < page + 5; i++) {
+						
 						showList.add(list.get(i));
 					}
 				} else if (page == lastPage) {
