@@ -1,5 +1,6 @@
 <template>
   <v-card
+    hover 
     max-width="700"
     class="mx-auto"
   >
@@ -10,8 +11,8 @@
       </v-list-item-avatar>
       <v-list-item-content class="d-flex justify-space-between">
         <div class="d-flex">
-            <v-list-item-title class="mr-1">username</v-list-item-title>
-            <!-- <v-list-item-title>{{community.username}}</v-list-item-title> -->
+            <!-- <v-list-item-title class="mr-1">username</v-list-item-title> -->
+            <v-list-item-title>{{community.co_name}}</v-list-item-title>
             <div class="mr-1" v-show="edituser">
                 <v-btn depressed color="error">삭제</v-btn>
             </div>
@@ -19,15 +20,17 @@
                 <v-btn depressed color="primary">수정</v-btn>
             </div>
         </div>
+        <v-card-text>
+        {{community.co_date}}
+        </v-card-text>
       </v-list-item-content>
     </v-list-item>
 
-    <v-img src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" height="194"></v-img>
-    <!-- <v-img :src="communityimg" height=100%></v-img> -->
+    <!-- <v-img src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" height="194"></v-img> -->
+    <v-img :src="communityimg" height=100%></v-img>
 
     <v-card-text>
-      Visit ten places on our planet that are undergoing the biggest changes today.
-      <!-- {{community.description}} -->
+      {{community.co_content}}
     </v-card-text>
     <hr>
     <v-card-actions class="d-flex justify-space-around">
@@ -41,8 +44,7 @@
         </div>
         <div  @click="showCommentsChange()">
         <v-btn icon>
-            <v-icon v-show="!showComments">mdi-message-text</v-icon>
-            <v-icon v-show="showComments" large color="blue darken-2">mdi-message-text</v-icon>
+            <v-icon large color="blue darken-2">mdi-message-text</v-icon>
             {{commentCnt}}
         </v-btn>
         </div>
@@ -61,21 +63,11 @@ export default {
     components:{
         CommentList,
     },
-    props:{
-        community:Object,
-    },
     data(){
         return{
             likeCnt:'',
             commentCnt:'',
             showLike: false,
-            showComments: false,
-            id:1,
-            // likeCnt:this.community.likecnt,
-            // commentCnt:this.community.commentcnt,
-            // showLike: this.community.flag,
-            // showComments: false,
-            // id:this.community.id,
             currentUser:'',
             communityUser:this.community.user,
             edituser:false,
@@ -88,6 +80,13 @@ export default {
         }
     },
     methods: {
+        checkLogin(){
+                if (!(this.$cookies.get('auth-token'))){
+                    this.$alert(" 로그인을 해주세요")
+                    this.$router.push({name:'Home'})                
+                }
+            },
+
         getuser(){
             axios.get(SERVER.URL`/user/`,this.axiosConfig)
             .then((reaponse)=>{
@@ -99,6 +98,25 @@ export default {
                     this.edituser = false
                     this.deleteuser = false
                 }
+            })
+            .catch((err)=>{
+                console.error(err)
+            })
+        },
+
+        getCommunity(){
+            console.log(123456)
+            console.log(this.$route.params.communityId)
+            console.log(this.$route.params.page)
+            const axiosConfig2 = {
+              headers:{
+                token: `${this.$cookies.get('auth-token')}`,
+                },
+              params: {co_idx:this.$route.params.communityId, page: this.$route.params.page}
+            }
+            axios.get(SERVER.URL+`/community/detail/${this.$route.params.communityId}`,axiosConfig2)
+            .then((reaponse)=>{
+                console.log(reaponse)
             })
             .catch((err)=>{
                 console.error(err)
@@ -135,12 +153,13 @@ export default {
             return this.community.userimg
         },
         communityimg(){
-            return this.community.communityimg
+            return this.community.co_img
         },
     },
     created(){
-        this.getuser(),
-        this.checkAdmin()
+        this.getCommunity()
+        this.checkLogin()
+        this.getuser()
     }
 }
 </script>
