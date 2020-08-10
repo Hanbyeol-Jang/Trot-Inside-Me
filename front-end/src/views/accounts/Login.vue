@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-          <!-- <button class="api-btn" onclick="kakaoLogout()">로그아웃</button> -->
+          <button class="api-btn" onclick="kakaoLogout()">로그아웃</button>
     </div>
 </template>
 

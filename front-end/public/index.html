@@ -19,6 +19,8 @@
       // 초기화한 앱에 현재 도메인이 등록되지 않은 경우 에러가 발생합니다.
       Kakao.init('c089c8172def97eb00c07217cae17495')
       function kakaoLogout() {
+        document.cookie = 'same-site-cookie=foo; SameSite=Lax';
+        document.cookie = 'cross-site-cookie=bar; SameSite=None; Secure';
         if (!Kakao.Auth.getAccessToken()) {
           alert('Not logged in.')
           return

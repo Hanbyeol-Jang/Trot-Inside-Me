@@ -8,7 +8,10 @@ import VueSimpleAlert from "vue-simple-alert"
 import VueCookies from 'vue-cookies'
 import VueSession from 'vue-session'
 import InfiniteLoading from 'vue-infinite-loading';
-
+import VueConfirmDialog from 'vue-confirm-dialog'
+ 
+Vue.use(VueConfirmDialog)
+Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 //도연
 var sessionOptions = {
   persist: true
