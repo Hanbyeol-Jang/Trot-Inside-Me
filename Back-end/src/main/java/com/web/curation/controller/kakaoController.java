@@ -106,6 +106,7 @@ public class kakaoController {
 			// 디비 삽입
 			kakaoService.insertKakao(userDto);
 		}
+		// TODO jinyong 수정해야됨
 		String Token = jwtTokenProvider.createToken(userDto.getU_email());
 		System.out.println(Token);
 		return new ResponseEntity<String>(Token, HttpStatus.OK);

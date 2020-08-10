@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dto.FollowDto;
+import com.web.curation.dto.UserDto;
 import com.web.curation.service.UserService;
 
 
@@ -26,20 +27,20 @@ public class UserController {
 	@GetMapping("/follow/list")
 	public ResponseEntity<List<FollowDto>> followlist(HttpServletRequest request){
 		
-		String u_email = userService.getTokenInfo(request);
-		if(u_email.equals("F")) {
+		UserDto dto = userService.getTokenInfo(request);
+		if(dto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
 		}else {
-			List<FollowDto> list = userService.getFollowList(u_email);
+			List<FollowDto> list = userService.getFollowList(dto.getU_email());
 			return new ResponseEntity<List<FollowDto>>(list, HttpStatus.OK );
 		}
 	}
 	
 	@GetMapping("/follow/{s_idx}")
 	public ResponseEntity<String> followApply(@PathVariable int s_idx, HttpServletRequest request) {
+		UserDto udto = userService.getTokenInfo(request);
 		FollowDto dto = new FollowDto();
-		String email = userService.getTokenInfo(request);
-		dto.setU_email(email);
+		dto.setU_email(udto.getU_email());
 		dto.setS_idx(s_idx);
 		if(userService.followApply(dto)) {
 			return new ResponseEntity<>("팔로우 추가 성공", HttpStatus.OK);
@@ -51,7 +52,7 @@ public class UserController {
 	@GetMapping("/follow/delete/{s_idx}")
 	public Object FollowDelete(@PathVariable int s_idx, HttpServletRequest request) {
 		FollowDto dto = new FollowDto();
-		dto.setU_email(userService.getTokenInfo(request));
+		dto.setU_email(userService.getTokenInfo(request).getU_email());
 		dto.setS_idx(s_idx);
 		if (userService.followDelete(dto)) {
 			return new ResponseEntity<>("팔로우 삭제 성공", HttpStatus.OK);
