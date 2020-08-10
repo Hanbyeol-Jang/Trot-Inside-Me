@@ -150,11 +150,16 @@ public class SearchServiceImpl implements SearchService {
 		return searchDao.isUrl2(url, name);
 	}
 
-	// 해당 가수 영상 디테일
+	// 영상 디테일
 	@Override
-	public BoardDto videoDetail(int s_idx, int b_idx) {
-		return searchDao.videoDetail(s_idx, b_idx);
+	public BoardDto videoDetail(int b_idx) {
+		return searchDao.videoDetail(b_idx);
 	}
+	@Override
+	public BoardDto articleDetail(int b_idx) {
+		return searchDao.articleDetail(b_idx);
+	}
+
 
 	// 편성표 전체 출력
 	@Override
@@ -176,5 +181,6 @@ public class SearchServiceImpl implements SearchService {
 	public List<BoardDto> videoArticleGood(int b_type) {
 		return searchDao.videoArticleGood(b_type);
 	}
+
 
 }

@@ -71,7 +71,15 @@
 		where 1=1
 		and b_type = 1
 		and b_idx = #{b_idx}
-		and b_member = (select s_name from Singer where s_idx = #{s_idx})
+		<!-- and b_member = (select s_name from Singer where s_idx = #{s_idx}) -->
+	</select>
+	<!-- 기사 디테일 -->
+	<select id="articledetail" resultType="BoardDto">
+		select * 
+		from Board
+		where 1=1
+		and b_type = 2
+		and b_idx = #{b_idx}
 	</select>
 	
 	<!-- 편성표 리스트 출력 -->
