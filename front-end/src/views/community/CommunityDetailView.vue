@@ -74,7 +74,7 @@ export default {
             deleteuser:false,
             axiosConfig : {
                 headers:{
-                Authorization : `Token ${this.$cookies.get('auth-token')}`
+                token : `${this.$cookies.get('auth-token')}`
                 },
             }
         }
@@ -88,15 +88,23 @@ export default {
             },
 
         getuser(){
-            axios.get(SERVER.URL`/user/`,this.axiosConfig)
+            axios.get(SERVER.URL+`/admin/userNow`,this.axiosConfig)
             .then((reaponse)=>{
-                this.currentUser = reaponse.data.username
-                if (this.communityUser === this.currentUser){
-                    this.edituser = true
-                    this.deleteuser =true
+                if(!Number(reaponse.data.u_isAdmin)){
+                    this.currentUser = reaponse.data.u_name
+                    this.deleteuser = true
+                    if (this.communityUser === this.currentUser){
+                        this.edituser = true
+                    }else{
+                        this.edituser = false
+                    }
                 }else{
-                    this.edituser = false
-                    this.deleteuser = false
+                    this.currentUser = reaponse.data.u_name
+                    if (this.communityUser === this.currentUser){
+                        this.edituser = true
+                    }else{
+                        this.edituser = false
+                    }
                 }
             })
             .catch((err)=>{
@@ -105,9 +113,6 @@ export default {
         },
 
         getCommunity(){
-            console.log(123456)
-            console.log(this.$route.params.communityId)
-            console.log(this.$route.params.page)
             const axiosConfig2 = {
               headers:{
                 token: `${this.$cookies.get('auth-token')}`,
