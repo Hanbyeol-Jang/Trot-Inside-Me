@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,8 @@ public class kakaoController {
 	@Autowired
 	KakaoService kakaoService;
 	private HttpSession session;
+	@Value("${KAKAO_API_KEY}")
+	private String API_KEY;
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 
@@ -52,13 +55,13 @@ public class kakaoController {
 	//# 삭제 예정 - 프론트에서 access값을 넘겨주면 필요 없음
 	@GetMapping("/social/login/kakao")
 	public ResponseEntity<String> login(@RequestParam("code") String code) throws SQLException {
-		System.out.println("logger - kakao login 후에 getCode");
-		System.out.println("code : " + code);
-		System.out.println("logger - code를 기반으로 getAccessToken");
+//		System.out.println("logger - kakao login 후에 getCode");
+//		System.out.println("code : " + code);
+//		System.out.println("logger - code를 기반으로 getAccessToken");
 		String access_Token = "";
 		try {
 			access_Token = kakaoAPI.getAccessToken(code);
-			System.out.println("controller access_token : " + access_Token);
+//			System.out.println("controller access_token : " + access_Token);
 			return new ResponseEntity<String>(access_Token, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +96,9 @@ public class kakaoController {
 	@PostMapping(value = "/signin/kakao")
 	public ResponseEntity<String> login(HttpServletRequest request) {
 		// TODO 배포시 Syso 삭제
-		System.out.println("logger - login 후 헤더에 access_token 담아 전송 ");
+//		System.out.println("logger - login 후 헤더에 access_token 담아 전송 ");
 		String access_token = jwtTokenProvider.getAccessToken(request);
-		System.out.println("logger - access_token: ");
+//		System.out.println("logger - access_token: ");
 		UserDto userDto = kakaoAPI.getUserInfo(access_token);
 		System.out.println(userDto);
 		
@@ -128,9 +131,8 @@ public class kakaoController {
 	@GetMapping(value = "/kakao/logout")
 	@ApiOperation("카카오계정과함께 로그아웃")
 	public String logout() {
-		String url = "https://kauth.kakao.com/oauth/logout?client_id=78183e66919b34b25f731ea9f2d99f0e&logout_redirect_uri="
-				+ "http://localhost:8080/index";
-		;
+		String url = "https://kauth.kakao.com/oauth/logout?client_id="+API_KEY+"&logout_redirect_uri="
+				+ "http://localhost:8080/";
 		return "redirect:" + url;
 	}
 }

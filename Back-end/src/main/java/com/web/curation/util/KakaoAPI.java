@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonElement;
@@ -18,6 +19,9 @@ import com.web.curation.dto.UserDto;
 @Service
 public class KakaoAPI {
 
+	@Value("${KAKAO_API_KEY}")
+	private String API_KEY;
+	
 	public String getAccessToken(String authorize_code) {
 		String access_Token = "";
 		String refresh_Token = "";
@@ -35,7 +39,7 @@ public class KakaoAPI {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
-			sb.append("&client_id=78183e66919b34b25f731ea9f2d99f0e");
+			sb.append("&client_id="+API_KEY);
 			sb.append("&redirect_uri=http://localhost:8080/social/login/kakao");
 			sb.append("&code=" + authorize_code);
 			bw.write(sb.toString());
