@@ -44,7 +44,7 @@
 					and g.u_email  = #{u_email}
 				) as good_flag 
 		from ssafy_trot.Community c 
-		ORDER BY #{order} desc;
+		ORDER BY ${order} desc;
 	</select>
 	
 	<!-- 게시글 디테일(게시글 + 댓글 리스트 +유저 이름) -->

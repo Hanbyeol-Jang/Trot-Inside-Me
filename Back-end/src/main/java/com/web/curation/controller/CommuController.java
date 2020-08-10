@@ -49,19 +49,12 @@ public class CommuController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
 			List<CommuDto> list = new ArrayList<>();
-			System.out.println("page : "+page+" 들어오는 번호 no : "+no);
 			if (no == 1) { // 좋아요순
 				System.out.println("좋아요");
 				list = commuService.getCommuList(udto.getU_email(), "good_cnt");
-				for (CommuDto commuDto : list) {
-					System.out.println(commuDto.getCo_idx()+" "+commuDto.getGood_cnt());
-				}
 			} else { // 최신순.
 				System.out.println("최신순 ");
 				list = commuService.getCommuList(udto.getU_email(), "co_idx");
-				for (CommuDto commuDto : list) {
-					System.out.println(commuDto.getCo_idx()+" "+commuDto.getGood_cnt());
-				}
 			}
 			List<CommuDto> showList = new ArrayList<>();
 			if (list != null) {
