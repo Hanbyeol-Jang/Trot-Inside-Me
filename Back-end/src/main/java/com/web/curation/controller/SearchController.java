@@ -30,6 +30,7 @@ public class SearchController {
 	private SearchService searchService;
 	@Autowired
 	private YoutubeAPI youtubeAPI;
+
 	// 가수 리스트
 	@GetMapping("/singer")
 	@ApiOperation(value = "가수 리스트")
@@ -65,7 +66,12 @@ public class SearchController {
 
 		if (page == 1) {
 			// 크롤링 후 디비 저장
-			searchService.insertVideo(singerDto.getS_name());
+			try {
+				searchService.insertVideo(singerDto.getS_name());
+				youtubeAPI.search(singerDto.getS_name());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		list = searchService.selectVideoList(singerDto.getS_name());
 //		page = 5 * page - 5;
@@ -96,6 +102,7 @@ public class SearchController {
 		}
 
 	}
+
 	// 해당 가수 기사 리스트
 	@GetMapping("singer/{s_idx}/articles")
 	@ApiOperation(value = "가수로 검색 기사 ")
@@ -150,8 +157,6 @@ public class SearchController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-
-
 
 	@GetMapping("/schedule/todayList")
 	public ResponseEntity<List<BroadCastingDto>> todaylist() {
@@ -216,19 +221,19 @@ public class SearchController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
+
 	// Youtube Search
 	@GetMapping("/search/youtube")
 	@ApiOperation(value = "유튜브 검색")
 	public ResponseEntity<String> youtubesearch(@RequestParam String keyword) {
 		String result = "";
 		try {
-			System.out.println("실행");
 			result = youtubeAPI.search(keyword);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>(result,HttpStatus.OK);
-		
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+
 	}
 }
