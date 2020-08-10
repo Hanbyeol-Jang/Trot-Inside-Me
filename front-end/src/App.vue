@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import Header from './components/main/Header'
-import BottomNav from './components/main/BottomNav'
+import Header from './components/main/navigation/Header'
+import BottomNav from './components/main/navigation/BottomNav'
 
 export default {
   name: 'App',

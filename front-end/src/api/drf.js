@@ -4,7 +4,9 @@ export default{
     ROUTES: {
         // auth
         login: '/admin/login',
-
+        logout: '/admin/logout',
+        kakaoLogin: '/signin/kakao',
+        
         // singer
         singerList: '/singer',
     }
