@@ -18,6 +18,7 @@ public interface SearchService {
 	public boolean isUrl(String vno, String name); // 네이버 동영상 vno가 db에 있는지 확인
 	public boolean isUrl2(String url, String name); // 네이버 기사 url이 db에 있는지 확인
 	public BoardDto videoDetail(int b_idx); // 동영상 디테일
+	public BoardDto articleDetail(int b_idx); // 기사 디테일
 	List<BroadCastingDto> broadCastAllList(); //편성표 전체 출력
 	List<BroadCastingDto> singerScheduleList(String s_name); //가수 스케줄 출력
 	

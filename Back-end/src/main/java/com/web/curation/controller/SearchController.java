@@ -157,6 +157,17 @@ public class SearchController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("singer/articles/{b_idx}")
+	@ApiOperation(value = "기사 디테일")
+	public ResponseEntity<BoardDto> articleDetail(@PathVariable int b_idx) {
+		BoardDto boardDto = searchService.articleDetail(b_idx);
+		if (boardDto != null) {
+			return new ResponseEntity<BoardDto>(boardDto, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
 
 	@GetMapping("/schedule/todayList")
 	public ResponseEntity<List<BroadCastingDto>> todaylist() {
