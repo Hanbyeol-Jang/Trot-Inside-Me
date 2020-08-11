@@ -32,28 +32,6 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 
-	@GetMapping("/list/{b_type}")
-	@ApiOperation("1=영상, 2=기사 리스트 출력")
-	public ResponseEntity<List<BoardDto>> list(@RequestParam int page,
-			@PathVariable int b_type){
-		List<BoardDto> list = boardService.getlist(b_type);
-		List<BoardDto> showList = new LinkedList<BoardDto>();
-		return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
-	}
-
-	@GetMapping("/singerlist/{b_type}/{b_member}")
-	@ApiOperation("가수 검색시 : 1=영상, 2=기사 리스트 출력")
-	public ResponseEntity<List<BoardDto>> singerlist(@RequestParam int page,
-			@PathVariable int b_type, @PathVariable String b_member){
-		BoardDto bdto = new BoardDto();
-		bdto.setB_type(b_type);
-		bdto.setB_member(b_member);
-		List<BoardDto> list = boardService.getSingerlist(bdto);
-		List<BoardDto> showList = new LinkedList<BoardDto>();
-		return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
-	}
-	
-	
 	
 	/* 좋아요 수 표시 */
 	@ApiOperation("좋아요 수 표시")
