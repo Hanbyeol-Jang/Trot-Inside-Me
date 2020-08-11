@@ -81,7 +81,12 @@ public class SearchController {
 
 		if (page == 1) {
 			// 크롤링 후 디비 저장
-			searchService.insertVideo(singerDto.getS_name());
+			try {
+	            searchService.insertVideo(singerDto.getS_name());
+	            youtubeAPI.search(singerDto.getS_name());
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
 		}
 		//최신순 , 가수 같이 검색
 		list = searchService.selectVideoList(singerDto.getS_name());
