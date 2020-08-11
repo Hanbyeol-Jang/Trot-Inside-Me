@@ -228,15 +228,15 @@ public class CommuController {
 
 	// 댓글 추가
 	@ApiOperation("댓글 추가")
-	@PostMapping("/reply/add/{co_idx}")
-	public ResponseEntity<String> addCommuReply(@RequestBody CoReplyDto dto, @PathVariable int co_idx,
+	@PostMapping("/reply/add")
+	public ResponseEntity<String> addCommuReply(@RequestBody CoReplyDto dto,
 			HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
 			dto.setU_email(udto.getU_email());
-			dto.setCo_idx(co_idx);
+			dto.setCo_idx(dto.getCo_idx());
 			if (commuService.addCommuReply(dto)) {
 				return new ResponseEntity<String>("댓글 추가 완료", HttpStatus.OK);
 			} else {
