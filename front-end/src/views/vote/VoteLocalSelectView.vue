@@ -41,6 +41,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+import SERVER from '@/api/drf'
+
 export default {
     name:"VoteLocalSelectView",
     data(){
@@ -51,6 +54,24 @@ export default {
         }
     },
     methods:{
+      getuser(){
+          const axiosConfig ={
+              headers:{
+                  token : `${this.$cookies.get('auth-token')}`
+              },
+          }
+          axios.get(SERVER.URL+`/admin/userNow`,axiosConfig)
+          .then((reaponse)=>{
+            if(reaponse.data.u_hasVote===1){
+              this.$alert("이미 투표를 하셨습니다.")
+              this.$router.push({ name: 'VoteView'})
+            }
+          })
+          .catch((err)=>{
+              console.error(err)
+          })
+      },
+
       checkDialog(local){
           this.$confirm(
             {
@@ -73,6 +94,9 @@ export default {
         this.checkDialog(local)
       },
     },
+    created(){
+      this.getuser()
+    }
 }
 </script>
 

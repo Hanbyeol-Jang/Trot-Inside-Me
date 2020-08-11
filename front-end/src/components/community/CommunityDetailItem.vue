@@ -1,5 +1,5 @@
 <template >
-<div v-show="deleteFlag">
+<div>
   <v-card
     hover 
     max-width="700"
@@ -42,15 +42,16 @@
                 {{likeCnt}}
             </div>
         </div>
-        <div class="d-flex" @click="goCommunity()">
+        <div  @click="showCommentsChange()">
         <v-btn icon>
-            <v-icon>mdi-message-text</v-icon>
-        </v-btn>
+            <v-icon large color="blue darken-2">mdi-message-text</v-icon>
             <div class="my-2 mx-2">
-                {{commentCnt}}
+            {{commentCnt}}
             </div>
+        </v-btn>
         </div>
     </v-card-actions>
+    <CommentList/>
   </v-card>
     <br>
     <hr>  
@@ -59,14 +60,14 @@
 </template>
 
 <script>
-// import CommentList from '@/components/main/CommentList.vue'
+import CommentList from '@/components/main/CommentList.vue'
 import axios from 'axios'
 import SERVER from '@/api/drf'
 
 export default {
     name:"CommunityDetailItem",
     components:{
-        // CommentList,
+        CommentList,
     },
     props:{
         community:Object,
@@ -101,7 +102,7 @@ export default {
         getuser(){
             axios.get(SERVER.URL+`/admin/userNow`,this.axiosConfig)
             .then((reaponse)=>{
-                if(!Number(reaponse.data.u_isAdmin)){
+                if(Number(reaponse.data.u_isAdmin)){
                     this.currentUser = reaponse.data.u_name
                     this.deleteuser = true
                     if (this.communityUser === this.currentUser){
@@ -116,18 +117,6 @@ export default {
                     }else{
                         this.edituser = false
                     }
-                }
-            })
-            .catch((err)=>{
-                console.error(err)
-            })
-        },
-
-        checkAdmin(){
-            axios.get(SERVER.URL`/admin/userNow`,this.axiosConfig)
-            .then((reaponse)=>{
-                if(reaponse.data.u_isAdmin){
-                    this.deleteuser = true
                 }
             })
             .catch((err)=>{

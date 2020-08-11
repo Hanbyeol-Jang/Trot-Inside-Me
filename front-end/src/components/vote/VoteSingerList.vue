@@ -68,7 +68,13 @@ export default {
             }
             axios.get(SERVER.URL+`/admin/userNow`,axiosConfig)
             .then((reaponse)=>{
-              this.userEmail = reaponse.data.u_email
+              console.log(reaponse)
+              if(reaponse.data.u_hasVote===1){
+                this.$alert("이미 투표를 하셨습니다.")
+                this.$router.push({ name: 'VoteView'})
+              }else{
+                this.userEmail = reaponse.data.u_email
+              }
             })
             .catch((err)=>{
                 console.error(err)
