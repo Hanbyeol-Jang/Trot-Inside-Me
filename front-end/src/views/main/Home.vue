@@ -76,7 +76,7 @@ export default {
             src: 'https://t1.daumcdn.net/cfile/tistory/993095345F05621F27',
           },
           {
-            src: 'https://ww.namu.la/s/a2ad1d574127aeee0a954f6dda80e03523905049e7b1e967386f5c6f908fd62984552557122c41470dacd9159e43d3cda340b408e906747f0ac9dc2db757814b2354671e76fe84815de0689d982e30618c5a0bb0ff74c5b45c5a79c5f5110f81',
+            src: '@/assets/image/content_default.png',
           },
         ],
     }

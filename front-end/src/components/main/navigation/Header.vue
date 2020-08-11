@@ -11,9 +11,7 @@
       <v-btn v-if="navBool" icon><i class="fas fa-bell fa-lg"></i></v-btn>
       <v-btn v-if="!navBool" icon @click="goBack"><i class="fas fa-chevron-left fa-lg"></i></v-btn>
       <v-spacer></v-spacer>
-      <v-toolbar-title
-        class="d-flex align-center"
-        >
+      <v-toolbar-title class="d-flex align-center">
         <img v-if="routeName === 'Home'" src="@/assets/image/trot_logo.png" alt=""
           width="90px" class="main-logo">
         <span v-if="routeName === 'SingerSearchView'" class="">가수 검색</span>
@@ -22,7 +20,12 @@
         <span v-if="routeName === 'TvtableDetailView'" class="">편성표 {{ todayDate }}</span>
         <span v-if="routeName === 'VideoListView'" class="">영상 보기</span>
         <span v-if="routeName === 'ArticleListView'" class="">기사 보기</span>
-        
+        <span v-if="routeName === 'AdminView'" class="">관리자 페이지</span>
+        <span v-if="routeName === 'UserDetailView'" class="">내 정보</span>
+        <span v-if="routeName === 'SingerManageView'" class="">가수 관리</span>
+        <span v-if="routeName === 'SingerCreateView'" class="">가수 등록</span>
+        <span v-if="routeName === 'ProgramManageView'" class="">프로그램 관리</span>
+        <span v-if="routeName === 'ProgramCreateView'" class="">프로그램 등록</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-if="navBool" icon @click="goUserDetail"><i class="fas fa-user fa-lg"></i></v-btn>
@@ -33,49 +36,55 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 var today = new Date()
 
 export default {
     name: 'Header',
     data() {
-        return {
-          date: today.getDate(),
-          month: today.getMonth() + 1,
-          year: today.getFullYear(),
-          todayDate: '',
-        }
+      return {
+        date: today.getDate(),
+        month: today.getMonth() + 1,
+        year: today.getFullYear(),
+        todayDate: '',
+        isAdmin: false,
+      }
     },
     methods: {
-        goBack() {
-            history.back()
-        },
-        goHome() {
-          if (this.$route.name !== 'Home') {
-            this.$router.push({ name: 'Home' }).catch(()=>{})
-          }
-        },
-        goSettings() {
-          if (this.$route.name !== 'UserSettingView') {
-            this.$router.push({ name: 'UserSettingView' }).catch(()=>{})
-          }
-        },
-        goUserDetail() {
-          if(this.isLoggedIn) {
+      ...mapActions(['getUser']),
+      goBack() {
+          history.back()
+      },
+      goHome() {
+        if (this.$route.name !== 'Home') {
+          this.$router.push({ name: 'Home' }).catch(()=>{})
+        }
+      },
+      goSettings() {
+        if (this.$route.name !== 'UserSettingView') {
+          this.$router.push({ name: 'UserSettingView' }).catch(()=>{})
+        }
+      },
+      goUserDetail() {
+        if(this.isLoggedIn) {
+          if (this.user.u_isAdmin === 1) {
+            if (this.$route.name !== 'AdminView') {
+              this.$router.push({ name: 'AdminView' }).catch(()=>{})
+            }
+          } else {
             if (this.$route.name !== 'UserDetailView') {
               this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
             }
-          } else {
-            if (this.$route.name !== 'Login') {
-              this.$router.push({ name: 'Login' }).catch(()=>{})
-            }
           }
-        },
-    },
-    components: {
-
+        } else {
+          if (this.$route.name !== 'Login') {
+            this.$router.push({ name: 'Login' }).catch(()=>{})
+          }
+        }
+      },
     },
     computed: {
+      ...mapState(['user']),
       ...mapGetters(['isLoggedIn']),
       routeName() {
         return this.$route.name
@@ -100,11 +109,12 @@ export default {
     created() {
       if (this.date < 10) {
             this.date = '0' + this.date
-        }
-        if (this.month < 10) {
-            this.month = '0' + this.month
-        }
-        this.todayDate = this.month +'월 ' + this.date + '일'
+      }
+      if (this.month < 10) {
+          this.month = '0' + this.month
+      }
+      this.todayDate = this.month +'월 ' + this.date + '일'
+      this.getUser()
     }
 }
 </script>

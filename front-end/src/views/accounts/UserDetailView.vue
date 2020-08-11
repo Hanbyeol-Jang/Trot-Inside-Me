@@ -1,13 +1,18 @@
 <template>
-  <div class="text-center mt-6">
-     <v-avatar
-      size="100px">
-      <img
-        src="@/assets/image/user_default.png"
-        alt="John"
-      >
-    </v-avatar>
-    <h3 class="mt-4">손님</h3>
+  <div class="mt-6">
+    <v-row>
+      <v-col cols="12">
+        <v-avatar
+          class="ma-3"
+          size="100"
+          >
+          <v-img 
+            class="elevation-6"
+            src="@/assets/image/user_default.png"></v-img>
+        </v-avatar>
+
+      </v-col>
+    </v-row>
   </div>
 </template>
 
