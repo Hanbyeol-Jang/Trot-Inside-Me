@@ -50,5 +50,9 @@
 				b.b_idx = #{b_idx};
 	</select>
  	
+ 	<select id="getList" resultType="com.web.curation.dto.BoardReplyGood">
+ 		select 
+ 	</select>
+ 	
  </mapper>
         

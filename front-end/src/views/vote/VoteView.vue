@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1>투표</h1>
-  </div>
+  <div></div>
 </template>
 
 <script>

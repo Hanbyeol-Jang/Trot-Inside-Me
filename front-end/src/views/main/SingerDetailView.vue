@@ -1,101 +1,72 @@
 <template>
-  <div class="home">
+  <div class="mt-5">
     <div class="text-center">
       <v-avatar
         size="150px">
         <img
-          :src="singer.singerImage"
+          :src="singer.s_img"
           alt="John"
         >
       </v-avatar>
-      <h3 class="mt-4">{{ singer.singerName }}</h3>
+      <h2 class="mt-4">{{ singer.s_name }}</h2>
     </div>
     <div class="text-center mt-3">
-      <v-btn rounded color="pink" dark>내 가수 추가하기</v-btn>
+      <v-btn rounded color="pink" dark><h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3></v-btn>
     </div>
-    <div class="mt-5 mb-6">
-      <v-tabs
-        color="pink"
-        class="d-flex justify-center">
-        <v-tab @click="showVideo"><h2><i class="fas fa-video mr-2"></i>동영상</h2></v-tab>
-        <v-tab @click="showArticle"><h2><i class="fas fa-newspaper mr-2"></i>뉴스 기사</h2></v-tab>
-      </v-tabs>
-    </div>
-    <div class="mt-4">
-      <VideoFeed v-if="videoTab" :singer="singer"/>
-      <ArticleFeed v-if="articleTab" :singer="singer"/>
-    </div>
+    <v-container>
+      <v-row dense>
+        <v-col 
+          v-for="menu in menuItems"
+          :key="menu.id"
+          cols="12">
+          <v-card
+            color="#FCE4EC"
+            raised
+            @click="goMenuDetail(menu.id)"
+          >
+            <v-card-title><h2><i :class="menu.icon" class="mr-2"></i>{{ menu.title }}</h2></v-card-title>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
-import VideoFeed from '../../components/main/singer/VideoFeed'
-import ArticleFeed from '../../components/main/singer/ArticleFeed'
+import axios from 'axios'
+import SERVER from '@/api/drf'
 
 export default {
   name: 'SingerDetailView',
-  components: {
-    VideoFeed,
-    ArticleFeed,
-  },
   data() {
     return {
-      videoTab: true,
-      articleTab: false,
-      singer: {
-        singerId: this.$route.params.singerId,
-        singerName: this.$route.params.singerId,
-        singerImage: this.$route.params.singerImg,
-        singerFollowers: '',
-      },
-      videos: [],
-      page: 1,
-      videosNum: null,
+      s_idx: this.$route.params.singerId,
+      singer: {},
+      menuItems: [ 
+        { id: 1, title: '영상 보기', icon: 'fas fa-play-circle'},
+        { id: 2, title: '기사 보기', icon: 'fas fa-newspaper'},
+        { id: 3, title: '스케줄 보기', icon: 'far fa-calendar-alt'},
+      ],
     }
   },
   methods: {
-    showVideo() {
-      this.videoTab = true,
-      this.articleTab = false
+    getSingerDetail() {
+      axios.get(SERVER.URL +`/singer/${this.s_idx}`, { params: { s_idx: this.s_idx } })
+            .then(res =>{ this.singer = res.data })
+            .catch(err=>{ console.error(err) })
     },
-    showArticle() {
-      this.videoTab = false,
-      this.articleTab = true
-    },
-    // fetchSingerVideoData() {
-    //   const options = { params: {_page: this.page++}}
-    //   axios.get(`${SERVER.URL}/search/naver/${this.singerName}`, options)
-    //     .then(res => {
-    //       // this.videos = res.data
-    //       this.videosNum = res.data.length
-    //       console.log(res.data.length)
-    //       setTimeout(() => {
-    //         this.videos.push(...res.data)
-    //       }, 1000);
-    //     })
-    //     .catch(err => console.log(err));
-    // },
-    // infiniteHandler($state){
-    //   if (parseInt(this.videosNum / 5) >= this.page){
-    //     const options = {params: {_page: this.page++}}
-    //     axios.get(`${SERVER.URL}/select/naver/${this.singerName}`, options)
-    //       .then(res => {
-    //         setTimeout(() => {
-    //           this.videos.push(...res.data)
-    //           $state.loaded()
-    //         }, 1000);
-    //       })
-    //       .catch(err => {
-    //         console.log(err.response.data)
-    //       })
-    //   } else{
-    //     $state.complete()
-    //   }
-    // },
-
+    goMenuDetail(id) {
+      if (id === 1) {
+        this.$router.push({ name: 'VideoListView', params: { singerId: this.s_idx }})
+      } else if (id === 2) {
+        this.$router.push({ name: 'ArticleListView', params: { singerId: this.s_idx }})
+      } else if (id === 3) {
+        this.$router.push({ name: 'VideoListView', params: { singerId: this.s_idx }})
+      } 
+    }
   },
   created() {
-    // this.fetchSingerVideoData()
-  },
+    this.getSingerDetail()
+  }
 }
 </script>

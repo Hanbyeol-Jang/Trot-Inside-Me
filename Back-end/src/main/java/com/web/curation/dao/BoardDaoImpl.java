@@ -1,9 +1,12 @@
 package com.web.curation.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.ReplyDto;
 
@@ -43,6 +46,16 @@ public class BoardDaoImpl implements BoardDao {
 	@Override
 	public int commentCount(BoardPK boardPK) {
 		return session.selectOne(ns + "commentcount", boardPK);
+	}
+
+	@Override
+	public List<BoardDto> getList(int b_type) {
+		return session.selectList(ns+"getList", b_type);
+	}
+
+	@Override
+	public List<BoardDto> getSingerlist(BoardDto bdto) {
+		return session.selectList(ns+"getList", bdto);
 	}
 
 }

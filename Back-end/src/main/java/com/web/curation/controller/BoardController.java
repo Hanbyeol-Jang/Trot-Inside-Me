@@ -1,6 +1,8 @@
 package com.web.curation.controller;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,8 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.ReplyDto;
 import com.web.curation.service.BoardService;
@@ -21,11 +26,35 @@ import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
+@RequestMapping("/board")
 public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
 
+	@GetMapping("/list/{b_type}")
+	@ApiOperation("1=영상, 2=기사 리스트 출력")
+	public ResponseEntity<List<BoardDto>> list(@RequestParam int page,
+			@PathVariable int b_type){
+		List<BoardDto> list = boardService.getlist(b_type);
+		List<BoardDto> showList = new LinkedList<BoardDto>();
+		return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
+	}
+
+	@GetMapping("/singerlist/{b_type}/{b_member}")
+	@ApiOperation("가수 검색시 : 1=영상, 2=기사 리스트 출력")
+	public ResponseEntity<List<BoardDto>> singerlist(@RequestParam int page,
+			@PathVariable int b_type, @PathVariable String b_member){
+		BoardDto bdto = new BoardDto();
+		bdto.setB_type(b_type);
+		bdto.setB_member(b_member);
+		List<BoardDto> list = boardService.getSingerlist(bdto);
+		List<BoardDto> showList = new LinkedList<BoardDto>();
+		return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
+	}
+	
+	
+	
 	/* 좋아요 수 표시 */
 	@ApiOperation("좋아요 수 표시")
 	@GetMapping("/board/good/{b_type}/{b_idx}")

@@ -1,7 +1,6 @@
 package com.web.curation.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -73,7 +72,8 @@ public class SearchController {
 	// 해당 가수 영상 리스트
 	@GetMapping("/singer/{s_idx}/videos")
 	@ApiOperation(value = "가수로 검색 비디오")
-	public ResponseEntity<List<BoardDto>> singerVideoList(@PathVariable int s_idx, @RequestParam int page) {
+	public ResponseEntity<List<BoardDto>> singerVideoList(
+			@PathVariable int s_idx, @RequestParam int page) {
 		List<BoardDto> list = null;
 		List<BoardDto> showList = new LinkedList<BoardDto>();
 		// s_idx로 가수 이름 검색
@@ -83,6 +83,7 @@ public class SearchController {
 			// 크롤링 후 디비 저장
 			searchService.insertVideo(singerDto.getS_name());
 		}
+		//최신순 , 가수 같이 검색
 		list = searchService.selectVideoList(singerDto.getS_name());
 //		page = 5 * page - 5;
 //		for (int i = page; i < page + 5; i++) {
@@ -208,7 +209,6 @@ public class SearchController {
 			return new ResponseEntity<String>("FAIL",HttpStatus.NOT_FOUND);
 		}
 	}
-
 	
 	
 	
@@ -254,6 +254,7 @@ public class SearchController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
+
 	// Youtube Search
 	@GetMapping("/search/youtube")
 	@ApiOperation(value = "영상 좋아요순으로 정렬")
@@ -269,4 +270,5 @@ public class SearchController {
 		return new ResponseEntity<String>(result,HttpStatus.OK);
 		
 	}
+
 }

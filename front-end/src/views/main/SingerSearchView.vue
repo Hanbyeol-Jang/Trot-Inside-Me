@@ -1,17 +1,17 @@
 <template>
 <div class="container">
-    <h1>가수 검색</h1>
     <SingerSearch @search-singers="searchSingers"/>
     <div class="d-flex justify-center">
-        <v-btn @click="getSinger" color="pink"><h4>전체 가수 보기</h4></v-btn>
+        <v-btn @click="showAll" color="pink" dark><h4>전체 가수 보기</h4></v-btn>
     </div>
-    <SingerList :Singers="Singers"/>
+    <SingerList v-if="singersData.length === 0" :singers="singers"/>
+    <SingerList v-else :singers="singersData"/>
 </div>
 </template>
 
 <script>
-import axios from 'axios'
-import SERVER from '@/api/drf'
+import { mapState, mapActions } from 'vuex'
+
 import SingerList from '@/components/main/SingerList.vue'
 import SingerSearch from '@/components/main/SingerSearch.vue'
 
@@ -23,34 +23,25 @@ export default {
     },
     data(){
         return{
-            Singers:[],
+            singersData: [],
         }
     },
+    computed: {
+        ...mapState(['singers'])
+    },
     methods:{
-        getSinger(){
-            axios.get(`${SERVER.URL}/search/singerlist`)
-            .then((response)=>{
-                console.log(response)
-                this.Singers = response.data
-            })
-            .catch((err)=>{
-                console.error(err)
-            }) 
-        },
+        ...mapActions(['fetchSingers']),
         searchSingers(keyword) {
-            axios.get(`${SERVER.URL}/search/singerlist`)
-                .then(response => {
-                    console.log(response)
-                const resultSingers = response.data.filter(data => data.s_name.includes(keyword))
-                this.Singers = resultSingers
-                })
-            .catch((err)=>{
-                console.error(err)
-            })             
-            },
+            const resultSingers = this.singers.filter(data => data.s_name.includes(keyword))
+            this.singersData = resultSingers
+        },
+        showAll() {
+            this.singersData = this.singers
+        }
     },
     created(){
-        this.getSinger()
+        this.fetchSingers()
+        this.singersData = this.singers
     }
 }
 </script>

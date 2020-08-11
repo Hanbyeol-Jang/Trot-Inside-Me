@@ -22,6 +22,9 @@
 				c.co_content ,
 				c.co_img ,
 				c.co_date ,
+				(	select COUNT(*) 
+					from Community
+				) as co_cnt,
 				c.u_email as co_email,
 				(	select u_name 
 					from ssafy_trot.UserInfo ui 
@@ -50,54 +53,52 @@
 	<!-- 게시글 디테일(게시글 + 댓글 리스트 +유저 이름) -->
 	<select id="getCommuDetail" 
 	parameterType="com.web.curation.dto.CoGoodDto"
-	resultType="com.web.curation.dto.CommuReplyUser">
-		select 	cc.co_idx , 
-			cc.co_content ,
-			cc.co_img ,
-			cc.co_date ,
-			cc.co_email ,
-			uii.u_name as co_name, 
-			cc.cr_idx ,
-			cc.cr_content , 
-			cc.cr_email ,
-			cc.cr_name ,
-			(	select COUNT(*) 
-				from ssafy_trot.CoReply 
-				where co_idx = #{co_idx}
-			) as cr_cnt,
-			(	select count(*) 
-				from ssafy_trot.CoGood 
-				where co_idx = #{co_idx}
-			) as good_cnt,
-			(
-				select count(*) 
-				from ssafy_trot.CoGood g 
-				where g.co_idx =3 
-				and g.u_email  = #{u_email}
-			) as good_flag 
-			FROM 	(
-						SELECT 	c.co_idx , 
-								c.co_content ,
-								c.co_img ,
-								c.co_date ,
-								c.u_email as co_email, 
-								cr.cr_idx ,
-								cr.cr_content , 
-								ui.u_email as cr_email,
-								ui.u_name as cr_name
-						FROM 	ssafy_trot.CoReply cr 
-						left outer join ssafy_trot.UserInfo ui 
-										on cr.u_email = ui.u_email 
-						left outer join ssafy_trot.Community c 
-										on c.co_idx =cr.co_idx 
-						where 	c.co_idx =#{co_idx}
-					) cc
-			left outer join ssafy_trot.UserInfo uii
-							on uii.u_email = cc.co_email 
-			ORDER BY cc.cr_idx desc;
-		
+	resultType="com.web.curation.dto.CommuDto">
+		select 	c.co_idx ,
+				c.co_content ,
+				c.co_img ,
+				c.co_date ,
+				(	select COUNT(*) 
+					from Community
+				) as co_cnt,
+				c.u_email as co_email,
+				(	select u_name 
+					from ssafy_trot.UserInfo ui 
+					where c.u_email =ui.u_email 
+				) as co_name,
+				(
+					SELECT  COUNT(cr_idx)
+					from 	ssafy_trot.CoReply cr 
+					where cr.co_idx  = c.co_idx 
+				) as cr_cnt,
+				(
+					SELECT 	COUNT(co_idx)
+					from	ssafy_trot.CoGood cg 
+					where cg.co_idx = c.co_idx  
+				) as good_cnt,
+				(
+					select count(*) 
+					from ssafy_trot.CoGood g 
+					where c.co_idx = g.co_idx 
+					and g.u_email  = #{u_email}
+				) as good_flag 
+		from ssafy_trot.Community c ;
 	</select>
 	
+	<!-- 커뮤니티 디테일 댓글 리스트  -->
+	<select id="getDetailReplyList" resultType="com.web.curation.dto.CommuReply">
+		select 	cr_idx, 
+				cr_content, 
+				cr.u_email as cr_email,
+				ui.u_name as cr_name, 
+				ui.u_profileImg as cr_profileImg,
+				co_idx, 
+				co_date
+		from CoReply cr 
+		left outer join UserInfo ui on ui.u_email = cr.u_email 
+		where co_idx = #{co_idx}
+		order by cr_idx desc;
+	</select>
 	<!-- 댓글 추가-->
 	<insert id="addCommuReply" 
 	parameterType="com.web.curation.dto.CoReplyDto">

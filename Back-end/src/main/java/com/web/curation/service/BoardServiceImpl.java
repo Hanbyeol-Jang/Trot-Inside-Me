@@ -1,9 +1,12 @@
 package com.web.curation.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.web.curation.dao.BoardDao;
+import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.ReplyDto;
 
@@ -41,6 +44,16 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int commentCount(BoardPK boardPK) {
 		return dao.commentCount(boardPK);
+	}
+
+	@Override
+	public List<BoardDto> getlist(int b_type) {
+		return dao.getList(b_type);
+	}
+
+	@Override
+	public List<BoardDto> getSingerlist(BoardDto bdto) {
+		return dao.getSingerlist(bdto);
 	}
 
 }
