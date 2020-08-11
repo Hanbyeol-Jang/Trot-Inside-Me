@@ -11,5 +11,6 @@ public class UserDto {
 	private String u_thumbnail;
 	private String u_pw;
 	private int u_isAdmin;
+	private String u_accessToken;
 
 }

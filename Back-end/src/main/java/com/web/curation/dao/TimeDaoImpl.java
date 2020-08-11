@@ -42,6 +42,10 @@ public class TimeDaoImpl implements TimeDao {
 			session.insert(ns+"insertSingerSchedule", timeDto);
 		}
 	}
+	@Override
+	public BroadCastingDto selectBoradCasting(int bc_idx) {
+		return session.selectOne(ns+"selectBroadCasting",bc_idx);
+	}
 
 
 

@@ -95,25 +95,38 @@ public class kakaoController {
 	// access_Token을 받아 얻어온 user의 정보가 db에 있는지 확인
 	@PostMapping(value = "/signin/kakao")
 	public ResponseEntity<String> login(HttpServletRequest request) {
-		// TODO 배포시 Syso 삭제
-//		System.out.println("logger - login 후 헤더에 access_token 담아 전송 ");
+
 		String access_token = jwtTokenProvider.getAccessToken(request);
-//		System.out.println("logger - access_token: ");
+
 		UserDto userDto = kakaoAPI.getUserInfo(access_token);
-		System.out.println(userDto);
+		userDto.setU_accessToken(access_token);
+
 		
 		if (kakaoService.isEmail(userDto.getU_email())) {
-			System.out.println("logger - 회원 정보가 db에 있습니다");
+//			System.out.println("logger - 회원 정보가 db에 있습니다");
+			if(!kakaoService.isAccessToken(userDto)) {
+				// update
+				kakaoService.updateAccessToken(userDto);
+			}
 		} else {
-			System.out.println("logger - 회원 정보가  db에 없습니다.");
+//			System.out.println("logger - 회원 정보가  db에 없습니다.");
 			// 디비 삽입
 			kakaoService.insertKakao(userDto);
+			kakaoService.updateAccessToken(userDto);
 		}
 		String Token = jwtTokenProvider.createToken(userDto.getU_email());
 		System.out.println(Token);
 		return new ResponseEntity<String>(Token, HttpStatus.OK);
 
 	}
+	
+	@GetMapping(value="/kakao/message")
+	@ApiOperation("나에게 보내기")
+	public ResponseEntity<String> messageForMe(@RequestParam String access_token){
+//		kakaoAPI.messageForMe(access_token);
+		return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+	}
+	
 	// 로그아웃  access token과 refresh token을 만료시킴
 	@PostMapping(value = "/kakao/token/logout")
 	@ApiOperation("로그아웃")
