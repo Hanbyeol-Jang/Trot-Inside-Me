@@ -22,6 +22,7 @@
       </v-container>
     </v-main>
     <BottomNav v-if="bottomNav"/>
+    <vue-confirm-dialog class="my-class"></vue-confirm-dialog>
   </v-app>
 </template>
 
@@ -62,5 +63,25 @@ export default {
   -moz-osx-font-smoothing: grayscale !important;
   /* text-align: center; */
   color: #2c3e50;
+}
+.my-class .vc-text {
+  font-size: 200%;
+  margin: 0;
+}
+.my-class .vc-container {
+  width: 300px;
+  background-color: whitesmoke;
+}
+.my-class .vc-btn {
+  color: whitesmoke;
+  background-color: #e91e63;
+  font-size: 150%;
+}
+
+.my-class .left {
+  color: #e91e63;
+  background-color: whitesmoke;
+  font-size: 150%;
+
 }
 </style>
