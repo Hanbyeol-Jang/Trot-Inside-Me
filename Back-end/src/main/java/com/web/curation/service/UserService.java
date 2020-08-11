@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.web.curation.dto.CommuReply;
 import com.web.curation.dto.FollowDto;
 import com.web.curation.dto.UserDto;
 
@@ -38,6 +39,7 @@ public interface UserService {
 
 	//팔로우 삭제
 	public boolean followDelete(FollowDto dto);
+	
 
 	
 

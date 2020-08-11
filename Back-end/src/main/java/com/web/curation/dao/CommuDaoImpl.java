@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
 import com.web.curation.dto.CommuDto;
-import com.web.curation.dto.CommuReplyUser;
+import com.web.curation.dto.CommuReply;
 
 @Repository
 public class CommuDaoImpl implements CommuDao {
@@ -36,10 +36,15 @@ public class CommuDaoImpl implements CommuDao {
 	}
 
 	@Override
-	public List<CommuReplyUser> getCommuDetail(CoGoodDto gdto) {
-		return session.selectList(ns+"getCommuDetail", gdto);
+	public CommuDto getCommuDetail(CoGoodDto gdto) {
+		return session.selectOne(ns+"getCommuDetail", gdto);
 	}
 
+	@Override
+	public List<CommuReply> getDetailReplyList(int co_idx) {
+		return session.selectList(ns+"getDetailReplyList", co_idx);
+	}
+	
 	@Override
 	public int addCommuReply(CoReplyDto dto) {
 		return session.insert(ns+"addCommuReply", dto);
@@ -64,5 +69,6 @@ public class CommuDaoImpl implements CommuDao {
 	public int deleteDetail(int co_idx) {
 		return session.delete(ns+"deleteDetail", co_idx);
 	}
+
 
 }

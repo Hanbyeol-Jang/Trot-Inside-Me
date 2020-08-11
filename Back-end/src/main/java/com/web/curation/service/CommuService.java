@@ -5,7 +5,7 @@ import java.util.List;
 import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
 import com.web.curation.dto.CommuDto;
-import com.web.curation.dto.CommuReplyUser;
+import com.web.curation.dto.CommuReply;
 
 public interface CommuService {
 
@@ -15,8 +15,10 @@ public interface CommuService {
 	boolean addCommu(CommuDto dto);
 	//게시글 삭제
 	boolean deleteCommu(int co_idx);
-	//게시글 디테일 + 댓글 리스트 
-	List<CommuReplyUser> getCommuDetail(CoGoodDto gdto);
+	//게시글 디테일 
+	CommuDto getCommuDetail(CoGoodDto gdto);
+	//게시글 디테일 댓글 리스트 
+	List<CommuReply> getDetailReplyList(int co_idx);
 	//게시글 디테일에서 삭제 
 	boolean deleteDetail(int co_idx);
 	//게시글 댓글 추가

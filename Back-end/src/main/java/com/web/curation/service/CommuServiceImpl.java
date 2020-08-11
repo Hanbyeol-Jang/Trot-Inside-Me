@@ -10,7 +10,7 @@ import com.web.curation.dao.CommuDao;
 import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
 import com.web.curation.dto.CommuDto;
-import com.web.curation.dto.CommuReplyUser;
+import com.web.curation.dto.CommuReply;
 
 @Service
 public class CommuServiceImpl implements CommuService {
@@ -34,10 +34,7 @@ public class CommuServiceImpl implements CommuService {
 	public boolean deleteCommu(int co_idx) {
 		return commuDao.deleteCommu(co_idx)==1;
 	}
-	@Override
-	public List<CommuReplyUser> getCommuDetail(CoGoodDto gdto) {
-		return commuDao.getCommuDetail(gdto);
-	}
+
 	@Override
 	public boolean addCommuReply(CoReplyDto dto) {
 		return commuDao.addCommuReply(dto)==1;
@@ -57,6 +54,14 @@ public class CommuServiceImpl implements CommuService {
 	@Override
 	public boolean deleteDetail(int co_idx) {
 		return commuDao.deleteDetail(co_idx)==1;
+	}
+	@Override
+	public CommuDto getCommuDetail(CoGoodDto gdto) {
+		return commuDao.getCommuDetail(gdto);
+	}
+	@Override
+	public List<CommuReply> getDetailReplyList(int co_idx) {
+		return commuDao.getDetailReplyList(co_idx);
 	}
 	
 }

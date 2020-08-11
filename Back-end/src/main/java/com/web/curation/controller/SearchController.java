@@ -1,7 +1,6 @@
 package com.web.curation.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -58,7 +57,8 @@ public class SearchController {
 	// 해당 가수 영상 리스트
 	@GetMapping("/singer/{s_idx}/videos")
 	@ApiOperation(value = "가수로 검색 비디오")
-	public ResponseEntity<List<BoardDto>> singerVideoList(@PathVariable int s_idx, @RequestParam int page) {
+	public ResponseEntity<List<BoardDto>> singerVideoList(
+			@PathVariable int s_idx, @RequestParam int page) {
 		List<BoardDto> list = null;
 		List<BoardDto> showList = new LinkedList<BoardDto>();
 		// s_idx로 가수 이름 검색
@@ -73,6 +73,7 @@ public class SearchController {
 				e.printStackTrace();
 			}
 		}
+		//최신순 , 가수 같이 검색
 		list = searchService.selectVideoList(singerDto.getS_name());
 //		page = 5 * page - 5;
 //		for (int i = page; i < page + 5; i++) {
@@ -169,26 +170,6 @@ public class SearchController {
 		}
 	}
 
-	@GetMapping("/schedule/todayList")
-	public ResponseEntity<List<BroadCastingDto>> todaylist() {
-		List<BroadCastingDto> list = searchService.broadCastAllList();
-		if (list != null) {
-			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-	}
-
-	@GetMapping("/schedule/singerScheduleList/{s_idx}")
-	public ResponseEntity<List<BroadCastingDto>> singerScheduleList(@PathVariable("s_idx") int s_idx) {
-		SingerDto singerDto = searchService.singerSearch(s_idx);
-		List<BroadCastingDto> list = searchService.singerScheduleList(singerDto.getS_name());
-		if (list != null) {
-			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-	}
 
 	// #### Board에 있는 영상 전체 개수
 	// #### Board에 있는 기사 전체 개수
@@ -232,7 +213,11 @@ public class SearchController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-
+	
+	
+	
+	
+	
 	// Youtube Search
 	@GetMapping("/search/youtube")
 	@ApiOperation(value = "유튜브 검색")
@@ -247,4 +232,29 @@ public class SearchController {
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 
 	}
+	
+	
+	@GetMapping("/schedule/todayList")
+	public ResponseEntity<List<BroadCastingDto>> todaylist() {
+		List<BroadCastingDto> list = searchService.broadCastAllList();
+		if (list != null) {
+			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping("/schedule/singerScheduleList/{s_idx}")
+	public ResponseEntity<List<BroadCastingDto>> singerScheduleList(@PathVariable("s_idx") int s_idx) {
+		SingerDto singerDto = searchService.singerSearch(s_idx);
+		List<BroadCastingDto> list = searchService.singerScheduleList(singerDto.getS_name());
+		if (list != null) {
+			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+
+	
+
 }
