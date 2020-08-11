@@ -14,6 +14,7 @@
                 </h2>
               </div>
             </v-col>
+            <ScrollTopButton />
             <v-col cols="12">
               <infinite-loading v-if="articles.length" 
                 @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
@@ -31,6 +32,7 @@ import { Circle8 } from 'vue-loading-spinner'
 
 import SERVER from '@/api/drf'
 import ArticleFeedItem from './ArticleFeedItem'
+import ScrollTopButton from './ScrollTopButton'
 
 export default {
     name: 'ArticleFeed',
@@ -46,6 +48,7 @@ export default {
         ArticleFeedItem,
         InfiniteLoading,
         Circle8,
+        ScrollTopButton,
     },
     props: {
         singerId: Number,

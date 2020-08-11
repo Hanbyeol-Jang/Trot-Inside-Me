@@ -11,8 +11,8 @@
         잠시만 기다려 주세요!
       </h2>
     </div>
+    <ScrollTopButton />
     <infinite-loading v-if="videos.length" @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
-
   </v-container>
 </template>
 
@@ -25,6 +25,7 @@ import { Circle8 } from 'vue-loading-spinner'
 
 import SERVER from '@/api/drf'
 import VideoFeedItem from './VideoFeedItem'
+import ScrollTopButton from './ScrollTopButton'
 
 export default {
     name: 'VideoFeed',
@@ -40,6 +41,7 @@ export default {
       VideoFeedItem,
       InfiniteLoading,
       Circle8,
+      ScrollTopButton,
     },
     props: {
       singerId: Number,

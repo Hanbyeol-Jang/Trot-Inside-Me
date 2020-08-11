@@ -137,6 +137,10 @@ export default new Vuex.Store({
         })
         .catch(err => console.log(err))
     },
+    scrollToTop() {
+      scroll(0, 0)
+    },
+
   },
   modules: {
   }
