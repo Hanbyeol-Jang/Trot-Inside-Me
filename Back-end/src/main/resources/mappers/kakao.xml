@@ -16,5 +16,18 @@
 		insert into UserInfo (u_email,u_name,u_thumbnail,u_profileImg)
 		values (#{u_email},#{u_name},#{u_thumbnail},#{u_profileImg})
 	</insert>
+	
+	<!-- 토큰이 일치하는지 확인 -->
+	<select id="isaccesstoken" resultType="Boolean">
+		select Count(*) from UserInfo
+		where 1=1
+		and u_email = #{u_email}
+		and u_accessToken = #{u_accessToken}
+	</select>
+	
+	<update id="updateaccesstoken">
+		update UserInfo set u_accessToken = #{u_accessToken}
+		where u_email = #{u_email};
+	</update>
 </mapper>
         

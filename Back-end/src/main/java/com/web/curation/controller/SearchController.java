@@ -1,8 +1,12 @@
 package com.web.curation.controller;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +21,10 @@ import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.SingerDto;
 import com.web.curation.service.SearchService;
+import com.web.curation.service.TimeService;
+import com.web.curation.service.UserService;
+import com.web.curation.util.JwtTokenProvider;
+import com.web.curation.util.KakaoAPI;
 import com.web.curation.util.YoutubeAPI;
 
 import io.swagger.annotations.ApiOperation;
@@ -29,7 +37,14 @@ public class SearchController {
 	private SearchService searchService;
 	@Autowired
 	private YoutubeAPI youtubeAPI;
-
+	@Autowired
+	private TimeService timeService;
+	@Autowired
+	private KakaoAPI kakaoAPI;
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
+	@Autowired
+	private UserService userService;
 	// 가수 리스트
 	@GetMapping("/singer")
 	@ApiOperation(value = "가수 리스트")
@@ -67,11 +82,11 @@ public class SearchController {
 		if (page == 1) {
 			// 크롤링 후 디비 저장
 			try {
-				searchService.insertVideo(singerDto.getS_name());
-				youtubeAPI.search(singerDto.getS_name());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	            searchService.insertVideo(singerDto.getS_name());
+	            youtubeAPI.search(singerDto.getS_name());
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
 		}
 		//최신순 , 가수 같이 검색
 		list = searchService.selectVideoList(singerDto.getS_name());
@@ -103,7 +118,6 @@ public class SearchController {
 		}
 
 	}
-
 	// 해당 가수 기사 리스트
 	@GetMapping("singer/{s_idx}/articles")
 	@ApiOperation(value = "가수로 검색 기사 ")
@@ -149,7 +163,7 @@ public class SearchController {
 	}
 
 	@GetMapping("singer/videos/{b_idx}")
-	@ApiOperation(value = "영상 디테일")
+	@ApiOperation(value = "영상 ")
 	public ResponseEntity<BoardDto> videoDetail(@PathVariable int b_idx) {
 		BoardDto boardDto = searchService.videoDetail(b_idx);
 		if (boardDto != null) {
@@ -158,19 +172,51 @@ public class SearchController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	@GetMapping("singer/articles/{b_idx}")
-	@ApiOperation(value = "기사 디테일")
-	public ResponseEntity<BoardDto> articleDetail(@PathVariable int b_idx) {
-		BoardDto boardDto = searchService.articleDetail(b_idx);
-		if (boardDto != null) {
-			return new ResponseEntity<BoardDto>(boardDto, HttpStatus.OK);
+
+
+
+	@GetMapping("/schedule/todayList")
+	public ResponseEntity<List<BroadCastingDto>> todaylist() {
+		List<BroadCastingDto> list = searchService.broadCastAllList();
+		if (list != null) {
+			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
 
-
+	@GetMapping("/schedule/singerScheduleList/{s_idx}")
+	public ResponseEntity<List<BroadCastingDto>> singerScheduleList(@PathVariable("s_idx") int s_idx) {
+		SingerDto singerDto = searchService.singerSearch(s_idx);
+		List<BroadCastingDto> list = searchService.singerScheduleList(singerDto.getS_name());
+		if (list != null) {
+			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	//나에게 메세지 보내기 (알림)
+	@GetMapping("/schedule")
+	public ResponseEntity<String> selectBroadCasting(@RequestParam("bc_idx") int bc_idx,HttpServletRequest request) {
+		
+		String useremail = jwtTokenProvider.getInfo(request).getU_email();
+		String accessToken = userService.getUserInfo(useremail).getU_accessToken();
+		BroadCastingDto broadCastingDto = timeService.selectBroadCasting(bc_idx);
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
+		map.put("broadCastingDto",broadCastingDto);
+		map.put("accessToken", accessToken);
+		kakaoAPI.messageForMe(map);
+		try{
+		return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+		} catch(Exception e) {	
+			e.printStackTrace();
+			return new ResponseEntity<String>("FAIL",HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	
+	
 	// #### Board에 있는 영상 전체 개수
 	// #### Board에 있는 기사 전체 개수
 	// #### Board에 있는 가수별 영상 개수
@@ -213,48 +259,21 @@ public class SearchController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	
-	
-	
-	
+
 	// Youtube Search
 	@GetMapping("/search/youtube")
-	@ApiOperation(value = "유튜브 검색")
+	@ApiOperation(value = "영상 좋아요순으로 정렬")
 	public ResponseEntity<String> youtubesearch(@RequestParam String keyword) {
 		String result = "";
 		try {
+			System.out.println("실행");
 			result = youtubeAPI.search(keyword);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>(result, HttpStatus.OK);
-
+		return new ResponseEntity<String>(result,HttpStatus.OK);
+		
 	}
-	
-	
-	@GetMapping("/schedule/todayList")
-	public ResponseEntity<List<BroadCastingDto>> todaylist() {
-		List<BroadCastingDto> list = searchService.broadCastAllList();
-		if (list != null) {
-			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-	}
-
-	@GetMapping("/schedule/singerScheduleList/{s_idx}")
-	public ResponseEntity<List<BroadCastingDto>> singerScheduleList(@PathVariable("s_idx") int s_idx) {
-		SingerDto singerDto = searchService.singerSearch(s_idx);
-		List<BroadCastingDto> list = searchService.singerScheduleList(singerDto.getS_name());
-		if (list != null) {
-			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-	}
-
-	
 
 }

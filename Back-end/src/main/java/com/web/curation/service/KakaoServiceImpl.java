@@ -22,6 +22,16 @@ public class KakaoServiceImpl implements KakaoService {
 		kakaoDao.insertKakao(userDto);
 	}
 
+	@Override
+	public boolean isAccessToken(UserDto userDto) {
+		return kakaoDao.isAccesstoken(userDto);
+	}
+
+	@Override
+	public void updateAccessToken(UserDto userDto) {
+		kakaoDao.updateAccessToken(userDto);
+	}
+
 
 
 }
