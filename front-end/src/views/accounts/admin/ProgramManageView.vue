@@ -46,7 +46,7 @@ export default {
         ...mapState(['programs']),
       },
   methods: {
-    ...mapActions(['fetchPrograms', 'deleteSProgram']),
+    ...mapActions(['fetchPrograms', 'deleteProgram']),
     goProgramCreate() {
       this.$router.push({ name: 'ProgramCreateView' })
     }

@@ -25,8 +25,8 @@
 export default {
     name:"TvtableList",
     props:{
-        tvprogram:Object,
-        tvprogramid:Number
+        tvprogram: Object,
+        tvprogramid: Number
     },
     data(){
         return{
@@ -35,7 +35,7 @@ export default {
     },
     methods:{
         checkColor(){
-            if(this.tvprogramid%2===0){
+            if(this.tvprogramid % 2 === 0){
                 this.color = "teal lighten-3"
             }else{
                 this.color="pink"

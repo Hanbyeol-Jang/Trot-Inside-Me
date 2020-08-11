@@ -114,7 +114,7 @@ export default {
           this.month = '0' + this.month
       }
       this.todayDate = this.month +'월 ' + this.date + '일'
-      this.getUser()
+      // this.getUser()
     }
 }
 </script>

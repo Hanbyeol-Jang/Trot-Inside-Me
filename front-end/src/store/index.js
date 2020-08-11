@@ -129,7 +129,7 @@ export default new Vuex.Store({
         })
         .catch(err => console.log(err))
     },
-    deleteSProgram(context, programId) { 
+    deleteProgram(context, programId) { 
       axios.delete(SERVER.URL + SERVER.ROUTES.programDelete + programId)
         .then(() => {
           console.log('Singer DELETE SUCCESS')
@@ -137,8 +137,6 @@ export default new Vuex.Store({
         })
         .catch(err => console.log(err))
     },
-
-
   },
   modules: {
   }
