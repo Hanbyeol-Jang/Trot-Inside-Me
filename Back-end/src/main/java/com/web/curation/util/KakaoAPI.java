@@ -6,14 +6,22 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.json.JSONObject;
+import org.jsoup.helper.HttpConnection;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.UserDto;
 
 @Service
@@ -122,6 +130,49 @@ public class KakaoAPI {
 			e.printStackTrace();
 		}
 		return userDto;
+	}
+	
+	// 나에게 메세지 보내기
+	public void messageForMe(Map<String,Object> map) {
+		String reqURL = "https://kapi.kakao.com/v2/api/talk/memo/default/send";
+		
+		String accessToken = (String) map.get("accessToken");
+		BroadCastingDto bcDto = (BroadCastingDto) map.get("broadCastingDto");
+		
+		try {
+			URL url = new URL(reqURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			
+			conn.setRequestMethod("POST");
+			conn.setDoOutput(true);
+
+			conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+			String msg = "template_object={\r\n" + 
+			 		"        \"object_type\": \"feed\",\r\n" + 
+			 		"        \"content\": {\r\n" + 
+			 		"            \"title\": \""+ bcDto.getBc_title() +"\",\r\n" + 
+					"            \"description\": \""+bcDto.getBc_company()+", "+bcDto.getBc_time()+"\",\r\n" + 
+					"            \"image_url\": \"http://blogfiles.naver.net/MjAyMDAxMjlfMjUy/MDAxNTgwMjgyNzAxNzcy.kZlmkLPDc-GKg7fV8aoaQCBEXhbqfZdY47L9gQCeT8kg.qcEUht24-YpNysTEG34quo4GTmj2B2rT7pazIC1DAn4g.JPEG.boeun1128/KakaoTalk_20200129_162050083_02.jpg\",\r\n" + 
+			 		"            \"image_width\": 640,\r\n" + 
+			 		"            \"image_height\": 640,\r\n" + 
+			 		"            \"link\": {\r\n" + 
+			 		"            \"web_url\": \"http://www.daum.net\",\r\n" + 
+			 		"            \"mobile_web_url\": \"http://m.daum.net\",\r\n" + 
+			 		"            \"android_execution_params\": \"contentId=100\",\r\n" + 
+			 		"            \"ios_execution_params\": \"contentId=100\"\r\n" + 
+			 		"            }\r\n" + 
+			 		"        }\r\n" + 
+			 		"    }";
+			
+			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+			wr.write(msg);
+			wr.flush();
+			
+			int responseCode = conn.getResponseCode();
+//			System.out.println("responseCode : " + responseCode);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// 로그아웃
