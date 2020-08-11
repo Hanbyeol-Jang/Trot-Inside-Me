@@ -20,5 +20,13 @@ public class KakaoDaoImpl implements KakaoDao {
 	public void insertKakao(UserDto userDto) {
 		sqlSession.insert(ns+".insertkakao", userDto);
 	}
+	@Override
+	public boolean isAccesstoken(UserDto userDto) {
+		return sqlSession.selectOne(ns+".isaccesstoken",userDto);
+	}
+	@Override
+	public void updateAccessToken(UserDto userDto) {
+		sqlSession.update(ns+".updateaccesstoken", userDto);
+	}
 
 }

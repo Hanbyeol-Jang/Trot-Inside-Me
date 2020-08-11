@@ -25,5 +25,11 @@
  	<select id="selectSinger" resultType="com.web.curation.dto.SingerDto">
  		select * from Singer;
  	</select>
+ 	
+ 	<select id="selectBroadCasting" resultType="BroadCastingDto">
+ 		select * from BroadCasting
+ 		where 1=1
+ 		and bc_idx = #{bc_idx}
+ 	</select>
  </mapper>
         
