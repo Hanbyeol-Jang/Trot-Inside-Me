@@ -172,7 +172,16 @@ public class SearchController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-
+	@GetMapping("singer/articles/{b_idx}")
+	@ApiOperation(value = "기사 디테일")
+	public ResponseEntity<BoardDto> articleDetail(@PathVariable int b_idx) {
+		BoardDto boardDto = searchService.articleDetail(b_idx);
+		if (boardDto != null) {
+			return new ResponseEntity<BoardDto>(boardDto, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
 
 
 	@GetMapping("/schedule/todayList")
@@ -206,8 +215,8 @@ public class SearchController {
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		map.put("broadCastingDto",broadCastingDto);
 		map.put("accessToken", accessToken);
-		kakaoAPI.messageForMe(map);
 		try{
+			kakaoAPI.messageForMe(map);
 		return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
 		} catch(Exception e) {	
 			e.printStackTrace();
@@ -262,11 +271,11 @@ public class SearchController {
 
 	// Youtube Search
 	@GetMapping("/search/youtube")
-	@ApiOperation(value = "영상 좋아요순으로 정렬")
+	@ApiOperation(value = "유튜브 검색")
 	public ResponseEntity<String> youtubesearch(@RequestParam String keyword) {
 		String result = "";
 		try {
-			System.out.println("실행");
+//			System.out.println("실행");
 			result = youtubeAPI.search(keyword);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
