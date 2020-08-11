@@ -4,14 +4,19 @@
       <v-spacer></v-spacer>       
       <v-btn x-large color="primary" @click="createCommunity"><v-icon class="mr-2">mdi-pencil</v-icon>게시글 작성</v-btn>
     </div>
+    <br>
+      <v-tabs
+          color="pink"
+          class="d-flex justify-center">
+          <v-tab @click="getLikeCommunity" ><h4>인기 순으로 보기</h4></v-tab>
+          <v-tab @click="getRecentCommunity" ><h4>최신 순으로 보기</h4></v-tab>
+      </v-tabs>
+      <br>
       <div class="mt-5">
-          <!-- <div v-for="community in communities" :key="community.id">
-            <router-link :to="{ name: 'CommunityDetailView', params: { communityId: community.id }}">
-              <CommunityDetailItem :community="community"/>
-            </router-link>  
-          </div> -->
-          <CommunityDetailItem/>
-          <div class="my-5 text-center">
+          <div v-for="community in communities" :key="community.id">
+              <CommunityDetailItem :community="community" :page="page" @community-delete="deleteArticle"/>
+          </div>
+          <div  class="mt-5 my-10 text-center">
             <p class="mt-2" v-if="!communities.length">No results :(</p>
             <infinite-loading v-if="communities.length" @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
           </div>
@@ -35,63 +40,104 @@ export default {
       return{
         communities:[],
         page: 1,
+        no:1,
         communityNum:null,
+        changeFlag:true,
       }
     },
     methods:{
       checkLogin(){
-        if (!(this.$session.get('jwt'))){
-          this.$alert(" 로그인을 해주세요")
-          this.$router.push({ name: 'Home'})
-        }
-      },
-
-      getCommunity(){
-        const options = {params: {_page: this.page}}
-        axios.get(SERVER.URL + `/community/list`, options)
-          .then((response) => {
-            console.log(response)
-            this.communityNum = response.data.data
-            this.communities.push(...response.data.data)
-          })
-          .catch((err) => {console.log(err)})
-      },
+            if (!(this.$cookies.get('auth-token'))){
+                this.$alert(" 로그인을 해주세요")
+                this.$router.push({name:'Home'})                
+            }
+        },
 
       createCommunity(){
-        this.$router.push({ name: 'CommunityCreateView' })
-      },
+            this.$router.push({ name: 'CommunityCreateView' })
+          },
+
+      getLikeCommunity(){
+            this.communities = []
+            this.no = 1
+            this.page = 1
+            const axiosConfig = {
+              headers:{
+                token: `${this.$cookies.get('auth-token')}`,
+                },
+              params: {no: this.no, page: this.page}
+            }
+              axios.get(SERVER.URL + `/community/list`,axiosConfig)
+                .then((response) => {
+                  this.communityNum = response.data[0].co_cnt
+                  this.communities.push(...response.data)
+                })
+                .catch((err) => {console.log(err)})
+            },
+
+      getRecentCommunity(){
+            this.communities = []
+            this.no = 2
+            this.page = 1
+            const axiosConfig = {
+              headers:{
+                token: `${this.$cookies.get('auth-token')}`,
+                },
+              params: {no: this.no, page: this.page}
+            }
+              axios.get(SERVER.URL + `/community/list`,axiosConfig)
+                .then((response) => {
+                  this.communityNum = response.data[0].co_cnt
+                  this.communities.push(...response.data)
+                })
+                .catch((err) => {console.log(err)})
+            },
 
       infiniteHandler($state){
-        if (parseInt(this.communityNum / 5) + 1 >= this.page){
-          const options = {params: {_page: this.page+1}}
-          axios.get(SERVER.URL + `/community/`, options)
-            .then((response) => {
-              setTimeout(() => {
-                this.page += 1
-                this.communities.push(...response.data.data)
-                $state.loaded()
-              }, 1000);
+            const axiosConfig = {
+              headers:{
+                token: `${this.$cookies.get('auth-token')}`,
+                },
+              params: {no: this.no, page: this.page+1}
+            }
+            if (parseInt(this.communityNum / 5) + 1 >= this.page){
+              axios.get(SERVER.URL +`/community/list`, axiosConfig)
+                .then(res => {
+                  setTimeout(() => {
+                    this.page += 1
+                    this.communities.push(...res.data)
+                    $state.loaded()
+                  }, 1000);
+                })
+                .catch(err => console.log(err))
+            } else{
+              $state.complete()     
+            }
+          },
+
+        deleteArticle(idx){
+            const axiosConfig2 = {
+              headers:{
+                token: `${this.$cookies.get('auth-token')}`,
+                },
+              params: {co_idx:idx ,no: this.no, page: this.page}
+            }
+            axios.delete(SERVER.URL+`/community/delete/${idx}`,axiosConfig2)
+            .then((response)=>{
+                console.log(response)
+                this.$alert('삭제 완료')
             })
-            .catch((err) => {
-              console.log(err)
+            .catch((err)=>{
+                console.log(err)
             })
-        } else{
-          $state.complete()
-        }
+        },
+
+    },
+      created(){
+        this.checkLogin()
+        this.getLikeCommunity()
       },
-
-      communityDelete(communityId){
-        this.communities = this.articles.filter(function (community){
-          return community.id !== communityId
-        })
-      }
-
-    },
-
-    created(){
-      this.getCommunity()
-    },
-}
+    }
 </script>
 
 <style>

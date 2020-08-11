@@ -1,18 +1,22 @@
 <template>
-  <div class="text-center mt-6">
-     <v-avatar
-      size="100px">
-      <img
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSrPi2eq64wocYIj9FMtpIUqStLMKG1_iwt7jAmpZOo1blAxD0asvOHJp6Z_SKfPIE8_XK4WieQapBuqV13lwAdnHHFC0DLhmryZW8a&usqp=CAU&ec=45682162"
-        alt="John"
-      >
-    </v-avatar>
-    <h3 class="mt-4">손님</h3>
+  <div class="mt-6">
+    <v-row>
+      <v-col cols="12">
+        <v-avatar
+          class="ma-3"
+          size="100"
+          >
+          <v-img 
+            class="elevation-6"
+            src="@/assets/image/user_default.png"></v-img>
+        </v-avatar>
 
+      </v-col>
+    </v-row>
   </div>
 </template>
 
-<script>
+<script> 
 export default {
     name: 'UserDetailView',
 }

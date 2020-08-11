@@ -4,8 +4,13 @@
       <v-avatar
         size="150px">
         <img
+          v-if="singer.s_img"
           :src="singer.s_img"
-          alt="John"
+          alt="Singer Default"
+        >
+        <img
+          v-else
+          src="@/assets/image/user_default.png"
         >
       </v-avatar>
       <h2 class="mt-4">{{ singer.s_name }}</h2>
@@ -61,7 +66,7 @@ export default {
       } else if (id === 2) {
         this.$router.push({ name: 'ArticleListView', params: { singerId: this.s_idx }})
       } else if (id === 3) {
-        this.$router.push({ name: 'VideoListView', params: { singerId: this.s_idx }})
+        this.$router.push({ name: 'SingerScheduleView', params: { singerId: this.s_idx }})
       } 
     }
   },

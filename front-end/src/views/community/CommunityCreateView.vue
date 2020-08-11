@@ -5,7 +5,6 @@
     class="mx-auto mt-5"
     max-width="500"
   >
-
     <v-card-actions class="d-flex flex-row-reverse">
         <v-btn text color="deep-purple accent-4" @click="createCommunity"><v-icon class="mr-2">mdi-pencil</v-icon>글 작성하기</v-btn>
     </v-card-actions>

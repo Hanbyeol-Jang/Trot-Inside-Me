@@ -6,17 +6,20 @@
             <v-row v-if="singers.length">
               <v-col
                 v-for="singer in singers"
-                :key="singer.s_name"
+                :key="singer.s_idx"
                 cols="4"
               >
               <div class="cursor_test">
                   <router-link :to="{ name: 'SingerDetailView', params: { singerId: singer.s_idx }}">
                     <v-avatar size="80">
                       <img
+                        v-if="singer.s_img"
                         :src="singer.s_img"
-                        alt="John"
-                      height="100%"
-                      width="100%"
+                        alt="Singer Default"
+                      >
+                      <img
+                        v-else
+                        src="@/assets/image/user_default.png"
                       >
                     </v-avatar>
                   </router-link>
