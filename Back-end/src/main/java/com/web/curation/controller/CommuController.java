@@ -187,9 +187,10 @@ public class CommuController {
 	@ApiOperation("디테일 댓글 리스트 + 5개씩 페이징")
 	@GetMapping("/detail/reply/{co_idx}")
 	public ResponseEntity<List<CommuReply>> getDetailReplyList(@PathVariable int co_idx, @RequestParam int page) {
-		List<CommuReply> list = commuService.getDetailReplyList(co_idx);
 		List<CommuReply> showList = new ArrayList<>();
-		if (list != null) {
+		try {
+			List<CommuReply> list = commuService.getDetailReplyList(co_idx);
+			
 			int lastPageRemain = list.size() % 5;
 			int lastPage = list.size() - lastPageRemain;
 			page = 5 * page - 5;
@@ -204,8 +205,9 @@ public class CommuController {
 				}
 			}
 			return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 
 	// 게시물 디테일 삭제
