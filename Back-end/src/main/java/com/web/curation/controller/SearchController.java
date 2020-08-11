@@ -194,8 +194,8 @@ public class SearchController {
 	@GetMapping("/schedule")
 	public ResponseEntity<String> selectBroadCasting(@RequestParam("bc_idx") int bc_idx,HttpServletRequest request) {
 		
-		String useremail = jwtTokenProvider.getInfo(request);
-		String accessToken = userService.getUserInfoToken(useremail).getU_accessToken();
+		String useremail = jwtTokenProvider.getInfo(request).getU_email();
+		String accessToken = userService.getUserInfo(useremail).getU_accessToken();
 		BroadCastingDto broadCastingDto = timeService.selectBroadCasting(bc_idx);
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		map.put("broadCastingDto",broadCastingDto);
