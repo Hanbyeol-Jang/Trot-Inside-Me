@@ -122,11 +122,11 @@ public class CommuController {
 					page = 5 * page - 5;
 					// 5개씩 보여주기
 					if (page < lastPage) {
-						for (int i = 0; i < page + 5; i++) {
+						for (int i = 1; i < page + 5; i++) {
 							showList.add(list.get(i));
 						}
 					} else if (page == lastPage) {
-						for (int i = 0; i < page + lastPageRemain; i++) {
+						for (int i = 1; i < page + lastPageRemain; i++) {
 							showList.add(list.get(i));
 						}
 					}
@@ -196,11 +196,11 @@ public class CommuController {
 			page = 5 * page - 5;
 			// 5개씩 보여주기
 			if (page < lastPage) {
-				for (int i = 0; i < page + 5; i++) {
+				for (int i = page; i < page + 5; i++) {
 					showList.add(list.get(i));
 				}
 			} else if (page == lastPage) {
-				for (int i = 0; i < page + lastPageRemain; i++) {
+				for (int i = page; i < page + lastPageRemain; i++) {
 					showList.add(list.get(i));
 				}
 			}
@@ -241,7 +241,7 @@ public class CommuController {
 				List<CommuReply> list = commuService.getDetailReplyList(dto.getCo_idx());
 				List<CommuReply> showList = new ArrayList<>();
 				if (list != null) {
-					for (int i = 1; i < 5; i++) {
+					for (int i = 1; i <= 5; i++) {
 						showList.add(list.get(i));
 					}
 					return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
@@ -272,11 +272,11 @@ public class CommuController {
 					page = 5 * page - 5;
 					// 5개씩 보여주기
 					if (page < lastPage) {
-						for (int i = 0; i < page + 5; i++) {
+						for (int i = 1; i < page + 5; i++) {
 							showList.add(list.get(i));
 						}
 					} else if (page == lastPage) {
-						for (int i = 0; i < page + lastPageRemain; i++) {
+						for (int i = 1; i < page + lastPageRemain; i++) {
 							showList.add(list.get(i));
 						}
 					}
