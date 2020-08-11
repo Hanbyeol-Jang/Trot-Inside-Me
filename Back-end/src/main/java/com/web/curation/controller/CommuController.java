@@ -190,7 +190,7 @@ public class CommuController {
 		List<CommuReply> showList = new ArrayList<>();
 		try {
 			List<CommuReply> list = commuService.getDetailReplyList(co_idx);
-			
+
 			int lastPageRemain = list.size() % 5;
 			int lastPage = list.size() - lastPageRemain;
 			page = 5 * page - 5;
@@ -205,7 +205,7 @@ public class CommuController {
 				}
 			}
 			return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.OK);
 		}
 	}
@@ -229,8 +229,7 @@ public class CommuController {
 	// 댓글 추가
 	@ApiOperation("댓글 추가")
 	@PostMapping("/reply/add")
-	public ResponseEntity<String> addCommuReply(@RequestBody CoReplyDto dto,
-			HttpServletRequest request) {
+	public ResponseEntity<String> addCommuReply(@RequestBody CoReplyDto dto, HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -238,6 +237,7 @@ public class CommuController {
 			dto.setU_email(udto.getU_email());
 			dto.setCo_idx(dto.getCo_idx());
 			if (commuService.addCommuReply(dto)) {
+				System.out.println("댓글 추가 완료 ");
 				return new ResponseEntity<String>("댓글 추가 완료", HttpStatus.OK);
 			} else {
 				return new ResponseEntity<String>("댓글 추가 에러 ", HttpStatus.NOT_FOUND);
@@ -248,8 +248,8 @@ public class CommuController {
 	// 댓글 삭제
 	@ApiOperation("댓글 삭제")
 	@DeleteMapping("/reply/delete/{co_idx}/{cr_idx}")
-	public ResponseEntity<String> deleteCommuReply(@PathVariable int co_idx, @PathVariable int cr_idx,
-			HttpServletRequest request) {
+	public ResponseEntity<List<CommuReply>> deleteCommuReply(@PathVariable int co_idx, @PathVariable int cr_idx,
+			@RequestParam int page, HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -257,12 +257,29 @@ public class CommuController {
 			CoReplyDto dto = new CoReplyDto();
 			dto.setCo_idx(co_idx);
 			dto.setCr_idx(cr_idx);
+			List<CommuReply> list = commuService.getDetailReplyList(co_idx);
+			List<CommuReply> showList = new ArrayList<>();
 			if (commuService.deleteCommuReply(dto)) {
-				return new ResponseEntity<String>("댓글 삭제 완료", HttpStatus.OK);
-			} else {
-				return new ResponseEntity<String>("댓글 삭제 에러 ", HttpStatus.NOT_FOUND);
+				if (list != null) {
+					int lastPageRemain = list.size() % 5;
+					int lastPage = list.size() - lastPageRemain;
+					page = 5 * page - 5;
+					// 5개씩 보여주기
+					if (page < lastPage) {
+						for (int i = 0; i < page + 5; i++) {
+							showList.add(list.get(i));
+						}
+					} else if (page == lastPage) {
+						for (int i = 0; i < page + lastPageRemain; i++) {
+							showList.add(list.get(i));
+						}
+					}
+					return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+				}
 			}
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-
 }
