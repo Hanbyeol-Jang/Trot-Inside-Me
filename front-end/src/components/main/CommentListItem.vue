@@ -1,20 +1,20 @@
 <template>
   <div class="row">
     <div class="col-2">
-      <v-avatar color="indigo" :src="profileImage"><v-icon dark>mdi-account-circle</v-icon></v-avatar>
+      <v-avatar color="indigo"><v-icon dark>mdi-account-circle</v-icon></v-avatar>
       <!-- <b-avatar variant="secondary" :src="profileImage" size="3.5rem"></b-avatar> -->
     </div>
     <div class="col-10 pl-2">
       <div class="d-flex flex-wrap justify-content-between">
         <div class="d-flex">
-          <h6 class="font-weight-bold">{{ comment.user.username }}</h6>
-          <pre class="text-secondary ml-3">{{ updateTime }}</pre>
+          <h6 class="font-weight-bold">{{ comment.cr_name }}</h6>
+          <!-- <pre class="text-secondary ml-3">{{ updateTime }}</pre> -->
         </div>
         <div v-if="isAuth" class="ml-auto">
           <button class="btn btn-link" @click="deleteComment">삭제</button>
         </div>
       </div>
-      <span class=""> {{ comment.content }}</span>
+      <span class=""> {{ comment.cr_content }}</span>
     </div>
   </div>
 </template>
@@ -77,7 +77,7 @@ export default {
     }
   },
   mounted(){
-    this.checkAuth()
+    // this.checkAuth()
   },
 }
 </script>

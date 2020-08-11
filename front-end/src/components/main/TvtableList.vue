@@ -13,7 +13,7 @@
               <div>{{tvprogram.bc_company}}</div>
             </v-col>
             <v-col cols="3" class="mr-0 px-0">
-              <v-btn color="error" fab small dark>
+              <v-btn color="error" fab small dark @click="kakaogo">
                 <v-icon>mdi-alarm</v-icon>
               </v-btn>            
             </v-col>
@@ -22,6 +22,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+import SERVER from '@/api/drf'
+
 export default {
     name:"TvtableList",
     props:{
@@ -34,6 +37,17 @@ export default {
         }
     },
     methods:{
+        kakaogo(){
+            const params = {bc_idx: this.tvprogram.bc_idx}
+            axios.get(SERVER.URL+`/admin/userNow`,params)
+            .then((reaponse)=>{
+              console.log(reaponse)
+            })
+            .catch((err)=>{
+                console.error(err)
+            })
+        },
+
         checkColor(){
             if(this.tvprogramid%2===0){
                 this.color = "teal lighten-3"
