@@ -229,20 +229,26 @@ public class CommuController {
 	// 댓글 추가
 	@ApiOperation("댓글 추가")
 	@PostMapping("/reply/add")
-	public ResponseEntity<String> addCommuReply(@RequestBody CoReplyDto dto, HttpServletRequest request) {
+	public ResponseEntity<List<CommuReply>> addCommuReply(@RequestBody CoReplyDto dto, HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
 			dto.setU_email(udto.getU_email());
 			dto.setCo_idx(dto.getCo_idx());
+			System.out.println("asdasddassd " + dto.getCo_idx());
 			if (commuService.addCommuReply(dto)) {
-				System.out.println("댓글 추가 완료 ");
-				return new ResponseEntity<String>("댓글 추가 완료", HttpStatus.OK);
-			} else {
-				return new ResponseEntity<String>("댓글 추가 에러 ", HttpStatus.NOT_FOUND);
+				List<CommuReply> list = commuService.getDetailReplyList(dto.getCo_idx());
+				List<CommuReply> showList = new ArrayList<>();
+				if (list != null) {
+					for (int i = 1; i < 5; i++) {
+						showList.add(list.get(i));
+					}
+					return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
+				}
 			}
 		}
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 
 	// 댓글 삭제
