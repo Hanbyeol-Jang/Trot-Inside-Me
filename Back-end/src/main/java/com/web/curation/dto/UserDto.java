@@ -1,8 +1,10 @@
-package com.web.curation.dto;
+|package com.web.curation.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class UserDto {
 
 	private String u_email;
@@ -13,4 +15,6 @@ public class UserDto {
 	private int u_isAdmin;
 	private String u_accessToken;
 
+	private int u_isAdmin; //관리자 1 ,유저 0
+	private int u_hasVote ; //투표 유 1 , 무 0
 }

@@ -1,10 +1,18 @@
 package com.web.curation.util;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.web.curation.dto.TestDto;
+import com.web.curation.dto.UserDto;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -14,11 +22,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtTokenProvider {
-	private String secretKey = "webfirewood";
-    private long tokenValidTime = 30 * 60 * 1000L; //30분
+	
+	@Value("${token.secret.key}")
+	private String secretKey;
+	
+	@Value("${token.vaild.time}")
+    private long tokenValidTime;
     
-    public String createToken(String subject) {
-        Claims claims = Jwts.claims().setSubject(subject);
+    public String createToken(UserDto dto) {
+//        Claims claims = Jwts.claims().setSubject(map);
+        Claims claims = Jwts.claims().setSubject(dto.getU_email());
 
         Date now = new Date();
         Date validity = new Date(now.getTime()
@@ -26,6 +39,10 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setClaims(claims)
+                .claim("u_name", dto.getU_name())
+                .claim("u_profileImg", dto.getU_profileImg())
+                .claim("u_isAdmin", dto.getU_isAdmin())
+                .claim("u_hasVote ", dto.getU_hasVote())
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -43,24 +60,31 @@ public class JwtTokenProvider {
     	return access_token;
     }
     
-    public boolean validateToken(Jws<Claims> claims) {
-        try {
-            return !claims.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
-            return false;
-        }
+    public boolean validateToken(String token) {
+    	try {
+    		Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+    		return !claims.getBody().getExpiration().before(new Date());
+    	} catch (Exception e) {
+    		return false;
+    	}
     }
 
-	public String getInfo(HttpServletRequest request) {
+
+	public UserDto getInfo(HttpServletRequest request) {
+		UserDto dto = new UserDto();
 		String token = resolveToken(request);
-		Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-		String useremail="";
-		if(validateToken(claims)) {
-			 useremail = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+		if(validateToken(token)) {
+			 Claims cl=Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+			 
+			 dto.setU_email(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject());
+			 dto.setU_name(cl.get("u_name").toString());
+			 dto.setU_profileImg(cl.get("u_profileImg").toString());
+			 dto.setU_isAdmin(Integer.parseInt(cl.get("u_isAdmin").toString()));
+			 dto.setU_hasVote(Integer.parseInt(cl.get("u_hasVote ").toString()));
 		}else {
 			System.out.println("만료됨 새 토큰 발행받아야함.");
-			useremail="F";
+			dto.setU_name("F");
 		}
-		return useremail;
+		return dto;
 	}
 }

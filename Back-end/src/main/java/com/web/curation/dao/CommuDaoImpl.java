@@ -1,11 +1,13 @@
 package com.web.curation.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
 import com.web.curation.dto.CommuDto;
 import com.web.curation.dto.CommuReplyUser;
@@ -19,8 +21,8 @@ public class CommuDaoImpl implements CommuDao {
 	String ns="com.web.curation.dao.CommuDao.";
 	
 	@Override
-	public List<CommuDto> getCommuList() {
-		return session.selectList(ns+"getCommuList");
+	public List<CommuDto> getCommuList(HashMap<String, String> map) {
+		return session.selectList(ns+"getCommuList",map);
 	}
 
 	@Override
@@ -34,8 +36,8 @@ public class CommuDaoImpl implements CommuDao {
 	}
 
 	@Override
-	public List<CommuReplyUser> getCommuDetail(int co_idx) {
-		return session.selectList(ns+"getCommuDetail", co_idx);
+	public List<CommuReplyUser> getCommuDetail(CoGoodDto gdto) {
+		return session.selectList(ns+"getCommuDetail", gdto);
 	}
 
 	@Override
@@ -46,6 +48,21 @@ public class CommuDaoImpl implements CommuDao {
 	@Override
 	public int deleteCommuReply(CoReplyDto dto) {
 		return session.delete(ns+"deleteCommuReply", dto);
+	}
+
+	@Override
+	public int clickGood(CoGoodDto dto) {
+		return session.insert(ns+"clickGood",dto);
+	}
+
+	@Override
+	public int clickGoodCancel(CoGoodDto dto) {
+		return session.delete(ns+"clickGoodCancel",dto);
+	}
+
+	@Override
+	public int deleteDetail(int co_idx) {
+		return session.delete(ns+"deleteDetail", co_idx);
 	}
 
 }

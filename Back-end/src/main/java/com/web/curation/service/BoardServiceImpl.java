@@ -1,15 +1,10 @@
 package com.web.curation.service;
 
-import java.util.HashMap;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.web.curation.dao.BoardDao;
 import com.web.curation.dto.BoardPK;
-import com.web.curation.dto.BroadCastingDto;
-import com.web.curation.dto.FollowDto;
 import com.web.curation.dto.ReplyDto;
 
 @Service
