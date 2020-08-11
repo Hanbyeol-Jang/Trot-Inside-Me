@@ -54,11 +54,10 @@ public class AdminController {
 	}
 
 	//로그아웃..
-//	@GetMapping("/logout")
-//	public ResponseEntity<String> logout(HttpSession session) {
-//		session.invalidate();
-//        return new ResponseEntity<>("로그아웃", HttpStatus.OK);
-//	}
+	@GetMapping("/logout")
+	public ResponseEntity<String> logout() {
+        return new ResponseEntity<>("로그아웃", HttpStatus.OK);
+	}
 	
 	// 토큰 디코딩.. 유저 정보 반환
 	@ApiOperation("토큰 디코딩.. 유저 정보 반환")
