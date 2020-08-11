@@ -7,7 +7,8 @@ export default{
         logout: '/admin/logout',
         kakaoLogin: '/signin/kakao',
         kakaoLogout: 'https://kauth.kakao.com/oauth/logout?client_id=78183e66919b34b25f731ea9f2d99f0e&logout_redirect_uri=http://localhost:8081/',
-        
+        getAmdinUser: '/admin/userNow',
+
         // singer
         singerList: '/singer',
         singerCreate: '/admin/singer/add',

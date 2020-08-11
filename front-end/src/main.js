@@ -2,12 +2,15 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import vuetify from './plugins/vuetify';
+import vuetify from './plugins/vuetify'
 //도연
 import VueSimpleAlert from "vue-simple-alert"
 import VueCookies from 'vue-cookies'
 import VueSession from 'vue-session'
 import InfiniteLoading from 'vue-infinite-loading';
+
+import vueCalendar from 'vue2-simple-calendar'
+import "./assets/style/vue2-simple-calendar.css"
 
 //도연
 var sessionOptions = {
@@ -16,7 +19,8 @@ var sessionOptions = {
 Vue.use(VueSimpleAlert)
 Vue.use(VueCookies)
 Vue.use(VueSession, sessionOptions)
-Vue.use(InfiniteLoading, { /* options */ });
+Vue.use(InfiniteLoading, { /* options */ })
+Vue.use(vueCalendar)
 
 Vue.config.productionTip = false
 

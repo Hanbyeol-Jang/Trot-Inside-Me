@@ -66,7 +66,7 @@ export default {
       } else if (id === 2) {
         this.$router.push({ name: 'ArticleListView', params: { singerId: this.s_idx }})
       } else if (id === 3) {
-        this.$router.push({ name: 'VideoListView', params: { singerId: this.s_idx }})
+        this.$router.push({ name: 'SingerScheduleView', params: { singerId: this.s_idx }})
       } 
     }
   },

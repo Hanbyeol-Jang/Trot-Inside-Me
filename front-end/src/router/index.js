@@ -27,6 +27,7 @@ import SignupCompleteView from '@/views/accounts/SignupCompleteView.vue'
 import UserSettingView from '@/views/accounts/UserSettingView.vue'
 import VideoListView from '@/views/main/VideoListView.vue'
 import ArticleListView from '@/views/main/ArticleListView.vue'
+import SingerScheduleView from '@/views/main/SingerScheduleView.vue'
 
 import AdminLogin from '@/views/accounts/admin/AdminLogin.vue'
 import AdminView from '@/views/accounts/admin/AdminView.vue'
@@ -148,6 +149,11 @@ Vue.use(VueRouter)
     path: '/singer/:singerId/articles',
     name: 'ArticleListView',
     component: ArticleListView
+  },
+  {
+    path: '/schedule/:singerId',
+    name: 'SingerScheduleView',
+    component: SingerScheduleView
   },
 
   // Admin Page

@@ -10,16 +10,15 @@
       <template v-slot:default>
         <thead>
           <tr>
-            <th class="text-left">이름</th>
-            <th class="text-left">URL</th>
+            <th class="text-left">프로그램명</th>
             <th class="text-center">삭제</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="program in programs" :key="program.a_idx">
-            <td>{{ program.a_broadName }}</td>
-            <td v-if="program.a_broadUrl"><a :href="program.a_broadUrl">URL<i class="fas fa-external-link-alt ml-1"></i></a></td>
-            <td v-else>미등록</td>
+            <td><a :href="program.a_broadUrl">{{ program.a_broadName }}<i class="fas fa-external-link-alt ml-1"></i></a></td>
+            <!-- <td v-if="program.a_broadUrl"><a :href="program.a_broadUrl">URL<i class="fas fa-external-link-alt ml-1"></i></a></td> -->
+            <!-- <td v-else>미등록</td> -->
             <td class="text-center">
               <v-btn icon @click="deleteProgram(program.a_idx)"><i class="fas fa-trash-alt"></i></v-btn>
             </td>

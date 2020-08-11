@@ -79,7 +79,7 @@ export default new Vuex.Store({
       router.push({ name: 'Home' })
     },
     getUser({ getters, commit }) {
-      axios.get(SERVER.URL + "/admin/test", getters.config)
+      axios.get(SERVER.URL + SERVER.ROUTES.getAmdinUser, getters.config)
         .then(res => {  commit('SET_USER', res.data) })
         .catch((err)=>{ console.error(err) })    
     },
