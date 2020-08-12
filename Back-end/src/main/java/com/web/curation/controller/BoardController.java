@@ -178,9 +178,8 @@ public class BoardController {
 
 		if (showList != null) {
 			return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
+		} 
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 
 	@GetMapping("/videodetail/{b_idx}")
@@ -375,26 +374,27 @@ public class BoardController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	//나에게 메세지 보내기 (알림)
-	@GetMapping("/schedule")
-	public ResponseEntity<String> selectBroadCasting(@RequestParam("bc_idx") int bc_idx,HttpServletRequest request) {
-		
-		String useremail = userService.getTokenInfo(request).getU_email();
-		String accessToken = userService.getUserInfo(useremail).getU_accessToken();
-		BroadCastingDto broadCastingDto = timeService.selectBroadCasting(bc_idx);
-		Map<String, Object> map = new LinkedHashMap<String, Object>();
-		map.put("broadCastingDto",broadCastingDto);
-		map.put("accessToken", accessToken);
-		kakaoAPI.messageForMe(map);
-		try{
-		return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
-		} catch(Exception e) {	
-			e.printStackTrace();
-			return new ResponseEntity<String>("FAIL",HttpStatus.NOT_FOUND);
-		}
-	}
-	
+	@GetMapping("/board/tvmsg/{bc_idx}")
+	   public ResponseEntity<String> selectBroadCasting(@PathVariable("bc_idx") int bc_idx,HttpServletRequest request) {
+	      
+	      String useremail = userService.getTokenInfo(request).getU_email();
+	      String accessToken = userService.getUserInfo(useremail).getU_accessToken();
+	      System.out.println(bc_idx);
+	      BroadCastingDto broadCastingDto = timeService.selectBroadCasting(bc_idx);
+	      
+	      Map<String, Object> map = new LinkedHashMap<String, Object>();
+	      map.put("broadCastingDto",broadCastingDto);
+	      map.put("accessToken", accessToken);
+	      try{
+	         kakaoAPI.messageForMe(map);
+	      return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+	      } catch(Exception e) {   
+	         e.printStackTrace();
+	         return new ResponseEntity<String>("FAIL",HttpStatus.NOT_FOUND);
+	      }
+	   }
 	
 	
 	// Youtube Search
