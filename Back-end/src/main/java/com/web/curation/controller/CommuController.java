@@ -132,6 +132,8 @@ public class CommuController {
 						for (int i = 0; i < page + lastPageRemain; i++) {
 							showList.add(list.get(i));
 						}
+					}else {
+						return new ResponseEntity<List<CommuDto>>(list, HttpStatus.OK);
 					}
 					return new ResponseEntity<List<CommuDto>>(showList, HttpStatus.OK);
 				} else {
@@ -166,7 +168,7 @@ public class CommuController {
 	@ApiOperation("디테일 댓글 리스트 + 5개씩 페이징")
 	@GetMapping("/detail/replylist/{co_idx}")
 	public ResponseEntity<List<CommuReply>> getDetailReplyList(@PathVariable int co_idx, @RequestParam("page") int page) {
-		System.out.println("스크롤 시켰다 ");
+		System.out.println("스크롤 시켰다  page : "+page);
 		
 		List<CommuReply> showList = new ArrayList<>();
 		try {
@@ -267,6 +269,8 @@ public class CommuController {
 						for (int i = 0; i < page + lastPageRemain; i++) {
 							showList.add(list.get(i));
 						}
+					}else {
+						return new ResponseEntity<List<CommuReply>>(list, HttpStatus.OK);
 					}
 					return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
 				} else {
