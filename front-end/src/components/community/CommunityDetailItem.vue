@@ -1,5 +1,5 @@
 <template >
-<div>
+<div v-show="deleteFlag">
   <v-card
     hover 
     max-width="700"
@@ -26,13 +26,11 @@
             {{community.co_date.slice(0,10)}}
         </v-card-text>
     <v-img :src="communityimg" height=100% @click="goCommunity()"></v-img>
-
     <v-card-text @click="goCommunity()">
       {{community.co_content}}
     </v-card-text>
     <hr>
     <v-card-actions class="d-flex justify-space-around">
-
         <div class="d-flex" @click="showLikeChange()">
         <v-btn icon>
             <v-icon v-show="!showLike">mdi-thumb-up</v-icon>
@@ -42,32 +40,29 @@
                 {{likeCnt}}
             </div>
         </div>
-        <div  @click="showCommentsChange()">
+        <div class="d-flex" @click="goCommunity()">
         <v-btn icon>
-            <v-icon large color="blue darken-2">mdi-message-text</v-icon>
-            <div class="my-2 mx-2">
-            {{commentCnt}}
-            </div>
+            <v-icon>mdi-message-text</v-icon>
         </v-btn>
+            <div class="my-2 mx-2">
+                {{commentCnt}}
+            </div>
         </div>
     </v-card-actions>
-    <CommentList/>
   </v-card>
     <br>
     <hr>  
     <br>
 </div>
 </template>
-
 <script>
-import CommentList from '@/components/main/CommentList.vue'
+// import CommentList from '@/components/main/CommentList.vue'
 import axios from 'axios'
 import SERVER from '@/api/drf'
-
 export default {
     name:"CommunityDetailItem",
     components:{
-        CommentList,
+        // CommentList,
     },
     props:{
         community:Object,
@@ -91,14 +86,12 @@ export default {
         }
     },
     methods: {
-
         checkLogin(){
                 if (!(this.$cookies.get('auth-token'))){
                     this.$alert(" 로그인을 해주세요")
                     this.$router.push({name:'Home'})                
                 }
             },
-
         getuser(){
             axios.get(SERVER.URL+`/admin/userNow`,this.axiosConfig)
             .then((reaponse)=>{
@@ -123,7 +116,6 @@ export default {
                 console.error(err)
             })
         },
-
         showLikeChange(){
             const axiosConfig2 = {
               headers:{
@@ -143,17 +135,14 @@ export default {
             })
             .catch((err) => {console.log(err)})
             },
-
         goCommunity(){
             this.$router.push({ name: 'CommunityDetailView', params: { communityId: this.community.co_idx, page:this.page }})
         },
-
         deleteArticle(){
             this.deleteFlag = false
             const idx = this.community.co_idx
             this.$emit('community-delete',idx)
         },
-
         editArticle(){
             this.$router.push({ name: 'CommunityUpdateView', params: { communityId: this.community.co_idx, page:this.page }})
         },
@@ -172,7 +161,5 @@ export default {
     },
 }
 </script>
-
 <style>
-
 </style>

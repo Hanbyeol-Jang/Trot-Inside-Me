@@ -1,16 +1,9 @@
 <template>
  <v-card-text>
    <hr>
-    <div v-for="comment in comments" :key="comment.id">
-      <CommentListItem class="mb-3" @comment-delete="commentDelete" :comment="comment"/>
-      <hr>
-    </div>
-      <br>
-      <p class="text-center" v-if="!comments.length">No results </p>
-      <infinite-loading v-if="comments.length" @infinite="infiniteHandler"></infinite-loading>
         <v-col cols="10" class="row text-center mx-auto">
           <v-text-field
-            label="Write a comment"
+            label="댓글을 작성해주세요."
             single-line
             v-model="commentData.content" 
             @keypress.enter="commentCreate"
@@ -19,6 +12,13 @@
               <i class="far fa-paper-plane fa-lg my-auto" @click="commentCreate"></i>
           </v-btn>
         </v-col>
+    <div v-for="comment in comments" :key="comment.id">
+      <CommentListItem class="mb-3" @delete-comment2="commentDelete" :comment="comment"/>
+      <hr>
+    </div>
+      <br>
+      <p class="text-center" v-if="!comments.length">No results :( </p>
+      <infinite-loading v-if="comments.length" @infinite="infiniteHandler"></infinite-loading>
 </v-card-text>
 </template>
 
@@ -35,80 +35,101 @@ export default {
     InfiniteLoading,
   },
   props:{
-    id:Number
+    commentCnt:Number,
+    communityIdx:Number
   },
   data(){
     return {
       comments: [],
-      commentsNum: null,
       commentData: {
-        content: null,
+        content: '',
       },
       page: 1,
     }
   },
   methods: {
     getComments(){
-    const options = {params: {_page: this.page}}
-    //////////////////////////////////////////////////////////////////////
-    axios.get(SERVER.URL + `/${this.id}/`,options)
-    /////////////////////////////////////////////////////////////////////
-      .then((response) => {
-        this.comments = response.data.data
-        this.commentsNum = response.data.comments_num
-      })
-      .catch((err) => { console.log(err.response.data) })
-    },
-    infiniteHandler($state) {
-      const options = {params: {_page: this.page+1}}
-      ////////////////////////////////////////////////////////////////
-      axios.get(SERVER.URL + `/${this.id}/`,options)
-      ////////////////////////////////////////////////////////////////
-      .then(( response ) => {
-        if ((response.data.comments_num/5) >= this.page) {
-          setTimeout(()=>{
-            this.page += 1;
-            this.comments.push(...response.data.data);
-            $state.loaded();
-          }, 1000);
-        } else {
-          $state.complete();
+      console.log(this.communityIdx)
+        const axiosConfig2 = {
+          headers:{
+            token: `${this.$cookies.get('auth-token')}`,
+            },
+          params: {co_idx:this.$route.params.communityId, page: this.page}
         }
-      })
-      .catch((err) => {
-        console.log(err.response.data)
-        $state.complete();
-      })
+        axios.get(SERVER.URL+`/community/detail/reply/${this.$route.params.communityId}`,axiosConfig2)
+        .then((response)=>{
+            this.comments = response.data
+        })
+        .catch((err)=>{
+            console.error(err)
+        })
     },
-    showCommentsChange(){
-      this.showComments = !this.showComments
-    },
-    commentCreate(){
-      if (!this.commentData.content){
-        alert('내용을 작성해주세요')
+
+
+    infiniteHandler($state) {
+      console.log(this.commentCnt)
+      const axiosConfig2 = {
+        headers:{
+          token: `${this.$cookies.get('auth-token')}`,
+          },
+        params: {co_idx:this.$route.params.communityId, page: this.page+1}
+      } 
+      if (parseInt(this.commentCnt / 5)+1 >= this.page){
+        console.log(axiosConfig2)
+        axios.get(SERVER.URL +`/community/detail/reply/${this.$route.params.communityId}`, axiosConfig2)
+          .then(res => {
+            setTimeout(() => {
+              this.page+=1
+              console.log(res)
+              console.log(this.page)
+              this.comments.push(...res.data)
+              $state.loaded()
+            }, 1000);
+          })
+          .catch(err => console.log(err))
       } else{
-        /////////////////////////////////////////
+        $state.complete()     
+      }
+    },
+
+
+    commentCreate(){
+        this.$emit('add-comment')
+        this.page = 1
+        const json = {
+            co_idx : this.$route.params.communityId ,
+            cr_content : this.commentData.content
+        }
+        const axiosConfig2 = {
+            headers:{
+                token : `${this.$cookies.get('auth-token')}`
+            }
+        }
+      if (!this.commentData.content){
+        this.$alert('내용을 작성해주세요')
+      } else{
         if (!this.$cookies.isKey('auth-token')){
-        ////////////////////////////////////////
-          alert('로그인이 필요합니다')
+          this.$alert('로그인이 필요합니다')
           this.commentData.content = null
         } else{
-          //////////////////////////////////////////////////////
-          axios.post(SERVER.URL + `/${this.id}/`, this.commentData, { headers: { Authorization: `Token ${this.$cookies.get("auth-token")}` }})
-          /////////////////////////////////////////////////////
+-          axios.post(SERVER.URL + `/community/reply/add`,json,axiosConfig2)
            .then((res) => {
-              this.commentData.content = null
-              this.comments.push(res.data.data)
+             console.log(res)
+             this.page = 1
+              this.commentData.content = ''
+              this.comments = res.data
             })
             .catch((err) => { console.log(err.response.data) })
         }
       }
     },
-    commentDelete(commentId){
-      this.comments = this.comments.filter(function (comment){
-        return comment.id !== commentId
-      })
+
+
+    commentDelete(){
+      this.$emit('delete-comment')
     },
+
+
   },
   created(){
     this.getComments()
