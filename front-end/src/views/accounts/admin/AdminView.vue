@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'AdminView',
@@ -65,6 +65,7 @@ export default {
   },
   computed: {
     ...mapState(['user']),
+    ...mapGetters(['isLoggedIn']),
   },
   methods: {
     ...mapActions(['logout', 'getUser']),
@@ -77,7 +78,9 @@ export default {
     }
   },
   created() {
-    // this.getUser()
+    if (this.isLoggedIn) {
+      this.getUser()
+    }
   }
 }
 </script>

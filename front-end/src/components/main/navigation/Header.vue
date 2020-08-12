@@ -7,6 +7,7 @@
       elevate-on-scroll 
       height="50px"
       scroll-target="#scrolling-techniques-7"
+      class="header"
     >
       <v-btn v-if="navBool" icon><i class="fas fa-bell fa-lg"></i></v-btn>
       <v-btn v-if="!navBool" icon @click="goBack"><i class="fas fa-chevron-left fa-lg"></i></v-btn>
@@ -36,7 +37,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 var today = new Date()
 
 export default {
@@ -49,38 +50,6 @@ export default {
         todayDate: '',
         isAdmin: false,
       }
-    },
-    methods: {
-      goBack() {
-          history.back()
-      },
-      goHome() {
-        if (this.$route.name !== 'Home') {
-          this.$router.push({ name: 'Home' }).catch(()=>{})
-        }
-      },
-      goSettings() {
-        if (this.$route.name !== 'UserSettingView') {
-          this.$router.push({ name: 'UserSettingView' }).catch(()=>{})
-        }
-      },
-      goUserDetail() {
-        if(this.isLoggedIn) {
-          if (this.user.u_isAdmin === 1) {
-            if (this.$route.name !== 'AdminView') {
-              this.$router.push({ name: 'AdminView' }).catch(()=>{})
-            }
-          } else {
-            if (this.$route.name !== 'UserDetailView') {
-              this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
-            }
-          }
-        } else {
-          if (this.$route.name !== 'Login') {
-            this.$router.push({ name: 'Login' }).catch(()=>{})
-          }
-        }
-      },
     },
     computed: {
       ...mapState(['user']),
@@ -106,6 +75,33 @@ export default {
         }
       },
     },
+    methods: {
+      ...mapActions(['getUser']),
+      goBack() {
+          history.back()
+      },
+      goHome() {
+        if (this.$route.name !== 'Home') {
+          this.$router.push({ name: 'Home' }).catch(()=>{})
+        }
+      },
+      goSettings() {
+        if (this.$route.name !== 'UserSettingView') {
+          this.$router.push({ name: 'UserSettingView' }).catch(()=>{})
+        }
+      },
+      goUserDetail() {
+        if(this.isLoggedIn && this.$route.name !== 'UserDetailView') {
+            if (this.user.u_isAdmin) {
+              this.$router.push({ name: 'AdminView' })
+            } else {
+              this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
+            }
+        } else {
+          this.$router.push({ name: 'Login' })
+        }
+      },
+    },
     created() {
       if (this.date < 10) {
             this.date = '0' + this.date
@@ -114,6 +110,9 @@ export default {
           this.month = '0' + this.month
       }
       this.todayDate = this.month +'월 ' + this.date + '일'
+      if (this.isLoggedIn) {
+        this.getUser()
+      }
     }
 }
 </script>
@@ -149,5 +148,9 @@ export default {
 .main-logo {
   bottom: 0;
 }
+
+/* .header {
+  position: fixed !important;
+} */
 
 </style>

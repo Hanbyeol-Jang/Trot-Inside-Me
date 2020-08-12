@@ -10,10 +10,10 @@
       <template v-slot:default>
         <thead>
           <tr>
-            <th class="text-center">이미지</th>
-            <th class="text-center">이름</th>
-            <th class="text-center">팬 카페</th>
-            <th class="text-center">삭제</th>
+            <th class="text-left">이미지</th>
+            <th class="text-left">이름</th>
+            <th class="text-left">팬 카페</th>
+            <th class="text-left">삭제</th>
           </tr>
         </thead>
         <tbody>

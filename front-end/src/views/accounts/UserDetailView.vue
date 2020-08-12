@@ -29,17 +29,20 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 export default {
   name: 'UserDetailView',
   computed: {
     ...mapState(['user']),
+    ...mapGetters(['isLoggedIn']),
   },
   methods: {
     ...mapActions(['getUser']),
   },
   created() {
-    this.getUser()
+    if (this.isLoggedIn === 1) {
+      this.getUser()
+    }
   },
 }
 </script>
