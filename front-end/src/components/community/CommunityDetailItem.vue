@@ -152,7 +152,7 @@ export default {
             return this.community.userimg
         },
         communityimg(){
-            return this.community.co_img
+            return `${SERVER.URL}/${this.community.co_img}`
         },
     },
     created(){

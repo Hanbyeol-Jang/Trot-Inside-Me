@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div v-show="!isdelete" class="row">
     <div class="col-2">
       <v-avatar color="indigo"><v-icon dark>mdi-account-circle</v-icon></v-avatar>
       <!-- <b-avatar variant="secondary" :src="profileImage" size="3.5rem"></b-avatar> -->
@@ -16,6 +16,7 @@
       </div>
       <span class=""> {{ comment.cr_content }}</span>
     </div>
+    <hr>
   </div>
 </template>
 
@@ -30,6 +31,7 @@ export default {
   },
   data(){
     return {
+      isdelete:false,
       isAuth: false,
       axiosConfig :{
           headers:{
@@ -46,6 +48,7 @@ export default {
       return this.comment.updated_at.slice(0,10)
     },
   },
+
   methods: {
     deleteComment(){
       const idx = this.comment.cr_idx
@@ -58,12 +61,14 @@ export default {
           },
           callback: confirm => {
             if (confirm) {
+                  this.isdelete = true
                   this.$emit('delete-comment2',idx)
             }
           }
         }
       )
     },
+
     checkAuth(){
       axios.get(SERVER.URL+`/admin/userNow`,this.axiosConfig)
       .then((reaponse)=>{
