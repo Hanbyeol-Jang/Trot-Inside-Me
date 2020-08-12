@@ -114,6 +114,18 @@
 		value(#{b_type}, #{b_idx}, #{u_email});
 	</insert>
 	
+	
+	<!-- 게시글 좋아요 취소 -->
+	<delete id="goodClickCancel" >
+		delete 	from Good
+		where 	1=1
+		and		b_type = #{b_type} 
+		and		b_idx = #{b_idx} 
+		and		u_email = #{u_email};
+	</delete>
+	
+	
+	
 	<!-- 게시물 좋아요 클릭취소 -->
 	<!-- <delete id="goodClickCancel">
 		delete	from Good

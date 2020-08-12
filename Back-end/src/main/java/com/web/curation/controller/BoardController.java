@@ -1,6 +1,7 @@
 package com.web.curation.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,11 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.BoardPK;
+import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.ReplyDto;
 import com.web.curation.dto.SingerDto;
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.BoardService;
 import com.web.curation.service.UserService;
+import com.web.curation.util.YoutubeAPI;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -40,7 +43,8 @@ public class BoardController {
 
 	@Autowired
 	private UserService userService;
-	
+	@Autowired
+	private YoutubeAPI youtubeAPI;
 	// 가수 리스트
 	@GetMapping("/singerlist")
 	@ApiOperation(value = "가수 리스트")
@@ -65,40 +69,32 @@ public class BoardController {
 		}
 	}
 
-	// 해당 가수 영상 리스트 - 최신순
-	@GetMapping("/mainlist/{b_type}/{s_idx}")
-	@ApiOperation(value = "가수로 검색 비디오")
-	public ResponseEntity<List<BoardDto>> mainList(@PathVariable int b_type,
-			@PathVariable int s_idx, @RequestParam int page) {
-		List<BoardDto> showList = new LinkedList<BoardDto>();
-		if (b_type == 1 || b_type == 2) {
-			List<BoardDto> list = boardService.videoArticleGood(b_type);
-			int lastPageRemain = list.size() % 5;
-			int lastPage = list.size() - lastPageRemain;
-			page = 5 * page - 5;
-			// 5개씩 보여주기
-			if (page < lastPage) {
-				for (int i = page; i < page + 5; i++) {
-					showList.add(list.get(i));
-				}
-			} else if (page == lastPage) {
-				for (int i = page; i < page + lastPageRemain; i++) {
-					showList.add(list.get(i));
-				}
+	// 해당 영상/기사 리스트 - 좋아요
+	@GetMapping("/mainlist/{b_type}")
+	@ApiOperation(value = "메인 리스트 ")
+	public ResponseEntity<List<BoardDto>> mainList(@PathVariable int b_type, @RequestParam int page) {
+		List<BoardDto> showList = new ArrayList<BoardDto>();
+		List<BoardDto> list = boardService.mainlist(b_type);
+		int lastPageRemain = list.size() % 5;
+		int lastPage = list.size() - lastPageRemain;
+		page = 5 * page - 5;
+		// 5개씩 보여주기
+		if (page < lastPage) {
+			for (int i = page; i < page + 5; i++) {
+				showList.add(list.get(i));
 			}
-
-			return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		} else if (page == lastPage) {
+			for (int i = page; i < page + lastPageRemain; i++) {
+				showList.add(list.get(i));
+			}
 		}
-
+		return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
 	}
 
 	// 해당 가수 영상 리스트
-	@GetMapping("/{s_idx}/videolist")
+	@GetMapping("/list/{s_idx}/{page}")
 	@ApiOperation(value = "가수로 검색 비디오")
-	public ResponseEntity<List<BoardDto>> singerList(@PathVariable int s_idx,
-			@RequestParam int page) {
+	public ResponseEntity<List<BoardDto>> singerList(@PathVariable int s_idx, @RequestParam int page) {
 		List<BoardDto> list = null;
 		List<BoardDto> showList = new LinkedList<BoardDto>();
 		// s_idx로 가수 이름 검색
@@ -138,7 +134,7 @@ public class BoardController {
 		}
 
 	}
-	
+
 	// 해당 가수 기사 리스트
 	@GetMapping("/{s_idx}/articlelist")
 	@ApiOperation(value = "가수로 검색 기사 ")
@@ -175,9 +171,9 @@ public class BoardController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@GetMapping("/videodetail/{b_idx}")
-	@ApiOperation(value = "영상 ")
+	@ApiOperation(value = "영상 디테일 ")
 	public ResponseEntity<BoardDto> videoDetail(@PathVariable int b_idx) {
 		BoardDto boardDto = boardService.videoDetail(b_idx);
 		if (boardDto != null) {
@@ -188,21 +184,20 @@ public class BoardController {
 	}
 
 	@GetMapping("/articledetail/{b_idx}")
-	@ApiOperation(value = "영상 ")
+	@ApiOperation(value = "기사 디테일 ")
 	public ResponseEntity<BoardDto> articleDetail(@PathVariable int b_idx) {
-		BoardDto boardDto = boardService.videoDetail(b_idx);
+		BoardDto boardDto = boardService.articleDetail(b_idx);
 		if (boardDto != null) {
 			return new ResponseEntity<BoardDto>(boardDto, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	
+
 	@GetMapping("/replylist/{b_idx}")
-	@ApiOperation(value = "영상 ")
+	@ApiOperation(value = "댓글리스트  ")
 	public ResponseEntity<List<BoardDto>> replylist(@PathVariable int b_idx) {
-		List<BoardDto> boardDto = boardService.videoDetail(b_idx);
+		List<BoardDto> boardDto = boardService.replylist(b_idx);
 		if (boardDto != null) {
 			return new ResponseEntity<List<BoardDto>>(boardDto, HttpStatus.OK);
 		} else {
@@ -210,89 +205,76 @@ public class BoardController {
 		}
 	}
 
+	
 	/* 댓글 작성 */
 	@ApiOperation("댓글 작성")
 	@PostMapping("/replyadd")
-	public ResponseEntity<HashMap<String, Object>> addComment(
-			@RequestBody ReplyDto replyDto, @PathVariable("b_type") int b_type,
-			@PathVariable("b_idx") int b_idx, HttpServletRequest request) {
+	public ResponseEntity<HashMap<String, Object>> addComment(@RequestBody ReplyDto replyDto,
+			@PathVariable("b_type") int b_type, @PathVariable("b_idx") int b_idx, HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
-			
-		}
-		try {
-
 			boolean flag = boardService.addComment(replyDto);
-
 			HashMap<String, Object> map = new HashMap<>();
-
 			map.put("reply_boolean", flag);
-
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
 		}
 	}
 
 	/* 댓글 작성 */
 	@ApiOperation("댓글 삭제")
-	@DeleteMapping("/replydelete/{b_type}/{b_idx}")
+	@DeleteMapping("/replydelete/{b_type}/{b_idx}/{r_idx}")
 	public ResponseEntity<HashMap<String, Object>> deleteComment(@PathVariable("b_type") int b_type,
-			@PathVariable("b_idx") int b_idx, HttpServletRequest request) {
+			@PathVariable("b_idx") int b_idx, @PathVariable("r_idx") int r_idx,HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
-			
-		}
-		try {
 			ReplyDto replyDto = new ReplyDto();
 			replyDto.setR_idx(r_idx);
 			replyDto.setB_type(b_type);
 			replyDto.setB_idx(b_idx);
-			replyDto.setU_email(u_email);
+			replyDto.setU_email(udto.getU_email());
 			boolean flag = boardService.deleteComment(replyDto);
-
+			
 			HashMap<String, Object> map = new HashMap<>();
-
+			
 			map.put("like_boolean", flag);
-
+			
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/* 좋아요 클릭 */
 	@ApiOperation("좋아요 클릭")
 	@PostMapping("/good/{b_type}/{b_idx}")
-	public ResponseEntity<HashMap<String, Object>> goodClick(@PathVariable("b_type") int b_type, 
+	public ResponseEntity<Integer> goodClick(@PathVariable("b_type") int b_type,
 			@PathVariable("b_idx") int b_idx, @RequestParam int isgood, HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
+			GoodDto dto = new GoodDto();
+			dto.setB_idx(b_idx);
+			dto.setB_type(b_type);
+			dto.setU_email(udto.getU_email());
+			if (isgood == 1) { // 좋아요 취소
+				if (boardService.goodClickCancel(dto)) {
+					isgood = 0;
+				}
+			} else { // 좋아요 선택
+				if (boardService.goodClick(dto)) {
+					isgood = 1;
+				}
+			}
+			System.out.println("변경후  좋아요 상태 : " + isgood);
+			return new ResponseEntity<Integer>(isgood, HttpStatus.OK);
 			
 		}
-		
-		
-		try {
-
-			boolean flag = boardService.goodClick(boardPK);
-
-			HashMap<String, Object> map = new HashMap<>();
-
-			map.put("like_boolean", flag);
-
-			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
 	}
-	
-	
+
 //	
 //	
 //	
@@ -363,6 +345,5 @@ public class BoardController {
 //			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 //		}
 //	}
-
 
 }

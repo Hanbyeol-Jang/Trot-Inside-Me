@@ -16,6 +16,7 @@ import com.web.curation.dao.BoardDao;
 import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.BroadCastingDto;
+import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.ReplyDto;
 import com.web.curation.dto.SingerDto;
 
@@ -53,6 +54,14 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.singerSearch(s_idx);
 	}
 
+	
+	
+	@Override
+	public List<BoardDto> mainlist(int b_type) {
+		return boardDao.mainlist(b_type);
+	}
+
+	
 	// 네이버 동영상 DB에 넣기
 	@Override
 	public void insertVideo(String s_name) {
@@ -164,17 +173,14 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 
-	// 편성표 전체 출력
-	@Override
-	public List<BroadCastingDto> broadCastAllList() {
-		return boardDao.broadCastAllList();
-	}
+	
 
 	@Override
-	public List<BroadCastingDto> singerScheduleList(String s_name) {
-		return boardDao.singerScheduleList(s_name);
+	public List<BoardDto> replylist(int b_idx) {
+		return boardDao.replylist(b_idx);
 	}
-	
+
+
 	@Override
 	public boolean addComment(ReplyDto replyDto) {
 		return boardDao.addComment(replyDto) == 1;
@@ -185,14 +191,25 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.deleteComment(replyDto) == 1;
 	}
 	@Override
-	public boolean goodClick(BoardPK boardPK) {
-		return boardDao.goodClick(boardPK) == 1;
+	public boolean goodClick(GoodDto dto) {
+		return boardDao.goodClick(dto) == 1;
+	}
+	@Override
+	public boolean goodClickCancel(GoodDto dto) {
+		return boardDao.goodClickCancel(dto) == 1;
+	}
+	// 편성표 전체 출력
+	@Override
+	public List<BroadCastingDto> broadCastAllList() {
+		return boardDao.broadCastAllList();
 	}
 
-//	@Override
-//	public boolean goodClickCancel(BoardPK boardPK) {
-//		return boardDao.goodClickCancel(boardPK) == 1;
-//	}
+	@Override
+	public List<BroadCastingDto> singerScheduleList(String s_name) {
+		return boardDao.singerScheduleList(s_name);
+	}
+
+
 //
 //	@Override
 //	public int goodCount(BoardPK boardPK) {

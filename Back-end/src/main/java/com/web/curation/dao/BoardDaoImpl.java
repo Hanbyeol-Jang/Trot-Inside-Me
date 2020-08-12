@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.BroadCastingDto;
+import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.ReplyDto;
 import com.web.curation.dto.SingerDto;
 
@@ -32,6 +33,13 @@ public class BoardDaoImpl implements BoardDao {
 		return sqlSession.selectOne(ns + ".singerSearch", s_idx);
 	}
 
+
+	@Override
+	public List<BoardDto> mainlist(int b_type) {
+		return null;
+	}
+
+	
 	@Override
 	public void insertVideo(BoardDto boardDto) {
 		sqlSession.insert(ns + ".addvideo", boardDto);
@@ -78,6 +86,33 @@ public class BoardDaoImpl implements BoardDao {
 		return sqlSession.selectOne(ns + ".articledetail", b_idx);
 	}
 
+	
+	@Override
+	public List<BoardDto> replylist(int b_idx) {
+		return null;
+	}
+
+	@Override
+	public int addComment(ReplyDto replyDto) {
+		return sqlSession.insert(ns + "addcomment", replyDto);
+	}
+	
+	@Override
+	public int deleteComment(ReplyDto replyDto) {
+		return sqlSession.insert(ns + "deletecomment", replyDto);
+	}
+
+	@Override
+	public int goodClick(GoodDto dto) {
+		return sqlSession.insert(ns+"goodClick",dto);
+	}
+
+	@Override
+	public int goodClickCancel(GoodDto dto) {
+		return sqlSession.delete(ns+"goodClickCancel",dto);
+	}
+
+	
 	@Override
 	public List<BroadCastingDto> broadCastAllList() {
 		return sqlSession.selectList(ns + ".broadCastAllList");
@@ -88,20 +123,8 @@ public class BoardDaoImpl implements BoardDao {
 		return sqlSession.selectList(ns + ".singerScheduleList", s_name);
 	}
 	
-	
-	@Override
-	public int addComment(ReplyDto replyDto) {
-		return sqlSession.insert(ns + "addcomment", replyDto);
-	}
-	
-	@Override
-	public int deleteComment(ReplyDto replyDto) {
-		return sqlSession.insert(ns + "deletecomment", replyDto);
-	}
-	@Override
-	public int goodClick(BoardPK boardPK) {
-		return sqlSession.update(ns + "goodClick", boardPK);
-	}
+
+
 
 //	@Override
 //	public int goodClickCancel(BoardPK boardPK) {
