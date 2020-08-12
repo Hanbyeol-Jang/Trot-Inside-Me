@@ -16,8 +16,8 @@
       <CommentListItem class="mb-3" @delete-comment2="commentDelete" :comment="comment"/>
     </div>
       <br>
-      <p class="text-center" v-if="!comments.length">No results :( </p>
-      <infinite-loading v-if="comments.length" @infinite="infiniteHandler"></infinite-loading>
+      <!-- <p class="text-center" v-if="!comments.length">No results :( </p> -->
+      <infinite-loading  @infinite="infiniteHandler"></infinite-loading>
 </v-card-text>
 </template>
 
@@ -65,6 +65,8 @@ export default {
 
 
     infiniteHandler($state) {
+      console.log("스크롤")
+      console.log("밑에 찍었다.", this.page)
       const axiosConfig2 = {
         headers:{
           token: `${this.$cookies.get('auth-token')}`,
@@ -78,6 +80,7 @@ export default {
               this.page+=1
               this.comments.push(...res.data)
               $state.loaded()
+              console.log('페이지 증가',this.page)
             }, 1000);
           })
           .catch(err => console.log(err))
@@ -88,6 +91,7 @@ export default {
 
 
     commentCreate(){
+        console.log("생성전페이지",this.page)
         const json = {
             co_idx : this.$route.params.communityId ,
             cr_content : this.commentData.content
@@ -102,7 +106,7 @@ export default {
       } else{
         if (!this.$cookies.isKey('auth-token')){
           this.$alert('로그인이 필요합니다')
-          this.commentData.content = null
+          this.commentData.content = ''
         } else{
 -          axios.post(SERVER.URL + `/community/replyadd`,json,axiosConfig2)
            .then((res) => {
@@ -112,7 +116,9 @@ export default {
               this.commentData.content = ''
               this.comments = []
               this.comments.push(...res.data)
-              console.log(this.page)
+              console.log("글생성!", this.page)
+              // this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
+              this.$refs.InfiniteLoading
             })
             .catch((err) => { console.log(err.response.data) })
         }
