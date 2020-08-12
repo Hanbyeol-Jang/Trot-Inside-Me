@@ -45,14 +45,12 @@ export default {
         },
 
         createCommunity(){
-          console.log(this.image)
             const data = {
               'co_content' : this.content,
               'co_img' : this.image
             }
             axios.post(`${SERVER.URL}/community/add`,data,this.axiosConfig)
             .then(()=>{
-              console.log(1231231)
                 this.$router.push({ name: 'CommunityIndexView'})
             })
             .catch((err)=>{
