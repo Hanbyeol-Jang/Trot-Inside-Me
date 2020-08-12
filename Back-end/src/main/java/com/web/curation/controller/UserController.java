@@ -10,21 +10,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dto.FollowDto;
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.UserService;
 
+import io.swagger.annotations.ApiOperation;
+
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
+@RequestMapping("/user")
 public class UserController {
 	
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping("/follow/list")
+	@GetMapping("/followlist")
 	public ResponseEntity<List<FollowDto>> followlist(HttpServletRequest request){
 		
 		UserDto dto = userService.getTokenInfo(request);
@@ -36,7 +40,7 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping("/follow/{s_idx}")
+	@GetMapping("/followadd/{s_idx}")
 	public ResponseEntity<String> followApply(@PathVariable int s_idx, HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		FollowDto dto = new FollowDto();
@@ -49,7 +53,7 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/follow/delete/{s_idx}")
+	@GetMapping("/followdelete/{s_idx}")
 	public Object FollowDelete(@PathVariable int s_idx, HttpServletRequest request) {
 		FollowDto dto = new FollowDto();
 		dto.setU_email(userService.getTokenInfo(request).getU_email());
@@ -61,7 +65,17 @@ public class UserController {
 		}
 	}
 	
-	
+	// 토큰 디코딩.. 유저 정보 반환
+	@ApiOperation("토큰 디코딩.. 유저 정보 반환")
+	@GetMapping("/getUserInfo")
+	public ResponseEntity<UserDto> getUserInfo(HttpServletRequest request){
+		UserDto dto = userService.getTokenInfo(request); // 헤더에서 유저정보 추출
+		if(dto.getU_name().equals("F")) {
+			return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+		}else {
+			return new ResponseEntity<>(dto, HttpStatus.OK);
+		}
+	}
 	
 //수정
 //	@PostMapping("/accounts/logout")
