@@ -29,7 +29,7 @@ public class KakaoAPI {
 
 	@Value("${KAKAO_API_KEY}")
 	private String API_KEY;
-	
+
 	public String getAccessToken(String authorize_code) {
 		String access_Token = "";
 		String refresh_Token = "";
@@ -47,7 +47,7 @@ public class KakaoAPI {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
-			sb.append("&client_id="+API_KEY);
+			sb.append("&client_id=" + API_KEY);
 			sb.append("&redirect_uri=http://localhost:8080/social/login/kakao");
 			sb.append("&code=" + authorize_code);
 			bw.write(sb.toString());
@@ -123,51 +123,56 @@ public class KakaoAPI {
 
 			userDto.setU_email(email);
 			userDto.setU_name(properties.getAsJsonObject().get("nickname").getAsString());
-			userDto.setU_thumbnail(properties.getAsJsonObject().get("thumbnail_image").getAsString());
-			userDto.setU_profileImg(properties.getAsJsonObject().get("profile_image").getAsString());
+
+			// 썸네일 없을 경우
+			if (properties.getAsJsonObject().get("thumbnail_image") != null) {
+				userDto.setU_thumbnail(properties.getAsJsonObject().get("thumbnail_image").getAsString());
+			} else {
+				userDto.setU_thumbnail("");
+			}
+			// 프로필 이미지 없을경우
+			if (properties.getAsJsonObject().get("profile_image") != null) {
+				userDto.setU_profileImg(properties.getAsJsonObject().get("profile_image").getAsString());
+			} else {
+				userDto.setU_profileImg("");
+			}
 			System.out.println("logger - kakaoDto 정보: " + userDto);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return userDto;
 	}
-	
+
 	// 나에게 메세지 보내기
-	public void messageForMe(Map<String,Object> map) {
+	public void messageForMe(Map<String, Object> map) {
 		String reqURL = "https://kapi.kakao.com/v2/api/talk/memo/default/send";
-		
+
 		String accessToken = (String) map.get("accessToken");
 		BroadCastingDto bcDto = (BroadCastingDto) map.get("broadCastingDto");
-		
+
 		try {
 			URL url = new URL(reqURL);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			
+
 			conn.setRequestMethod("POST");
 			conn.setDoOutput(true);
 
 			conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-			String msg = "template_object={\r\n" + 
-			 		"        \"object_type\": \"feed\",\r\n" + 
-			 		"        \"content\": {\r\n" + 
-			 		"            \"title\": \""+ bcDto.getBc_title() +"\",\r\n" + 
-					"            \"description\": \""+bcDto.getBc_company()+", "+bcDto.getBc_time()+"\",\r\n" + 
-					"            \"image_url\": \"http://blogfiles.naver.net/MjAyMDAxMjlfMjUy/MDAxNTgwMjgyNzAxNzcy.kZlmkLPDc-GKg7fV8aoaQCBEXhbqfZdY47L9gQCeT8kg.qcEUht24-YpNysTEG34quo4GTmj2B2rT7pazIC1DAn4g.JPEG.boeun1128/KakaoTalk_20200129_162050083_02.jpg\",\r\n" + 
-			 		"            \"image_width\": 640,\r\n" + 
-			 		"            \"image_height\": 640,\r\n" + 
-			 		"            \"link\": {\r\n" + 
-			 		"            \"web_url\": \"http://www.daum.net\",\r\n" + 
-			 		"            \"mobile_web_url\": \"http://m.daum.net\",\r\n" + 
-			 		"            \"android_execution_params\": \"contentId=100\",\r\n" + 
-			 		"            \"ios_execution_params\": \"contentId=100\"\r\n" + 
-			 		"            }\r\n" + 
-			 		"        }\r\n" + 
-			 		"    }";
-			
+			String msg = "template_object={\r\n" + "        \"object_type\": \"feed\",\r\n"
+					+ "        \"content\": {\r\n" + "            \"title\": \"" + bcDto.getBc_title() + "\",\r\n"
+					+ "            \"description\": \"" + bcDto.getBc_company() + ", " + bcDto.getBc_time() + "\",\r\n"
+					+ "            \"image_url\": \"http://blogfiles.naver.net/MjAyMDAxMjlfMjUy/MDAxNTgwMjgyNzAxNzcy.kZlmkLPDc-GKg7fV8aoaQCBEXhbqfZdY47L9gQCeT8kg.qcEUht24-YpNysTEG34quo4GTmj2B2rT7pazIC1DAn4g.JPEG.boeun1128/KakaoTalk_20200129_162050083_02.jpg\",\r\n"
+					+ "            \"image_width\": 640,\r\n" + "            \"image_height\": 640,\r\n"
+					+ "            \"link\": {\r\n" + "            \"web_url\": \"http://www.daum.net\",\r\n"
+					+ "            \"mobile_web_url\": \"http://m.daum.net\",\r\n"
+					+ "            \"android_execution_params\": \"contentId=100\",\r\n"
+					+ "            \"ios_execution_params\": \"contentId=100\"\r\n" + "            }\r\n"
+					+ "        }\r\n" + "    }";
+
 			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 			wr.write(msg);
 			wr.flush();
-			
+
 			int responseCode = conn.getResponseCode();
 //			System.out.println("responseCode : " + responseCode);
 		} catch (IOException e) {
