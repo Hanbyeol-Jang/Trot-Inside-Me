@@ -49,7 +49,7 @@ export default {
         },
 
         getuser(){
-            axios.get(`${SERVER.URL}/rest-auth/user/`,this.axiosConfig)
+            axios.get(`${SERVER.URL}/user/getUserInfo`,this.axiosConfig)
                 .then((reaponse)=>{
                 this.currentuser = reaponse.data.username
                 if (this.user !== this.currentuser){
@@ -63,11 +63,12 @@ export default {
         },
 
         getcommunity(){ 
-            axios.get(`${SERVER.URL}/community/articles/`+this.$route.params.communityId+'/')
+            axios.get(SERVER.URL+`/community/detail/${this.$route.params.communityId}`,this.axiosConfig)
             .then((reaponse)=>{
-                this.show_image = SERVER.URL+reaponse.data.data.image
-                this.content = reaponse.data.data.content
-                this.user = reaponse.data.data.user.username
+                this.communityContent=reaponse.data.co_content,
+                this.communityUser=reaponse.data.co_name,
+                // this.userImg=reaponse.data.co_img
+                this.communityImg=reaponse.data.co_img
                 this.getuser()
             })
             .catch((err)=>{

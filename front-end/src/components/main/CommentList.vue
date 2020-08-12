@@ -16,8 +16,8 @@
       <CommentListItem class="mb-3" @delete-comment2="commentDelete" :comment="comment"/>
     </div>
       <br>
-      <p class="text-center" v-if="!comments.length">No results :( </p>
-      <infinite-loading v-if="comments.length" @infinite="infiniteHandler"></infinite-loading>
+      <!-- <p class="text-center" v-if="!comments.length">No results :( </p> -->
+      <infinite-loading  @infinite="infiniteHandler"></infinite-loading>
 </v-card-text>
 </template>
 
@@ -54,7 +54,7 @@ export default {
             },
           params: {co_idx:this.$route.params.communityId, page: this.page}
         }
-        axios.get(SERVER.URL+`/community/detail/reply/${this.$route.params.communityId}`,axiosConfig2)
+        axios.get(SERVER.URL+`/community/detail/replylist/${this.$route.params.communityId}`,axiosConfig2)
         .then((response)=>{
             this.comments = response.data
         })
@@ -65,6 +65,8 @@ export default {
 
 
     infiniteHandler($state) {
+      console.log("스크롤")
+      console.log("밑에 찍었다.", this.page)
       const axiosConfig2 = {
         headers:{
           token: `${this.$cookies.get('auth-token')}`,
@@ -72,12 +74,13 @@ export default {
         params: {co_idx:this.$route.params.communityId, page: this.page+1}
       } 
       if (parseInt(this.commentCnt / 5)+1 >= this.page){
-        axios.get(SERVER.URL +`/community/detail/reply/${this.$route.params.communityId}`, axiosConfig2)
+        axios.get(SERVER.URL +`/community/detail/replylist/${this.$route.params.communityId}`, axiosConfig2)
           .then(res => {
             setTimeout(() => {
               this.page+=1
               this.comments.push(...res.data)
               $state.loaded()
+              console.log('페이지 증가',this.page)
             }, 1000);
           })
           .catch(err => console.log(err))
@@ -88,6 +91,7 @@ export default {
 
 
     commentCreate(){
+        console.log("생성전페이지",this.page)
         const json = {
             co_idx : this.$route.params.communityId ,
             cr_content : this.commentData.content
@@ -102,9 +106,9 @@ export default {
       } else{
         if (!this.$cookies.isKey('auth-token')){
           this.$alert('로그인이 필요합니다')
-          this.commentData.content = null
+          this.commentData.content = ''
         } else{
--          axios.post(SERVER.URL + `/community/reply/add`,json,axiosConfig2)
+-          axios.post(SERVER.URL + `/community/replyadd`,json,axiosConfig2)
            .then((res) => {
              console.log(res)
               this.$emit('add-comment')
@@ -112,6 +116,9 @@ export default {
               this.commentData.content = ''
               this.comments = []
               this.comments.push(...res.data)
+              console.log("글생성!", this.page)
+              // this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
+              this.$refs.InfiniteLoading
             })
             .catch((err) => { console.log(err.response.data) })
         }
@@ -126,12 +133,14 @@ export default {
           },
         params: {page: this.page}
       }
-        axios.delete(SERVER.URL+`/community/reply/delete/${this.$route.params.communityId}/${idx}`,axiosConfig2)
+        axios.delete(SERVER.URL+`/community/replydelete/${this.$route.params.communityId}/${idx}`,axiosConfig2)
         .then((response)=>{
             console.log(response)
             this.$emit('delete-comment')
             this.comments = []
+            console.log("init")
             this.comments.push(...response.data)
+            console.log(this.comments)
             this.$alert('삭제 완료')
         })
         .catch((err)=>{

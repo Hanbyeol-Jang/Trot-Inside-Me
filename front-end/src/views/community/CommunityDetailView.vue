@@ -100,7 +100,7 @@ export default {
             },
 
         getuser(){
-            axios.get(SERVER.URL+`/admin/userNow`,this.axiosConfig)
+            axios.get(SERVER.URL+`/user/getUserInfo`,this.axiosConfig)
             .then((reaponse)=>{
                 if(Number(reaponse.data.u_isAdmin)){
                     this.currentUser = reaponse.data.u_name
@@ -171,7 +171,7 @@ export default {
                 token: `${this.$cookies.get('auth-token')}`,
                 },
             }
-            axios.delete(SERVER.URL+`/community/detail/delete/${this.communityIdx}`,axiosConfig2)
+            axios.delete(SERVER.URL+`/community/delete/${this.communityIdx}`,axiosConfig2)
             .then((response)=>{
                 console.log(response)
                 this.$alert('삭제 완료')

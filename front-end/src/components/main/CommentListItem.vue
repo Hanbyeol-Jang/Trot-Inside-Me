@@ -1,5 +1,5 @@
 <template>
-  <div v-show="!isdelete" class="row">
+  <div class="row">
     <div class="col-2">
       <v-avatar color="indigo"><v-icon dark>mdi-account-circle</v-icon></v-avatar>
       <!-- <b-avatar variant="secondary" :src="profileImage" size="3.5rem"></b-avatar> -->
@@ -31,7 +31,6 @@ export default {
   },
   data(){
     return {
-      isdelete:false,
       isAuth: false,
       axiosConfig :{
           headers:{
@@ -61,7 +60,6 @@ export default {
           },
           callback: confirm => {
             if (confirm) {
-                  this.isdelete = true
                   this.$emit('delete-comment2',idx)
             }
           }
@@ -70,7 +68,7 @@ export default {
     },
 
     checkAuth(){
-      axios.get(SERVER.URL+`/admin/userNow`,this.axiosConfig)
+      axios.get(SERVER.URL+`/user/getUserInfo`,this.axiosConfig)
       .then((reaponse)=>{
           const currentUser = reaponse.data.u_name
           if(Number(reaponse.data.u_isAdmin)){
