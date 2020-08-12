@@ -43,8 +43,8 @@ public class BoardController {
 
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private YoutubeAPI youtubeAPI;
+//	@Autowired
+//	private YoutubeAPI youtubeAPI;
 	// 가수 리스트
 	@GetMapping("/singerlist")
 	@ApiOperation(value = "가수 리스트")
