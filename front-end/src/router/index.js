@@ -207,4 +207,27 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  // const publicPages = ['Login', 'Signup', 'Home', 'AdminLogin'] // Login 안해도 됨
+  const loggedInPages = ['UserDetailView', 'UserSettingView', 
+    'AdminView', 'SingerManageView', 'SingerCreateView', 'ProgramCreateView', 'ProgramManageView',]
+  // const adminPages = ['AdminView']
+  const authPages = ['Login', 'Signup', 'AdminLogin'] // Login 되어있으면 안됨
+
+  // const authRequired = !publicPages.includes(to.name) // Login 해야함
+  const authRequired = loggedInPages.includes(to.name) // Login 해야함
+  const unAuthRequired = authPages.includes(to.name) // Login 해서는 안됨
+  const isLoggedIn = !!Vue.$cookies.isKey('auth-token')
+
+  if (unAuthRequired && isLoggedIn) {
+    next('/')
+  }
+  if (authRequired && !isLoggedIn) {
+    next({name: 'Login'})
+  } else {
+    next()
+  }
+  // authRequired && !isLoggedIn ? next({name: 'Login'}) : next()
+})
+
 export default router
