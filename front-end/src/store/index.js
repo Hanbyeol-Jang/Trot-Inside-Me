@@ -12,6 +12,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
+    authAdmin: cookies.get('auth-admin'),
     singers: [],
     programs: [],
     contentsCount: 0,
@@ -137,10 +138,10 @@ export default new Vuex.Store({
         })
         .catch(err => console.log(err))
     },
+
     scrollToTop() {
       scroll(0, 0)
     },
-
   },
   modules: {
   }

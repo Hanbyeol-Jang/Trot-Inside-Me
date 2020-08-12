@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 var today = new Date()
 
 export default {
@@ -51,7 +51,6 @@ export default {
       }
     },
     methods: {
-      ...mapActions(['getUser']),
       goBack() {
           history.back()
       },
@@ -115,7 +114,6 @@ export default {
           this.month = '0' + this.month
       }
       this.todayDate = this.month +'월 ' + this.date + '일'
-      // this.getUser()
     }
 }
 </script>
