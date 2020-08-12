@@ -1,13 +1,18 @@
 <template>
-  <vue-calendar
-      :show-limit="3"
-      @show-all="showAll"
-      @day-clicked="dayClicked"
-      @event-clicked="eventClicked"
-      @month-changed="monthChanged"
-  ></vue-calendar>
+    <v-card
+    class="mx-auto mt-5"
+    >
+      <vue-calendar
+        class="ma-1"
+        :show-limit="3"
+        @show-all="showAll"
+        @day-clicked="dayClicked"
+        @event-clicked="eventClicked"
+        @month-changed="monthChanged"
+      ></vue-calendar>
+    </v-card> 
 </template>
-
+ 
 <script>
   export default {
     name: 'SingerScheduleView',

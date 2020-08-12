@@ -2,6 +2,7 @@
   <div class="mt-5">
     <div class="text-center">
       <v-avatar
+        class="ma-3 elevation-4"
         size="150px">
         <img
           v-if="singer.s_img"

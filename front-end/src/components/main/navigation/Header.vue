@@ -91,7 +91,8 @@ export default {
       },
       navBool() {
         if (this.$route.name === 'Home'
-          || this.$route.name === 'CommunityIndexView' || this.$route.name === 'VoteView'
+          || this.$route.name === 'CommunityIndexView' 
+          || this.$route.name === 'VoteView'
           || this.$route.name === 'SingerSearchView'){
           return true
         } else {
