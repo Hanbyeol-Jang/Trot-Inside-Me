@@ -3,8 +3,10 @@ package com.web.curation.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,13 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.BoardPK;
+import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.CommuReply;
 import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.ReplyDto;
 import com.web.curation.dto.SingerDto;
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.BoardService;
+import com.web.curation.service.TimeService;
 import com.web.curation.service.UserService;
+import com.web.curation.util.KakaoAPI;
 import com.web.curation.util.YoutubeAPI;
 
 import io.swagger.annotations.ApiOperation;
@@ -42,11 +47,14 @@ public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
-
+	@Autowired
+	private KakaoAPI kakaoAPI;
 	@Autowired
 	private UserService userService;
-//	@Autowired
-//	private YoutubeAPI youtubeAPI;
+	@Autowired
+	private TimeService timeService;
+	@Autowired
+	private YoutubeAPI youtubeAPI;
 
 	// 가수 리스트
 	@GetMapping("/singerlist")
@@ -216,8 +224,8 @@ public class BoardController {
 
 	@GetMapping("/replylist/{b_type}/{b_idx}")
 	@ApiOperation(value = "댓글리스트  ")
-	public ResponseEntity<List<ReplyDto>> replylist(@PathVariable("b_type") int b_type, 
-			@RequestParam("page") int page,	@PathVariable("b_idx") int b_idx) {
+	public ResponseEntity<List<ReplyDto>> replylist(@PathVariable("b_type") int b_type, @RequestParam("page") int page,
+			@PathVariable("b_idx") int b_idx) {
 		GoodDto dto = new GoodDto();
 		dto.setB_idx(b_idx);
 		dto.setB_type(b_type);
@@ -347,75 +355,61 @@ public class BoardController {
 		}
 	}
 
-//	
-//	
-//	
-//	/* 좋아요 수 표시 */
-//	@ApiOperation("좋아요 수 표시")
-//	@GetMapping("/board/good/{b_type}/{b_idx}")
-//	public ResponseEntity<HashMap<String, Object>> goodCount(@PathVariable("b_type") int b_type,
-//			@PathVariable("b_idx") int b_idx) {
-//
-//		try {
-//			BoardPK boardPK = new BoardPK();
-//			boardPK.setB_type(b_type);
-//			boardPK.setB_idx(b_idx);
-//
-//			int like_count = boardService.goodCount(boardPK);
-//			HashMap<String, Object> map = new HashMap<>();
-//			map.put("like_count", like_count);
-//			map.put("like_boolean", true);
-//
-//			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//		}
-//	}
-//
-//
-//
-//	/* 좋아요 취소 */
-//	@ApiOperation("좋아요 취소")
-//	@DeleteMapping("/board/good/{b_type}/{b_idx}/{u_email}")
-//	public ResponseEntity<HashMap<String, Object>> goodClickCancel(@PathVariable("b_type") int b_type,
-//			@PathVariable("b_idx") int b_idx, @PathVariable("u_email") String u_email) {
-//		try {
-//			BoardPK boardPK = new BoardPK();
-//			boardPK.setB_type(b_type);
-//			boardPK.setB_idx(b_idx);
-//			boardPK.setU_email(u_email);
-//			boolean flag = boardService.goodClickCancel(boardPK);
-//
-//			HashMap<String, Object> map = new HashMap<>();
-//
-//			map.put("like_boolean", flag);
-//
-//			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//		}
-//	}
-//
-//	/* 댓글 수 표시 */
-//	@ApiOperation("댓글 수 표시")
-//	@GetMapping("/board/reply/{b_type}/{b_idx}")
-//	public ResponseEntity<HashMap<String, Object>> commentCount(@PathVariable("b_type") int b_type,
-//			@PathVariable("b_idx") int b_idx) {
-//
-//		try {
-//			BoardPK boardPK = new BoardPK();
-//			boardPK.setB_type(b_type);
-//			boardPK.setB_idx(b_idx);
-//
-//			int like_count = boardService.commentCount(boardPK);
-//			HashMap<String, Object> map = new HashMap<>();
-//			map.put("comment_count", like_count);
-//			map.put("comment_boolean", true);
-//
-//			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//		}
-//	}
+	@GetMapping("/schedule/todayList")
+	public ResponseEntity<List<BroadCastingDto>> todaylist() {
+		List<BroadCastingDto> list = boardService.broadCastAllList();
+		if (list != null) {
+			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
 
+	@GetMapping("/schedule/singerScheduleList/{s_idx}")
+	public ResponseEntity<List<BroadCastingDto>> singerScheduleList(@PathVariable("s_idx") int s_idx) {
+		SingerDto singerDto = boardService.singerSearch(s_idx);
+		List<BroadCastingDto> list = boardService.singerScheduleList(singerDto.getS_name());
+		if (list != null) {
+			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	//나에게 메세지 보내기 (알림)
+	@GetMapping("/schedule")
+	public ResponseEntity<String> selectBroadCasting(@RequestParam("bc_idx") int bc_idx,HttpServletRequest request) {
+		
+		String useremail = userService.getTokenInfo(request).getU_email();
+		String accessToken = userService.getUserInfo(useremail).getU_accessToken();
+		BroadCastingDto broadCastingDto = timeService.selectBroadCasting(bc_idx);
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
+		map.put("broadCastingDto",broadCastingDto);
+		map.put("accessToken", accessToken);
+		kakaoAPI.messageForMe(map);
+		try{
+		return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+		} catch(Exception e) {	
+			e.printStackTrace();
+			return new ResponseEntity<String>("FAIL",HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	
+	
+	// Youtube Search
+	@GetMapping("/search/youtube")
+	@ApiOperation(value = "영상 좋아요순으로 정렬")
+	public ResponseEntity<String> youtubesearch(@RequestParam String keyword) {
+		String result = "";
+		try {
+			System.out.println("실행");
+			result = youtubeAPI.search(keyword);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+
+	}
 }
