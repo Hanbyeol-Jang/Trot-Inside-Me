@@ -54,7 +54,7 @@ export default {
             },
           params: {co_idx:this.$route.params.communityId, page: this.page}
         }
-        axios.get(SERVER.URL+`/community/detail/reply/${this.$route.params.communityId}`,axiosConfig2)
+        axios.get(SERVER.URL+`/community/detail/replylist/${this.$route.params.communityId}`,axiosConfig2)
         .then((response)=>{
             this.comments = response.data
         })
@@ -72,7 +72,7 @@ export default {
         params: {co_idx:this.$route.params.communityId, page: this.page+1}
       } 
       if (parseInt(this.commentCnt / 5)+1 >= this.page){
-        axios.get(SERVER.URL +`/community/detail/reply/${this.$route.params.communityId}`, axiosConfig2)
+        axios.get(SERVER.URL +`/community/detail/replylist/${this.$route.params.communityId}`, axiosConfig2)
           .then(res => {
             setTimeout(() => {
               this.page+=1
@@ -104,7 +104,7 @@ export default {
           this.$alert('로그인이 필요합니다')
           this.commentData.content = null
         } else{
--          axios.post(SERVER.URL + `/community/reply/add`,json,axiosConfig2)
+-          axios.post(SERVER.URL + `/community/replyadd`,json,axiosConfig2)
            .then((res) => {
              console.log(res)
               this.$emit('add-comment')
@@ -112,6 +112,7 @@ export default {
               this.commentData.content = ''
               this.comments = []
               this.comments.push(...res.data)
+              console.log(this.page)
             })
             .catch((err) => { console.log(err.response.data) })
         }
@@ -126,12 +127,14 @@ export default {
           },
         params: {page: this.page}
       }
-        axios.delete(SERVER.URL+`/community/reply/delete/${this.$route.params.communityId}/${idx}`,axiosConfig2)
+        axios.delete(SERVER.URL+`/community/replydelete/${this.$route.params.communityId}/${idx}`,axiosConfig2)
         .then((response)=>{
             console.log(response)
             this.$emit('delete-comment')
             this.comments = []
+            console.log("init")
             this.comments.push(...response.data)
+            console.log(this.comments)
             this.$alert('삭제 완료')
         })
         .catch((err)=>{

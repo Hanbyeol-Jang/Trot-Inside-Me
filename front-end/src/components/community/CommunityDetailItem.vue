@@ -93,7 +93,7 @@ export default {
                 }
             },
         getuser(){
-            axios.get(SERVER.URL+`/admin/userNow`,this.axiosConfig)
+            axios.get(SERVER.URL+`/user/getUserInfo`,this.axiosConfig)
             .then((reaponse)=>{
                 if(Number(reaponse.data.u_isAdmin)){
                     this.currentUser = reaponse.data.u_name
@@ -139,7 +139,6 @@ export default {
             this.$router.push({ name: 'CommunityDetailView', params: { communityId: this.community.co_idx, page:this.page }})
         },
         deleteArticle(){
-            this.deleteFlag = false
             const idx = this.community.co_idx
             this.$emit('community-delete',idx)
         },
