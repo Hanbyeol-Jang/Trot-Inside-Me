@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import axios from 'axios'
 import VideoDetailItem from '@/components/main/VideoDetailItem.vue'
 import CommentList from '@/components/main/CommentList.vue'
@@ -55,6 +56,9 @@ export default {
       id:this.$route.params.videoId,
       type:''
     }
+  },
+  computed: {
+    ...mapGetters(['isLoggedIn']),
   },
   methods: {
     getuser(){
@@ -105,7 +109,9 @@ export default {
     },
   },
   created(){
-    this.getuser()
+    if (this.isLoggedIn) {
+        this.getuser()
+    }
     this.getVideo()
   },
 }

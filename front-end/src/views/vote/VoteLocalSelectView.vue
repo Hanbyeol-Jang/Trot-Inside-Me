@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import SERVER from '@/api/drf'
 
@@ -53,7 +54,12 @@ export default {
             selectLocal:"",
         }
     },
+    computed: {
+      ...mapState(['user']),
+      ...mapGetters(['isLoggedIn']),
+    },
     methods:{
+      ...mapActions(['getUser']),
       getuser(){
           const axiosConfig ={
               headers:{
@@ -95,7 +101,9 @@ export default {
       },
     },
     created(){
-      this.getuser()
+      if (this.isLoggedIn) {
+        this.getuser()
+      }
     }
 }
 </script>

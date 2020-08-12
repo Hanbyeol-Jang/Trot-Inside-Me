@@ -79,6 +79,14 @@ export default new Vuex.Store({
       cookies.remove('auth-token')
       router.push({ name: 'Home' })
     },
+    kakaoOff({ getters }) {
+      axios.post(SERVER.URL + SERVER.ROUTES.kakaoOff, null, getters.config)
+        .then(() => {  
+            console.log('Kakao OFF') 
+            router.push({ name: 'Home' })
+          })
+        .catch((err)=>{ console.error(err) }) 
+    },
     getUser({ getters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.getAmdinUser, getters.config)
         .then(res => {  commit('SET_USER', res.data) })

@@ -11,7 +11,7 @@
         잠시만 기다려 주세요!
       </h2>
     </div>
-    <ScrollTopButton />
+    <ScrollTopButton /> 
     <infinite-loading v-if="videos.length" @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
   </v-container>
 </template>
