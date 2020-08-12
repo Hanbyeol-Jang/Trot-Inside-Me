@@ -13,6 +13,9 @@
 		select * from Singer where s_idx = #{s_idx};
 	</select>
 	
+	<!-- 전체 영상, 기사 리슽  -->
+	
+	
 	<!-- 비디오 추가 -->
 	<insert id="addvideo">
 		insert into Board (b_type,b_url,b_title,b_content,b_member,b_thumbnail,b_date)

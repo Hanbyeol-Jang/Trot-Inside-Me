@@ -25,34 +25,32 @@ public class BoardDaoImpl implements BoardDao {
 
 	@Override
 	public List<SingerDto> singerAllList() {
-		return sqlSession.selectList(ns + ".singerAllList");
+		return sqlSession.selectList(ns + "singerAllList");
 	}
 
 	@Override
 	public SingerDto singerSearch(int s_idx) {
-		return sqlSession.selectOne(ns + ".singerSearch", s_idx);
+		return sqlSession.selectOne(ns + "singerSearch", s_idx);
 	}
-
 
 	@Override
 	public List<BoardDto> mainlist(int b_type) {
-		return null;
+		return sqlSession.selectList(ns + "mainlist", b_type);
 	}
 
-	
 	@Override
 	public void insertVideo(BoardDto boardDto) {
-		sqlSession.insert(ns + ".addvideo", boardDto);
+		sqlSession.insert(ns + "addvideo", boardDto);
 	}
 
 	@Override
 	public void insertArticle(BoardDto boardDto) {
-		sqlSession.insert(ns + ".addarticle", boardDto);
+		sqlSession.insert(ns + "addarticle", boardDto);
 	}
 
 	@Override
 	public List<BoardDto> selectVideoList(String s_name) {
-		return sqlSession.selectList(ns + ".selectvideolist", s_name);
+		return sqlSession.selectList(ns + "selectvideolist", s_name);
 	}
 
 	@Override
@@ -60,12 +58,12 @@ public class BoardDaoImpl implements BoardDao {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("vno", vno);
 		map.put("name", name);
-		return sqlSession.selectOne(ns + ".isurl", map);
+		return sqlSession.selectOne(ns + "isurl", map);
 	}
 
 	@Override
 	public List<BoardDto> selectArticleList(String s_name) {
-		return sqlSession.selectList(ns + ".selectarticlelist", s_name);
+		return sqlSession.selectList(ns + "selectarticlelist", s_name);
 	}
 
 	@Override
@@ -73,20 +71,19 @@ public class BoardDaoImpl implements BoardDao {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("url", url);
 		map.put("name", name);
-		return sqlSession.selectOne(ns + ".isurl2", map);
+		return sqlSession.selectOne(ns + "isurl2", map);
 	}
 
 	@Override
 	public BoardDto videoDetail(int b_idx) {
-		return sqlSession.selectOne(ns + ".videodetail", b_idx);
+		return sqlSession.selectOne(ns + "videodetail", b_idx);
 	}
 
 	@Override
 	public BoardDto articleDetail(int b_idx) {
-		return sqlSession.selectOne(ns + ".articledetail", b_idx);
+		return sqlSession.selectOne(ns + "articledetail", b_idx);
 	}
 
-	
 	@Override
 	public List<BoardDto> replylist(int b_idx) {
 		return null;
@@ -96,7 +93,7 @@ public class BoardDaoImpl implements BoardDao {
 	public int addComment(ReplyDto replyDto) {
 		return sqlSession.insert(ns + "addcomment", replyDto);
 	}
-	
+
 	@Override
 	public int deleteComment(ReplyDto replyDto) {
 		return sqlSession.insert(ns + "deletecomment", replyDto);
@@ -104,27 +101,23 @@ public class BoardDaoImpl implements BoardDao {
 
 	@Override
 	public int goodClick(GoodDto dto) {
-		return sqlSession.insert(ns+"goodClick",dto);
+		return sqlSession.insert(ns + "goodClick", dto);
 	}
 
 	@Override
 	public int goodClickCancel(GoodDto dto) {
-		return sqlSession.delete(ns+"goodClickCancel",dto);
+		return sqlSession.delete(ns + "goodClickCancel", dto);
 	}
 
-	
 	@Override
 	public List<BroadCastingDto> broadCastAllList() {
-		return sqlSession.selectList(ns + ".broadCastAllList");
+		return sqlSession.selectList(ns + "broadCastAllList");
 	}
 
 	@Override
 	public List<BroadCastingDto> singerScheduleList(String s_name) {
-		return sqlSession.selectList(ns + ".singerScheduleList", s_name);
+		return sqlSession.selectList(ns + "singerScheduleList", s_name);
 	}
-	
-
-
 
 //	@Override
 //	public int goodClickCancel(BoardPK boardPK) {
@@ -136,7 +129,6 @@ public class BoardDaoImpl implements BoardDao {
 //		return sqlSession.selectOne(ns + "goodCount", boardPK);
 //	}
 
-	
 //	@Override
 //	public int commentCount(BoardPK boardPK) {
 //		return sqlSession.selectOne(ns + "commentcount", boardPK);

@@ -3,7 +3,6 @@ package com.web.curation.service;
 import java.util.List;
 
 import com.web.curation.dto.BoardDto;
-import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.ReplyDto;
@@ -16,7 +15,7 @@ public interface BoardService {
 	//가수 디테일 
 	SingerDto singerSearch(int s_idx);
 	//메인 리스트 (좋아요 순)
-	List<BoardDto> mainlist(int b_type, int page);
+	List<BoardDto> mainlist(int b_type);
 		
 	public void insertVideo(String s_name); // 네이버 동영상 DB에 넣기
 	public void insertArticle(String s_name); // 네이버 기사 DB에 넣기

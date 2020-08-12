@@ -166,6 +166,8 @@ public class CommuController {
 	@ApiOperation("디테일 댓글 리스트 + 5개씩 페이징")
 	@GetMapping("/detail/replylist/{co_idx}")
 	public ResponseEntity<List<CommuReply>> getDetailReplyList(@PathVariable int co_idx, @RequestParam("page") int page) {
+		System.out.println("스크롤 시켰다 ");
+		
 		List<CommuReply> showList = new ArrayList<>();
 		try {
 			List<CommuReply> list = commuService.getDetailReplyList(co_idx);

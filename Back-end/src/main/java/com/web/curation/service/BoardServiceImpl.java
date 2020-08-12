@@ -14,10 +14,8 @@ import org.springframework.stereotype.Service;
 
 import com.web.curation.dao.BoardDao;
 import com.web.curation.dto.BoardDto;
-import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.GoodDto;
-import com.web.curation.dto.Pagenation;
 import com.web.curation.dto.ReplyDto;
 import com.web.curation.dto.SingerDto;
 
@@ -58,31 +56,8 @@ public class BoardServiceImpl implements BoardService {
 	
 	
 	@Override
-	public List<BoardDto> mainlist(int b_type, int page) {
-		
-		Pagenation dto = pagenation(b_type,page);
+	public List<BoardDto> mainlist(int b_type) {
 		return boardDao.mainlist(b_type);
-	}
-
-	
-	private Pagenation pagenation(int b_type, int page) {
-		
-		int lastPageRemain = list.size() % 5;
-		int lastPage = list.size() - lastPageRemain;
-		page = 5 * page - 5;
-		// 5개씩 보여주기
-		if (page < lastPage) {
-			for (int i = page; i < page + 5; i++) {
-				showList.add(list.get(i));
-			}
-		} else if (page == lastPage) {
-			for (int i = page; i < page + lastPageRemain; i++) {
-				showList.add(list.get(i));
-			}
-		}
-		Pagenation dto = new Pagenation();
-		
-		return dto;
 	}
 
 	// 네이버 동영상 DB에 넣기
