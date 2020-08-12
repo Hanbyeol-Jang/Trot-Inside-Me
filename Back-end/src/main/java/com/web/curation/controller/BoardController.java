@@ -74,7 +74,7 @@ public class BoardController {
 	@ApiOperation(value = "메인 리스트 ")
 	public ResponseEntity<List<BoardDto>> mainList(@PathVariable int b_type, @RequestParam int page) {
 		List<BoardDto> showList = new ArrayList<BoardDto>();
-		List<BoardDto> list = boardService.mainlist(b_type);
+		List<BoardDto> list = boardService.mainlist(b_type,page);
 		int lastPageRemain = list.size() % 5;
 		int lastPage = list.size() - lastPageRemain;
 		page = 5 * page - 5;

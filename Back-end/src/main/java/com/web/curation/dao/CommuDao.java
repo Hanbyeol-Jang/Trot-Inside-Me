@@ -16,6 +16,8 @@ public interface CommuDao {
 	int addCommu(CommuDto dto);
 	//게시글 삭제
 	int deleteCommu(int co_idx);
+	//게시글 수정
+	int updateDetail(CommuDto dto);
 	//게시글 디테일
 	CommuDto getCommuDetail(CoGoodDto gdto);
 	//게시글 디테일 댓글 리스트 

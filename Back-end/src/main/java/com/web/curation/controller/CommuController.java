@@ -8,11 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +31,7 @@ import com.web.curation.service.UserService;
 import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
-@RestController
+@Controller
 @RequestMapping("/community")
 public class CommuController {
 
@@ -163,7 +165,7 @@ public class CommuController {
 	// 디테일 댓글 리스트 + 5개씩 페이징
 	@ApiOperation("디테일 댓글 리스트 + 5개씩 페이징")
 	@GetMapping("/detail/replylist/{co_idx}")
-	public ResponseEntity<List<CommuReply>> getDetailReplyList(@PathVariable int co_idx, @RequestParam int page) {
+	public ResponseEntity<List<CommuReply>> getDetailReplyList(@PathVariable int co_idx, @RequestParam("page") int page) {
 		List<CommuReply> showList = new ArrayList<>();
 		try {
 			List<CommuReply> list = commuService.getDetailReplyList(co_idx);
@@ -187,21 +189,21 @@ public class CommuController {
 		}
 	}
 
-	// 게시물 디테일 삭제
-//	@ApiOperation("게시물 디테일 삭제")
-//	@DeleteMapping("/detail/delete/{co_idx}")
-//	public ResponseEntity<String> deleteDetail(@PathVariable int co_idx, HttpServletRequest request) {
-//		UserDto udto = userService.getTokenInfo(request);
-//		if (udto.getU_name().equals("F")) {
-//			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//		} else {
-//			if (commuService.deleteDetail(co_idx)) {
-//				return new ResponseEntity<String>("디테일에서 게시글 삭제 완료", HttpStatus.OK);
-//			} else {
-//				return new ResponseEntity<String>("디테일에서 게시글 삭제 에러 ", HttpStatus.NOT_FOUND);
-//			}
-//		}
-//	}
+	 //게시물 디테일 수정
+	@ApiOperation("게시물 디테일 수정")
+	@PutMapping("/update")
+	public ResponseEntity<String> updateDetail(CommuDto dto, HttpServletRequest request) {
+		UserDto udto = userService.getTokenInfo(request);
+		if (udto.getU_name().equals("F")) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		} else {
+			if (commuService.updateDetail(dto)) {
+				return new ResponseEntity<String>("디테일에서 게시글 수정 완료", HttpStatus.OK);
+			} else {
+				return new ResponseEntity<String>("디테일에서 게시글 수정 에러 ", HttpStatus.NOT_FOUND);
+			}
+		}
+	}
 
 	// 댓글 추가
 	@ApiOperation("댓글 추가")

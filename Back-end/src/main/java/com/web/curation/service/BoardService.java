@@ -16,7 +16,7 @@ public interface BoardService {
 	//가수 디테일 
 	SingerDto singerSearch(int s_idx);
 	//메인 리스트 (좋아요 순)
-	List<BoardDto> mainlist(int b_type);
+	List<BoardDto> mainlist(int b_type, int page);
 		
 	public void insertVideo(String s_name); // 네이버 동영상 DB에 넣기
 	public void insertArticle(String s_name); // 네이버 기사 DB에 넣기
