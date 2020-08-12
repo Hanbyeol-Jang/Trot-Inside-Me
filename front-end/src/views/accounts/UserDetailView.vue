@@ -9,12 +9,17 @@
           size="120"
           >
           <v-img 
+            v-if="user.u_profileImg"
+            :src="user.u_profileImg">
+          </v-img>
+          <v-img
+            v-else
             src="@/assets/image/user_default.png">
           </v-img>
         </v-avatar>
         <div class="d-flex align-center">
           <div class="d-flex flex-column">
-            <div></div>
+            <div>{{ user.u_name }}</div>
             <div><i class="fas fa-at mr-1"></i></div>
           </div>
         </div>
@@ -23,9 +28,19 @@
   </div>
 </template>
 
-<script> 
+<script>
+import { mapState, mapActions } from 'vuex'
 export default {
-    name: 'UserDetailView',
+  name: 'UserDetailView',
+  computed: {
+    ...mapState(['user']),
+  },
+  methods: {
+    ...mapActions(['getUser']),
+  },
+  created() {
+    this.getUser()
+  },
 }
 </script>
 
