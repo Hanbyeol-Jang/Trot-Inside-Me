@@ -3,30 +3,98 @@
 		 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.web.curation.dao.BoardDao">
-	<!-- 게시물 좋아요 클릭 -->
-	<insert id="goodClick">
-		insert into Good(b_type, b_idx, u_email)
-		value(#{b_type}, #{b_idx}, #{u_email});
-	</insert>
-	
-	<!-- 게시물 좋아요 클릭취소 -->
-	<delete id="goodClickCancel">
-		delete	from Good
-		where 	b_type = #{b_type} AND
-				b_idx = #{b_idx} AND 
-				u_email = #{u_email};
-	</delete>
-
-	<!-- 좋아요 수 출력  -->
-	<select id="goodCount" parameterType="int" resultType="int">
-		SELECT 	count(u_email)
-		FROM 	Board b left outer join Good g
-				ON b.b_type =g.b_type and b.b_idx = g.b_idx
-		where	b.b_type = #{b_type} and
-				b.b_idx	 = #{b_idx};
+ 	
+ 	
+ 	<!-- 편성표 리스트 출력 -->
+	<select id="singerAllList" resultType="com.web.curation.dto.SingerDto">
+		select * from Singer;
+	</select>
+ 	<select id="singerSearch" parameterType="int" resultType="com.web.curation.dto.SingerDto">
+		select * from Singer where s_idx = #{s_idx};
 	</select>
 	
-	<!-- 댓글 작성 -->
+	<!-- 비디오 추가 -->
+	<insert id="addvideo">
+		insert into Board (b_type,b_url,b_title,b_content,b_member,b_thumbnail,b_date)
+		values(1,#{b_url},#{b_title},#{b_content},#{b_member},#{b_thumbnail},#{b_date})
+	</insert>
+
+	<!-- 기사 추가 -->
+	<insert id="addarticle">
+		insert into Board
+		(b_type, b_url,b_title,b_member,b_thumbnail,b_date,b_company)
+		values(2,#{b_url},#{b_title},#{b_member},#{b_thumbnail},#{b_date},#{b_company})
+	</insert>
+
+	<!-- 비디오 리스트 조회 -->
+	<select id="selectvideolist" resultType="BoardDto">
+		select *
+		from Board
+		where 1=1
+		and b_member = #{s_name}
+		and b_type = 1
+		order by b_idx desc
+		
+	</select>
+
+	<!-- 디비에 해당 번호의 동영상이 있는지 확인 -->
+	<select id="isurl" resultType="Boolean">
+		select Count(*) from Board
+		where 1=1 
+		and b_type = 1
+		and b_url like CONCAT("%", #{vno}, "%") and b_member = #{name}
+
+	</select>
+
+	<!-- 디비에 해당 url의 기사가 있는지 확인 -->
+	<select id="isurl2" resultType="Boolean">
+		select Count(*) from Board
+		where 1=1
+		and b_type = 2
+		and b_url like CONCAT("%", #{url}, "%") and b_member = #{name}
+
+	</select>
+
+	<!-- 기사 리스트 조회 -->
+	<select id="selectarticlelist" resultType="BoardDto">
+		select *
+		from Board
+		where 1=1
+		and b_member = #{s_name}
+		and b_type = 2
+		order by b_idx desc;
+	</select>
+	
+	<!-- 동영상 디테일 -->
+	<select id="videodetail" resultType="BoardDto">
+		select * 
+		from Board
+		where 1=1
+		and b_type = 1
+		and b_idx = #{b_idx}
+		<!-- and b_member = (select s_name from Singer where s_idx = #{s_idx}) -->
+	</select>
+	<!-- 기사 디테일 -->
+	<select id="articledetail" resultType="BoardDto">
+		select * 
+		from Board
+		where 1=1
+		and b_type = 2
+		and b_idx = #{b_idx}
+	</select>
+	
+	<!-- 편성표 리스트 출력 -->
+	<select id="broadCastAllList" resultType="com.web.curation.dto.BroadCastingDto">
+		select * from BroadCasting where bc_member = "";
+	</select>
+	
+	<!-- 가수 스케줄 출력 -->
+	<select id="singerScheduleList" parameterType="String" resultType="com.web.curation.dto.BroadCastingDto">
+		select * from BroadCasting where bc_member = #{s_name};
+	</select>
+ 	
+ 	
+ 	<!-- 댓글 작성 -->
 	<insert id="addcomment">
 		insert into Reply (r_content, u_email, b_type, b_idx)
 		value(#{r_content}, #{u_email}, #{b_type}, #{b_idx});
@@ -40,19 +108,36 @@
 				b_idx = #{b_idx} AND 
 				u_email = #{u_email} ;
 	</delete>
+ 		<!-- 게시물 좋아요 클릭 -->
+	<insert id="goodClick">
+		insert into Good(b_type, b_idx, u_email)
+		value(#{b_type}, #{b_idx}, #{u_email});
+	</insert>
 	
+	<!-- 게시물 좋아요 클릭취소 -->
+	<!-- <delete id="goodClickCancel">
+		delete	from Good
+		where 	b_type = #{b_type} AND
+				b_idx = #{b_idx} AND 
+				u_email = #{u_email};
+	</delete>
+ -->
+	<!-- 좋아요 수 출력  -->
+<!-- 	<select id="goodCount" parameterType="int" resultType="int">
+		SELECT 	count(u_email)
+		FROM 	Board b left outer join Good g
+				ON b.b_type =g.b_type and b.b_idx = g.b_idx
+		where	b.b_type = #{b_type} and
+				b.b_idx	 = #{b_idx};
+	</select>
+	 -->
 	<!-- 댓글 수 출력  -->
-	<select id="commentcount" parameterType="int" resultType="int">
+<!-- 	<select id="commentcount" parameterType="int" resultType="int">
 		SELECT 	COUNT(r.r_idx)
 		FROM 	Board b left outer join Reply r
 				ON b.b_type =r.b_type and b.b_idx = r.b_idx
 		where	b.b_type = #{b_type} AND
 				b.b_idx = #{b_idx};
-	</select>
- 	
- 	<select id="getList" resultType="com.web.curation.dto.BoardReplyGood">
- 		select 
- 	</select>
- 	
+	</select> -->
  </mapper>
         

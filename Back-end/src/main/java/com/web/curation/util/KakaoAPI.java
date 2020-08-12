@@ -121,11 +121,16 @@ public class KakaoAPI {
 			String nickname = properties.getAsJsonObject().get("nickname").getAsString();
 			String email = kakao_account.getAsJsonObject().get("email").getAsString();
 
-			userDto.setU_email(email);
-			userDto.setU_name(properties.getAsJsonObject().get("nickname").getAsString());
-			userDto.setU_thumbnail(properties.getAsJsonObject().get("thumbnail_image").getAsString());
-			userDto.setU_profileImg(properties.getAsJsonObject().get("profile_image").getAsString());
-			System.out.println("logger - kakaoDto 정보: " + userDto);
+	         userDto.setU_email(email);
+	         userDto.setU_name(properties.getAsJsonObject().get("nickname").getAsString());
+	         if(properties.getAsJsonObject().get("thumbnail_image").getAsString()!=null) {
+	            userDto.setU_thumbnail(properties.getAsJsonObject().get("thumbnail_image").getAsString());
+	            } else {userDto.setU_thumbnail("");}
+	         if(properties.getAsJsonObject().get("profile_image").getAsString() != null) {
+	         userDto.setU_profileImg(properties.getAsJsonObject().get("profile_image").getAsString());
+	         } else {
+	            userDto.setU_profileImg("");
+	         }
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
