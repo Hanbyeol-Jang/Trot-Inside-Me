@@ -1,5 +1,6 @@
 <template >
 <div>
+    <br>
   <v-card
     hover 
     max-width="700"
@@ -12,7 +13,7 @@
       </v-list-item-avatar>
       <v-list-item-content class="d-flex justify-space-between">
         <div class="d-flex">
-            <v-list-item-title >{{username}}</v-list-item-title>
+            <v-list-item-title >{{communityUser}}</v-list-item-title>
             <div class="mr-1" v-show="deleteuser">
                 <v-btn depressed color="error" @click="deleteArticle">삭제</v-btn>
             </div>
@@ -46,16 +47,16 @@
         <v-btn icon>
             <v-icon large color="blue darken-2">mdi-message-text</v-icon>
             <div class="my-2 mx-2">
-            {{commentCnt}}
+                {{commentCnt}}
             </div>
         </v-btn>
         </div>
     </v-card-actions>
-    <CommentList/>
+    <CommentList :commentCnt="commentCnt" :communityIdx="communityIdx" @add-comment="addcomment" @delete-comment="deleteComment"/>
   </v-card>
     <br>
-    <hr>  
-    <br></div>
+    <br>
+    </div>
 </template>
 
 <script>
@@ -70,11 +71,13 @@ export default {
     },
     data(){
         return{
-            username:'',
+            userImg:'',
+            communityImg:'',
             communityDate:'',
             communityContent:'',
+            communityIdx:0,
             likeCnt:'',
-            commentCnt:'',
+            commentCnt:0,
             showLike: '',
             currentUser:'',
             communityUser:'',
@@ -121,14 +124,34 @@ export default {
             })
         },
 
+        getCommunity(){
+            axios.get(SERVER.URL+`/community/detail/${this.$route.params.communityId}`,this.axiosConfig)
+            .then((reaponse)=>{
+                this.communityDate=reaponse.data.co_date,
+                this.communityContent=reaponse.data.co_content,
+                this.likeCnt=reaponse.data.good_cnt,
+                this.commentCnt=reaponse.data.cr_cnt,
+                this.showLike=reaponse.data.good_flag,
+                this.communityUser=reaponse.data.co_name,
+                this.communityIdx=reaponse.data.co_idx
+                // this.userImg=reaponse.data.co_img
+                this.communityImg=reaponse.data.co_img
+                this.getuser()
+            })
+            .catch((err)=>{
+                console.error(err)
+            })
+        },
+
+
         showLikeChange(){
             const axiosConfig2 = {
               headers:{
                 token: `${this.$cookies.get('auth-token')}`,
                 },
-              params: {co_idx:this.community.co_idx, isgood:this.showLike}
+              params: {co_idx:this.communityIdx, isgood:this.showLike}
             }
-            axios.get(SERVER.URL+`/community/good/${this.community.co_idx}`,axiosConfig2)
+            axios.get(SERVER.URL+`/community/good/${this.communityIdx}`,axiosConfig2)
             .then(()=>{
                 if(this.showLike){
                     this.showLike = 0
@@ -141,13 +164,14 @@ export default {
             .catch((err) => {console.log(err)})
             },
 
+
         deleteArticle(){
             const axiosConfig2 = {
               headers:{
                 token: `${this.$cookies.get('auth-token')}`,
                 },
             }
-            axios.delete(SERVER.URL+`/community/detail/delete/${this.community.co_idx}`,axiosConfig2)
+            axios.delete(SERVER.URL+`/community/detail/delete/${this.communityIdx}`,axiosConfig2)
             .then((response)=>{
                 console.log(response)
                 this.$alert('삭제 완료')
@@ -158,21 +182,31 @@ export default {
             })
         },
 
+
         editArticle(){
-            this.$router.push({ name: 'CommunityUpdateView', params: { communityId: this.community.co_idx, page:this.page }})
+            this.$router.push({ name: 'CommunityUpdateView', params: { communityId: this.communityIdx, page:this.$route.params.page }})
         },
+
+        addcomment(){
+            this.commentCnt += 1
+        },
+
+
+        deleteComment(){
+            this.commentCnt -= 1
+        }
     },
     computed:{
         userimg(){
-            return this.community.userimg
+            return this.userImg
         },
         communityimg(){
-            return this.community.co_img
+            return this.communityImg
         },
     },
     created(){
-        // this.checkLogin(),
-        // this.getuser()
+        this.checkLogin(),
+        this.getCommunity()
     },
 }
 </script>

@@ -13,7 +13,7 @@
           </v-btn>
         </v-col>
     <div v-for="comment in comments" :key="comment.id">
-      <CommentListItem class="mb-3" @comment-delete="commentDelete" :comment="comment"/>
+      <CommentListItem class="mb-3" @delete-comment2="commentDelete" :comment="comment"/>
       <hr>
     </div>
       <br>
@@ -34,10 +34,13 @@ export default {
     CommentListItem,
     InfiniteLoading,
   },
+  props:{
+    commentCnt:Number,
+    communityIdx:Number
+  },
   data(){
     return {
       comments: [],
-      commentsNum: '',
       commentData: {
         content: '',
       },
@@ -46,19 +49,16 @@ export default {
   },
   methods: {
     getComments(){
+      console.log(this.communityIdx)
         const axiosConfig2 = {
           headers:{
             token: `${this.$cookies.get('auth-token')}`,
             },
           params: {co_idx:this.$route.params.communityId, page: this.page}
         }
-        axios.get(SERVER.URL+`/community/detail/1`,axiosConfig2)
+        axios.get(SERVER.URL+`/community/detail/reply/${this.$route.params.communityId}`,axiosConfig2)
         .then((response)=>{
-            console.log(response)
             this.comments = response.data
-            this.commentsNum = response.data.length
-            console.log(this.comments)
-            console.log(this.commentsNum)
         })
         .catch((err)=>{
             console.error(err)
@@ -67,17 +67,21 @@ export default {
 
 
     infiniteHandler($state) {
+      console.log(this.commentCnt)
       const axiosConfig2 = {
         headers:{
           token: `${this.$cookies.get('auth-token')}`,
           },
         params: {co_idx:this.$route.params.communityId, page: this.page+1}
-      }
-      if (parseInt(this.commentsNum / 5) >= this.page){
-        axios.get(SERVER.URL +`/community/list`, axiosConfig2)
+      } 
+      if (parseInt(this.commentCnt / 5)+1 >= this.page){
+        console.log(axiosConfig2)
+        axios.get(SERVER.URL +`/community/detail/reply/${this.$route.params.communityId}`, axiosConfig2)
           .then(res => {
             setTimeout(() => {
-              this.page += 1
+              this.page+=1
+              console.log(res)
+              console.log(this.page)
               this.comments.push(...res.data)
               $state.loaded()
             }, 1000);
@@ -90,8 +94,17 @@ export default {
 
 
     commentCreate(){
-      console.log(123)
-      console.log(this.commentData.content)
+        this.$emit('add-comment')
+        this.page = 1
+        const json = {
+            co_idx : this.$route.params.communityId ,
+            cr_content : this.commentData.content
+        }
+        const axiosConfig2 = {
+            headers:{
+                token : `${this.$cookies.get('auth-token')}`
+            }
+        }
       if (!this.commentData.content){
         this.$alert('내용을 작성해주세요')
       } else{
@@ -99,20 +112,12 @@ export default {
           this.$alert('로그인이 필요합니다')
           this.commentData.content = null
         } else{
-            const axiosConfig2 = {
-              headers:{
-                token: `${this.$cookies.get('auth-token')}`,
-                },
-            }
-            const dto = {
-                "co_idx": this.$route.params.communityId,
-                "cr_content": this.commentData.content,
-            }
--          axios.post(SERVER.URL + `/community/reply/add/${this.$route.params.communityId}`,dto,axiosConfig2)
+-          axios.post(SERVER.URL + `/community/reply/add`,json,axiosConfig2)
            .then((res) => {
              console.log(res)
-              this.commentData.content = null
-              this.comments.push(res.data.data)
+             this.page = 1
+              this.commentData.content = ''
+              this.comments = res.data
             })
             .catch((err) => { console.log(err.response.data) })
         }
@@ -120,10 +125,8 @@ export default {
     },
 
 
-    commentDelete(commentId){
-      this.comments = this.comments.filter(function (comment){
-        return comment.id !== commentId
-      })
+    commentDelete(){
+      this.$emit('delete-comment')
     },
 
 

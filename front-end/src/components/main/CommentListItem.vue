@@ -30,7 +30,12 @@ export default {
   },
   data(){
     return {
-      isAuth: null,
+      isAuth: false,
+      axiosConfig :{
+          headers:{
+              token : `${this.$cookies.get('auth-token')}`
+          },
+      }
     }
   },
   computed: {
@@ -43,41 +48,41 @@ export default {
   },
   methods: {
     deleteComment(){
+      const idx = this.comment.cr_idx
       this.$confirm(
         {
           message: `삭제하시겠습니까?`,
           button: {
-            yes: 'Yes',
-            no: 'No',
+            yes: '삭제하기',
+            no: '아니요',
           },
           callback: confirm => {
             if (confirm) {
-              axios.delete(SERVER.URL + `/community/comments/${this.comment.id}/`, { headers: { Authorization: `Token ${this.$cookies.get("auth-token")}` }})
-                .then(() => {
-                  this.$emit('comment-delete', this.comment.id)
-                })
-                .catch((err) => { console.log(err.response.data) })
+                  this.$emit('delete-comment2',idx)
             }
           }
         }
       )
     },
     checkAuth(){
-      if (this.$cookies.get("auth-token")){
-        axios.get(SERVER.URL + '/accounts/', { headers: { Authorization: `Token ${this.$cookies.get("auth-token")}` }})
-          .then((response) => {
-            if (response.data.data.id === this.comment.user.id){
+      axios.get(SERVER.URL+`/admin/userNow`,this.axiosConfig)
+      .then((reaponse)=>{
+          const currentUser = reaponse.data.u_name
+          if(Number(reaponse.data.u_isAdmin)){
               this.isAuth = true
-            } else{
-              this.isAuth = false
-            }
-              })
-          .catch((err) => { console.log(err.response.data) })
-        }
+          }else{
+              if (this.communityUser === currentUser){
+                  this.isAuth = true
+              }
+          }
+      })
+      .catch((err)=>{
+          console.error(err)
+      })
     }
   },
   mounted(){
-    // this.checkAuth()
+    this.checkAuth()
   },
 }
 </script>
