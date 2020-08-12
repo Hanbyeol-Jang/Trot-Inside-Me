@@ -241,11 +241,17 @@ public class CommuController {
 				List<CommuReply> list = commuService.getDetailReplyList(dto.getCo_idx());
 				List<CommuReply> showList = new ArrayList<>();
 				if (list != null) {
-					for (int i = 1; i <= 5; i++) {
-						showList.add(list.get(i));
-					}
-					return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
-				}
+		               if(list.size()<5) {
+		                  for (int i = 0; i < list.size(); i++) {
+		                     showList.add(list.get(i));
+		                  }
+		               }else {
+		                  for (int i = 0; i < 5; i++) {
+		                     showList.add(list.get(i));
+		                  }
+		               }
+		               return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
+		            }
 			}
 		}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
