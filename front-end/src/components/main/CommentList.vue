@@ -18,6 +18,7 @@
       <br>
       <!-- <p class="text-center" v-if="!comments.length">No results :( </p> -->
       <infinite-loading  @infinite="infiniteHandler"></infinite-loading>
+      <ScrollTopButton />
 </v-card-text>
 </template>
 
@@ -26,12 +27,15 @@ import axios from 'axios'
 import CommentListItem from '@/components/main/CommentListItem'
 import InfiniteLoading from 'vue-infinite-loading'
 import SERVER from '@/api/drf'
+import ScrollTopButton from './ScrollTopButton'
+
 
 export default {
   name: 'CommentList',
   components: {
     CommentListItem,
     InfiniteLoading,
+    ScrollTopButton,
   },
   props:{
     commentCnt:Number,
@@ -65,8 +69,6 @@ export default {
 
 
     infiniteHandler($state) {
-      console.log("스크롤")
-      console.log("밑에 찍었다.", this.page)
       const axiosConfig2 = {
         headers:{
           token: `${this.$cookies.get('auth-token')}`,
@@ -80,7 +82,6 @@ export default {
               this.page+=1
               this.comments.push(...res.data)
               $state.loaded()
-              console.log('페이지 증가',this.page)
             }, 1000);
           })
           .catch(err => console.log(err))
@@ -91,7 +92,6 @@ export default {
 
 
     commentCreate(){
-        console.log("생성전페이지",this.page)
         const json = {
             co_idx : this.$route.params.communityId ,
             cr_content : this.commentData.content
@@ -110,15 +110,11 @@ export default {
         } else{
 -          axios.post(SERVER.URL + `/community/replyadd`,json,axiosConfig2)
            .then((res) => {
-             console.log(res)
               this.$emit('add-comment')
               this.page = 1
               this.commentData.content = ''
               this.comments = []
               this.comments.push(...res.data)
-              console.log("글생성!", this.page)
-              // this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
-              this.$refs.InfiniteLoading
             })
             .catch((err) => { console.log(err.response.data) })
         }
