@@ -22,24 +22,26 @@ public interface BoardDao {
 	public List<BoardDto> selectArticleList(String s_name); // s_name에 대한 전체 기사 리스트 출력
 	public boolean isUrl(String vno,String name); // 네이버 동영상 vno가 db에 있는지 확인
 	boolean isUrl2(String url, String name); // 네이버 기사 url이 db에 있는지 확인
-	public BoardDto videoDetail(int b_idx); // 동영상(b_idx) 디테일
-	public BoardDto articleDetail(int b_idx); // 기사(b_idx) 디테일
-	List<BroadCastingDto> broadCastAllList(); //편성표 전체 출력
-	List<BroadCastingDto> singerScheduleList(String s_name);//가수 스케줄 리스트 출력
+	
+	//기사+동영상 디테일 
+	public BoardPK detail(GoodDto dto);
 	
 	//댓글 리스트 
-	List<BoardDto> replylist(int b_idx);
+	List<ReplyDto> replylist(GoodDto b_idx);
 	/* 댓글 작성 */
 	int addComment(ReplyDto replyDto);
 
 	/* 댓글 삭제 */
-	int deleteComment(ReplyDto replyDto);
+	int deleteComment(GoodDto replyDto);
 	/* 좋아요 클릭 */
 	int goodClick(GoodDto dto);
 	/* 좋아요 취소 */
 	int goodClickCancel(GoodDto dto);
 	
 
+	List<BroadCastingDto> broadCastAllList(); //편성표 전체 출력
+	List<BroadCastingDto> singerScheduleList(String s_name);//가수 스케줄 리스트 출력
+	
 //	/* 좋아요 취소 */
 //	int goodClickCancel(BoardPK boardPK);
 //

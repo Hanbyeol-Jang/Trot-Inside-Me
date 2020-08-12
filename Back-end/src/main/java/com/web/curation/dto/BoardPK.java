@@ -6,9 +6,6 @@ import lombok.Data;
 public class BoardPK {
 	private int b_idx;
 	private int b_type;
-//	private int b_good;
-//	private int b_bookmard;
-//	private int b_reply;
 	private String b_title;
 	private String b_thumbnail;
 	private String b_url;

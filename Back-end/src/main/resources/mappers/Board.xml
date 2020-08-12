@@ -14,7 +14,34 @@
 	</select>
 	
 	<!-- 전체 영상, 기사 리슽  -->
-	
+	<select id="mainlist">
+		select  b_idx,
+			b_type,
+			b_title,
+			b_thumbnail ,
+			b_url ,
+			b_date ,
+			b_member ,
+			b_company,
+			b_content ,
+			(	select 	COUNT(*) 
+				from ssafy_trot.Board 	
+			) as b_cnt,
+			(	select 	COUNT(*) 
+				from 	ssafy_trot.Reply r 
+				where 	1=1 
+				and 	r.b_idx = b.b_idx
+				and		r.b_type =b.b_type 
+			) as br_cnt,
+			(
+				SELECT COUNT(*) 
+				from ssafy_trot.Good g
+				where 1=1
+				and 	g.b_idx = b.b_idx
+				and		g.b_type =b.b_type 
+			) as good_cnt
+		from ssafy_trot.Board b;
+	</select>
 	
 	<!-- 비디오 추가 -->
 	<insert id="addvideo">
@@ -68,39 +95,67 @@
 		order by b_idx desc;
 	</select>
 	
-	<!-- 동영상 디테일 -->
-	<select id="videodetail" resultType="BoardDto">
-		select * 
-		from Board
-		where 1=1
-		and b_type = 1
-		and b_idx = #{b_idx}
-		<!-- and b_member = (select s_name from Singer where s_idx = #{s_idx}) -->
-	</select>
-	<!-- 기사 디테일 -->
-	<select id="articledetail" resultType="BoardDto">
-		select * 
-		from Board
-		where 1=1
-		and b_type = 2
-		and b_idx = #{b_idx}
+	
+	<!-- 디테일 -->
+	<select id="detail" resultType="BoardPK">
+		select 	
+			b_idx, 
+			b_type,
+			b_title,
+			b_thumbnail ,
+			b_url,
+			b_date ,
+			b_company,
+			b_content,
+			(	select 	COUNT(*) 
+				from 	ssafy_trot.Reply r 
+				where 	1=1 
+				and 	r.b_idx = b.b_idx
+				and		r.b_type =b.b_type 
+			) as br_cnt,
+			(
+				SELECT COUNT(*) 
+				from ssafy_trot.Good g
+				where 1=1
+				and 	g.b_idx = b.b_idx
+				and		g.b_type =b.b_type 
+			) as good_cnt
+			<if test="u_email  != '' and u_email   != null " >
+			,(
+				select COUNT(*)
+				from ssafy_trot.Good g
+				where 1 =1
+				and g.b_idx =b.b_idx
+				and g.b_type =b.b_type
+				and g.u_email =  #{u_email}
+			)as good_flag
+			</if>
+		from ssafy_trot.Board b
+		where 1=1 
+		and b_type =  #{b_type}
+		and b_idx = #{b_idx};
 	</select>
 	
-	<!-- 편성표 리스트 출력 -->
-	<select id="broadCastAllList" resultType="com.web.curation.dto.BroadCastingDto">
-		select * from BroadCasting where bc_member = "";
+	<select id="replylist" resultType="ReplyDto">
+		select 	r.r_idx,
+				r.r_content,
+				r.u_email as r_email,
+				ui.u_name as r_name,
+				ui.u_profileImg as r_profileImg,
+				r.b_type,
+				r.b_idx
+		from ssafy_trot.Reply r 
+		left outer join ssafy_trot.UserInfo ui
+				on ui.u_email = r.u_email 
+		where 	r.b_idx = #{b_idx}
+				and r.b_type = #{b_type}
+		order by r.r_idx desc;
 	</select>
 	
-	<!-- 가수 스케줄 출력 -->
-	<select id="singerScheduleList" parameterType="String" resultType="com.web.curation.dto.BroadCastingDto">
-		select * from BroadCasting where bc_member = #{s_name};
-	</select>
- 	
- 	
  	<!-- 댓글 작성 -->
 	<insert id="addcomment">
 		insert into Reply (r_content, u_email, b_type, b_idx)
-		value(#{r_content}, #{u_email}, #{b_type}, #{b_idx});
+		value(#{r_content}, #{r_email}, #{b_type}, #{b_idx});
 	</insert>
 	
 	<!-- 댓글 삭제 -->
@@ -127,7 +182,16 @@
 		and		u_email = #{u_email};
 	</delete>
 	
+		<!-- 편성표 리스트 출력 -->
+	<select id="broadCastAllList" resultType="com.web.curation.dto.BroadCastingDto">
+		select * from BroadCasting where bc_member = "";
+	</select>
 	
+	<!-- 가수 스케줄 출력 -->
+	<select id="singerScheduleList" parameterType="String" resultType="com.web.curation.dto.BroadCastingDto">
+		select * from BroadCasting where bc_member = #{s_name};
+	</select>
+ 	
 	
 	<!-- 게시물 좋아요 클릭취소 -->
 	<!-- <delete id="goodClickCancel">

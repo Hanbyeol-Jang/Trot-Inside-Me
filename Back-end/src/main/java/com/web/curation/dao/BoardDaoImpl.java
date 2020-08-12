@@ -75,18 +75,13 @@ public class BoardDaoImpl implements BoardDao {
 	}
 
 	@Override
-	public BoardDto videoDetail(int b_idx) {
-		return sqlSession.selectOne(ns + "videodetail", b_idx);
+	public BoardPK detail(GoodDto dto) {
+		return sqlSession.selectOne(ns + "detail", dto);
 	}
 
 	@Override
-	public BoardDto articleDetail(int b_idx) {
-		return sqlSession.selectOne(ns + "articledetail", b_idx);
-	}
-
-	@Override
-	public List<BoardDto> replylist(int b_idx) {
-		return null;
+	public List<ReplyDto> replylist(GoodDto dto) {
+		return sqlSession.selectList(ns+"replylist",dto);
 	}
 
 	@Override
@@ -95,7 +90,7 @@ public class BoardDaoImpl implements BoardDao {
 	}
 
 	@Override
-	public int deleteComment(ReplyDto replyDto) {
+	public int deleteComment(GoodDto replyDto) {
 		return sqlSession.insert(ns + "deletecomment", replyDto);
 	}
 

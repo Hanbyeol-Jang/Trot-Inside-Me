@@ -31,7 +31,7 @@ import com.web.curation.service.UserService;
 import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
-@Controller
+@RestController
 @RequestMapping("/community")
 public class CommuController {
 
@@ -85,7 +85,7 @@ public class CommuController {
 	// 게시글 추가
 	@ApiOperation("게시글 추가")
 	@PostMapping("/add")
-	public ResponseEntity<String> commuAdd(@RequestBody CommuDto dto, HttpServletRequest request) {
+	public ResponseEntity<String> commuAdd( CommuDto dto, HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -186,6 +186,8 @@ public class CommuController {
 				for (int i = page; i < page + lastPageRemain; i++) {
 					showList.add(list.get(i));
 				}
+			}else {
+				return new ResponseEntity<List<CommuReply>>(list, HttpStatus.OK);
 			}
 			return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
 		} catch (Exception e) {
@@ -212,7 +214,7 @@ public class CommuController {
 	// 댓글 추가
 	@ApiOperation("댓글 추가")
 	@PostMapping("/replyadd")
-	public ResponseEntity<List<CommuReply>> addCommuReply(@RequestBody CoReplyDto dto,
+	public ResponseEntity<List<CommuReply>> addCommuReply( CoReplyDto dto,
 			HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
@@ -273,9 +275,7 @@ public class CommuController {
 						return new ResponseEntity<List<CommuReply>>(list, HttpStatus.OK);
 					}
 					return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
-				} else {
-					return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-				}
+				} 
 			}
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}

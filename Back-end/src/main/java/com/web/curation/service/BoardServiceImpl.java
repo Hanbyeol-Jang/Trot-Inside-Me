@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.web.curation.dao.BoardDao;
 import com.web.curation.dto.BoardDto;
+import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.ReplyDto;
@@ -162,19 +163,12 @@ public class BoardServiceImpl implements BoardService {
 
 	// 영상 디테일
 	@Override
-	public BoardDto videoDetail(int b_idx) {
-		return boardDao.videoDetail(b_idx);
-	}
-	@Override
-	public BoardDto articleDetail(int b_idx) {
-		return boardDao.articleDetail(b_idx);
+	public BoardPK detail(GoodDto dto) {
+		return boardDao.detail(dto);
 	}
 
-
-	
-
 	@Override
-	public List<BoardDto> replylist(int b_idx) {
+	public List<ReplyDto> replylist(GoodDto b_idx) {
 		return boardDao.replylist(b_idx);
 	}
 
@@ -185,7 +179,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public boolean deleteComment(ReplyDto replyDto) {
+	public boolean deleteComment(GoodDto replyDto) {
 		return boardDao.deleteComment(replyDto) == 1;
 	}
 	@Override
