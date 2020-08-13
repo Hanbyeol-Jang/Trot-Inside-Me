@@ -29,7 +29,7 @@
 						where 	1=1
 						and		f.s_idx = #{b_idx}
 						and 	f.u_email  =  #{u_email}
-					)as good_flag
+					)as f_flag
 				</if>
 		from ssafy_trot.Singer s
 		where s_idx =#{b_idx};
