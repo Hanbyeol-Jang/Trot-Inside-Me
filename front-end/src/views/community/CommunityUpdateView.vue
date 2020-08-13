@@ -35,11 +35,7 @@ export default {
             user:"",
             axiosConfig:{
               headers:{
-<<<<<<< HEAD
                 token : `${this.$cookies.get('auth-token')}`
-=======
-                Authorization : `Token ${this.$cookies.get('auth-token')}`
->>>>>>> BE-Develop
               }
             },
         }
@@ -53,15 +49,9 @@ export default {
         },
 
         getuser(){
-<<<<<<< HEAD
             axios.get(`${SERVER.URL}/user/getUserInfo`,this.axiosConfig)
                 .then((reaponse)=>{
                 this.currentuser = reaponse.data.u_name
-=======
-            axios.get(`${SERVER.URL}/rest-auth/user/`,this.axiosConfig)
-                .then((reaponse)=>{
-                this.currentuser = reaponse.data.username
->>>>>>> BE-Develop
                 if (this.user !== this.currentuser){
                     this.$alert("잘 못 된 접근입니다.");
                     this.$router.push({name:'Home'})
@@ -73,19 +63,11 @@ export default {
         },
 
         getcommunity(){ 
-<<<<<<< HEAD
             axios.get(SERVER.URL+`/community/detail/${this.$route.params.communityId}`,this.axiosConfig)
             .then((reaponse)=>{
                 this.content=reaponse.data.co_content,
                 this.user=reaponse.data.co_name,
                 this.show_image=reaponse.data.co_img
-=======
-            axios.get(`${SERVER.URL}/community/articles/`+this.$route.params.communityId+'/')
-            .then((reaponse)=>{
-                this.show_image = SERVER.URL+reaponse.data.data.image
-                this.content = reaponse.data.data.content
-                this.user = reaponse.data.data.user.username
->>>>>>> BE-Develop
                 this.getuser()
             })
             .catch((err)=>{
@@ -93,7 +75,6 @@ export default {
             })
         },
 
-<<<<<<< HEAD
         updateCommunity(){
             // const data = new FormData()
             // data.append('content',this.content)
@@ -106,16 +87,6 @@ export default {
               'co_img' : this.image
             }
             axios.put(`${SERVER.URL}/community/update`,data,this.axiosConfig)
-=======
-        updateCommunity(event){
-            event.preventDefault()
-            const data = new FormData()
-            data.append('content',this.content)
-            if (this.$refs.file.$refs.input.files[0]!==undefined){
-              data.append('image',this.image)
-            }
-            axios.post(`${SERVER.URL}/community/`,data,this.axiosConfig)
->>>>>>> BE-Develop
             .then(()=>{
                 this.$router.push({ name: 'CommunityIndexView'})
             })
@@ -125,11 +96,7 @@ export default {
         },
 
         communityImage(){
-<<<<<<< HEAD
           this.image = this.$refs.file.$refs.input.files[0].name
-=======
-          this.image = this.$refs.file.$refs.input.files[0]
->>>>>>> BE-Develop
           this.change_image = URL.createObjectURL(this.image)
           this.flag = true
         },
@@ -137,10 +104,6 @@ export default {
     created(){
         this.checklogin()
         this.getcommunity()
-<<<<<<< HEAD
-=======
-        this.getuser()
->>>>>>> BE-Develop
     },
 }
 </script>

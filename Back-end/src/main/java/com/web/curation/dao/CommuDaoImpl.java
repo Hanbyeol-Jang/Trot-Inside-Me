@@ -1,16 +1,14 @@
 package com.web.curation.dao;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
 import com.web.curation.dto.CommuDto;
-import com.web.curation.dto.CommuReply;
+import com.web.curation.dto.CommuReplyUser;
 
 @Repository
 public class CommuDaoImpl implements CommuDao {
@@ -21,8 +19,8 @@ public class CommuDaoImpl implements CommuDao {
 	String ns="com.web.curation.dao.CommuDao.";
 	
 	@Override
-	public List<CommuDto> getCommuList(HashMap<String, String> map) {
-		return session.selectList(ns+"getCommuList",map);
+	public List<CommuDto> getCommuList() {
+		return session.selectList(ns+"getCommuList");
 	}
 
 	@Override
@@ -36,20 +34,10 @@ public class CommuDaoImpl implements CommuDao {
 	}
 
 	@Override
-	public int updateDetail(CommuDto dto) {
-		return session.update(ns+"updateCommu", dto);
+	public List<CommuReplyUser> getCommuDetail(int co_idx) {
+		return session.selectList(ns+"getCommuDetail", co_idx);
 	}
 
-	@Override
-	public CommuDto getCommuDetail(CoGoodDto gdto) {
-		return session.selectOne(ns+"getCommuDetail", gdto);
-	}
-
-	@Override
-	public List<CommuReply> getDetailReplyList(int co_idx) {
-		return session.selectList(ns+"getDetailReplyList", co_idx);
-	}
-	
 	@Override
 	public int addCommuReply(CoReplyDto dto) {
 		return session.insert(ns+"addCommuReply", dto);
@@ -59,21 +47,5 @@ public class CommuDaoImpl implements CommuDao {
 	public int deleteCommuReply(CoReplyDto dto) {
 		return session.delete(ns+"deleteCommuReply", dto);
 	}
-
-	@Override
-	public int clickGood(CoGoodDto dto) {
-		return session.insert(ns+"clickGood",dto);
-	}
-
-	@Override
-	public int clickGoodCancel(CoGoodDto dto) {
-		return session.delete(ns+"clickGoodCancel",dto);
-	}
-
-	@Override
-	public int deleteDetail(int co_idx) {
-		return session.delete(ns+"deleteDetail", co_idx);
-	}
-
 
 }

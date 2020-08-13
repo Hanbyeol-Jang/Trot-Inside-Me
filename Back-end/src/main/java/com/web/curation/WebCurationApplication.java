@@ -12,5 +12,11 @@ public class WebCurationApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WebCurationApplication.class, args);
 	}
+	
+//	 카카오 통신
+//	@Bean
+//	public ReesTemplate getRestTemplate() {
+//		return new RestTemplate();
+//	}
 
 }

@@ -7,9 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.FollowDto;
-import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.UserDto;
 
 @Repository
@@ -63,11 +61,6 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public int followDelete(FollowDto dto) {
 		return sqlSession.delete(ns+"followDelete",dto);
-	}
-
-	@Override
-	public List<BoardDto> myBoardList(GoodDto gdto) {
-		return sqlSession.selectList(ns+"myBoardList", gdto);
 	}
 	
 	

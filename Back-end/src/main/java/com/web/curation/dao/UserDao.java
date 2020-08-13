@@ -3,9 +3,7 @@ package com.web.curation.dao;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.FollowDto;
-import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.UserDto;
 
 public interface UserDao {
@@ -36,6 +34,5 @@ public interface UserDao {
 	//팔로우 삭제
 	public int followDelete(FollowDto dto);
 
-	//마이페이지 영상, 기사 리스트 
-	public List<BoardDto> myBoardList(GoodDto gdto);
+	
 }

@@ -13,6 +13,5 @@ public interface TimeDao {
 	List<SingerDto> selectSinger();
 	void deleteSingerSchedule();
 	void insertSingerSchedule(List<BroadCastingDto> slist);
-	BroadCastingDto selectBoradCasting(int bc_idx);
 	
 }

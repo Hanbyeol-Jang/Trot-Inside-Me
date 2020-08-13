@@ -13,7 +13,5 @@ public interface TimeService {
 	List<SingerDto> selectSinger();
 	void deleteSingerSchedule();
 	void insertSingerSchedule(List<BroadCastingDto> slist);
-	BroadCastingDto selectBroadCasting(int bc_idx); // 인덱스 하나를 받아 로우 조회
-	
 	
 }

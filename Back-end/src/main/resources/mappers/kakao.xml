@@ -16,19 +16,5 @@
 		insert into UserInfo (u_email,u_name,u_thumbnail,u_profileImg)
 		values (#{u_email},#{u_name},#{u_thumbnail},#{u_profileImg})
 	</insert>
-	
-	<!-- 카카오 정보 업데이트 -->
-	<update id="updatekakao">
-		update UserInfo set u_name = #{u_name}, u_thumbnail = #{u_thumbnail},u_profileImg = #{u_profileImg}, u_accessToken = #{u_accessToken}
-		where 1=1
-		and u_email = #{u_email};
-	</update>
-	
-	<!-- 카카오 서비스 탈퇴 -->
-	<delete id="deletekakao">
-		delete from UserInfo
-		where 1=1
-		and u_email = #{email};
-	</delete>
 </mapper>
         

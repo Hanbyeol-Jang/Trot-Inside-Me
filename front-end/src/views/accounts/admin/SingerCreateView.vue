@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <div class="my-5">
     <v-card
       class="mx-auto mt-5"
@@ -132,14 +131,6 @@ export default {
         }
       }
     },
-=======
-  <div></div>
-</template>
-
-<script>
-export default {
-    name: 'SingerCreateView',
->>>>>>> BE-Develop
 }
 </script>
 

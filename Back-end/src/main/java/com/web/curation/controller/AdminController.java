@@ -5,7 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.ibatis.annotations.Options;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +22,6 @@ import com.web.curation.dto.SingerDto;
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.AdminServcie;
 import com.web.curation.service.UserService;
-import com.web.curation.util.JwtTokenProvider;
-
-import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
@@ -36,33 +32,54 @@ public class AdminController {
 	private UserService userService;
 	
 	@Autowired
-	JwtTokenProvider jwt;
-			
-	@Autowired
 	private AdminServcie adminService;
 	
-	//로그인
-	@ApiOperation("로그인")
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody UserDto user, HttpServletRequest request) {
 		
 		//관리자 로그인 할때 다음 페이지가 관리자가 아니면 안넘어갈 수 있도록 하는 방법이 있는 지 찾아보기. -> 인터 셉터?
-		UserDto dto = userService.getUserInfo(user.getU_email());
-		String token = userService.createToken(dto);
-		
+		String token = userService.createToken(user.getU_email(), user.getU_pw());
         return new ResponseEntity<>(token, HttpStatus.OK);
 	}
 
-	//로그아웃..
 	@GetMapping("/logout")
-	public ResponseEntity<String> logout() {
+	public ResponseEntity<String> logout(HttpSession session) {
+		session.invalidate();
         return new ResponseEntity<>("로그아웃", HttpStatus.OK);
 	}
 	
+	@GetMapping("/test")
+	public ResponseEntity<UserDto> test(HttpServletRequest request){
+		String tokenInfo = userService.getTokenInfo(request);
+		if(tokenInfo.equals("F")) {
+			return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+		}else {
+			UserDto user = userService.getUserInfoToken(tokenInfo);
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		}
+	}
+	
 
-	//관리자 - 편성표 리스트 출력
-	@ApiOperation("편성표 리스트 출력")
-	@GetMapping("/tvlist")
+	//관리자 - 편성표 주소 추가
+	@PostMapping("/broadSchedule/add")
+	public ResponseEntity<String> broadSchedule(@RequestBody AdminDto dto) {
+		if(adminService.addBroadSchedule(dto)) {
+			return new ResponseEntity<String>("편성표 추가 완료",HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>("편성표 추가 에러 ",HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@DeleteMapping("/broadSchedule/delete/{a_idx}")
+	public ResponseEntity<String> DeleteBroadSchedule(@PathVariable int a_idx) {
+		if(adminService.deleteBroadSchedule(a_idx)) {
+			return new ResponseEntity<String>("편성표 삭제 완료",HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>("편성표 삭제 에러 ",HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/broadSchedule/list")
 	public ResponseEntity<List<AdminDto>> broadSchedulelist(){
 		List<AdminDto> list = adminService.getBroadScheduleList();
 		if(list!=null) {
@@ -72,33 +89,7 @@ public class AdminController {
 		}
 	}
 	
-
-	//관리자 - 편성표 주소 추가
-	@ApiOperation("편성표 주소 추가")
-	@PostMapping("/tvadd")
-	public ResponseEntity<String> broadSchedule(@RequestBody AdminDto dto) {
-		if(adminService.addBroadSchedule(dto)) {
-			return new ResponseEntity<String>("편성표 추가 완료",HttpStatus.OK);
-		}else {
-			return new ResponseEntity<String>("편성표 추가 에러 ",HttpStatus.NOT_FOUND);
-		}
-	}
-	
-	//관리자 - 편성표 삭제 
-	@ApiOperation("편성표 삭제 ")
-	@DeleteMapping("/tvdelete/{a_idx}")
-	public ResponseEntity<String> DeleteBroadSchedule(@PathVariable int a_idx) {
-		if(adminService.deleteBroadSchedule(a_idx)) {
-			return new ResponseEntity<String>("편성표 삭제 완료",HttpStatus.OK);
-		}else {
-			return new ResponseEntity<String>("편성표 삭제 에러 ",HttpStatus.NOT_FOUND);
-		}
-	}
-	
-	
-	//관리자 - 가수 리스트 출력
-	@ApiOperation(" 가수 리스트 출력")
-	@GetMapping("/singerlist")
+	@GetMapping("/singer/list")
 	public ResponseEntity<List<SingerDto>> getSingerList(){
 		List<SingerDto> list = adminService.getSingerList();
 		if(list!=null) {
@@ -107,10 +98,7 @@ public class AdminController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	//관리자 - 가수 추가 
-	@ApiOperation("가수 추가 ")
-	@PostMapping("/singeradd")
+	@PostMapping("/singer/add")
 	public ResponseEntity<String> singerAdd(@RequestBody SingerDto dto) {
 		if(adminService.addSinger(dto)) {
 			return new ResponseEntity<String>("가수 추가 완료",HttpStatus.OK);
@@ -119,9 +107,7 @@ public class AdminController {
 		}
 	}
 
-	//관리자 - 가수 삭제 
-	@ApiOperation("가수 삭제 ")
-	@DeleteMapping("/singerdelete/{s_idx}")
+	@DeleteMapping("/singer/delete/{s_idx}")
 	public ResponseEntity<String> deleteSinger(@PathVariable int s_idx) {
 		if(adminService.deleteSinger(s_idx)) {
 			return new ResponseEntity<String>("가수 삭제 완료",HttpStatus.OK);
@@ -129,7 +115,4 @@ public class AdminController {
 			return new ResponseEntity<String>("가수 삭제 에러 ",HttpStatus.NOT_FOUND);
 		}
 	}
-	
-
-	
 }

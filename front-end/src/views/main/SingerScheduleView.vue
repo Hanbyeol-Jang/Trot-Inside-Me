@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
     <v-card
     class="mx-auto mt-5"
     >
@@ -58,19 +57,4 @@ li {
 a {
   color: #42b983;
 }
-=======
-  <div>
-
-  </div>
-</template>
-
-<script>
-export default {
-    name: 'SingerScheduleView',
-}
-</script>
-
-<style>
-
->>>>>>> BE-Develop
 </style>
