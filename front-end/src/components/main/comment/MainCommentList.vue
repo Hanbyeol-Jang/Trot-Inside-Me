@@ -39,7 +39,8 @@ export default {
   },
   props:{
     commentCnt:Number,
-    communityIdx:Number
+    id:Number,
+    type:Number
   },
   data(){
     return {
@@ -56,9 +57,9 @@ export default {
           headers:{
             token: `${this.$cookies.get('auth-token')}`,
             },
-          params: {co_idx:this.$route.params.communityId, page: this.page}
+          params: {page:this.page}
         }
-        axios.get(SERVER.URL+`/community/replylist/${this.$route.params.communityId}`,axiosConfig2)
+        axios.get(SERVER.URL+`/board/replylist/${this.type}/${this.id}`,axiosConfig2)
         .then((response)=>{
             console.log(response)
             this.comments = response.data
@@ -75,10 +76,10 @@ export default {
         headers:{
           token: `${this.$cookies.get('auth-token')}`,
           },
-        params: {co_idx:this.$route.params.communityId, page: this.page+1}
+        params: {page: this.page+1}
       } 
       if (parseInt(this.commentCnt / 5)+1 >= this.page){
-        axios.get(SERVER.URL +`/community/detail/replylist/${this.$route.params.communityId}`, axiosConfig2)
+        axios.get(SERVER.URL +`/board/replylist/${this.type}/${this.id}`, axiosConfig2)
           .then(res => {
             console.log(res.data)
             setTimeout(() => {
@@ -96,8 +97,9 @@ export default {
 
     commentCreate(){
         const json = {
-            co_idx : this.$route.params.communityId ,
-            cr_content : this.commentData.content
+            b_type:this.type,
+            b_idx : this.id ,
+            r_content : this.commentData.content
         }
         const axiosConfig2 = {
             headers:{
@@ -112,7 +114,7 @@ export default {
           this.$alert('로그인이 필요합니다')
           this.commentData.content = ''
         } else{
--          axios.post(SERVER.URL + `/community/replyadd`,json,axiosConfig2)
+-          axios.post(SERVER.URL + `/board/replyadd`,json,axiosConfig2)
            .then((res) => {
               this.$emit('add-comment')
               this.commentData.content = ''
@@ -132,7 +134,7 @@ export default {
           },
         params: {page: this.page}
       }
-        axios.delete(SERVER.URL+`/community/replydelete/${this.$route.params.communityId}/${idx}`,axiosConfig2)
+        axios.delete(SERVER.URL+`/board/replydelete/${this.type}/${this.id}/${idx}`,axiosConfig2)
         .then((response)=>{
             this.$emit('delete-comment')
             this.comments = []

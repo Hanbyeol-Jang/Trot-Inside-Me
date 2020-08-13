@@ -7,6 +7,7 @@
       <v-row dense>
           <v-card>
             <ArticleDetailItem :article="article"/>
+            <hr>
             <v-card-actions class="d-flex justify-space-around">
 
               <div class="d-flex" @click="showLikeChange()">
@@ -24,12 +25,12 @@
                   <v-icon v-show="!showComments">mdi-message-text</v-icon>
                   <v-icon v-show="showComments" large color="blue darken-2">mdi-message-text</v-icon>
                 </v-btn>
-              </div>
                 <div class="my-2 mx-2">
                     {{commentCnt}}
                 </div>
+              </div>
             </v-card-actions>
-            <MainCommentList v-show="showComments" @add-comment="addcomment" @delete-comment="deleteComment" :id="id"/>
+            <MainCommentList v-show="showComments" @add-comment="addcomment" @delete-comment="deleteComment" :commentCnt="commentCnt" :id="id" :type="type"/>
           </v-card>
       </v-row>
     </v-container>
@@ -50,18 +51,18 @@ export default {
   },
   data(){
     return {
-      article: [],
+      article: {},
       likeCnt:'',
       showLike: '',
-      commentCnt:'',
+      commentCnt:0,
       showComments: false,
-      id : '',
-      type:'',
+      id : Number(this.$route.params.articleId),
+      type:2,
     }
   },
   methods: {
     checkId(){
-      this.id = this.$route.params.articleId
+      this.id = Number(this.$route.params.articleId)
     },
 
 
@@ -73,7 +74,6 @@ export default {
       }
       axios.get(SERVER.URL +`/board/detail/2/${this.id}`,axiosConfig)
         .then((response) => {
-          console.log(response)
           this.article = response.data
           this.type = response.data.b_type
           this.likeCnt = response.data.good_cnt
@@ -86,23 +86,27 @@ export default {
 
 
     showLikeChange(){
-      const axiosConfig = {
-          headers:{
-          token: `${this.$cookies.get('auth-token')}`
-          },
-          params: {isgood:this.showLike}
-      }
-      axios.get(SERVER.URL+`/board/good/${this.type}/${this.id}`,axiosConfig)
-      .then(()=>{
-        if(this.showLike){
-            this.showLike = 0
-            this.likeCnt -= 1
-        }else{
-            this.showLike = 1
-            this.likeCnt += 1
+      if (!(this.$cookies.get('auth-token'))){
+          this.$alert(" 로그인을 해주세요")
+      }else{
+        const axiosConfig = {
+            headers:{
+            token: `${this.$cookies.get('auth-token')}`
+            },
+            params: {isgood:this.showLike}
         }
-      })
-      .catch((err) => {console.log(err.response.data)})
+        axios.get(SERVER.URL+`/board/good/${this.type}/${this.id}`,axiosConfig)
+        .then(()=>{
+          if(this.showLike){
+              this.showLike = 0
+              this.likeCnt -= 1
+          }else{
+              this.showLike = 1
+              this.likeCnt += 1
+          }
+        })
+        .catch((err) => {console.log(err.response.data)})
+      }
     },
 
 

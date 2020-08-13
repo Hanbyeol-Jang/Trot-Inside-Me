@@ -89,7 +89,7 @@ export default {
       })
     }
   },
-  mounted(){
+  updated(){
     this.checkAuth()
   },
 }

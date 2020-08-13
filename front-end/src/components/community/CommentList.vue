@@ -113,6 +113,7 @@ export default {
         } else{
 -          axios.post(SERVER.URL + `/community/replyadd`,json,axiosConfig2)
            .then((res) => {
+             console.log(res)
               this.$emit('add-comment')
               this.commentData.content = ''
               this.comments = []
