@@ -108,37 +108,49 @@ public class UserController {
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 
-	@GetMapping("/followadd/{s_idx}")
-	public ResponseEntity<String> followApply(@PathVariable int s_idx, HttpServletRequest request) {
+	@GetMapping("/follow/{s_idx}")
+	public ResponseEntity<Integer> followApply(@PathVariable int s_idx, HttpServletRequest request,
+			@RequestParam("isfollow") int isfollow) {
 		UserDto udto = userService.getTokenInfo(request);
-		FollowDto dto = new FollowDto();
-		dto.setU_email(udto.getU_email());
-		dto.setS_idx(s_idx);
-		if (userService.followApply(dto)) {
-			return new ResponseEntity<>("팔로우 추가 성공", HttpStatus.OK);
+		if (udto.getU_name().equals("F")) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<>("팔로우 추가 실패", HttpStatus.NOT_FOUND);
+			FollowDto dto = new FollowDto();
+			dto.setU_email(udto.getU_email());
+			dto.setS_idx(s_idx);
+			
+			if (isfollow == 1) { // 좋아요 취소
+				if (userService.followDelete(dto)) {
+					isfollow = 0;
+				}
+			} else { // 좋아요 선택
+				if (userService.followApply(dto)) {
+					isfollow = 1;
+				}
+			}
+			return new ResponseEntity<Integer>(isfollow, HttpStatus.OK);
 		}
 	}
-
-	@GetMapping("/followdelete/{s_idx}")
-	public Object FollowDelete(@PathVariable int s_idx, HttpServletRequest request) {
-		FollowDto dto = new FollowDto();
-		dto.setU_email(userService.getTokenInfo(request).getU_email());
-		dto.setS_idx(s_idx);
-		if (userService.followDelete(dto)) {
-			return new ResponseEntity<>("팔로우 삭제 성공", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("팔로우 삭제 실패", HttpStatus.NOT_FOUND);
-		}
-	}
+//
+//	@GetMapping("/followdelete/{s_idx}")
+//	public Object FollowDelete(@PathVariable int s_idx, HttpServletRequest request) {
+//		FollowDto dto = new FollowDto();
+//		dto.setU_email(userService.getTokenInfo(request).getU_email());
+//		dto.setS_idx(s_idx);
+//		if (userService.followDelete(dto)) {
+//			return new ResponseEntity<>("팔로우 삭제 성공", HttpStatus.OK);
+//		} else {
+//			return new ResponseEntity<>("팔로우 삭제 실패", HttpStatus.NOT_FOUND);
+//		}
+//	}
 
 	// 토큰 디코딩.. 유저 정보 반환
 	@ApiOperation("토큰 디코딩.. 유저 정보 반환")
 	@GetMapping("/getUserInfo")
 	public ResponseEntity<UserDto> getUserInfo(HttpServletRequest request) {
 		String token = request.getHeader("token");
-		if (!token.equals("null")) {
+		System.out.println("token-getuserinfo :"+ token);
+		if (token.equals("null")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 		UserDto dto = userService.getTokenInfo(request); // 헤더에서 유저정보 추출
