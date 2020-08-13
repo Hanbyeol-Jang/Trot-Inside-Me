@@ -210,7 +210,8 @@
 			</if>
 		from ssafy_trot.Board b
 		where 1=1 
-		and b_idx = #{b_idx};
+		and b_idx = #{b_idx}
+		and b_type = #{b_type};
 	</select>
 	
 	<select id="replylist" resultType="ReplyDto">

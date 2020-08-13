@@ -191,13 +191,13 @@ public class BoardController {
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 
-	@GetMapping("/videodetail/{b_idx}")
-	@ApiOperation(value = "영상 디테일 ")
-	public ResponseEntity<BoardPK> videoDetail(@PathVariable int b_idx, HttpServletRequest request) {
+	@GetMapping("/detail/{b_type}/{b_idx}")
+	@ApiOperation(value = "영상/기사  디테일 ")
+	public ResponseEntity<BoardPK> videoDetail(@PathVariable("b_type") int b_type, @PathVariable("b_idx") int b_idx, HttpServletRequest request) {
 		String token = request.getHeader("token");
 		GoodDto dto = new GoodDto();
 		dto.setB_idx(b_idx);
-		dto.setB_type(1);
+		dto.setB_type(b_type);
 		if (!token.equals("undefine")) {// 회원
 			dto.setU_email(userService.getTokenInfo(request).getU_email());
 		}
@@ -210,25 +210,6 @@ public class BoardController {
 		}
 	}
 
-	@GetMapping("/articledetail/{b_idx}")
-	@ApiOperation(value = "기사 디테일 ")
-	public ResponseEntity<BoardPK> articleDetail(@PathVariable int b_idx, HttpServletRequest request) {
-		String token = request.getHeader("token");
-		GoodDto dto = new GoodDto();
-		dto.setB_idx(b_idx);
-		dto.setB_type(2);
-		if (!token.equals("undefine")) {// 회원
-			System.out.println("회원이다잉");
-			dto.setU_email(userService.getTokenInfo(request).getU_email());
-		}
-		System.out.println(dto.toString());
-		BoardPK boardDto = boardService.detail(dto);
-		if (boardDto != null) {
-			return new ResponseEntity<BoardPK>(boardDto, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
-	}
 
 	@GetMapping("/replylist/{b_type}/{b_idx}")
 	@ApiOperation(value = "댓글리스트  ")
