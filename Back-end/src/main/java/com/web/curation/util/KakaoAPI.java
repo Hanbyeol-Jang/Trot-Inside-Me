@@ -155,8 +155,8 @@ public class KakaoAPI {
 			 		"            \"image_width\": 640,\r\n" + 
 			 		"            \"image_height\": 640,\r\n" + 
 			 		"            \"link\": {\r\n" + 
-			 		"            \"web_url\": \"http://www.daum.net\",\r\n" + 
-			 		"            \"mobile_web_url\": \"http://m.daum.net\",\r\n" + 
+			 		"            \"web_url\": \"http://i3b202.p.ssafy.io\",\r\n" + 
+			 		"            \"mobile_web_url\": \"http://i3b202.p.ssafy.io\",\r\n" + 
 			 		"            \"android_execution_params\": \"contentId=100\",\r\n" + 
 			 		"            \"ios_execution_params\": \"contentId=100\"\r\n" + 
 			 		"            }\r\n" + 

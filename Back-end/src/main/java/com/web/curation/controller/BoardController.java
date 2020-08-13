@@ -378,7 +378,7 @@ public class BoardController {
 	}
 
 	// 나에게 메세지 보내기 (알림)
-	@GetMapping("/board/tvmsg/{bc_idx}")
+	@GetMapping("/tvmsg/{bc_idx}")
 	public ResponseEntity<String> selectBroadCasting(@PathVariable("bc_idx") int bc_idx, HttpServletRequest request) {
 
 		String useremail = userService.getTokenInfo(request).getU_email();
