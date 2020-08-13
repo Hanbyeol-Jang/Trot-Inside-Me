@@ -29,7 +29,9 @@
     <!-- <v-img :src="communityimg" height=100%></v-img> -->
 
     <v-card-text>
-      {{communityContent}}
+        <h1>
+            {{communityContent}}
+        </h1>
     </v-card-text>
     <hr>
     <v-card-actions class="d-flex justify-space-around">

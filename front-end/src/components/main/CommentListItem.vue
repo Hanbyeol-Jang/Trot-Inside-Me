@@ -1,21 +1,26 @@
 <template>
-  <div class="row">
-    <div class="col-2">
-      <v-avatar color="indigo"><v-icon dark>mdi-account-circle</v-icon></v-avatar>
-      <!-- <b-avatar variant="secondary" :src="profileImage" size="3.5rem"></b-avatar> -->
-    </div>
-    <div class="col-10 pl-2">
-      <div class="d-flex flex-wrap justify-content-between">
-        <div class="d-flex">
-          <h6 class="font-weight-bold">{{ comment.cr_name }}</h6>
-          <!-- <pre class="text-secondary ml-3">{{ updateTime }}</pre> -->
-        </div>
-        <div v-if="isAuth" class="ml-auto">
-          <button class="btn btn-link" @click="deleteComment">삭제</button>
+  <div>
+    <div class="row d-flex align-center">
+      <div class="col-2">
+        <v-avatar color="indigo"><v-icon dark>mdi-account-circle</v-icon></v-avatar>
+        <!-- <b-avatar variant="secondary" :src="profileImage" size="3.5rem"></b-avatar> -->
+      </div>
+      <div class="col-10 pl-2">
+        <div class="d-flex flex-wrap justify-content-between">
+          <div class="d-flex align-center">
+            <h3 class="font-weight-bold">{{ comment.cr_name }}</h3>
+            <!-- <pre class="text-secondary ml-3">{{ updateTime }}</pre> -->
+          </div>
+          <div v-if="isAuth" class="ml-auto">
+            <v-btn depressed outlined color="error" @click="deleteComment">삭제</v-btn>
+          </div>
         </div>
       </div>
-      <span class=""> {{ comment.cr_content }}</span>
     </div>
+        <div class="ml-10 pl-10">
+          <h1 class=""> {{ comment.cr_content }}</h1>
+        </div>
+    <br>
     <hr>
   </div>
 </template>
