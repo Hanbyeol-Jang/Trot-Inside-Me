@@ -79,7 +79,7 @@ public class BoardServiceImpl implements BoardService {
 				int end = vno.indexOf("?");
 				vno = vno.substring(3, end);
 
-				String vsrc = "https://tv.naver.com/embed/" + vno + "?autoPlay=true";
+				String vsrc = "https://tv.naver.com/embed/" + vno;
 				if (isUrl(vno, s_name)) {
 					System.out.println(s_name + "에 대한 " + vno + "가  DB에 있습니다.");
 					continue;
