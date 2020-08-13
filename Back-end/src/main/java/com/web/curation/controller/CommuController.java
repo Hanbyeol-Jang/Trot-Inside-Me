@@ -216,26 +216,31 @@ public class CommuController {
 	@ApiOperation("댓글 추가")
 	@PostMapping("/replyadd")
 	public ResponseEntity<List<CommuReply>> addCommuReply(@RequestBody CoReplyDto dto,
-			HttpServletRequest request) {
+			@RequestParam("page") int page, HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
 			dto.setU_email(udto.getU_email());
 			dto.setCo_idx(dto.getCo_idx());
-			System.out.println("asdasddassd " + dto.getCo_idx());
 			if (commuService.addCommuReply(dto)) {
 				List<CommuReply> list = commuService.getDetailReplyList(dto.getCo_idx());
 				List<CommuReply> showList = new ArrayList<>();
 				if (list != null) {
-					if(list.size()<5) {
-						for (int i = 0; i < list.size(); i++) {
+					int lastPageRemain = list.size() % 5;
+					int lastPage = list.size() - lastPageRemain;
+					page = 5 * page - 5;
+					// 5개씩 보여주기
+					if (page < lastPage) {
+						for (int i = 0; i < page + 5; i++) {
+							showList.add(list.get(i));
+						}
+					} else if (page == lastPage) {
+						for (int i = 0; i < page + lastPageRemain; i++) {
 							showList.add(list.get(i));
 						}
 					}else {
-						for (int i = 0; i < 5; i++) {
-							showList.add(list.get(i));
-						}
+						return new ResponseEntity<List<CommuReply>>(list, HttpStatus.OK);
 					}
 					return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
 				}
