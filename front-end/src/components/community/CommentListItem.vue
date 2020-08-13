@@ -65,7 +65,8 @@ export default {
           },
           callback: confirm => {
             if (confirm) {
-                  this.$emit('delete-comment2',idx)
+              this.isAuth=false
+              this.$emit('delete-comment2',idx)
             }
           }
         }
@@ -73,7 +74,6 @@ export default {
     },
 
     checkAuth(){
-      console.log(1234)
       axios.get(SERVER.URL+`/user/getUserInfo`,this.axiosConfig)
       .then((reaponse)=>{
           const currentUser = reaponse.data.u_name
