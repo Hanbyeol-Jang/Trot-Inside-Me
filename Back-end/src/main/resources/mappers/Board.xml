@@ -221,7 +221,8 @@
 				ui.u_name as r_name,
 				ui.u_profileImg as r_profileImg,
 				r.b_type,
-				r.b_idx
+				r.b_idx,
+				r.r_date
 		from ssafy_trot.Reply r 
 		left outer join ssafy_trot.UserInfo ui
 				on ui.u_email = r.u_email 

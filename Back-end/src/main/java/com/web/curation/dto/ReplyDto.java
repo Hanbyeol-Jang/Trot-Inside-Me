@@ -1,5 +1,7 @@
 package com.web.curation.dto;
 
+import java.sql.Timestamp;
+
 import lombok.Data;
 
 @Data
@@ -11,5 +13,5 @@ public class ReplyDto {
 	private String r_profileImg;
 	private int b_type;
 	private int b_idx;
-
+	private Timestamp r_date;
 }
