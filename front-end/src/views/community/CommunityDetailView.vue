@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import CommentList from '@/components/main/CommentList.vue'
+import CommentList from '@/components/community/CommentList.vue'
 import axios from 'axios'
 import SERVER from '@/api/drf'
 
@@ -201,7 +201,6 @@ export default {
         editArticle(){
             this.$router.push({ name: 'CommunityUpdateView', params: { communityId: this.communityIdx, page:this.$route.params.page }})
         },
-
 
         addcomment(){
             this.commentCnt += 1

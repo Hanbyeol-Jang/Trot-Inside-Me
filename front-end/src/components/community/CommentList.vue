@@ -24,10 +24,10 @@
 
 <script>
 import axios from 'axios'
-import CommentListItem from '@/components/main/CommentListItem'
+import CommentListItem from '@/components/community/CommentListItem'
 import InfiniteLoading from 'vue-infinite-loading'
 import SERVER from '@/api/drf'
-import ScrollTopButton from './ScrollTopButton'
+import ScrollTopButton from '@/components/main/ScrollTopButton'
 
 
 export default {

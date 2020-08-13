@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <iframe width="100%" :src="video.url" class="embed-responsive-item mt-3" allowfullscreen></iframe> -->
     <iframe :src="video.b_url" frameborder='no' scrolling='no' marginwidth='0' marginheight='0' WIDTH=100% HEIGHT=300 allow='autoplay' allowfullscreen></iframe>
 
     <hr>
