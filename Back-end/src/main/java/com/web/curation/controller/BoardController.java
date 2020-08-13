@@ -405,7 +405,6 @@ public class BoardController {
 			System.out.println("실행");
 			result = youtubeAPI.search(keyword);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return new ResponseEntity<String>(result, HttpStatus.OK);
