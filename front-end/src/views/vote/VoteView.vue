@@ -1,8 +1,8 @@
 <template>
-  <div align="center mt-5">
+  <div align="center mt-8">
     <v-btn
         color="pink"
-        class="button-bottom"
+        class="mt-4"
         dark
         @click="goVote"
     >
@@ -19,8 +19,8 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import axios from 'axios'
-import SERVER from '@/api/drf'
+// import axios from 'axios'
+// import SERVER from '@/api/drf'
 // import VoteMoving from '@/components/vote/VoteMoving'
 import ScrollTopButton from '@/components/main/ScrollTopButton'
 
@@ -38,22 +38,47 @@ export default {
   },
   methods:{
     ...mapActions(['getUser']),
-    getuser() {
-      axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo, this.config)
-        .then((reaponse)=>{
-          if(reaponse.data.u_hasVote===0){
-            this.$router.push({ name: 'VoteLocalSelectView'})
-          }
-        })
-        .catch((err)=>{ console.error(err) })
-      },
-          goVote(){
-            this.$router.push({ name: 'VoteLocalSelectView' })
+    // getuser() {
+    //   axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo, this.config)
+    //     .then((reaponse)=>{
+    //       if(reaponse.data.u_hasVote===0){
+    //         this.$router.push({ name: 'VoteLocalSelectView'})
+    //       }
+    //     })
+    //     .catch((err)=>{ console.error(err) })
+    // },
+    goVote(){
+      if (this.isLoggedIn) {
+        if (this.user.u_hasVote === 0) {
+          this.$router.push({ name: 'VoteLocalSelectView' })
+        } else {
+          this.$confirm({
+            message: "이미 투표하셨습니다!",
+            button: {
+              no: '닫기',
+            }
+          })
         }
+      } else {
+        this.$confirm({
+          message: "로그인이 해주세요!",
+          button: {
+              yes: '로그인 하기',
+              no: '닫기',
+            },
+            callback: confirm => {
+              if (confirm) {
+                this.$router.push({ name: 'Login' })
+              }
+            }
+        })
+      }
+      
+    }
   },
   created(){
     if (this.isLoggedIn) {
-      this.getuser()
+      this.getUser()
       }
   }
   }

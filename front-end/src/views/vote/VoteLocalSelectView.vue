@@ -79,20 +79,20 @@ export default {
       },
 
       checkDialog(local){
-          this.$confirm(
-            {
-              message: `"${local}"`,
-              button: {
-                yes: '선택 완료',
-                no: '다시 선택하기',
-              },
-              callback: confirm => {
-                if (confirm) {
-                  this.$router.push({ name: 'VoteCreateView', params: { local:`${this.selectLocal}`}})
-                }
+        this.$confirm(
+          {
+            message: `"${local}"`,
+            button: {
+              yes: '선택 완료',
+              no: '다시 선택하기',
+            },
+            callback: confirm => {
+              if (confirm) {
+                this.$router.push({ name: 'VoteCreateView', params: { local:`${this.selectLocal}`}})
               }
             }
-          )
+          }
+        )
       },
 
       inputLocal(local){

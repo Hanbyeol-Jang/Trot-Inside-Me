@@ -58,7 +58,7 @@ export default {
             }
         },
         getTvtable(){
-            axios.get(`${SERVER.URL}/schedule/todayList`)
+            axios.get(`${SERVER.URL}/board/schedule/todayList`)
             .then((response)=>{
               this.Tvprograms = []
               const programs = _.sortBy(response.data,'bc_time')

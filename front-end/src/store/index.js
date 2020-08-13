@@ -14,6 +14,7 @@ export default new Vuex.Store({
     authToken: cookies.get('auth-token'),
     authAdmin: cookies.get('auth-admin'),
     singers: [],
+    singer: {},
     programs: [],
     contentsCount: 0,
     user: {},
@@ -33,6 +34,9 @@ export default new Vuex.Store({
     },
     SET_SINGERS(state, singers) {
       state.singers = singers
+    },
+    SET_SINGER(state, singer) {
+      state.singer = singer
     },
     SET_PROGRAMS(state, programs) {
       state.programs = programs
@@ -79,10 +83,10 @@ export default new Vuex.Store({
       cookies.remove('auth-token')
       router.push({ name: 'Home' })
     },
-    kakaoOff({ getters }) {
+    kakaoOff({ getters }) { 
       axios.post(SERVER.URL + SERVER.ROUTES.kakaoOff, null, getters.config)
-        .then(() => {  
-            console.log('Kakao OFF') 
+        .then((res) => {  
+            console.log('Kakao OFF', res) 
             router.push({ name: 'Home' })
           })
         .catch((err)=>{ console.error(err) }) 
@@ -90,7 +94,7 @@ export default new Vuex.Store({
     getUser({ getters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo, getters.config)
         .then(res => {  commit('SET_USER', res.data) })
-        .catch((err)=>{ console.error(err) })    
+        .catch((err)=>{ console.error(err) })
     },
 
     // Feed Data
@@ -123,7 +127,17 @@ export default new Vuex.Store({
         })
         .catch(err => console.log(err))
     },
-    
+    getSingerDetail({ getters, commit }, singerId) {
+      axios.get(SERVER.URL + SERVER.ROUTES.singerDetail + singerId, getters.config)
+        .then((res) => {
+          commit('SET_SINGER', res.data)
+        })
+        .catch(err => console.log(err))
+    },
+    // Follow Singer
+     
+
+
     // Program Data
     fetchPrograms({ commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.programList)

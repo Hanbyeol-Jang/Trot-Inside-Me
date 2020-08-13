@@ -13,7 +13,7 @@ export default{
 
         // singer
         singerList: '/board/singerlist',
-        singerDetail: '',
+        singerDetail: '/board/singerdetail/',
         singerCreate: '/admin/singeradd',
         singerDelete: '/admin/singerdelete/',
         singerVideoList: '/board/videolist/',

@@ -10,6 +10,7 @@
           v-for="(item,i) in items"
           :key="i"
           :src="item.src"
+          
         ></v-carousel-item>
       </v-carousel>
       <v-container class="mt-4">
@@ -76,7 +77,7 @@ export default {
             src: 'https://t1.daumcdn.net/cfile/tistory/993095345F05621F27',
           },
           {
-            src: '@/assets/image/content_default.png',
+            src: '@/assets/image/last_week_top3.png',
           },
         ],
     }

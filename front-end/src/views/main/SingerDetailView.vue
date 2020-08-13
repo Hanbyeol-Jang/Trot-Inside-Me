@@ -16,9 +16,23 @@
       </v-avatar>
       <h2 class="mt-4">{{ singer.s_name }}</h2>
     </div>
-    <div class="text-center mt-3">
-      <v-btn rounded color="pink" dark><h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3></v-btn>
-    </div>
+    <v-container>
+      <v-row no-gutters>
+        <v-col cols="6">
+          <div class="text-center">
+            {{ singer.f_cnt }}명이 좋아합니다.
+            {{ singer.f_flag }}
+            {{ userFollow }}
+          </div>
+        </v-col>
+        <v-col cols="6">
+          <div class="text-center">
+            <v-btn rounded color="pink" dark>
+              <h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3></v-btn>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
     <v-container class="mt-4 text-center">
       <v-row no-gutters>
         <template v-for="menu in menus">
@@ -48,8 +62,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-import SERVER from '@/api/drf'
+import { mapState, mapActions } from 'vuex'
 
 import VideoIcon from '@/assets/icon/video-icon.svg'
 import MagazineIcon from '@/assets/icon/magazine-icon.svg'
@@ -60,7 +73,7 @@ export default {
   data() {
     return {
       s_idx: this.$route.params.singerId,
-      singer: {},
+      userFollow: false,
       menus: [
         { id: 1, title: '영상 보기'},
         { id: 2, title: '기사 보기'},
@@ -74,11 +87,16 @@ export default {
     MagazineIcon,
     CalendarIcon,
   },
+  computed: {
+    ...mapState(['singer']),
+  },
   methods: {
-    getSingerDetail() {
-      axios.get(SERVER.URL +`/singer/${this.s_idx}`, { params: { s_idx: this.s_idx } })
-            .then(res =>{ this.singer = res.data })
-            .catch(err=>{ console.error(err) })
+    ...mapActions(['getSingerDetail']),
+    follow() {
+
+    },
+    followBack() {
+
     },
     goMenuDetail(id) {
       if (id === 1) {
@@ -91,7 +109,8 @@ export default {
     }
   },
   created() {
-    this.getSingerDetail()
+    this.getSingerDetail(this.s_idx)
+    this.userFollow = this.singer.f_flag
   }
 }
 </script>
