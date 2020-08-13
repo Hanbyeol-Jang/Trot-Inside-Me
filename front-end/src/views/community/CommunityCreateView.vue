@@ -5,6 +5,10 @@
     class="mx-auto mt-5"
     max-width="500"
   >
+<<<<<<< HEAD
+=======
+
+>>>>>>> BE-Develop
     <v-card-actions class="d-flex flex-row-reverse">
         <v-btn text color="deep-purple accent-4" @click="createCommunity"><v-icon class="mr-2">mdi-pencil</v-icon>글 작성하기</v-btn>
     </v-card-actions>
@@ -40,21 +44,33 @@ export default {
         checklogin(){
             if (!(this.$cookies.get('auth-token'))){
                 this.$alert(" 로그인을 해주세요")
+<<<<<<< HEAD
                 this.$router.push({name:'Login'})                
+=======
+                this.$router.push({name:'Home'})                
+>>>>>>> BE-Develop
             }
         },
 
         createCommunity(){
+<<<<<<< HEAD
             // const dto = new FormData()
             // dto.append('co_content',this.content)
             // dto.append('co_img',this.image)
             // axios.post(`${SERVER.URL}/community/add`,dto,this.axiosConfig)
+=======
+          console.log(this.image)
+>>>>>>> BE-Develop
             const data = {
               'co_content' : this.content,
               'co_img' : this.image
             }
             axios.post(`${SERVER.URL}/community/add`,data,this.axiosConfig)
             .then(()=>{
+<<<<<<< HEAD
+=======
+              console.log(1231231)
+>>>>>>> BE-Develop
                 this.$router.push({ name: 'CommunityIndexView'})
             })
             .catch((err)=>{
@@ -63,7 +79,11 @@ export default {
         },
 
         communityImage(){
+<<<<<<< HEAD
           this.image = this.$refs.file.$refs.input.files[0]
+=======
+          this.image = this.$refs.file.$refs.input.files[0].name
+>>>>>>> BE-Develop
           this.change_image = URL.createObjectURL(this.image)
           this.flag = true
         },

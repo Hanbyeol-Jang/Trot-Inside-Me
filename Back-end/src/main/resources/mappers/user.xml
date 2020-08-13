@@ -2,61 +2,78 @@
 <!DOCTYPE mapper 	
 		 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.web.curation.dao.UserDao">
-	
+<mapper namespace="com.web.curation.dao.UserDao">	
 	<!-- 관리자 회원가입 -->
  	<insert id="join" parameterType="com.web.curation.dto.UserDto">
  		insert into UserInfo(u_email,u_pw,u_name) 
  		values(#{u_email},#{u_pw},#{u_name});
  	</insert>
- 		<!-- insert into UserInfo(u_email,u_pw,u_pw2,u_name) 
- 		values(#{u_email},#{u_pw},#{u_pw2},#{u_name}); -->
- 	
+
  	<!-- 이메일로 회원 정보 찾기 -->
  	<select id="getUserInfoSuc" parameterType="String" resultType="com.web.curation.dto.UserDto">
  		select * from UserInfo
  		where u_email = #{email};
  	</select>
  	
- 	
- 	<!-- 회원정보 수정 -->
- 	<update id="edit">
- 		
- 	</update>
- 	
- 	<!-- 회원탈퇴 -->
- 	<delete id="delete">
- 		
- 	</delete>
- 	
  	<!-- 비밀번호 찾기 -->
- 	<select id="findpassword" resultType="String">
+ 	<!-- <select id="findpassword" resultType="String">
  		select u_pw 
  		from UserInfo
  		where 1=1
  		and u_email = #{email}
- 	</select>
+ 	</select> -->
  	
  	<!-- 비밀번호 변경 -->
- 	<update id="changepassword">
+ 	<!-- <update id="changepassword">
  		update UserInfo set u_pw = #{u_pw},u_pw2 = #{u_pw}
  		where 1=1
  		and u_email = #{u_email} 
- 	</update>
- 	
+ 	</update -->
+
+	<!-- 마이페이지 리스트 -->
+ 	<select id="myBoardList" resultType="BoardDto">
+ 		select 	g.u_email ,
+				b.b_idx,
+				b.b_type,
+				b.b_title ,
+				b.b_thumbnail ,
+				b.b_url ,
+				b.b_date ,
+				b.b_company ,
+				b.b_member ,
+				b.b_content ,
+				(	select	COUNT(*) 
+					from	ssafy_trot.Good gg
+					where 	gg.b_type = g.b_type 
+					and 	gg.u_email =g.u_email 
+				) as b_cnt
+		from 	ssafy_trot.Good g
+		left outer join ssafy_trot.Board b
+				on b.b_type = g.b_type and b.b_idx = g.b_idx 
+		where 	g.b_type = #{b_type}
+		and 	g.u_email = #{u_email};
+ 	</select>
  	<!-- 팔로우 전체 리스트 출력 -->
- 	<select id="getFollowList" parameterType="String" resultType="com.web.curation.dto.FollowDto">
- 		select * from Following where u_email = #{userEmail};
+ 	<select id="getFollowList"  resultType="com.web.curation.dto.FollowDto">
+ 		select 	u_email,
+				f.s_idx,
+				s.s_name ,
+				s.s_img 
+		from 	ssafy_trot.`Following` f
+		left outer join	ssafy_trot.Singer s
+				on s.s_idx = f.s_idx
+		where 	u_email = #{userEmail};
  	</select>
  	
+ 	
  	<!-- 팔로우 등록 -->
- 	<insert id="followApply" parameterType="com.web.curation.dto.FollowDto">
+ 	<insert id="followApply" >
  		insert into Following(u_email, s_idx) 
  		values(#{u_email},#{s_idx});
  	</insert>
  
  	<!-- 팔로우 취소 -->
- 	<delete id="followDelete" parameterType="com.web.curation.dto.FollowDto">
+ 	<delete id="followDelete" >
  		delete from Following 
  		where u_email= #{u_email} and s_idx = #{s_idx};
  	</delete>

@@ -20,5 +20,14 @@ public class KakaoDaoImpl implements KakaoDao {
 	public void insertKakao(UserDto userDto) {
 		sqlSession.insert(ns+".insertkakao", userDto);
 	}
+	@Override
+	public void updateKakao(UserDto userDto) {
+		sqlSession.update(ns+".updatekakao",userDto);
+		
+	}
+	@Override
+	public void deleteKakao(String email) {
+		sqlSession.delete(ns+".deletekakao",email);
+	}
 
 }

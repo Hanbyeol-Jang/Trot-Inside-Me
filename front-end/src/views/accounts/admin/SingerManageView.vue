@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <v-container>
     <div class="my-3 text-right">
       <v-btn rounded color="pink" dark @click="goSingerCreate">
@@ -82,6 +83,16 @@ export default {
   created() {
     this.fetchSingers()
   }
+=======
+  <div>
+
+  </div>
+</template>
+
+<script>
+export default {
+    name: 'SingerManageView',
+>>>>>>> BE-Develop
 }
 </script>
 

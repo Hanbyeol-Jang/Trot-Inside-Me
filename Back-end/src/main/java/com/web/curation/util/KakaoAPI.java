@@ -7,16 +7,22 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.UserDto;
 
 @Service
 public class KakaoAPI {
+
+	@Value("${KAKAO_API_KEY}")
+	private String API_KEY;
 
 	public String getAccessToken(String authorize_code) {
 		String access_Token = "";
@@ -35,7 +41,7 @@ public class KakaoAPI {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
-			sb.append("&client_id=78183e66919b34b25f731ea9f2d99f0e");
+			sb.append("&client_id=" + API_KEY);
 			sb.append("&redirect_uri=http://localhost:8080/social/login/kakao");
 			sb.append("&code=" + authorize_code);
 			bw.write(sb.toString());
@@ -71,20 +77,16 @@ public class KakaoAPI {
 	}
 
 	public UserDto getUserInfo(String access_Token) {
+		System.out.println("[logger - kakao getUserInfo method]");
 
-		// 요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
-//	    HashMap<String, Object> userInfo = new HashMap<>();
 		UserDto userDto = new UserDto();
 		String reqURL = "https://kapi.kakao.com/v2/user/me";
 
-		System.out.println("[logger - getUserInfo method]");
 		try {
 			URL url = new URL(reqURL);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("POST");
 
-			// 요청에 필요한 Header에 포함될 내용
-			System.out.println("!! " + access_Token);
 			conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
 			int responseCode = conn.getResponseCode();
@@ -104,20 +106,68 @@ public class KakaoAPI {
 			JsonElement element = parser.parse(result);
 
 			JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
-			JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
 
-			String nickname = properties.getAsJsonObject().get("nickname").getAsString();
-			String email = kakao_account.getAsJsonObject().get("email").getAsString();
+			if(properties.getAsJsonObject().get("nickname") != null)
+				userDto.setU_name(properties.getAsJsonObject().get("nickname").getAsString());
+			userDto.setU_email(element.getAsJsonObject().get("id").getAsString());
+	         if(properties.getAsJsonObject().get("thumbnail_image") !=null) {
+	        	 	userDto.setU_thumbnail(properties.getAsJsonObject().get("thumbnail_image").getAsString());
+	            } else {
+	            	userDto.setU_thumbnail("");
+	            }
+	         if(properties.getAsJsonObject().get("profile_image") != null) {
+	         userDto.setU_profileImg(properties.getAsJsonObject().get("profile_image").getAsString());
+	         } else {
+	            userDto.setU_profileImg("");
+	         }
 
-			userDto.setU_email(email);
-			userDto.setU_name(properties.getAsJsonObject().get("nickname").getAsString());
-			userDto.setU_thumbnail(properties.getAsJsonObject().get("thumbnail_image").getAsString());
-			userDto.setU_profileImg(properties.getAsJsonObject().get("profile_image").getAsString());
-			System.out.println("logger - kakaoDto 정보: " + userDto);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return userDto;
+	}
+
+	// 나에게 메세지 보내기
+	public void messageForMe(Map<String, Object> map) {
+		String reqURL = "https://kapi.kakao.com/v2/api/talk/memo/default/send";
+
+		String accessToken = (String) map.get("accessToken");
+		BroadCastingDto bcDto = (BroadCastingDto) map.get("broadCastingDto");
+
+		try {
+			URL url = new URL(reqURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+			conn.setRequestMethod("POST");
+			conn.setDoOutput(true);
+
+			conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+			String msg = "template_object={\r\n" + 
+			 		"        \"object_type\": \"feed\",\r\n" + 
+			 		"        \"content\": {\r\n" + 
+			 		"            \"title\": \""+ bcDto.getBc_title() +"\",\r\n" + 
+					"            \"description\": \""+bcDto.getBc_company()+", "+bcDto.getBc_time()+"\",\r\n" + 
+					"            \"image_url\": \"http://blogfiles.naver.net/MjAyMDAxMjlfMjUy/MDAxNTgwMjgyNzAxNzcy.kZlmkLPDc-GKg7fV8aoaQCBEXhbqfZdY47L9gQCeT8kg.qcEUht24-YpNysTEG34quo4GTmj2B2rT7pazIC1DAn4g.JPEG.boeun1128/KakaoTalk_20200129_162050083_02.jpg\",\r\n" + 
+			 		"            \"image_width\": 640,\r\n" + 
+			 		"            \"image_height\": 640,\r\n" + 
+			 		"            \"link\": {\r\n" + 
+			 		"            \"web_url\": \"http://i3b202.p.ssafy.io\",\r\n" + 
+			 		"            \"mobile_web_url\": \"http://i3b202.p.ssafy.io\",\r\n" + 
+			 		"            \"android_execution_params\": \"contentId=100\",\r\n" + 
+			 		"            \"ios_execution_params\": \"contentId=100\"\r\n" + 
+			 		"            }\r\n" + 
+			 		"        }\r\n" + 
+			 		"    }";
+			
+			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+			wr.write(msg);
+			wr.flush();
+
+			int responseCode = conn.getResponseCode();
+//			System.out.println("responseCode : " + responseCode);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// 로그아웃

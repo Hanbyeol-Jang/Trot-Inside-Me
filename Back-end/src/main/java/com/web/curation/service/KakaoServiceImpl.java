@@ -22,6 +22,17 @@ public class KakaoServiceImpl implements KakaoService {
 		kakaoDao.insertKakao(userDto);
 	}
 
+	@Override
+	public void updateKakao(UserDto userDto) {
+		kakaoDao.updateKakao(userDto);
+	}
+
+	@Override
+	public void deleteKakao(String email) {
+		kakaoDao.deleteKakao(email);
+	}
+
+	
 
 
 }

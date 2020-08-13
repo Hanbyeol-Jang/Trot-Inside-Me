@@ -1,10 +1,15 @@
 <template>
     <div class="container">
+<<<<<<< HEAD
         <div class="d-flex justify-center">
+=======
+        <div>
+>>>>>>> BE-Develop
             <h1>거주지역을 선택해주세요.</h1>
         </div>
     <v-row>
       <v-col cols="12" sm="24" offset-sm="3" class="mx-0 my-0 p-0">
+<<<<<<< HEAD
           <div class="d-flex justify-center">
           </div>
           <v-container fluid class="p-0">
@@ -18,11 +23,22 @@
                     <v-btn @click="inputLocal(local1)">
                       {{local1}}
                     </v-btn>
+=======
+          <v-container fluid class="p-0">
+            <v-row>
+              <v-col
+                v-for="local in locals" :key="local.id"
+                cols="4"
+              >
+              <div class="cursor_test">
+                    <v-btn>{{local}}</v-btn>
+>>>>>>> BE-Develop
               </div>
               </v-col>
             </v-row>
             <v-row >
               <v-col
+<<<<<<< HEAD
                 v-for="local in locals" :key="local.id"
                 cols="6"
                 class="pa-0 d-flex justify-center"
@@ -31,6 +47,13 @@
                     <v-btn @click="inputLocal(local)">
                       {{local}}
                     </v-btn>
+=======
+                v-for="local1 in local2" :key="local1.id"
+                cols="4"
+              >
+              <div class="cursor_test">
+                    <v-btn>{{local1}}</v-btn>
+>>>>>>> BE-Develop
               </div>
               </v-col>
             </v-row>
@@ -41,14 +64,18 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import { mapState, mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import SERVER from '@/api/drf'
 
+=======
+>>>>>>> BE-Develop
 export default {
     name:"VoteLocalSelectView",
     data(){
         return{
+<<<<<<< HEAD
             locals:["서울특별시","인천광역시","대전광역시","광주광역시","대구광역시","울산광역시","부산광역시","세종특별자치시"],
             local2:["경기도","강원도","충청남도","충청북도","전라남도","전라북도","경상남도","경상북도","제주도"],
             selectLocal:"",
@@ -105,6 +132,12 @@ export default {
         this.getuser()
       }
     }
+=======
+            locals:["서울특별시","인천광역시","대전광역시","광주광역시","대구광역시","울산광역시","부산광역시"],
+            local2:["경기도","강원도","충청도","전라도","경상도","제주도"]
+        }
+    },
+>>>>>>> BE-Develop
 }
 </script>
 

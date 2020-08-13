@@ -1,5 +1,7 @@
 package com.web.curation.dto;
 
+import java.sql.Timestamp;
+
 import lombok.Getter;
 import lombok.Setter;
 
