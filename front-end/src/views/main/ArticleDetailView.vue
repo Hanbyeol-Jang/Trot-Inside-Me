@@ -86,13 +86,6 @@ export default {
 
 
     showLikeChange(){
-        if(this.showLike){
-            this.showLike = 0
-            this.likeCnt -= 1
-        }else{
-            this.showLike = 1
-            this.likeCnt += 1
-        }
       const axiosConfig = {
           headers:{
           token: `${this.$cookies.get('auth-token')}`
@@ -100,15 +93,14 @@ export default {
           params: {isgood:this.showLike}
       }
       axios.get(SERVER.URL+`/board/good/${this.type}/${this.id}`,axiosConfig)
-      .then((response)=>{
-        console.log(response)
-        // if(this.showLike){
-        //     this.showLike = 0
-        //     this.likeCnt -= 1
-        // }else{
-        //     this.showLike = 1
-        //     this.likeCnt += 1
-        // }
+      .then(()=>{
+        if(this.showLike){
+            this.showLike = 0
+            this.likeCnt -= 1
+        }else{
+            this.showLike = 1
+            this.likeCnt += 1
+        }
       })
       .catch((err) => {console.log(err.response.data)})
     },
