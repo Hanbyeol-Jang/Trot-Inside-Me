@@ -66,7 +66,7 @@ export default {
                     token : `${this.$cookies.get('auth-token')}`
                 },
             }
-            axios.get(SERVER.URL+`/admin/userNow`,axiosConfig)
+            axios.get(SERVER.URL+`/user/getUserInfo`,axiosConfig)
             .then((reaponse)=>{
               console.log(reaponse)
               if(reaponse.data.u_hasVote===1){
@@ -99,6 +99,8 @@ export default {
                     axios.post(SERVER.URL+`/vote`,voteDto)
                     .then((res)=>{
                       console.log(res)
+                      this.$router.push({ name: 'VoteView' })
+                      this.$alert('투표가 완료되었습니다!')
                     })
                     .catch((err) => {console.log(err)})                
                     }
