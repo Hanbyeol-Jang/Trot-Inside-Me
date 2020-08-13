@@ -53,7 +53,8 @@
 			b_company,
 			b_content ,
 			(	select 	COUNT(*) 
-				from ssafy_trot.Board 	
+				from ssafy_trot.Board bb
+				where 	bb.b_type = b.b_type
 			) as b_cnt,
 			(	select 	COUNT(*) 
 				from 	ssafy_trot.Reply r 
@@ -69,6 +70,7 @@
 				and		g.b_type =b.b_type 
 			) as good_cnt
 		from ssafy_trot.Board b
+		where b_type = #{b_type}
 		order by good_cnt desc;
 	</select>
 	
