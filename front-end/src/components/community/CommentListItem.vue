@@ -73,6 +73,7 @@ export default {
     },
 
     checkAuth(){
+      console.log(1234)
       axios.get(SERVER.URL+`/user/getUserInfo`,this.axiosConfig)
       .then((reaponse)=>{
           const currentUser = reaponse.data.u_name
@@ -89,7 +90,7 @@ export default {
       })
     }
   },
-  updated(){
+  mounted(){
     this.checkAuth()
   },
 }
