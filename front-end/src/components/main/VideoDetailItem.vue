@@ -20,7 +20,7 @@ export default {
     components:{
     },
     props:{
-        video:Object,
+        video: Object,
     },
 }
 </script>

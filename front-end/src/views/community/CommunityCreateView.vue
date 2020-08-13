@@ -40,7 +40,7 @@ export default {
         checklogin(){
             if (!(this.$cookies.get('auth-token'))){
                 this.$alert(" 로그인을 해주세요")
-                this.$router.push({name:'Home'})                
+                this.$router.push({name:'Login'})                
             }
         },
 

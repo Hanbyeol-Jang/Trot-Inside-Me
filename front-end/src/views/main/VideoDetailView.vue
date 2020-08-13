@@ -29,7 +29,7 @@
               </div>
 
             </v-card-actions>
-            <MainCommentList v-show="showComments" @add-comment="addcomment" @delete-comment="deleteComment" :id="id"/>
+            <MainCommentList v-show="showComments" @add-comment="addcomment" @delete-comment="deleteComment" :commentCnt="commentCnt" :id="id" :type="type"/>
           </v-card>
       </v-row>
     </v-container>
@@ -51,13 +51,13 @@ export default {
   },
   data(){
     return {
-      video: [],
+      video: {},
       likeCnt:'',
-      commentCnt:'',
+      commentCnt:0,
       showLike: '',
       showComments: false,
-      id:'',
-      type:'',
+      id: Number(this.$route.params.videoId),
+      type:1,
     }
   },
   computed: {
@@ -66,7 +66,7 @@ export default {
   methods: {
 
     checkId(){
-      this.id = this.$route.params.videoId
+      this.id = Number(this.$route.params.videoId)
     },
 
     getVideo(){
@@ -77,7 +77,6 @@ export default {
       }
       axios.get(SERVER.URL +`/board/detail/1/${this.id}`,axiosConfig)
         .then((response) => {
-          console.log(response)
           this.video = response.data
           this.type = response.data.b_type
           this.likeCnt = response.data.good_cnt
@@ -90,34 +89,29 @@ export default {
 
 
     showLikeChange(){
-        if(this.showLike){
-            this.showLike = 0
-            this.likeCnt -= 1
-        }else{
-            this.showLike = 1
-            this.likeCnt += 1
+      if (!(this.$cookies.get('auth-token'))){
+          this.$alert(" 로그인을 해주세요")
+      }else{
+        const axiosConfig = {
+            headers:{
+            token: `${this.$cookies.get('auth-token')}`
+            },
+            params: {isgood:this.showLike}
         }
-      const axiosConfig = {
-          headers:{
-          token: `${this.$cookies.get('auth-token')}`
-          },
-          params: {isgood:this.showLike}
+        axios.get(SERVER.URL+`/board/good/${this.type}/${this.id}`,axiosConfig)
+        .then((response)=>{
+          console.log(response)
+          if(this.showLike){
+              this.showLike = 0
+              this.likeCnt -= 1
+          }else{
+              this.showLike = 1
+              this.likeCnt += 1
+          }
+        })
+        .catch((err) => {console.log(err.response.data)})
       }
-      axios.get(SERVER.URL+`/board/good/${this.type}/${this.id}`,axiosConfig)
-      .then((response)=>{
-        console.log(response)
-        // this.showLike = response.data.isgood
-        // if(this.showLike){
-        //     this.showLike = 0
-        //     this.likeCnt -= 1
-        // }else{
-        //     this.showLike = 1
-        //     this.likeCnt += 1
-        // }
-      })
-      .catch((err) => {console.log(err.response.data)})
-    },
-
+      },
 
     showCommentsChange(){
       this.showComments = !this.showComments

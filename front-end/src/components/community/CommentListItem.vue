@@ -65,7 +65,8 @@ export default {
           },
           callback: confirm => {
             if (confirm) {
-                  this.$emit('delete-comment2',idx)
+              this.isAuth=false
+              this.$emit('delete-comment2',idx)
             }
           }
         }
