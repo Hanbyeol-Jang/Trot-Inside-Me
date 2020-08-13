@@ -210,7 +210,6 @@
 			</if>
 		from ssafy_trot.Board b
 		where 1=1 
-		and b_type =  #{b_type}
 		and b_idx = #{b_idx};
 	</select>
 	
