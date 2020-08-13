@@ -18,7 +18,7 @@ export default {
     },
     computed: {
       singerId() {
-        return this.$route.params.singerId
+        return parseInt(this.$route.params.singerId)
       }
     },
 }

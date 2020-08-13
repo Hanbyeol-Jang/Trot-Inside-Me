@@ -26,7 +26,7 @@
                   </router-link>
                 
               </div>
-              <h4 class="text-center">{{singer.s_name}}</h4>
+              <h3 class="text-center mt-3">{{singer.s_name}}</h3>
               </v-col>
             </v-row>
             <p class="text-center" v-if="!singers.length">찾는 가수 없음</p>

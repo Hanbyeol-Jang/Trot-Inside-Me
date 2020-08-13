@@ -9,21 +9,23 @@
       </div>
       <h2 class="text-center mt-4">
         잠시만 기다려 주세요!
-      </h2>
+      </h2> 
     </div>
     <ScrollTopButton /> 
-    <infinite-loading v-if="videos.length" @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
+    <infinite-loading 
+      v-if="videos.length" @infinite="infiniteHandler" spinner="waveDots">
+    </infinite-loading>
   </v-container>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 import axios from 'axios'
+import SERVER from '@/api/drf'
 import InfiniteLoading from 'vue-infinite-loading'
 import { Circle8 } from 'vue-loading-spinner'
 
-import SERVER from '@/api/drf'
 import VideoFeedItem from './VideoFeedItem'
 import ScrollTopButton from './ScrollTopButton'
 
@@ -33,8 +35,8 @@ export default {
       return {
         videos: [],
         page: 1,
-        pageAll: 1,
         mediaType: 1,
+        articleCnt: 0,
       }
     },
     components: {
@@ -47,60 +49,72 @@ export default {
       singerId: Number,
     },
     computed: {
-      ...mapState(['contentsCount']),
+      ...mapState(['authToken']),
       routeSingerId() {
         return parseInt(this.$route.params.singerId)
       }
     },
     methods: {
-      ...mapActions(['getContentsCount']),
       fetchVideoData() {
         if (this.routeSingerId) {
-          const options = { params: { page: this.page++ }}
-          axios.get(SERVER.URL + `/singer/${this.singerId}/videos`, options)
-            .then(res => {
-              setTimeout(() => {
-                this.videos.push(...res.data)
-              }, 1000);
+          // singer
+          const options = {
+              headers:{ token: this.authToken },
+              params: { page: this.page++ }
+          }
+          axios.get(SERVER.URL + SERVER.ROUTES.singerVideoList + this.singerId, options)
+            .then((res) => {
+              this.videoCnt = res.data[0].b_cnt
+              setTimeout(() => { this.videos.push(...res.data) }, 500) 
             })
             .catch(err => console.log(err))
         } else {
-          console.log('all')
-          const options = { params: { page: this.page++ }}
-          axios.get(SERVER.URL + `/${this.mediaType}/good`, options)
-            .then(res => {
-              setTimeout(() => {
-                this.videos.push(...res.data)
-              }, 500);
+          // all
+          const options = {
+              headers:{ token: this.authToken },
+              params: { page: this.page++ }
+          }
+          axios.get(SERVER.URL + SERVER.ROUTES.mainList + this.mediaType, options)
+            .then((res) => {
+              this.videoCnt = res.data[0].b_cnt
+              setTimeout(() => { this.videos.push(...res.data) }, 500) 
             })
             .catch(err => console.log(err))
         }
       },
+      // Pagination
       infiniteHandler($state){
         if (this.routeSingerId) {
-          if (parseInt(this.contentsCount / 5) + 1 >= this.page){
-            const options = {params: { page: this.page++ }}
-            axios.get(SERVER.URL + `/singer/${this.singerId}/videos`, options)
+          // singer
+          if (parseInt(this.videoCnt / 5) + 1 >= this.page){
+            const options = {
+              headers:{ token: this.authToken },
+              params: { page: this.page++ }
+            }
+            axios.get(SERVER.URL + SERVER.ROUTES.singerVideoList + this.singerId, options)
               .then(res => {
                 setTimeout(() => {
                   this.videos.push(...res.data)
                   $state.loaded()
-                }, 1000);
+                }, 500);
               })
               .catch(err => console.log(err))
           } else{
             $state.complete()
           }
         } else {
-          console.log('all')
-          if (parseInt(this.contentsCount / 5) + 1 >= this.page){
-            const options = {params: { page: this.page++ }}
-            axios.get(SERVER.URL + `/${this.mediaType}/good`, options)
+          // all
+          if (parseInt(this.videoCnt / 5) + 1 >= this.page){
+            const options = {
+              headers:{ token: this.authToken },
+              params: { page: this.page++ }
+            }
+            axios.get(SERVER.URL + SERVER.ROUTES.mainList + this.mediaType, options)
               .then(res => {
                 setTimeout(() => {
                   this.videos.push(...res.data)
                   $state.loaded()
-                }, 1000);
+                }, 500);
               })
               .catch(err => console.log(err))
           } else{
@@ -110,13 +124,7 @@ export default {
       },
     },
     created() {
-      const info = { mediaType: 1, singerId: this.$route.params.singerId }
-      this.getContentsCount(info)
       this.fetchVideoData()
     },
 }
 </script>
-
-<style scoped>
-
-</style>

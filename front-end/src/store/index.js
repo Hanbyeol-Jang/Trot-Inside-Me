@@ -47,7 +47,7 @@ export default new Vuex.Store({
       axios.post(SERVER.URL + SERVER.ROUTES.login, loginData)
         .then(res => {
           console.log('Admin Login SUCCESS')
-          commit('SET_TOKEN', res.data)
+          commit('SET_TOKEN', res.data) 
           router.push({ name: 'AdminView' })
         })
         .catch(err => console.log(err))
