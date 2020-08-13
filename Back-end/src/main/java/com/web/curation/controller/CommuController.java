@@ -58,9 +58,9 @@ public class CommuController {
 				System.out.println("최신순 ");
 				list = commuService.getCommuList(udto.getU_email(), "co_idx");
 			}
-			List<CommuDto> showList = new ArrayList<>();
 
 			if (list != null) {
+				List<CommuDto> showList = new ArrayList<>();
 				int lastPageRemain = list.size() % 5;
 				int lastPage = list.size() - lastPageRemain;
 				page = 5 * page - 5;
@@ -76,6 +76,7 @@ public class CommuController {
 					}
 				}
 				return new ResponseEntity<List<CommuDto>>(showList, HttpStatus.OK);
+			
 			} else {
 				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			}
@@ -86,6 +87,7 @@ public class CommuController {
 	@ApiOperation("게시글 추가")
 	@PostMapping("/add")
 	public ResponseEntity<String> commuAdd(@RequestBody CommuDto dto, HttpServletRequest request) {
+		System.out.println(dto.getCo_img());
 		System.out.println(dto.toString());
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {

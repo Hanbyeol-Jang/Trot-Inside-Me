@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.web.curation.dao.UserDao;
+import com.web.curation.dto.BoardDto;
+import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.FollowDto;
+import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.UserDto;
 import com.web.curation.util.JwtTokenProvider;
 
@@ -52,6 +55,13 @@ public class UserServiceImpl implements UserService {
 //	}
 //	
 
+
+	@Override
+	public List<BoardDto> myBoardList(GoodDto gdto) {
+		return userDao.myBoardList(gdto);
+	}
+
+	
 	@Override
 	public List<FollowDto> getFollowList(String userEmail) {
 		return userDao.getFollowList(userEmail);

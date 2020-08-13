@@ -4,8 +4,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.web.curation.dto.BoardDto;
+import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.CommuReply;
 import com.web.curation.dto.FollowDto;
+import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.UserDto;
 
 public interface UserService {
@@ -39,6 +42,9 @@ public interface UserService {
 
 	//팔로우 삭제
 	public boolean followDelete(FollowDto dto);
+	
+	//마이페이지 영상, 기사 리스트 
+	public List<BoardDto> myBoardList(GoodDto gdto);
 	
 
 	
