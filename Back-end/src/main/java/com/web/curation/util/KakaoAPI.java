@@ -83,20 +83,16 @@ public class KakaoAPI {
 	}
 
 	public UserDto getUserInfo(String access_Token) {
+		System.out.println("[logger - kakao getUserInfo method]");
 
-		// 요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
-//	    HashMap<String, Object> userInfo = new HashMap<>();
 		UserDto userDto = new UserDto();
 		String reqURL = "https://kapi.kakao.com/v2/user/me";
 
-		System.out.println("[logger - getUserInfo method]");
 		try {
 			URL url = new URL(reqURL);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("POST");
 
-			// 요청에 필요한 Header에 포함될 내용
-			System.out.println("!! " + access_Token);
 			conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
 			int responseCode = conn.getResponseCode();
@@ -116,17 +112,15 @@ public class KakaoAPI {
 			JsonElement element = parser.parse(result);
 
 			JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
-			JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
-
-			String nickname = properties.getAsJsonObject().get("nickname").getAsString();
-			String email = kakao_account.getAsJsonObject().get("email").getAsString();
-
-	         userDto.setU_email(email);
-	         userDto.setU_name(properties.getAsJsonObject().get("nickname").getAsString());
-	         if(properties.getAsJsonObject().get("thumbnail_image").getAsString()!=null) {
-	            userDto.setU_thumbnail(properties.getAsJsonObject().get("thumbnail_image").getAsString());
-	            } else {userDto.setU_thumbnail("");}
-	         if(properties.getAsJsonObject().get("profile_image").getAsString() != null) {
+			if(properties.getAsJsonObject().get("nickname") != null)
+				userDto.setU_name(properties.getAsJsonObject().get("nickname").getAsString());
+			userDto.setU_email(element.getAsJsonObject().get("id").getAsString());
+	         if(properties.getAsJsonObject().get("thumbnail_image") !=null) {
+	        	 	userDto.setU_thumbnail(properties.getAsJsonObject().get("thumbnail_image").getAsString());
+	            } else {
+	            	userDto.setU_thumbnail("");
+	            }
+	         if(properties.getAsJsonObject().get("profile_image") != null) {
 	         userDto.setU_profileImg(properties.getAsJsonObject().get("profile_image").getAsString());
 	         } else {
 	            userDto.setU_profileImg("");

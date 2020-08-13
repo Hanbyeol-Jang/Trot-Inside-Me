@@ -27,7 +27,19 @@
 	
 	<update id="updateaccesstoken">
 		update UserInfo set u_accessToken = #{u_accessToken}
-		where u_email = #{u_email};
+		where 1=1
+		and u_email = #{u_email};
 	</update>
+	<update id="updatekakao">
+		update UserInfo set u_name = #{u_name}, u_thumbnail = #{u_thumbnail},u_profileImg = #{u_profileImg}, u_accessToken = #{u_accessToken}
+		where 1=1
+		and u_email = #{u_email};
+	</update>
+	
+	<delete id="deletekakao">
+		delete from UserInfo
+		where 1=1
+		and u_email = #{email};
+	</delete>
 </mapper>
         

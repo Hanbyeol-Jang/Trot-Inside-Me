@@ -7,8 +7,8 @@ public interface KakaoDao {
 
 	public void insertKakao(UserDto userDto); // 카카오 회원가입
 
-	public boolean isAccesstoken(UserDto userDto); // access_token이 db에 있는 값과 일치하는지 확인
+	public void updateKakao(UserDto userDto); // 카카오 정보 업데이트
 
-	public void updateAccessToken(UserDto userDto); //access_token 변경
+	public void deleteKakao(String email); // 카카오 서비스 탈퇴
 	
 }
