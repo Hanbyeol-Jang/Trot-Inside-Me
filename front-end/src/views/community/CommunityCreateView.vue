@@ -45,6 +45,10 @@ export default {
         },
 
         createCommunity(){
+            // const dto = new FormData()
+            // dto.append('co_content',this.content)
+            // dto.append('co_img',this.image)
+            // axios.post(`${SERVER.URL}/community/add`,dto,this.axiosConfig)
             const data = {
               'co_content' : this.content,
               'co_img' : this.image
@@ -59,7 +63,7 @@ export default {
         },
 
         communityImage(){
-          this.image = this.$refs.file.$refs.input.files[0].name
+          this.image = this.$refs.file.$refs.input.files[0]
           this.change_image = URL.createObjectURL(this.image)
           this.flag = true
         },

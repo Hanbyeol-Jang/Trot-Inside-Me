@@ -30,7 +30,7 @@ import axios from 'axios'
 import SERVER from '@/api/drf'
 
 export default {
-  name: 'CommentListItem',
+  name: 'MainCommentListItem',
   props: {
     comment: Object,
   },

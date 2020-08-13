@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import CommentList from '@/components/main/CommentList.vue'
+import CommentList from '@/components/community/CommentList.vue'
 import axios from 'axios'
 import SERVER from '@/api/drf'
 
@@ -168,20 +168,33 @@ export default {
 
 
         deleteArticle(){
-            const axiosConfig2 = {
-              headers:{
-                token: `${this.$cookies.get('auth-token')}`,
+            this.$confirm(
+                {
+                message: `삭제하시겠습니까?`,
+                button: {
+                    yes: '삭제하기',
+                    no: '아니요',
                 },
-            }
-            axios.delete(SERVER.URL+`/community/delete/${this.communityIdx}`,axiosConfig2)
-            .then((response)=>{
-                console.log(response)
-                this.$alert('삭제 완료')
-                this.$router.push({name:'CommunityIndexView'})                
-            })
-            .catch((err)=>{
-                console.log(err)
-            })
+                callback: confirm => {
+                    if (confirm) {
+                        const axiosConfig2 = {
+                        headers:{
+                            token: `${this.$cookies.get('auth-token')}`,
+                            },
+                        }
+                        axios.delete(SERVER.URL+`/community/delete/${this.communityIdx}`,axiosConfig2)
+                        .then((response)=>{
+                            console.log(response)
+                            this.$alert('삭제 완료')
+                            this.$router.push({name:'CommunityIndexView'})                
+                        })
+                        .catch((err)=>{
+                            console.log(err)
+                        })                  
+                    }
+                }
+                }
+            )
         },
 
 
