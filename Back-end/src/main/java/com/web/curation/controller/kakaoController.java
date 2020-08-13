@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.KakaoService;
+import com.web.curation.service.UserService;
 import com.web.curation.util.JwtTokenProvider;
 import com.web.curation.util.KakaoAPI;
 
@@ -32,6 +33,8 @@ public class kakaoController {
 	@Autowired
 	KakaoService kakaoService;
 	private HttpSession session;
+	@Autowired
+	private UserService userService;
 	@Value("${KAKAO_API_KEY}")
 	private String API_KEY;
 	@Autowired
@@ -114,8 +117,7 @@ public class kakaoController {
 			kakaoService.insertKakao(userDto);
 			kakaoService.updateAccessToken(userDto);
 		}
-		System.out.println(userDto);
-		// TODO jinyong 수정해야됨
+
 		String Token = jwtTokenProvider.createToken(userDto);
 		System.out.println(Token);
 		return new ResponseEntity<String>(Token, HttpStatus.OK);
@@ -137,10 +139,16 @@ public class kakaoController {
 	}
 
 	// 로그아웃 앱서비스와의 연동을 끊음 => 카카오 로그인 탈퇴시 사용
-	@PostMapping(value = "/kakao/unlink")
+	@PostMapping(value = "/user/kakao/unlink")
 	@ApiOperation("로그아웃")
-	public void kakaoUnlink(@RequestParam String access_Token) {
-		kakaoAPI.kakaoUnlink(access_Token);
+	public void kakaoUnlink(HttpServletRequest request) {
+		String useremail = jwtTokenProvider.getInfo(request).getU_email();
+		String accessToken = userService.getUserInfo(useremail).getU_accessToken();
+		
+		// TODO 우리 디비에서 해당 계정 삭제해줘야함.
+		
+		kakaoAPI.kakaoUnlink(accessToken);
+		
 	}
 	// 카카오 계정과 함께 로그아웃
 	@GetMapping(value = "/kakao/logout")
