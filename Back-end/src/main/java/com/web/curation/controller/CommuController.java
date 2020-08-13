@@ -187,8 +187,6 @@ public class CommuController {
 				for (int i = page; i < page + lastPageRemain; i++) {
 					showList.add(list.get(i));
 				}
-			}else {
-				return new ResponseEntity<List<CommuReply>>(list, HttpStatus.OK);
 			}
 			return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
 		} catch (Exception e) {
