@@ -191,27 +191,26 @@
 				and 	r.b_idx = b.b_idx
 				and		r.b_type =b.b_type 
 			) as br_cnt,
+			<if test='u_email  != "" and u_email   != null ' >
 			(
-				SELECT COUNT(*) 
-				from ssafy_trot.Good g
-				where 1=1
-				and 	g.b_idx = b.b_idx
-				and		g.b_type =b.b_type 
-			) as good_cnt
-			<if test="u_email  != '' and u_email   != null " >
-			,(
 				select COUNT(*)
 				from ssafy_trot.Good g
 				where 1 =1
 				and g.b_idx =b.b_idx
 				and g.b_type =b.b_type
 				and g.u_email =  #{u_email}
-			)as good_flag
-			</if>
+			)as good_flag, </if>
+				(	
+				SELECT COUNT(*) 
+				from ssafy_trot.Good g
+				where 1=1
+				and 	g.b_idx = b.b_idx
+				and		g.b_type =b.b_type 
+			) as good_cnt
 		from ssafy_trot.Board b
 		where 1=1 
-		and b_type =  #{b_type}
-		and b_idx = #{b_idx};
+		and b_idx = #{b_idx}
+		and b_type = #{b_type};
 	</select>
 	
 	<select id="replylist" resultType="ReplyDto">
@@ -221,7 +220,8 @@
 				ui.u_name as r_name,
 				ui.u_profileImg as r_profileImg,
 				r.b_type,
-				r.b_idx
+				r.b_idx,
+				r.r_date
 		from ssafy_trot.Reply r 
 		left outer join ssafy_trot.UserInfo ui
 				on ui.u_email = r.u_email 
