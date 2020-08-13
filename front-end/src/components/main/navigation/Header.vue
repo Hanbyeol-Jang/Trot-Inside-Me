@@ -92,14 +92,19 @@ export default {
       },
       goUserDetail() {
         if(this.isLoggedIn && this.$route.name !== 'UserDetailView') {
-            if (this.user.u_isAdmin) {
-              this.$router.push({ name: 'AdminView' })
-            } else {
-              this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
-            }
+            this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
         } else {
           this.$router.push({ name: 'Login' })
         }
+        // if(this.isLoggedIn && this.$route.name !== 'UserDetailView') {
+        //     if (this.user.u_isAdmin) {
+        //       this.$router.push({ name: 'AdminView' })
+        //     } else {
+        //       this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
+        //     }
+        // } else {
+        //   this.$router.push({ name: 'Login' })
+        // }
       },
     },
     created() {

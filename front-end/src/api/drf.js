@@ -22,6 +22,9 @@ export default{
         // main
         mainList: '/board/mainlist/',
         
+        // follow
+        follow: '/user/follow/',
+
         // program
         programList: '/admin/tvlist',
         programCreate: '/admin/tvadd',
