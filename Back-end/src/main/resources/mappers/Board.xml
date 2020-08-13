@@ -9,12 +9,23 @@
 	<select id="singerAllList" resultType="com.web.curation.dto.SingerDto">
 		select * from Singer;
 	</select>
- 	<select id="singerSearch" parameterType="int" resultType="com.web.curation.dto.SingerDto">
-		select * from Singer where s_idx = #{s_idx};
+ 	<select id="singerSearch" resultType="com.web.curation.dto.SingerDto">
+	 	select s_idx, 
+				s_name, 
+				s_url,
+				s_img, 
+				s_cafeUrl,
+				(
+					select COUNT(*)
+					from ssafy_trot.`Following` f
+					where f.s_idx  = s.s_idx 
+				) as f_cnt
+		from ssafy_trot.Singer s
+		where s_idx =#{s_idx};
 	</select>
 	
 	<!-- 전체 영상, 기사 리슽  -->
-	<select id="mainlist">
+	<select id="mainlist" resultType="BoardPK">
 		select  b_idx,
 			b_type,
 			b_title,

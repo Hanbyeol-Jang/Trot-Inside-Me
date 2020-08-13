@@ -57,7 +57,7 @@ public class BoardServiceImpl implements BoardService {
 	
 	
 	@Override
-	public List<BoardDto> mainlist(int b_type) {
+	public List<BoardPK> mainlist(int b_type) {
 		return boardDao.mainlist(b_type);
 	}
 

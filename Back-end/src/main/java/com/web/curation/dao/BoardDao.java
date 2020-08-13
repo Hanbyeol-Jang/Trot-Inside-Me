@@ -14,7 +14,7 @@ public interface BoardDao {
 	List<SingerDto> singerAllList();
 	SingerDto singerSearch(int s_idx);
 	//메인리스트 
-	List<BoardDto> mainlist(int b_type);
+	List<BoardPK> mainlist(int b_type);
 	
 	public void insertVideo(BoardDto boardDto); // 네이버 동영상 DB에 넣기
 	public void insertArticle(BoardDto boardDto); // 네이버 기사 DB에 넣기

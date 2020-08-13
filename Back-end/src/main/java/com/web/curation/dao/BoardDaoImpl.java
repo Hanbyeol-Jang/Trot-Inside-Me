@@ -34,7 +34,7 @@ public class BoardDaoImpl implements BoardDao {
 	}
 
 	@Override
-	public List<BoardDto> mainlist(int b_type) {
+	public List<BoardPK> mainlist(int b_type) {
 		return sqlSession.selectList(ns + "mainlist", b_type);
 	}
 

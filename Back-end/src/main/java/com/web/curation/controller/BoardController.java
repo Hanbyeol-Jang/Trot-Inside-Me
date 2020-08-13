@@ -71,7 +71,7 @@ public class BoardController {
 	// 가수 디테일
 	@GetMapping("/singerdetail/{s_idx}")
 	@ApiOperation(value = "가수 디테일")
-	public ResponseEntity<SingerDto> singerDetail(@RequestParam int s_idx) {
+	public ResponseEntity<SingerDto> singerDetail(@PathVariable int s_idx) {
 		SingerDto singerDto = boardService.singerSearch(s_idx);
 		if (singerDto != null) {
 			return new ResponseEntity<SingerDto>(singerDto, HttpStatus.OK);
@@ -83,9 +83,9 @@ public class BoardController {
 	// 해당 영상/기사 리스트 - 좋아요
 	@GetMapping("/mainlist/{b_type}")
 	@ApiOperation(value = "메인 리스트 ")
-	public ResponseEntity<List<BoardDto>> mainList(@PathVariable int b_type, @RequestParam int page) {
-		List<BoardDto> showList = new ArrayList<BoardDto>();
-		List<BoardDto> list = boardService.mainlist(b_type);
+	public ResponseEntity<List<BoardPK>> mainList(@PathVariable int b_type, @RequestParam int page) {
+		List<BoardPK> showList = new ArrayList<BoardPK>();
+		List<BoardPK> list = boardService.mainlist(b_type);
 		int lastPageRemain = list.size() % 5;
 		int lastPage = list.size() - lastPageRemain;
 		page = 5 * page - 5;
@@ -99,7 +99,7 @@ public class BoardController {
 				showList.add(list.get(i));
 			}
 		}
-		return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
+		return new ResponseEntity<List<BoardPK>>(showList, HttpStatus.OK);
 	}
 
 	// 해당 가수 영상 리스트
