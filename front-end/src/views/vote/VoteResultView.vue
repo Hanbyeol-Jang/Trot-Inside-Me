@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div>
     <div align="center" class="col-auto">
         <iframe                    
@@ -6,13 +7,19 @@
         </iframe>
     </div>
   </div>
+=======
+  <div></div>
+>>>>>>> BE-Develop
 </template>
 
 <script>
 export default {
     name:"VoteResultView"
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> BE-Develop
 </script>
 
 <style>

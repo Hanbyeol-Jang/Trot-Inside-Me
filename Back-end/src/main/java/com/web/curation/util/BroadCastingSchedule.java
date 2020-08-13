@@ -76,7 +76,7 @@ public class BroadCastingSchedule {
 
 	// 하루에 한번 스케쥴 넣기
 //	@Scheduled(cron = "0 0 0 * * ?")
-	@Scheduled(cron = "50 45 15 * * ?")
+	@Scheduled(cron = "0 30 10 * * ?")
 	public void insertSingerSchedule() throws Exception {
 		// db 가수 리스트 받아옴.
 		List<SingerDto> dsList = timeService.selectSinger();

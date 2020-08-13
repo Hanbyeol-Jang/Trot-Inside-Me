@@ -10,5 +10,4 @@ public class BroadCastingDto {
 	private String bc_time;
 	private String bc_member;
 	private String bc_title;
-	
 }

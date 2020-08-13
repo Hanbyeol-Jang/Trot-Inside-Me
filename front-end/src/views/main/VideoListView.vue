@@ -18,7 +18,11 @@ export default {
     },
     computed: {
       singerId() {
+<<<<<<< HEAD
         return parseInt(this.$route.params.singerId)
+=======
+        return this.$route.params.singerId
+>>>>>>> BE-Develop
       }
     },
 }

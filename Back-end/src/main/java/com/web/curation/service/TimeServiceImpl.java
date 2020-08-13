@@ -43,4 +43,10 @@ public class TimeServiceImpl implements TimeService {
 		dao.insertSingerSchedule(slist);
 	}
 
+	@Override
+	public BroadCastingDto selectBroadCasting(int bc_idx) {
+		
+		return dao.selectBoradCasting(bc_idx);
+	}
+
 }
