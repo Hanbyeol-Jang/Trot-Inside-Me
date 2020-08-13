@@ -19,20 +19,29 @@
     <div class="text-center mt-3">
       <v-btn rounded color="pink" dark><h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3></v-btn>
     </div>
-    <v-container>
-      <v-row dense>
-        <v-col 
-          v-for="menu in menuItems"
-          :key="menu.id"
-          cols="12">
-          <v-card
-            color="#FCE4EC"
-            raised
-            @click="goMenuDetail(menu.id)"
-          >
-            <v-card-title><h2><i :class="menu.icon" class="mr-2"></i>{{ menu.title }}</h2></v-card-title>
-          </v-card>
-        </v-col>
+    <v-container class="mt-4 text-center">
+      <v-row no-gutters>
+        <template v-for="menu in menus">
+          <v-col :key="menu.id">
+            <v-card
+              class="pa-2"
+              outlined
+              tile
+              color="white"
+              @click="goMenuDetail(menu.id)"
+            >
+              <VideoIcon v-if="menu.id === 1" />
+              <MagazineIcon v-if="menu.id === 2" />
+              <CalendarIcon v-if="menu.id === 3" />
+              <div class="menu-title">{{ menu.title }}</div>
+            </v-card>
+          </v-col>
+          <v-responsive
+            v-if="menu.id === 2"
+            :key="`width-${menu.id}`"
+            width="100%"
+          ></v-responsive>
+        </template>
       </v-row>
     </v-container>
   </div>
@@ -42,18 +51,28 @@
 import axios from 'axios'
 import SERVER from '@/api/drf'
 
+import VideoIcon from '@/assets/icon/video-icon.svg'
+import MagazineIcon from '@/assets/icon/magazine-icon.svg'
+import CalendarIcon from '@/assets/icon/calendar-icon.svg'
+
 export default {
   name: 'SingerDetailView',
   data() {
     return {
       s_idx: this.$route.params.singerId,
       singer: {},
-      menuItems: [ 
-        { id: 1, title: '영상 보기', icon: 'fas fa-play-circle'},
-        { id: 2, title: '기사 보기', icon: 'fas fa-newspaper'},
-        { id: 3, title: '스케줄 보기', icon: 'far fa-calendar-alt'},
+      menus: [
+        { id: 1, title: '영상 보기'},
+        { id: 2, title: '기사 보기'},
+        { id: 3, title: '스케줄 보기'},
+        { id: 4, title: ''},
       ],
     }
+  },
+  components: {
+    VideoIcon,
+    MagazineIcon,
+    CalendarIcon,
   },
   methods: {
     getSingerDetail() {
@@ -76,3 +95,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.menu-title{
+  font-size: 25px;
+}
+</style>

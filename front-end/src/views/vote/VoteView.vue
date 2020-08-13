@@ -1,8 +1,8 @@
 <template>
   <div align="center mt-5">
-    <iframe
-      src="https://public.tableau.com/views/1_15971485028810/1_1?:language=ko&:display_count=y&publish=yes&:origin=viz_share_link:showVizHome=no&:embed=true"
-      width="100%" height="700px">
+    <iframe class="mt-4 mx-1"                    
+      src="https://public.tableau.com/views/trot/1?:language=ko&:display_count=y&publish=yes&:origin=viz_share_link:showVizHome=no&:embed=true"
+      width="100%" height="1400px">
     </iframe>
     <ScrollTopButton />
   </div>
@@ -18,7 +18,7 @@ export default {
   name: 'VoteView',
   computed: {
     ...mapState(['user']),
-    ...mapGetters(['isLoggedIn']),
+    ...mapGetters(['isLoggedIn', 'config']),
   },
   components: {
     ScrollTopButton,
@@ -26,12 +26,7 @@ export default {
   methods:{
     ...mapActions(['getUser']),
     getuser() {
-      const axiosConfig = {
-        headers:{
-            token : `${this.$cookies.get('auth-token')}`
-        },
-      }
-      axios.get(SERVER.URL+`/admin/userNow`,axiosConfig)
+      axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo, this.config)
         .then((reaponse)=>{
           if(reaponse.data.u_hasVote===0){
             this.$router.push({ name: 'VoteLocalSelectView'})

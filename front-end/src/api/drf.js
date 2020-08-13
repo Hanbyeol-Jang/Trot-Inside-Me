@@ -12,13 +12,21 @@ export default{
         getUserInfo: '/user/getUserInfo',
 
         // singer
-        singerList: '/singer',
+        singerList: '/board/singerlist',
+        singerDetail: '',
         singerCreate: '/admin/singeradd',
         singerDelete: '/admin/singerdelete/',
+        singerVideoList: '/board/videolist/',
+        singerArticleList: '/board/articlelist/',
 
+        // main
+        mainList: '/board/mainlist/',
+        
         // program
         programList: '/admin/tvlist',
         programCreate: '/admin/tvadd',
         programDelete: '/admin/tvdelete/',
+        programSchedule: '/board/schedule/todayList',
+
     }
 }

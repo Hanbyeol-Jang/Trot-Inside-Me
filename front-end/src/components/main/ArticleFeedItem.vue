@@ -15,10 +15,10 @@
         >
         {{ article.b_date }}
         <v-icon class="mr-1">mdi-heart</v-icon>
-        <span class="subheading mr-2">{{ article.b_good }}</span>
+        <span class="subheading mr-2">{{ article.good_cnt }}</span>
         <span class="mr-1">·</span>
         <i class="fas fa-comment fa-lg mr-1"></i>
-        <span class="subheading mr-2">{{ article.b_reply }}</span>
+        <span class="subheading mr-2">{{ article.br_cnt }}</span>
         </v-row>
     </v-card>
 </template>
