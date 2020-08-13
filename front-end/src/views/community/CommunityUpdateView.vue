@@ -83,7 +83,7 @@ export default {
             if (this.$refs.file.$refs.input.files[0]!==undefined){
               data.append('image',this.image)
             }
-            axios.post(`${SERVER.URL}/community/`,data,this.axiosConfig)
+            axios.put(`${SERVER.URL}/community/`,data,this.axiosConfig)
             .then(()=>{
                 this.$router.push({ name: 'CommunityIndexView'})
             })

@@ -69,6 +69,7 @@ export default {
 
 
     infiniteHandler($state) {
+      console.log(this.page)
       const axiosConfig2 = {
         headers:{
           token: `${this.$cookies.get('auth-token')}`,
@@ -78,6 +79,7 @@ export default {
       if (parseInt(this.commentCnt / 5)+1 >= this.page){
         axios.get(SERVER.URL +`/community/detail/replylist/${this.$route.params.communityId}`, axiosConfig2)
           .then(res => {
+            console.log(res.data)
             setTimeout(() => {
               this.page+=1
               this.comments.push(...res.data)
@@ -99,7 +101,8 @@ export default {
         const axiosConfig2 = {
             headers:{
                 token : `${this.$cookies.get('auth-token')}`
-            }
+            },
+            params: {page: this.page}
         }
       if (!this.commentData.content){
         this.$alert('내용을 작성해주세요')
@@ -111,7 +114,6 @@ export default {
 -          axios.post(SERVER.URL + `/community/replyadd`,json,axiosConfig2)
            .then((res) => {
               this.$emit('add-comment')
-              this.page = 1
               this.commentData.content = ''
               this.comments = []
               this.comments.push(...res.data)
@@ -131,12 +133,9 @@ export default {
       }
         axios.delete(SERVER.URL+`/community/replydelete/${this.$route.params.communityId}/${idx}`,axiosConfig2)
         .then((response)=>{
-            console.log(response)
             this.$emit('delete-comment')
             this.comments = []
-            console.log("init")
             this.comments.push(...response.data)
-            console.log(this.comments)
             this.$alert('삭제 완료')
         })
         .catch((err)=>{

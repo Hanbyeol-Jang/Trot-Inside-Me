@@ -92,6 +92,8 @@ export default {
                     this.$router.push({name:'Home'})                
                 }
             },
+
+            
         getuser(){
             axios.get(SERVER.URL+`/user/getUserInfo`,this.axiosConfig)
             .then((reaponse)=>{
@@ -116,6 +118,8 @@ export default {
                 console.error(err)
             })
         },
+
+
         showLikeChange(){
             const axiosConfig2 = {
               headers:{
@@ -135,13 +139,31 @@ export default {
             })
             .catch((err) => {console.log(err)})
             },
+
+
         goCommunity(){
             this.$router.push({ name: 'CommunityDetailView', params: { communityId: this.community.co_idx, page:this.page }})
         },
+
+
         deleteArticle(){
-            const idx = this.community.co_idx
-            this.$emit('community-delete',idx)
-        },
+            this.$confirm(
+                {
+                message: `삭제하시겠습니까?`,
+                button: {
+                    yes: '삭제하기',
+                    no: '아니요',
+                },
+                callback: confirm => {
+                    if (confirm) {
+                        const idx = this.community.co_idx
+                        this.$emit('community-delete',idx)                    
+                    }
+                }
+                }
+            )},
+
+
         editArticle(){
             this.$router.push({ name: 'CommunityUpdateView', params: { communityId: this.community.co_idx, page:this.page }})
         },
