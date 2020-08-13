@@ -6,15 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.json.JSONObject;
-import org.jsoup.helper.HttpConnection;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +23,7 @@ public class KakaoAPI {
 
 	@Value("${KAKAO_API_KEY}")
 	private String API_KEY;
-	
+
 	public String getAccessToken(String authorize_code) {
 		String access_Token = "";
 		String refresh_Token = "";
@@ -47,7 +41,7 @@ public class KakaoAPI {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
-			sb.append("&client_id="+API_KEY);
+			sb.append("&client_id=" + API_KEY);
 			sb.append("&redirect_uri=http://localhost:8080/social/login/kakao");
 			sb.append("&code=" + authorize_code);
 			bw.write(sb.toString());
@@ -112,6 +106,7 @@ public class KakaoAPI {
 			JsonElement element = parser.parse(result);
 
 			JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
+
 			if(properties.getAsJsonObject().get("nickname") != null)
 				userDto.setU_name(properties.getAsJsonObject().get("nickname").getAsString());
 			userDto.setU_email(element.getAsJsonObject().get("id").getAsString());
@@ -125,23 +120,24 @@ public class KakaoAPI {
 	         } else {
 	            userDto.setU_profileImg("");
 	         }
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return userDto;
 	}
-	
+
 	// 나에게 메세지 보내기
-	public void messageForMe(Map<String,Object> map) {
+	public void messageForMe(Map<String, Object> map) {
 		String reqURL = "https://kapi.kakao.com/v2/api/talk/memo/default/send";
-		
+
 		String accessToken = (String) map.get("accessToken");
 		BroadCastingDto bcDto = (BroadCastingDto) map.get("broadCastingDto");
-		
+
 		try {
 			URL url = new URL(reqURL);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			
+
 			conn.setRequestMethod("POST");
 			conn.setDoOutput(true);
 
@@ -166,7 +162,7 @@ public class KakaoAPI {
 			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 			wr.write(msg);
 			wr.flush();
-			
+
 			int responseCode = conn.getResponseCode();
 //			System.out.println("responseCode : " + responseCode);
 		} catch (IOException e) {
