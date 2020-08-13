@@ -105,9 +105,9 @@ public class BoardController {
 	// 해당 가수 영상 리스트
 	@GetMapping("/videolist/{s_idx}")
 	@ApiOperation(value = "가수로 검색 비디오")
-	public ResponseEntity<List<BoardDto>> singerList(@PathVariable int s_idx, @RequestParam int page) {
-		List<BoardDto> list = null;
-		List<BoardDto> showList = new LinkedList<BoardDto>();
+	public ResponseEntity<List<BoardPK>> singerList(@PathVariable int s_idx, @RequestParam int page) {
+		List<BoardPK> list = null;
+		List<BoardPK> showList = new LinkedList<BoardPK>();
 		// s_idx로 가수 이름 검색
 		SingerDto singerDto = boardService.singerSearch(s_idx);
 
@@ -139,7 +139,7 @@ public class BoardController {
 		}
 
 		if (showList != null) {
-			return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
+			return new ResponseEntity<List<BoardPK>>(showList, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
@@ -149,9 +149,9 @@ public class BoardController {
 	// 해당 가수 기사 리스트
 	@GetMapping("/articlelist/{s_idx}")
 	@ApiOperation(value = "가수로 검색 기사 ")
-	public ResponseEntity<List<BoardDto>> searchNews(@PathVariable("s_idx") int s_idx, @RequestParam int page) {
-		List<BoardDto> list = null;
-		List<BoardDto> showList = new LinkedList<BoardDto>();
+	public ResponseEntity<List<BoardPK>> searchNews(@PathVariable("s_idx") int s_idx, @RequestParam int page) {
+		List<BoardPK> list = null;
+		List<BoardPK> showList = new LinkedList<BoardPK>();
 		SingerDto singerDto = boardService.singerSearch(s_idx);
 
 		if (page == 1) {
@@ -177,7 +177,7 @@ public class BoardController {
 		}
 
 		if (showList != null) {
-			return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
+			return new ResponseEntity<List<BoardPK>>(showList, HttpStatus.OK);
 		} 
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
@@ -189,7 +189,7 @@ public class BoardController {
 		GoodDto dto = new GoodDto();
 		dto.setB_idx(b_idx);
 		dto.setB_type(1);
-		if (!token.equals("undefined")) {// 회원
+		if (!token.equals("undefine")) {// 회원
 			dto.setU_email(userService.getTokenInfo(request).getU_email());
 		}
 		System.out.println(dto.toString());
@@ -208,7 +208,7 @@ public class BoardController {
 		GoodDto dto = new GoodDto();
 		dto.setB_idx(b_idx);
 		dto.setB_type(2);
-		if (!token.equals("undefined")) {// 회원
+		if (!token.equals("undefine")) {// 회원
 			System.out.println("회원이다잉");
 			dto.setU_email(userService.getTokenInfo(request).getU_email());
 		}
@@ -328,7 +328,7 @@ public class BoardController {
 
 	/* 좋아요 클릭 */
 	@ApiOperation("좋아요 클릭")
-	@PostMapping("/good/{b_type}/{b_idx}")
+	@GetMapping("/good/{b_type}/{b_idx}")
 	public ResponseEntity<Integer> goodClick(@PathVariable("b_type") int b_type, @PathVariable("b_idx") int b_idx,
 			@RequestParam int isgood, HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);

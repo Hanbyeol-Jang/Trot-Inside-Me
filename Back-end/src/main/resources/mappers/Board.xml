@@ -40,7 +40,8 @@
 				and 	g.b_idx = b.b_idx
 				and		g.b_type =b.b_type 
 			) as good_cnt
-		from ssafy_trot.Board b;
+		from ssafy_trot.Board b
+		order by good_cnt desc;
 	</select>
 	
 	<!-- 비디오 추가 -->
@@ -57,9 +58,33 @@
 	</insert>
 
 	<!-- 비디오 리스트 조회 -->
-	<select id="selectvideolist" resultType="BoardDto">
-		select *
-		from Board
+	<select id="selectvideolist" resultType="BoardPK">
+		select b_idx,
+				b_type,
+				b_title,
+				b_thumbnail ,
+				b_url ,
+				b_date ,
+				b_member ,
+				b_company,
+				b_content ,
+				(	select 	COUNT(*) 
+					from ssafy_trot.Board 	
+				) as b_cnt,
+				(	select 	COUNT(*) 
+					from 	ssafy_trot.Reply r 
+					where 	1=1 
+					and 	r.b_idx = b.b_idx
+					and		r.b_type =b.b_type 
+				) as br_cnt,
+				(
+					SELECT COUNT(*) 
+					from ssafy_trot.Good g
+					where 1=1
+					and 	g.b_idx = b.b_idx
+					and		g.b_type =b.b_type 
+				) as good_cnt
+		from Board b
 		where 1=1
 		and b_member = #{s_name}
 		and b_type = 1
@@ -85,13 +110,36 @@
 
 	</select>
 
-	<!-- 기사 리스트 조회 -->
-	<select id="selectarticlelist" resultType="BoardDto">
-		select *
-		from Board
-		where 1=1
-		and b_member = #{s_name}
-		and b_type = 2
+	<!-- 영상/기사 리스트 조회 -->
+	<select id="selectarticlelist" resultType="BoardPK">
+		select  b_idx,
+			b_type,
+			b_title,
+			b_thumbnail ,
+			b_url ,
+			b_date ,
+			b_member ,
+			b_company,
+			b_content ,
+			(	select 	COUNT(*) 
+				from ssafy_trot.Board 	
+			) as b_cnt,
+			(	select 	COUNT(*) 
+				from 	ssafy_trot.Reply r 
+				where 	1=1 
+				and 	r.b_idx = b.b_idx
+				and		r.b_type =b.b_type 
+			) as br_cnt,
+			(
+				SELECT COUNT(*) 
+				from ssafy_trot.Good g
+				where 1=1
+				and 	g.b_idx = b.b_idx
+				and		g.b_type =b.b_type 
+			) as good_cnt
+		from ssafy_trot.Board b 
+		where 	b_member = #{s_name}
+		and 	b_type = 2
 		order by b_idx desc;
 	</select>
 	

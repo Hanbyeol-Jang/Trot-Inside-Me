@@ -49,7 +49,7 @@ public class BoardDaoImpl implements BoardDao {
 	}
 
 	@Override
-	public List<BoardDto> selectVideoList(String s_name) {
+	public List<BoardPK> selectVideoList(String s_name) {
 		return sqlSession.selectList(ns + "selectvideolist", s_name);
 	}
 
@@ -62,7 +62,7 @@ public class BoardDaoImpl implements BoardDao {
 	}
 
 	@Override
-	public List<BoardDto> selectArticleList(String s_name) {
+	public List<BoardPK> selectArticleList(String s_name) {
 		return sqlSession.selectList(ns + "selectarticlelist", s_name);
 	}
 

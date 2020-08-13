@@ -20,8 +20,12 @@ public interface BoardService {
 		
 	public void insertVideo(String s_name); // 네이버 동영상 DB에 넣기
 	public void insertArticle(String s_name); // 네이버 기사 DB에 넣기
-	public List<BoardDto> selectVideoList(String s_name); // s_name에 대한 전체 동영상 리스트 출력
-	public List<BoardDto> selectArticleList(String s_name); // s_name에 대한 전체 기사 리스트 출력
+	
+	// 가수 검색 후 영상 리스트 
+	public List<BoardPK> selectVideoList(String s_name);
+	
+	//가수 검색 후 기사 리스트 
+	public List<BoardPK> selectArticleList(String s_name); 
 	public boolean isUrl(String vno, String name); // 네이버 동영상 vno가 db에 있는지 확인
 	public boolean isUrl2(String url, String name); // 네이버 기사 url이 db에 있는지 확인
 	//기사+동영상 디테일 

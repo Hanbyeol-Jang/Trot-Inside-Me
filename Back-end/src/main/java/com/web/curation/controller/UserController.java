@@ -65,17 +65,6 @@ public class UserController {
 		}
 	}
 	
-	// 토큰 디코딩.. 유저 정보 반환
-	@ApiOperation("토큰 디코딩.. 유저 정보 반환")
-	@GetMapping("/getUserInfo")
-	public ResponseEntity<UserDto> getUserInfo(HttpServletRequest request){
-		UserDto dto = userService.getTokenInfo(request); // 헤더에서 유저정보 추출
-		if(dto.getU_name().equals("F")) {
-			return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
-		}else {
-			return new ResponseEntity<>(dto, HttpStatus.OK);
-		}
-	}
 	
 //수정
 //	@PostMapping("/accounts/logout")

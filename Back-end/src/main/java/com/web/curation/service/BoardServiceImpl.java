@@ -137,13 +137,13 @@ public class BoardServiceImpl implements BoardService {
 
 	// 네이버 동영상 전체 리스트 출력
 	@Override
-	public List<BoardDto> selectVideoList(String s_name) {
+	public List<BoardPK> selectVideoList(String s_name) {
 		return boardDao.selectVideoList(s_name);
 	}
 
 	// 네이버 기사 전체 리스트 출력
 	@Override
-	public List<BoardDto> selectArticleList(String s_name) {
+	public List<BoardPK> selectArticleList(String s_name) {
 		return boardDao.selectArticleList(s_name);
 	}
 
