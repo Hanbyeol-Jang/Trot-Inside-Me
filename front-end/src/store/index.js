@@ -18,6 +18,7 @@ export default new Vuex.Store({
     programs: [],
     contentsCount: 0,
     user: {},
+    isFollow: 0,
   },
   getters: {
     isLoggedIn: state => !!state.authToken,
@@ -44,6 +45,9 @@ export default new Vuex.Store({
     SET_CONTENTS_CNT(state, cnt) {
       state.contentsCount = cnt
     },
+    SET_FOLLOW(state, isFollow) {
+      state.isFollow = isFollow
+    },
   },
   actions: {
     // Auth
@@ -66,12 +70,13 @@ export default new Vuex.Store({
         })
         .catch(err => console.log(err))
     },
-    kakaoLogin({ commit }, accessToken) {
+    kakaoLogin({ dispatch, commit }, accessToken) {
       const axiosConfig = { headers:{ access_token : accessToken } }
       axios.post(SERVER.URL + SERVER.ROUTES.kakaoLogin, null, axiosConfig)
         .then((res)=>{
           console.log('Kakao Login SUCCESS')
             commit('SET_TOKEN', res.data)
+            dispatch('getUser')
             router.push({ name: 'Home' })
         })
         .catch((err)=>{ console.log(err) })
@@ -135,9 +140,19 @@ export default new Vuex.Store({
         .catch(err => console.log(err))
     },
     // Follow Singer
-     
-
-
+    follow({ state, commit }, info) {
+      console.log('follow')
+      const options = {
+        headers:{ token: state.authToken },
+        params: { isfollow: info.f_flag }
+      }
+      axios.get(SERVER.URL + SERVER.ROUTES.follow + info.s_idx, options)
+      .then(res => { 
+        commit('SET_FOLLOW', res.data) 
+        console.log(res.data)
+      })
+      .catch(err => { console.error(err) })
+    },
     // Program Data
     fetchPrograms({ commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.programList)

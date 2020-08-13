@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex'
 // <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 import VideoIcon from '@/assets/icon/video-icon.svg'
 import MagazineIcon from '@/assets/icon/magazine-icon.svg'
@@ -82,7 +83,12 @@ export default {
         ],
     }
   },
+  computed: {
+    ...mapState(['user']),
+    ...mapGetters(['isLoggedIn']),
+  },
   methods: {
+    ...mapActions(['getUser']),
     goMenu(m_idx) {
       if (m_idx === 1) {
         this.$router.push({ name: 'VideoListView', params: { singerId: 0 }})
@@ -93,6 +99,11 @@ export default {
       }
     },
   },
+  created() {
+    if (this.isLoggedIn === 1) {
+      this.getUser()
+    }
+  }
 }
 </script>
 
