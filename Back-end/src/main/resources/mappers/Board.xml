@@ -191,23 +191,22 @@
 				and 	r.b_idx = b.b_idx
 				and		r.b_type =b.b_type 
 			) as br_cnt,
+			<if test='u_email  != "" and u_email   != null ' >
 			(
-				SELECT COUNT(*) 
-				from ssafy_trot.Good g
-				where 1=1
-				and 	g.b_idx = b.b_idx
-				and		g.b_type =b.b_type 
-			) as good_cnt
-			<if test="u_email  != '' and u_email   != null " >
-			,(
 				select COUNT(*)
 				from ssafy_trot.Good g
 				where 1 =1
 				and g.b_idx =b.b_idx
 				and g.b_type =b.b_type
 				and g.u_email =  #{u_email}
-			)as good_flag
-			</if>
+			)as good_flag, </if>
+				(	
+				SELECT COUNT(*) 
+				from ssafy_trot.Good g
+				where 1=1
+				and 	g.b_idx = b.b_idx
+				and		g.b_type =b.b_type 
+			) as good_cnt
 		from ssafy_trot.Board b
 		where 1=1 
 		and b_idx = #{b_idx}

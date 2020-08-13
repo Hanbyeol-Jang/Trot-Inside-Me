@@ -161,12 +161,12 @@
 			<version>23.0</version>
 		</dependency>
 		<!-- log4j2 -->
-		<!-- <dependency>
+		<!--  <dependency>
 			<groupId>org.bgee.log4jdbc-log4j2</groupId>
 			<artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
 			<version>1.16</version>
-		</dependency> -->
-
+		</dependency> 
+ -->
 
 	</dependencies>
 

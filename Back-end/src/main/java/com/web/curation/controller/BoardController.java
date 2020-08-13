@@ -71,8 +71,7 @@ public class BoardController {
 	// 가수 디테일
 	@GetMapping("/singerdetail/{s_idx}")
 	@ApiOperation(value = "가수 디테일")
-	public ResponseEntity<SingerDto> singerDetail(@PathVariable int s_idx 
-			, HttpServletRequest request) {
+	public ResponseEntity<SingerDto> singerDetail(@PathVariable int s_idx, HttpServletRequest request) {
 		String token = request.getHeader("token");
 		GoodDto dto = new GoodDto();
 		dto.setB_idx(s_idx);
@@ -187,29 +186,33 @@ public class BoardController {
 
 		if (showList != null) {
 			return new ResponseEntity<List<BoardPK>>(showList, HttpStatus.OK);
-		} 
+		}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 
 	@GetMapping("/detail/{b_type}/{b_idx}")
 	@ApiOperation(value = "영상/기사  디테일 ")
-	public ResponseEntity<BoardPK> videoDetail(@PathVariable("b_type") int b_type, @PathVariable("b_idx") int b_idx, HttpServletRequest request) {
+	public ResponseEntity<BoardPK> videoDetail(@PathVariable("b_type") int b_type, @PathVariable("b_idx") int b_idx,
+			HttpServletRequest request) {
 		String token = request.getHeader("token");
 		GoodDto dto = new GoodDto();
 		dto.setB_idx(b_idx);
 		dto.setB_type(b_type);
 		if (!token.equals("undefine")) {// 회원
-			dto.setU_email(userService.getTokenInfo(request).getU_email());
+			UserDto udto = userService.getTokenInfo(request);
+			if (udto.getU_name().equals("F")) {
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			}
+			dto.setU_email(udto.getU_email());
 		}
-		System.out.println(dto.toString());
+		System.out.println(token +" /// "+dto.toString());
 		BoardPK boardDto = boardService.detail(dto);
 		if (boardDto != null) {
 			return new ResponseEntity<BoardPK>(boardDto, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
-	}
 
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	}
 
 	@GetMapping("/replylist/{b_type}/{b_idx}")
 	@ApiOperation(value = "댓글리스트  ")
@@ -243,8 +246,8 @@ public class BoardController {
 	/* 댓글 작성 */
 	@ApiOperation("댓글 작성")
 	@PostMapping("/replyadd")
-	public ResponseEntity<List<ReplyDto>> replyadd(@RequestBody ReplyDto rDto, 
-			@RequestParam("page") int page, HttpServletRequest request) {
+	public ResponseEntity<List<ReplyDto>> replyadd(@RequestBody ReplyDto rDto, @RequestParam("page") int page,
+			HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -326,6 +329,7 @@ public class BoardController {
 	@GetMapping("/good/{b_type}/{b_idx}")
 	public ResponseEntity<Integer> goodClick(@PathVariable("b_type") int b_type, @PathVariable("b_idx") int b_idx,
 			@RequestParam int isgood, HttpServletRequest request) {
+		System.out.println("좋아요 입력 : " + isgood);
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -370,28 +374,27 @@ public class BoardController {
 		}
 	}
 
-	//나에게 메세지 보내기 (알림)
+	// 나에게 메세지 보내기 (알림)
 	@GetMapping("/board/tvmsg/{bc_idx}")
-	   public ResponseEntity<String> selectBroadCasting(@PathVariable("bc_idx") int bc_idx,HttpServletRequest request) {
-	      
-	      String useremail = userService.getTokenInfo(request).getU_email();
-	      String accessToken = userService.getUserInfo(useremail).getU_accessToken();
-	      System.out.println(bc_idx);
-	      BroadCastingDto broadCastingDto = timeService.selectBroadCasting(bc_idx);
-	      
-	      Map<String, Object> map = new LinkedHashMap<String, Object>();
-	      map.put("broadCastingDto",broadCastingDto);
-	      map.put("accessToken", accessToken);
-	      try{
-	         kakaoAPI.messageForMe(map);
-	      return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
-	      } catch(Exception e) {   
-	         e.printStackTrace();
-	         return new ResponseEntity<String>("FAIL",HttpStatus.NOT_FOUND);
-	      }
-	   }
-	
-	
+	public ResponseEntity<String> selectBroadCasting(@PathVariable("bc_idx") int bc_idx, HttpServletRequest request) {
+
+		String useremail = userService.getTokenInfo(request).getU_email();
+		String accessToken = userService.getUserInfo(useremail).getU_accessToken();
+		System.out.println(bc_idx);
+		BroadCastingDto broadCastingDto = timeService.selectBroadCasting(bc_idx);
+
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
+		map.put("broadCastingDto", broadCastingDto);
+		map.put("accessToken", accessToken);
+		try {
+			kakaoAPI.messageForMe(map);
+			return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("FAIL", HttpStatus.NOT_FOUND);
+		}
+	}
+
 	// Youtube Search
 	@GetMapping("/search/youtube")
 	@ApiOperation(value = "영상 좋아요순으로 정렬")
