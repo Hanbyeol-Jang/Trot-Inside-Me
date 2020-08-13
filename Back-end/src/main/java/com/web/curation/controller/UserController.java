@@ -118,7 +118,7 @@ public class UserController {
 			FollowDto dto = new FollowDto();
 			dto.setU_email(udto.getU_email());
 			dto.setS_idx(s_idx);
-			
+			System.out.println("처음 받은값"+isfollow );
 			if (isfollow == 1) { // 좋아요 취소
 				if (userService.followDelete(dto)) {
 					isfollow = 0;
@@ -128,6 +128,7 @@ public class UserController {
 					isfollow = 1;
 				}
 			}
+			System.out.println("변경된  값"+isfollow );
 			return new ResponseEntity<Integer>(isfollow, HttpStatus.OK);
 		}
 	}
