@@ -34,6 +34,11 @@ public class CommuServiceImpl implements CommuService {
 	public boolean deleteCommu(int co_idx) {
 		return commuDao.deleteCommu(co_idx)==1;
 	}
+	@Override
+	public boolean updateDetail(CommuDto dto) {
+		return commuDao.updateDetail(dto)==1;
+	}
+
 
 	@Override
 	public boolean addCommuReply(CoReplyDto dto) {

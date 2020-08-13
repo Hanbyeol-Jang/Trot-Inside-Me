@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.KakaoService;
+import com.web.curation.service.UserService;
 import com.web.curation.util.JwtTokenProvider;
 import com.web.curation.util.KakaoAPI;
 
@@ -32,42 +33,37 @@ public class kakaoController {
 	@Autowired
 	KakaoService kakaoService;
 	private HttpSession session;
+	@Autowired
+	private UserService userService;
 	@Value("${KAKAO_API_KEY}")
 	private String API_KEY;
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
-
-	// #삭제 예정
-	@GetMapping("/index")
-	public String index() throws SQLException {
-		return "index";
-	}
 
 	// #삭제 예정 - 프론트에서 구현하면 필요 없음
 	@GetMapping("/social/login")
 	public String login() throws SQLException {
 		String URL = "https://kauth.kakao.com/oauth/authorize?client_id=78183e66919b34b25f731ea9f2d99f0e"
 				+ "&redirect_uri=http://localhost:8080/social/login/kakao" + "&response_type=code";
-//		System.out.println(URL);
+
 		return "redirect:" + URL;
 	}
 
-	//# 삭제 예정 - 프론트에서 access값을 넘겨주면 필요 없음
+	// # 삭제 예정 - 프론트에서 access값을 넘겨주면 필요 없음
 	@GetMapping("/social/login/kakao")
 	public ResponseEntity<String> login(@RequestParam("code") String code) throws SQLException {
-//		System.out.println("logger - kakao login 후에 getCode");
-//		System.out.println("code : " + code);
-//		System.out.println("logger - code를 기반으로 getAccessToken");
+
 		String access_Token = "";
 		try {
 			access_Token = kakaoAPI.getAccessToken(code);
-//			System.out.println("controller access_token : " + access_Token);
+
 			return new ResponseEntity<String>(access_Token, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
 		}
 	}
+
 	// # 삭제 예정
 	@PostMapping("/kakao/login/getInfo")
 	public ResponseEntity<HashMap<String, Object>> getInfo(@RequestParam String access_Token) throws SQLException {
@@ -78,11 +74,6 @@ public class kakaoController {
 			userDto = kakaoAPI.getUserInfo(access_Token);
 
 			System.out.println("login Controller : " + userInfo);
-//      클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
-//  if (userInfo.get("email") != null) {
-//      session.setAttribute("userId", userInfo.get("email"));
-//      session.setAttribute("access_Token", access_Token);
-//  }
 			return new ResponseEntity<HashMap<String, Object>>(userInfo, HttpStatus.OK);
 
 		} catch (Exception e) {
@@ -97,39 +88,25 @@ public class kakaoController {
 	public ResponseEntity<String> login(HttpServletRequest request) {
 
 		String access_token = jwtTokenProvider.getAccessToken(request);
-
 		UserDto userDto = kakaoAPI.getUserInfo(access_token);
 		userDto.setU_accessToken(access_token);
 
-		
-		if (kakaoService.isEmail(userDto.getU_email())) {
-//			System.out.println("logger - 회원 정보가 db에 있습니다");
-			if(!kakaoService.isAccessToken(userDto)) {
-				// update
-				kakaoService.updateAccessToken(userDto);
-			}
-		} else {
-//			System.out.println("logger - 회원 정보가  db에 없습니다.");
-			// 디비 삽입
+		// db에 회원 정보가 있는지 확인
+		if (!kakaoService.isEmail(userDto.getU_email()))
 			kakaoService.insertKakao(userDto);
-			kakaoService.updateAccessToken(userDto);
-		}
-		System.out.println(userDto);
-		// TODO jinyong 수정해야됨
+
+		kakaoService.updateKakao(userDto);
+
 		String Token = jwtTokenProvider.createToken(userDto);
-		System.out.println(Token);
+
 		return new ResponseEntity<String>(Token, HttpStatus.OK);
 
 	}
-	
-	@GetMapping(value="/kakao/message")
-	@ApiOperation("나에게 보내기")
-	public ResponseEntity<String> messageForMe(@RequestParam String access_token){
-//		kakaoAPI.messageForMe(access_token);
-		return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
-	}
-	
-	// 로그아웃  access token과 refresh token을 만료시킴
+
+
+
+	// #삭제예정 
+	// 로그아웃 access token과 refresh token을 만료시킴
 	@PostMapping(value = "/kakao/token/logout")
 	@ApiOperation("로그아웃")
 	public void kakaoLogout(@RequestParam String access_Token) {
@@ -137,16 +114,23 @@ public class kakaoController {
 	}
 
 	// 로그아웃 앱서비스와의 연동을 끊음 => 카카오 로그인 탈퇴시 사용
-	@PostMapping(value = "/kakao/unlink")
+	@PostMapping(value = "/user/kakao/unlink")
 	@ApiOperation("로그아웃")
-	public void kakaoUnlink(@RequestParam String access_Token) {
-		kakaoAPI.kakaoUnlink(access_Token);
+	public void kakaoUnlink(HttpServletRequest request) {
+		String useremail = jwtTokenProvider.getInfo(request).getU_email();
+		String accessToken = userService.getUserInfo(useremail).getU_accessToken();
+
+		// TODO 우리 디비에서 해당 계정 삭제해줘야함.
+
+		kakaoAPI.kakaoUnlink(accessToken);
+		kakaoService.deleteKakao(useremail);
 	}
+
 	// 카카오 계정과 함께 로그아웃
 	@GetMapping(value = "/kakao/logout")
 	@ApiOperation("카카오계정과함께 로그아웃")
 	public String logout() {
-		String url = "https://kauth.kakao.com/oauth/logout?client_id="+API_KEY+"&logout_redirect_uri="
+		String url = "https://kauth.kakao.com/oauth/logout?client_id=" + API_KEY + "&logout_redirect_uri="
 				+ "http://localhost:8080/";
 		return "redirect:" + url;
 	}

@@ -23,15 +23,16 @@ public class KakaoServiceImpl implements KakaoService {
 	}
 
 	@Override
-	public boolean isAccessToken(UserDto userDto) {
-		return kakaoDao.isAccesstoken(userDto);
+	public void updateKakao(UserDto userDto) {
+		kakaoDao.updateKakao(userDto);
 	}
 
 	@Override
-	public void updateAccessToken(UserDto userDto) {
-		kakaoDao.updateAccessToken(userDto);
+	public void deleteKakao(String email) {
+		kakaoDao.deleteKakao(email);
 	}
 
+	
 
 
 }

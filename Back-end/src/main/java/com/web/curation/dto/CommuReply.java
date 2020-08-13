@@ -1,5 +1,7 @@
 package com.web.curation.dto;
 
+import java.security.Timestamp;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,5 +13,5 @@ public class CommuReply {
 	private String cr_content; //댓글 내
 	private String cr_email; //댓글 작성자 이메일
 	private String cr_name; //댓글 작성자 이름 
-	
+	private Timestamp co_date; //댓글 시간 
 }

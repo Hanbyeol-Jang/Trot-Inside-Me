@@ -13,6 +13,8 @@ public interface CommuService {
 	List<CommuDto> getCommuList(String u_email, String string);
 	//게시글 추가
 	boolean addCommu(CommuDto dto);
+	//게시글 수정
+	boolean updateDetail(CommuDto dto);
 	//게시글 삭제
 	boolean deleteCommu(int co_idx);
 	//게시글 디테일 

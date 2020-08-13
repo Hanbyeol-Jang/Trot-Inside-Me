@@ -15,6 +15,14 @@
 		delete from Community where co_idx = #{co_idx};
 	</delete>
 	
+	<!-- 커뮤니티 게시글 수정  -->
+	<update id="updateCommu">
+		update 	Community 
+		set 	co_content=#{co_content} , 
+				co_img=#{co_img}
+		where 	co_idx = #{co_idx};
+	</update>
+	
 	<!-- 커뮤니티 게시글 리스트 출력  + 댓글 수  + 좋아요 수 / 최신순 -->
 	<select id="getCommuList" 
 	parameterType="HashMap" resultType="com.web.curation.dto.CommuDto">
@@ -82,7 +90,8 @@
 					where c.co_idx = g.co_idx 
 					and g.u_email  = #{u_email}
 				) as good_flag 
-		from ssafy_trot.Community c ;
+		from ssafy_trot.Community c 
+		where co_idx = #{co_idx};
 	</select>
 	
 	<!-- 커뮤니티 디테일 댓글 리스트  -->

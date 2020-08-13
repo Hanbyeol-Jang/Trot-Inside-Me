@@ -36,6 +36,11 @@ public class CommuDaoImpl implements CommuDao {
 	}
 
 	@Override
+	public int updateDetail(CommuDto dto) {
+		return session.update(ns+"updateCommu", dto);
+	}
+
+	@Override
 	public CommuDto getCommuDetail(CoGoodDto gdto) {
 		return session.selectOne(ns+"getCommuDetail", gdto);
 	}

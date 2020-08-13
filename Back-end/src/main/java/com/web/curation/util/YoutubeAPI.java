@@ -15,17 +15,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.web.curation.dao.SearchDao;
+import com.web.curation.dao.BoardDao;
 import com.web.curation.dto.BoardDto;
-import com.web.curation.service.SearchService;
+import com.web.curation.service.BoardService;
 
 @Service
 public class YoutubeAPI {
 	@Autowired
-	private SearchDao searchDao;
+	private BoardDao searchDao;
 	
 	@Autowired
-	private SearchService searchService;
+	private BoardService searchService;
 	
 	@Value("${YOUTUBE_API_KEY}")
 	private String API_KEY;
