@@ -85,7 +85,8 @@ public class CommuController {
 	// 게시글 추가
 	@ApiOperation("게시글 추가")
 	@PostMapping("/add")
-	public ResponseEntity<String> commuAdd( CommuDto dto, HttpServletRequest request) {
+	public ResponseEntity<String> commuAdd(@RequestBody CommuDto dto, HttpServletRequest request) {
+		System.out.println(dto.toString());
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -198,7 +199,7 @@ public class CommuController {
 	 //게시물 디테일 수정
 	@ApiOperation("게시물 디테일 수정")
 	@PutMapping("/update")
-	public ResponseEntity<String> updateDetail(CommuDto dto, HttpServletRequest request) {
+	public ResponseEntity<String> updateDetail(@RequestBody CommuDto dto, HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -214,7 +215,7 @@ public class CommuController {
 	// 댓글 추가
 	@ApiOperation("댓글 추가")
 	@PostMapping("/replyadd")
-	public ResponseEntity<List<CommuReply>> addCommuReply( CoReplyDto dto,
+	public ResponseEntity<List<CommuReply>> addCommuReply(@RequestBody CoReplyDto dto,
 			HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
