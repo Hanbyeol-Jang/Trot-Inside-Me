@@ -195,7 +195,7 @@ public class BoardController {
 	public ResponseEntity<BoardPK> videoDetail(@PathVariable("b_type") int b_type, @PathVariable("b_idx") int b_idx,
 			HttpServletRequest request) {
 		String token = request.getHeader("token");
-		System.out.println(token );
+		System.out.println(token);
 		GoodDto dto = new GoodDto();
 		dto.setB_idx(b_idx);
 		dto.setB_type(b_type);
@@ -206,7 +206,7 @@ public class BoardController {
 			}
 			dto.setU_email(udto.getU_email());
 		}
-		System.out.println(token +" /// "+dto.toString());
+		System.out.println(token + " /// " + dto.toString());
 		BoardPK boardDto = boardService.detail(dto);
 		if (boardDto != null) {
 			return new ResponseEntity<BoardPK>(boardDto, HttpStatus.OK);
@@ -219,6 +219,7 @@ public class BoardController {
 	@ApiOperation(value = "댓글리스트  ")
 	public ResponseEntity<List<ReplyDto>> replylist(@PathVariable("b_type") int b_type, @RequestParam("page") int page,
 			@PathVariable("b_idx") int b_idx) {
+		System.out.println("reply - page" + page);
 		GoodDto dto = new GoodDto();
 		dto.setB_idx(b_idx);
 		dto.setB_type(b_type);
@@ -238,10 +239,11 @@ public class BoardController {
 					showList.add(list.get(i));
 				}
 			}
-			return new ResponseEntity<List<ReplyDto>>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<List<ReplyDto>>(showList, HttpStatus.OK);
+
 		}
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
 	}
 
 	/* 댓글 작성 */
@@ -267,11 +269,11 @@ public class BoardController {
 					page = 5 * page - 5;
 					// 5개씩 보여주기
 					if (page < lastPage) {
-						for (int i = page; i < page + 5; i++) {
+						for (int i = 0; i < page + 5; i++) {
 							showList.add(list.get(i));
 						}
 					} else if (page == lastPage) {
-						for (int i = page; i < page + lastPageRemain; i++) {
+						for (int i = 0; i < page + lastPageRemain; i++) {
 							showList.add(list.get(i));
 						}
 					} else {
@@ -383,7 +385,7 @@ public class BoardController {
 		String accessToken = userService.getUserInfo(useremail).getU_accessToken();
 		System.out.println(bc_idx);
 		BroadCastingDto broadCastingDto = timeService.selectBroadCasting(bc_idx);
-		System.out.println("broadCastingDto  : "+broadCastingDto);
+		System.out.println("broadCastingDto  : " + broadCastingDto);
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		map.put("broadCastingDto", broadCastingDto);
 		map.put("accessToken", accessToken);

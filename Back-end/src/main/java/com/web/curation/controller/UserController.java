@@ -149,7 +149,6 @@ public class UserController {
 	@GetMapping("/getUserInfo")
 	public ResponseEntity<UserDto> getUserInfo(HttpServletRequest request) {
 		String token = request.getHeader("token");
-		System.out.println("token-getuserinfo :"+ token);
 		if (token.equals("null")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
