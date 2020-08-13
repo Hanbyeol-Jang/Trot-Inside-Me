@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import SERVER from '@/api/drf'
 
@@ -53,16 +54,21 @@ export default {
             selectLocal:"",
         }
     },
+    computed: {
+      ...mapState(['user']),
+      ...mapGetters(['isLoggedIn']),
+    },
     methods:{
+      ...mapActions(['getUser']),
       getuser(){
           const axiosConfig ={
               headers:{
                   token : `${this.$cookies.get('auth-token')}`
               },
           }
-          axios.get(SERVER.URL+`/admin/userNow`,axiosConfig)
+          axios.get(SERVER.URL+`/user/getUserInfo`,axiosConfig)
           .then((reaponse)=>{
-            if(reaponse.data.u_hasVote===1){
+            if(reaponse.data.u_hasVote === 1){
               this.$alert("이미 투표를 하셨습니다.")
               this.$router.push({ name: 'VoteView'})
             }
@@ -73,20 +79,20 @@ export default {
       },
 
       checkDialog(local){
-          this.$confirm(
-            {
-              message: `"${local}"`,
-              button: {
-                yes: '선택 완료',
-                no: '다시 선택하기',
-              },
-              callback: confirm => {
-                if (confirm) {
-                  this.$router.push({ name: 'VoteCreateView', params: { local:`${this.selectLocal}`}})
-                }
+        this.$confirm(
+          {
+            message: `"${local}"`,
+            button: {
+              yes: '선택 완료',
+              no: '다시 선택하기',
+            },
+            callback: confirm => {
+              if (confirm) {
+                this.$router.push({ name: 'VoteCreateView', params: { local:`${this.selectLocal}`}})
               }
             }
-          )
+          }
+        )
       },
 
       inputLocal(local){
@@ -95,7 +101,9 @@ export default {
       },
     },
     created(){
-      this.getuser()
+      if (this.isLoggedIn) {
+        this.getuser()
+      }
     }
 }
 </script>

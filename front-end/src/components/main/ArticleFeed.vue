@@ -14,6 +14,7 @@
                 </h2>
               </div>
             </v-col>
+            <ScrollTopButton />
             <v-col cols="12">
               <infinite-loading v-if="articles.length" 
                 @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
@@ -23,7 +24,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 import axios from 'axios'
 import InfiniteLoading from 'vue-infinite-loading'
@@ -31,6 +32,7 @@ import { Circle8 } from 'vue-loading-spinner'
 
 import SERVER from '@/api/drf'
 import ArticleFeedItem from './ArticleFeedItem'
+import ScrollTopButton from './ScrollTopButton'
 
 export default {
     name: 'ArticleFeed',
@@ -38,73 +40,85 @@ export default {
         return {
             articles: [],
             page: 1,
-            pageAll: 1,
             mediaType: 2,
+            videoCnt: 0,
         }
     },
     components: {
         ArticleFeedItem,
         InfiniteLoading,
         Circle8,
+        ScrollTopButton,
     },
     props: {
         singerId: Number,
     },
     computed: {
-      ...mapState(['contentsCount']),
+      ...mapState(['authToken']),
       routeSingerId() {
         return parseInt(this.$route.params.singerId)
       }
     },
     methods: {
-      ...mapActions(['getContentsCount']),
       fetchArticleData() {
         if (this.routeSingerId) {
-          const options = { params: { page: this.page++ }}
-          axios.get(SERVER.URL + `/singer/${this.singerId}/articles`, options)
-            .then(res => {
-              setTimeout(() => {
-                this.articles.push(...res.data)
-              }, 1000);
+          // singer
+          const options = {
+              headers:{ token: this.authToken },
+              params: { page: this.page++ }
+          }
+          axios.get(SERVER.URL + SERVER.ROUTES.singerArticleList + this.singerId, options)
+            .then((res) => {
+              this.articleCnt = res.data[0].b_cnt
+              setTimeout(() => { this.articles.push(...res.data) }, 500) 
             })
             .catch(err => console.log(err))
         } else {
-          console.log(this.routeSingerId)
-          const options = { params: { page: this.page++ }}
-          axios.get(SERVER.URL + `/${this.mediaType}/good`, options)
-            .then(res => {
-              setTimeout(() => {
-                this.articles.push(...res.data)
-              }, 500);
+          // all
+          const options = {
+              headers:{ token: this.authToken },
+              params: { page: this.page++ }
+          }
+          axios.get(SERVER.URL + SERVER.ROUTES.mainList + this.mediaType, options)
+            .then((res) => {
+              this.articleCnt = res.data[0].b_cnt
+              setTimeout(() => { this.articles.push(...res.data) }, 500) 
             })
             .catch(err => console.log(err))
         }
-      },
+      }, 
       infiniteHandler($state){
         if (this.routeSingerId) {
-          if (parseInt(this.contentsCount / 5) + 1 >= this.page){
-            const options = {params: { page: this.page++ }}
-            axios.get(SERVER.URL + `/singer/${this.singerId}/articles`, options)
+          // singer
+          if (parseInt(this.articleCnt / 5) + 1 >= this.page){
+            const options = {
+              headers:{ token: this.authToken },
+              params: { page: this.page++ }
+            }
+            axios.get(SERVER.URL + SERVER.ROUTES.singerArticleList + this.singerId, options)
               .then(res => {
                 setTimeout(() => {
                   this.articles.push(...res.data)
                   $state.loaded()
-                }, 1000);
+                }, 500);
               })
               .catch(err => console.log(err))
           } else{
             $state.complete()
           }
         } else {
-          console.log('all', this.routeSingerId)
-          if (parseInt(this.contentsCount / 5) + 1 >= this.page){
-            const options = {params: { page: this.page++ }}
-            axios.get(SERVER.URL + `/${this.mediaType}/good`, options)
+          // all
+          if (parseInt(this.articleCnt / 5) + 1 >= this.page){
+            const options = {
+              headers:{ token: this.authToken },
+              params: { page: this.page++ }
+            }
+            axios.get(SERVER.URL + SERVER.ROUTES.mainList + this.mediaType, options)
               .then(res => {
                 setTimeout(() => {
                   this.articles.push(...res.data)
                   $state.loaded()
-                }, 1000);
+                }, 500);
               })
               .catch(err => console.log(err))
           } else{
@@ -114,9 +128,6 @@ export default {
       },
     },
     created() {
-        const info = { mediaType: 2, singerId: this.$route.params.singerId }
-        this.getContentsCount(info)
-        console.log('check', this.routeSingerId)
         this.fetchArticleData()
     },
 

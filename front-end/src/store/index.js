@@ -12,10 +12,13 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
+    authAdmin: cookies.get('auth-admin'),
     singers: [],
+    singer: {},
     programs: [],
     contentsCount: 0,
     user: {},
+    isFollow: 0,
   },
   getters: {
     isLoggedIn: state => !!state.authToken,
@@ -33,11 +36,17 @@ export default new Vuex.Store({
     SET_SINGERS(state, singers) {
       state.singers = singers
     },
+    SET_SINGER(state, singer) {
+      state.singer = singer
+    },
     SET_PROGRAMS(state, programs) {
       state.programs = programs
     },
     SET_CONTENTS_CNT(state, cnt) {
       state.contentsCount = cnt
+    },
+    SET_FOLLOW(state, isFollow) {
+      state.isFollow = isFollow
     },
   },
   actions: {
@@ -46,7 +55,7 @@ export default new Vuex.Store({
       axios.post(SERVER.URL + SERVER.ROUTES.login, loginData)
         .then(res => {
           console.log('Admin Login SUCCESS')
-          commit('SET_TOKEN', res.data)
+          commit('SET_TOKEN', res.data) 
           router.push({ name: 'AdminView' })
         })
         .catch(err => console.log(err))
@@ -61,12 +70,13 @@ export default new Vuex.Store({
         })
         .catch(err => console.log(err))
     },
-    kakaoLogin({ commit }, accessToken) {
+    kakaoLogin({ dispatch, commit }, accessToken) {
       const axiosConfig = { headers:{ access_token : accessToken } }
       axios.post(SERVER.URL + SERVER.ROUTES.kakaoLogin, null, axiosConfig)
         .then((res)=>{
           console.log('Kakao Login SUCCESS')
             commit('SET_TOKEN', res.data)
+            dispatch('getUser')
             router.push({ name: 'Home' })
         })
         .catch((err)=>{ console.log(err) })
@@ -78,10 +88,18 @@ export default new Vuex.Store({
       cookies.remove('auth-token')
       router.push({ name: 'Home' })
     },
+    kakaoOff({ getters }) { 
+      axios.post(SERVER.URL + SERVER.ROUTES.kakaoOff, null, getters.config)
+        .then((res) => {  
+            console.log('Kakao OFF', res) 
+            router.push({ name: 'Home' })
+          })
+        .catch((err)=>{ console.error(err) }) 
+    },
     getUser({ getters, commit }) {
-      axios.get(SERVER.URL + SERVER.ROUTES.getAmdinUser, getters.config)
+      axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo, getters.config)
         .then(res => {  commit('SET_USER', res.data) })
-        .catch((err)=>{ console.error(err) })    
+        .catch((err)=>{ console.error(err) })
     },
 
     // Feed Data
@@ -114,7 +132,27 @@ export default new Vuex.Store({
         })
         .catch(err => console.log(err))
     },
-    
+    getSingerDetail({ getters, commit }, singerId) {
+      axios.get(SERVER.URL + SERVER.ROUTES.singerDetail + singerId, getters.config)
+        .then((res) => {
+          commit('SET_SINGER', res.data)
+        })
+        .catch(err => console.log(err))
+    },
+    // Follow Singer
+    follow({ state, commit }, info) {
+      console.log('follow')
+      const options = {
+        headers:{ token: state.authToken },
+        params: { isfollow: info.f_flag }
+      }
+      axios.get(SERVER.URL + SERVER.ROUTES.follow + info.s_idx, options)
+      .then(res => { 
+        commit('SET_FOLLOW', res.data) 
+        console.log(res.data)
+      })
+      .catch(err => { console.error(err) })
+    },
     // Program Data
     fetchPrograms({ commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.programList)
@@ -129,7 +167,7 @@ export default new Vuex.Store({
         })
         .catch(err => console.log(err))
     },
-    deleteSProgram(context, programId) { 
+    deleteProgram(context, programId) { 
       axios.delete(SERVER.URL + SERVER.ROUTES.programDelete + programId)
         .then(() => {
           console.log('Singer DELETE SUCCESS')
@@ -138,7 +176,9 @@ export default new Vuex.Store({
         .catch(err => console.log(err))
     },
 
-
+    scrollToTop() {
+      scroll(0, 0)
+    },
   },
   modules: {
   }

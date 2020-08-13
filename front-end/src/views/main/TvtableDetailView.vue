@@ -1,15 +1,15 @@
 <template>
 <div>
     <v-card
-        color="#EEEEEE"
-        class="my-4"
-        raised
-        >
-        <div class="text-center">
-            <v-card-title>현재 보실 수 있는 프로그램은 <br />
-                <span class="highlight-program mr-3" color="pink">{{ Tvprograms[0].bc_title }}</span> 입니다.
-            </v-card-title>
-        </div>
+      color="#EEEEEE"
+      class="my-4"
+      raised
+      >
+      <div class="text-center">
+        <v-card-title>현재 보실 수 있는 프로그램은 <br />
+            <span class="highlight-program mr-3" color="pink">{{ fastTimeProgram.bc_title }}</span> 입니다.
+        </v-card-title>
+      </div>
     </v-card>
     <TvtableSearch @search-programs="searchPrograms"/>
     <v-tabs
@@ -19,9 +19,9 @@
         <v-tab @click="getTvtableProgram"><h4>프로그램 별 보기</h4></v-tab>
     </v-tabs>
     <v-timeline
-    align-top
-    dense
-    v-for="tvprogram in Tvprograms" :key="Tvprograms.indexOf(tvprogram)"
+      align-top
+      dense
+      v-for="tvprogram in Tvprograms" :key="tvprogram.bc_idx"
     >
     <TvtableList :tvprogram="tvprogram" :tvprogramid="Tvprograms.indexOf(tvprogram)"/>
     </v-timeline>
@@ -43,8 +43,9 @@ export default {
     },
     data(){
         return{
-            Tvprograms:[],
+            Tvprograms: [],
             now: "",
+            fastTimeProgram: {},
         }
     },
     methods:{
@@ -57,18 +58,19 @@ export default {
             }
         },
         getTvtable(){
-            axios.get(`${SERVER.URL}/schedule/todayList`)
+            axios.get(`${SERVER.URL}/board/schedule/todayList`)
             .then((response)=>{
-                this.Tvprograms = []
-                const programs = _.sortBy(response.data,'bc_time')
-                for (var i in programs){
-                    if (programs[i].bc_time >= this.now){
-                        if (programs[i].bc_title ==="신청곡을 불러드립니다 - 사랑의 콜센타"){
-                            programs[i].bc_title = "사랑의 콜센타"
-                        }
-                        this.Tvprograms.push(programs[i])
-                    }
-                }
+              this.Tvprograms = []
+              const programs = _.sortBy(response.data,'bc_time')
+              for (var i in programs){
+                  if (programs[i].bc_time >= this.now){
+                      if (programs[i].bc_title ==="신청곡을 불러드립니다 - 사랑의 콜센타"){
+                          programs[i].bc_title = "사랑의 콜센타"
+                      }
+                      this.Tvprograms.push(programs[i])
+                  }
+              }
+              this.fastTimeProgram = this.Tvprograms[0]
             })
             .catch((err)=>{
                 console.error(err)

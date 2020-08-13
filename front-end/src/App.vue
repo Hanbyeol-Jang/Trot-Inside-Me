@@ -82,6 +82,5 @@ export default {
   color: #e91e63;
   background-color: whitesmoke;
   font-size: 150%;
-
 }
 </style>

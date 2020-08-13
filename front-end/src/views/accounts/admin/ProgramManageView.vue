@@ -20,6 +20,19 @@
             <!-- <td v-if="program.a_broadUrl"><a :href="program.a_broadUrl">URL<i class="fas fa-external-link-alt ml-1"></i></a></td> -->
             <!-- <td v-else>미등록</td> -->
             <td class="text-center">
+              <!-- <v-btn
+              depressed
+              small
+            >
+              View User
+
+              <v-icon
+                color="orange darken-4"
+                right
+              >
+                mdi-open-in-new
+              </v-icon>
+            </v-btn> -->
               <v-btn icon @click="deleteProgram(program.a_idx)"><i class="fas fa-trash-alt"></i></v-btn>
             </td>
           </tr>
@@ -46,7 +59,7 @@ export default {
         ...mapState(['programs']),
       },
   methods: {
-    ...mapActions(['fetchPrograms', 'deleteSProgram']),
+    ...mapActions(['fetchPrograms', 'deleteProgram']),
     goProgramCreate() {
       this.$router.push({ name: 'ProgramCreateView' })
     }

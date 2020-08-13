@@ -10,6 +10,7 @@
           v-for="(item,i) in items"
           :key="i"
           :src="item.src"
+          
         ></v-carousel-item>
       </v-carousel>
       <v-container class="mt-4">
@@ -43,6 +44,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex'
 // <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 import VideoIcon from '@/assets/icon/video-icon.svg'
 import MagazineIcon from '@/assets/icon/magazine-icon.svg'
@@ -76,12 +78,17 @@ export default {
             src: 'https://t1.daumcdn.net/cfile/tistory/993095345F05621F27',
           },
           {
-            src: '@/assets/image/content_default.png',
+            src: '@/assets/image/last_week_top3.png',
           },
         ],
     }
   },
+  computed: {
+    ...mapState(['user']),
+    ...mapGetters(['isLoggedIn']),
+  },
   methods: {
+    ...mapActions(['getUser']),
     goMenu(m_idx) {
       if (m_idx === 1) {
         this.$router.push({ name: 'VideoListView', params: { singerId: 0 }})
@@ -92,6 +99,11 @@ export default {
       }
     },
   },
+  created() {
+    if (this.isLoggedIn === 1) {
+      this.getUser()
+    }
+  }
 }
 </script>
 

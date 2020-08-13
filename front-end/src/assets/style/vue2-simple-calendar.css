@@ -1,6 +1,7 @@
 .vue-calendar {
     display: grid;
-    grid-template-rows: 10% 90%;
+    grid-template-rows: 10% 100%;
+    /* 10% 90% */
     background: #fff;
     margin: 0 auto;
   }
@@ -24,7 +25,8 @@
   }
   .calendar-body {
     display: grid;
-    grid-template-rows: 5% 95%;
+    grid-template-rows: 5% 80%;
+    /* 5% 95% */
   }
   .days-header {
     display: grid;
@@ -45,6 +47,9 @@
   .day-label {
     text-align: center;
     border-right: 1px solid #e0e0e0;
+    background-color: #E91E63;
+    color: white;
+
   }
   .week-row {
     display: grid;
@@ -66,7 +71,7 @@
   }
   .week-day.today > .day-number {
     font-weight: 700;
-    color: red;
+    color: #E91E63;
   }
   .events {
     font-size: 12px;

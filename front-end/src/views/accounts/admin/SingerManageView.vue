@@ -10,10 +10,10 @@
       <template v-slot:default>
         <thead>
           <tr>
-            <th class="text-center">이미지</th>
-            <th class="text-center">이름</th>
-            <th class="text-center">팬 카페</th>
-            <th class="text-center">삭제</th>
+            <th class="text-left">이미지</th>
+            <th class="text-left">이름</th>
+            <th class="text-left">팬 카페</th>
+            <th class="text-left">삭제</th>
           </tr>
         </thead>
         <tbody>
@@ -33,9 +33,21 @@
               </v-avatar>
             </td>
             <td>{{ singer.s_name }}</td>
-            <td v-if="singer.s_cafeUrl"><a :href="singer.s_cafeUrl">팬카페<i class="fas fa-external-link-alt ml-1"></i></a></td>
+            <td v-if="singer.s_cafeUrl" class="px-1">
+              <v-btn depressed small
+                :href="singer.s_cafeUrl">
+                팬카페
+                <v-icon
+                  color="pink"
+                  right
+                >
+                  mdi-open-in-new
+                </v-icon>
+              </v-btn>
+              <!-- <a :href="singer.s_cafeUrl">팬카페<i class="fas fa-external-link-alt ml-1"></i></a> -->
+            </td>
             <td v-else>미등록</td>
-            <td class="text-center">
+            <td class="text-center px-1">
               <v-btn icon @click="deleteSinger(singer.s_idx)"><i class="fas fa-trash-alt"></i></v-btn>
             </td>
           </tr>

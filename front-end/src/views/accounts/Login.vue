@@ -38,22 +38,17 @@ export default {
         return {
             email: '',
             password: '',
-            token:'',
         }
     },
     methods: {
         ...mapActions(['kakaoLogin']),
         onSuccess(data){
             console.log("kakao sucess")
-            this.token = data.access_token
             this.kakaoLogin(data.access_token)
         },
         onFailure(data){
             console.log("kakao failure", data)
         },
-    },
-    computed: {
-
     },
     created() {
         scroll(0, 0)

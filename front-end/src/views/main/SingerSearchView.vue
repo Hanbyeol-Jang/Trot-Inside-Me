@@ -9,7 +9,7 @@
 </div>
 </template>
 
-<script>
+<script> 
 import { mapState, mapActions } from 'vuex'
 
 import SingerList from '@/components/main/SingerList.vue'
@@ -27,7 +27,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['singers'])
+        ...mapState(['singers']),
     },
     methods:{
         ...mapActions(['fetchSingers']),

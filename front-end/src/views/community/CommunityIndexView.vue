@@ -125,6 +125,8 @@ export default {
             axios.delete(SERVER.URL+`/community/delete/${idx}`,axiosConfig2)
             .then((response)=>{
                 console.log(response)
+                this.communities=[]
+                this.communities.push(...response.data)
                 this.$alert('삭제 완료')
             })
             .catch((err)=>{

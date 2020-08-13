@@ -7,6 +7,7 @@
       elevate-on-scroll 
       height="50px"
       scroll-target="#scrolling-techniques-7"
+      class="header"
     >
       <v-btn v-if="navBool" icon><i class="fas fa-bell fa-lg"></i></v-btn>
       <v-btn v-if="!navBool" icon @click="goBack"><i class="fas fa-chevron-left fa-lg"></i></v-btn>
@@ -50,6 +51,30 @@ export default {
         isAdmin: false,
       }
     },
+    computed: {
+      ...mapState(['user']),
+      ...mapGetters(['isLoggedIn']),
+      routeName() {
+        return this.$route.name
+      },
+      navBool() {
+        if (this.$route.name === 'Home'
+          || this.$route.name === 'CommunityIndexView' 
+          || this.$route.name === 'VoteView'
+          || this.$route.name === 'SingerSearchView'){
+          return true
+        } else {
+          return false
+        }
+      },
+      navSetting() {
+         if (this.$route.name === 'UserDetailView'){
+          return true
+        } else {
+          return false
+        }
+      },
+    },
     methods: {
       ...mapActions(['getUser']),
       goBack() {
@@ -66,44 +91,20 @@ export default {
         }
       },
       goUserDetail() {
-        if(this.isLoggedIn) {
-          if (this.user.u_isAdmin === 1) {
-            if (this.$route.name !== 'AdminView') {
-              this.$router.push({ name: 'AdminView' }).catch(()=>{})
-            }
-          } else {
-            if (this.$route.name !== 'UserDetailView') {
-              this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
-            }
-          }
+        if(this.isLoggedIn && this.$route.name !== 'UserDetailView') {
+            this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
         } else {
-          if (this.$route.name !== 'Login') {
-            this.$router.push({ name: 'Login' }).catch(()=>{})
-          }
+          this.$router.push({ name: 'Login' })
         }
-      },
-    },
-    computed: {
-      ...mapState(['user']),
-      ...mapGetters(['isLoggedIn']),
-      routeName() {
-        return this.$route.name
-      },
-      navBool() {
-        if (this.$route.name === 'Home'
-          || this.$route.name === 'CommunityIndexView' || this.$route.name === 'VoteView'
-          || this.$route.name === 'SingerSearchView'){
-          return true
-        } else {
-          return false
-        }
-      },
-      navSetting() {
-         if (this.$route.name === 'UserDetailView'){
-          return true
-        } else {
-          return false
-        }
+        // if(this.isLoggedIn && this.$route.name !== 'UserDetailView') {
+        //     if (this.user.u_isAdmin) {
+        //       this.$router.push({ name: 'AdminView' })
+        //     } else {
+        //       this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
+        //     }
+        // } else {
+        //   this.$router.push({ name: 'Login' })
+        // }
       },
     },
     created() {
@@ -114,7 +115,9 @@ export default {
           this.month = '0' + this.month
       }
       this.todayDate = this.month +'월 ' + this.date + '일'
-      this.getUser()
+      if (this.isLoggedIn) {
+        this.getUser()
+      }
     }
 }
 </script>
@@ -150,5 +153,9 @@ export default {
 .main-logo {
   bottom: 0;
 }
+
+/* .header {
+  position: fixed !important;
+} */
 
 </style>

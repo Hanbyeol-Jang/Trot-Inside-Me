@@ -6,17 +6,30 @@ export default{
         login: '/admin/login',
         logout: '/admin/logout',
         kakaoLogin: '/signin/kakao',
-        kakaoLogout: 'https://kauth.kakao.com/oauth/logout?client_id=78183e66919b34b25f731ea9f2d99f0e&logout_redirect_uri=http://localhost:8081/',
-        getAmdinUser: '/admin/userNow',
+        // kakaoLogout: 'https://kauth.kakao.com/oauth/logout?client_id=3b520fb7e5e907ebebfde93be5b8a1aa&logout_redirect_uri=http://i3b202.p.ssafy.io:80/',
+        kakaoLogout: 'https://kauth.kakao.com/oauth/logout?client_id=3b520fb7e5e907ebebfde93be5b8a1aa&logout_redirect_uri=http://localhost:8081/',
+        kakaoOff: '/user/kakao/unlink',
+        getUserInfo: '/user/getUserInfo',
 
         // singer
-        singerList: '/singer',
-        singerCreate: '/admin/singer/add',
-        singerDelete: '/admin/singer/delete/',
+        singerList: '/board/singerlist',
+        singerDetail: '/board/singerdetail/',
+        singerCreate: '/admin/singeradd',
+        singerDelete: '/admin/singerdelete/',
+        singerVideoList: '/board/videolist/',
+        singerArticleList: '/board/articlelist/',
+
+        // main
+        mainList: '/board/mainlist/',
+        
+        // follow
+        follow: '/user/follow/',
 
         // program
-        programList: '/admin/broadSchedule/list',
-        programCreate: '/admin/broadSchedule/add',
-        programDelete: '/admin/broadSchedule/delete/',
+        programList: '/admin/tvlist',
+        programCreate: '/admin/tvadd',
+        programDelete: '/admin/tvdelete/',
+        programSchedule: '/board/schedule/todayList',
+
     }
 }

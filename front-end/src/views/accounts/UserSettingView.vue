@@ -8,6 +8,11 @@
               <v-list-item-title>로그아웃</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <!-- <v-list-item>
+            <v-list-item-content @click="kakaoOff">
+              <v-list-item-title>서비스 탈퇴</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item> -->
         </v-list-item-group>
       </v-list>
   </div>
@@ -31,7 +36,7 @@ export default {
       }
     },
     methods: {
-      ...mapActions(['kakaoLogout']),
+      ...mapActions(['kakaoLogout', 'kakaoOff']),
     },
 }
 </script>

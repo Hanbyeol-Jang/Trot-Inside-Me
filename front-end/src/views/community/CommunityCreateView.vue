@@ -40,19 +40,21 @@ export default {
         checklogin(){
             if (!(this.$cookies.get('auth-token'))){
                 this.$alert(" 로그인을 해주세요")
-                this.$router.push({name:'Home'})                
+                this.$router.push({name:'Login'})                
             }
         },
 
         createCommunity(){
-          console.log(this.image)
+            // const dto = new FormData()
+            // dto.append('co_content',this.content)
+            // dto.append('co_img',this.image)
+            // axios.post(`${SERVER.URL}/community/add`,dto,this.axiosConfig)
             const data = {
               'co_content' : this.content,
               'co_img' : this.image
             }
             axios.post(`${SERVER.URL}/community/add`,data,this.axiosConfig)
             .then(()=>{
-              console.log(1231231)
                 this.$router.push({ name: 'CommunityIndexView'})
             })
             .catch((err)=>{
@@ -61,7 +63,7 @@ export default {
         },
 
         communityImage(){
-          this.image = this.$refs.file.$refs.input.files[0].name
+          this.image = this.$refs.file.$refs.input.files[0]
           this.change_image = URL.createObjectURL(this.image)
           this.flag = true
         },
