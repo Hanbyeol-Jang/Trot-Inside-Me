@@ -75,7 +75,7 @@ public class BoardController {
 		String token = request.getHeader("token");
 		GoodDto dto = new GoodDto();
 		dto.setB_idx(s_idx);
-		if (!token.equals("undefine")) {// 회원
+		if (!token.equals("null")) {// 회원
 			System.out.println("회원이다잉");
 			dto.setU_email(userService.getTokenInfo(request).getU_email());
 		}
@@ -195,10 +195,11 @@ public class BoardController {
 	public ResponseEntity<BoardPK> videoDetail(@PathVariable("b_type") int b_type, @PathVariable("b_idx") int b_idx,
 			HttpServletRequest request) {
 		String token = request.getHeader("token");
+		System.out.println(token );
 		GoodDto dto = new GoodDto();
 		dto.setB_idx(b_idx);
 		dto.setB_type(b_type);
-		if (!token.equals("undefine")) {// 회원
+		if (!token.equals("null")) {// 회원
 			UserDto udto = userService.getTokenInfo(request);
 			if (udto.getU_name().equals("F")) {
 				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -382,7 +383,7 @@ public class BoardController {
 		String accessToken = userService.getUserInfo(useremail).getU_accessToken();
 		System.out.println(bc_idx);
 		BroadCastingDto broadCastingDto = timeService.selectBroadCasting(bc_idx);
-
+		System.out.println("broadCastingDto  : "+broadCastingDto);
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		map.put("broadCastingDto", broadCastingDto);
 		map.put("accessToken", accessToken);
