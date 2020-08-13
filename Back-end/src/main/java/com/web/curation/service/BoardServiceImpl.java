@@ -50,11 +50,14 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public SingerDto singerSearch(int s_idx) {
-		return boardDao.singerSearch(s_idx);
+	public SingerDto singerSearch(int dto) {
+		return boardDao.singerSearch(dto);
 	}
 
-	
+	@Override
+	public SingerDto singerDetail(GoodDto dto) {
+		return boardDao.singerDetail(dto);
+	}
 	
 	@Override
 	public List<BoardPK> mainlist(int b_type) {
@@ -200,6 +203,8 @@ public class BoardServiceImpl implements BoardService {
 	public List<BroadCastingDto> singerScheduleList(String s_name) {
 		return boardDao.singerScheduleList(s_name);
 	}
+
+
 
 
 //

@@ -10,4 +10,5 @@ public class SingerDto {
 	private String s_url;
 	private String s_cafeUrl;
 	private int f_cnt;
+	private int good_flag;
 }

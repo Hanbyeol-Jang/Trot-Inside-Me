@@ -9,7 +9,9 @@
 	<select id="singerAllList" resultType="com.web.curation.dto.SingerDto">
 		select * from Singer;
 	</select>
- 	<select id="singerSearch" resultType="com.web.curation.dto.SingerDto">
+	
+	<!-- 가수 디테일  -->
+ 	<select id="singerDetail" resultType="com.web.curation.dto.SingerDto">
 	 	select s_idx, 
 				s_name, 
 				s_url,
@@ -20,7 +22,22 @@
 					from ssafy_trot.`Following` f
 					where f.s_idx  = s.s_idx 
 				) as f_cnt
+				<if test="u_email  != '' and u_email   != null " >
+					,(
+						select 	COUNT(*) 
+						from ssafy_trot.`Following` f
+						where 	1=1
+						and		f.s_idx = #{b_idx}
+						and 	f.u_email  =  #{u_email}
+					)as good_flag
+				</if>
 		from ssafy_trot.Singer s
+		where s_idx =#{b_idx};
+	</select>
+	
+ 	<select id="singerSearch" resultType="com.web.curation.dto.SingerDto">
+	 	select s_name
+		from ssafy_trot.Singer 
 		where s_idx =#{s_idx};
 	</select>
 	

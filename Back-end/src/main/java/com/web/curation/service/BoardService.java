@@ -14,7 +14,9 @@ public interface BoardService {
 	//가수 전체 리스트 
 	List<SingerDto> singerAllList();
 	//가수 디테일 
-	SingerDto singerSearch(int s_idx);
+	SingerDto singerDetail(GoodDto dto);
+	//가수 검색 
+	SingerDto singerSearch(int dto);
 	//메인 리스트 (좋아요 순)
 	List<BoardPK> mainlist(int b_type);
 		
@@ -45,10 +47,6 @@ public interface BoardService {
 	
 	List<BroadCastingDto> broadCastAllList(); //편성표 전체 출력
 	List<BroadCastingDto> singerScheduleList(String s_name); //가수 스케줄 출력
-	;
-	
-	
-	
 	
 	
 

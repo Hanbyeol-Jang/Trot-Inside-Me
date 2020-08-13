@@ -29,6 +29,11 @@ public class BoardDaoImpl implements BoardDao {
 	}
 
 	@Override
+	public SingerDto singerDetail(GoodDto dto) {
+		return sqlSession.selectOne(ns + "singerDetail", dto);
+	}
+
+	@Override
 	public SingerDto singerSearch(int s_idx) {
 		return sqlSession.selectOne(ns + "singerSearch", s_idx);
 	}
@@ -81,7 +86,7 @@ public class BoardDaoImpl implements BoardDao {
 
 	@Override
 	public List<ReplyDto> replylist(GoodDto dto) {
-		return sqlSession.selectList(ns+"replylist",dto);
+		return sqlSession.selectList(ns + "replylist", dto);
 	}
 
 	@Override

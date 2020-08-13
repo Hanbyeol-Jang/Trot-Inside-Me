@@ -11,7 +11,11 @@ import com.web.curation.dto.SingerDto;
 
 public interface BoardDao {
 	
+	//가수 리스트 
 	List<SingerDto> singerAllList();
+	// 가수 디테일
+	SingerDto singerDetail(GoodDto dto);
+	// 가수 검색 
 	SingerDto singerSearch(int s_idx);
 	//메인리스트 
 	List<BoardPK> mainlist(int b_type);
@@ -43,6 +47,7 @@ public interface BoardDao {
 
 	List<BroadCastingDto> broadCastAllList(); //편성표 전체 출력
 	List<BroadCastingDto> singerScheduleList(String s_name);//가수 스케줄 리스트 출력
+
 	
 //	/* 좋아요 취소 */
 //	int goodClickCancel(BoardPK boardPK);

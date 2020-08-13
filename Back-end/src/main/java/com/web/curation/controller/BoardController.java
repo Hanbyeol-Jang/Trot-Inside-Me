@@ -71,8 +71,17 @@ public class BoardController {
 	// 가수 디테일
 	@GetMapping("/singerdetail/{s_idx}")
 	@ApiOperation(value = "가수 디테일")
-	public ResponseEntity<SingerDto> singerDetail(@PathVariable int s_idx) {
-		SingerDto singerDto = boardService.singerSearch(s_idx);
+	public ResponseEntity<SingerDto> singerDetail(@PathVariable int s_idx 
+			, HttpServletRequest request) {
+		String token = request.getHeader("token");
+		GoodDto dto = new GoodDto();
+		dto.setB_idx(s_idx);
+		if (!token.equals("undefine")) {// 회원
+			System.out.println("회원이다잉");
+			dto.setU_email(userService.getTokenInfo(request).getU_email());
+		}
+		System.out.println(dto.toString());
+		SingerDto singerDto = boardService.singerDetail(dto);
 		if (singerDto != null) {
 			return new ResponseEntity<SingerDto>(singerDto, HttpStatus.OK);
 		} else {
