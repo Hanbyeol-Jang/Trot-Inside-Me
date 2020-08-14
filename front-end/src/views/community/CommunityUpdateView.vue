@@ -79,17 +79,24 @@ export default {
         },
 
         updateCommunity(){
-            // const data = new FormData()
-            // data.append('content',this.content)
-            // if (this.$refs.file.$refs.input.files[0]!==undefined){
-            //   data.append('image',this.image)
-            // }
-            const data = {
-              'co_idx':this.$route.params.communityId,
-              'co_content' : this.content,
-              'co_img' : this.image
+            const axiosConfig2={
+              headers:{
+                token : `${this.$cookies.get('auth-token')}`,
+                'Content-Type': 'multipart/form-data'
+              }
             }
-            axios.put(`${SERVER.URL}/community/update`,data,this.axiosConfig)
+            const data = new FormData()
+            data.append('co_idx',this.$route.params.communityId)
+            data.append('co_content',this.content)
+            if (this.$refs.file.$refs.input.files[0]!==undefined){
+              data.append('co_img',this.image)
+            }
+            // const data = {
+            //   'co_idx':this.$route.params.communityId,
+            //   'co_content' : this.content,
+            //   'co_img' : this.image
+            // }
+            axios.put(`${SERVER.URL}/community/update`,data,axiosConfig2)
             .then(()=>{
                 this.$router.push({ name: 'CommunityIndexView'})
             })
@@ -128,7 +135,7 @@ export default {
         },
 
         communityImage(){
-          this.image = this.$refs.file.$refs.input.files[0].name
+          this.image = this.$refs.file.$refs.input.files[0]
           this.change_image = URL.createObjectURL(this.image)
           this.flag = true
         },
