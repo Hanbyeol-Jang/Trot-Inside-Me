@@ -1,6 +1,7 @@
 package com.web.curation.dto;
 
-import java.security.Timestamp;
+
+import java.sql.Timestamp;
 
 import lombok.Data;
 @Data
