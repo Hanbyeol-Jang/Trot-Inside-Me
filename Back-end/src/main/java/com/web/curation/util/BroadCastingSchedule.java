@@ -33,7 +33,7 @@ public class BroadCastingSchedule {
 	@Autowired
 	AdminServcie adminService;
 	
-	@Scheduled(cron = "0 0 0 * * ?")
+	@Scheduled(cron = "10 07 16 * * ?")
 	public void insertTodaySchedule() throws Exception {
 		// 편성표 삭제
 		timeService.deleteYesterDaySchedule();
@@ -45,7 +45,6 @@ public class BroadCastingSchedule {
 		ArrayList<BroadCastingDto> list = new ArrayList<>();
 		try {
 			for (int i = 0; i < broad.size(); i++) {
-				System.out.println(broad.get(i).getA_broadName());
 				Document doc = Jsoup.connect(broad.get(i).getA_broadUrl()).get();
 				ArrayList<String> brlist = new ArrayList<>();
 				Elements elb = doc.select("td.first");
@@ -62,15 +61,11 @@ public class BroadCastingSchedule {
 						dto.setBc_time(ee.text());
 						dto.setBc_title(broad.get(i).getA_broadName());
 						dto.setA_idx(broad.get(i).getA_idx());
-						System.out.println(broad.get(i).getA_idx());
 						list.add(dto);
 					}
 					cnt++;
-					
-					for (BroadCastingDto element : list) {
-						System.out.println(element);
-					}
 				}
+				
 			}
 			timeService.insertTodaySchedule(list);
 		} catch (IOException e1) {
