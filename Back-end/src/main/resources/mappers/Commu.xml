@@ -96,14 +96,14 @@
 	
 	<!-- 커뮤니티 디테일 댓글 리스트  -->
 	<select id="getDetailReplyList" resultType="com.web.curation.dto.CommuReply">
-		select 	cr_idx, 
+	select 	cr_idx, 
 				cr_content, 
 				cr.u_email as cr_email,
 				ui.u_name as cr_name, 
 				ui.u_profileImg as cr_profileImg,
 				co_idx, 
-				co_date
-		from CoReply cr 
+				cr_date
+		from ssafy_trot.CoReply cr 
 		left outer join UserInfo ui on ui.u_email = cr.u_email 
 		where co_idx = #{co_idx}
 		order by cr_idx desc;

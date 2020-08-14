@@ -190,6 +190,9 @@ public class CommuController {
 					showList.add(list.get(i));
 				}
 			}
+			for (CommuReply commuReply : list) {
+				System.out.println(commuReply.toString());
+			}
 			return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.OK);
