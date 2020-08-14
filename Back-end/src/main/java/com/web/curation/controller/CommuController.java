@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
 import com.web.curation.dto.CommuDto;
+import com.web.curation.dto.CommuPost;
 import com.web.curation.dto.CommuReply;
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.CommuService;
@@ -86,7 +87,7 @@ public class CommuController {
 	// 게시글 추가
 	@ApiOperation("게시글 추가")
 	@PostMapping("/add")
-	public ResponseEntity<String> commuAdd(@RequestBody CommuDto dto, HttpServletRequest request) {
+	public ResponseEntity<String> commuAdd( CommuPost dto, HttpServletRequest request) {
 		System.out.println(dto.getCo_img());
 		System.out.println(dto.toString());
 		UserDto udto = userService.getTokenInfo(request);
@@ -97,13 +98,31 @@ public class CommuController {
 			dto.setCo_email(udto.getU_email());
 			System.out.println("nn" + dto.getCo_email());
 			System.out.println("img  : " + dto.getCo_img());
-			if (commuService.addCommu(dto)) {
-				return new ResponseEntity<String>("커뮤니티 게시물 추가 완료", HttpStatus.OK);
-			} else {
-				return new ResponseEntity<String>("커뮤니티 게시물 추가 에러 ", HttpStatus.NOT_FOUND);
-			}
+			System.out.println("받아온다 :  "+dto.toString());
 		}
+			return new ResponseEntity<String>("커뮤니티 게시물 추가 에러 ", HttpStatus.NOT_FOUND);
 	}
+//	// 게시글 추가
+//	@ApiOperation("게시글 추가")
+//	@PostMapping("/add")
+//	public ResponseEntity<String> commuAdd(@RequestBody CommuDto dto, HttpServletRequest request) {
+//		System.out.println(dto.getCo_img());
+//		System.out.println(dto.toString());
+//		UserDto udto = userService.getTokenInfo(request);
+//		if (udto.getU_name().equals("F")) {
+//			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//		} else {
+//			System.out.println("aa" + udto.getU_email());
+//			dto.setCo_email(udto.getU_email());
+//			System.out.println("nn" + dto.getCo_email());
+//			System.out.println("img  : " + dto.getCo_img());
+//			if (commuService.addCommu(dto)) {
+//				return new ResponseEntity<String>("커뮤니티 게시물 추가 완료", HttpStatus.OK);
+//			} else {
+//				return new ResponseEntity<String>("커뮤니티 게시물 추가 에러 ", HttpStatus.NOT_FOUND);
+//			}
+//		}
+//	}
 
 	// 게시글 삭제
 	@ApiOperation("게시글 삭제")
