@@ -33,7 +33,7 @@ public class YoutubeAPI {
 	public String search(String search) throws IOException {
 		String apiurl = "https://www.googleapis.com/youtube/v3/search";
 		apiurl += "?key="+API_KEY;
-		apiurl += "&part=snippet&type=video&maxResults=2&videoEmbeddable=true";
+		apiurl += "&part=snippet&type=video&maxResults=5&videoEmbeddable=true";
 		apiurl += "&q="+URLEncoder.encode(search,"UTF-8");
 		URL url = new URL(apiurl);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
