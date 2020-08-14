@@ -9,5 +9,17 @@
 		value(#{u_email}, #{s_idx}, #{v_area});
 	</insert>
 
+	<update id="voteChange">
+		UPDATE	UserInfo 
+		SET 	u_hasVote = 1
+		WHERE 	u_email = #{u_email};
+	</update>
+
+	<select id="voteCheck" resultType="int">
+		select	u_hasVote 
+		from	UserInfo
+		where	u_email = #{u_email};
+	</select>
+
 </mapper>
         

@@ -17,4 +17,15 @@ public class VoteServiceImpl implements VoteService {
 		return voteDao.voteClick(voteDto) == 1;
 	}
 
+	@Override
+	public boolean voteCheck(String u_email) {
+		int temp = voteDao.voteCheck(u_email);
+
+		if (temp == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 }
