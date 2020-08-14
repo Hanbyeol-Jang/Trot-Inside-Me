@@ -61,9 +61,15 @@ public class BroadCastingSchedule {
 						dto.setBc_company(brlist.get(cnt));
 						dto.setBc_time(ee.text());
 						dto.setBc_title(broad.get(i).getA_broadName());
+						dto.setA_idx(broad.get(i).getA_idx());
+						System.out.println(broad.get(i).getA_idx());
 						list.add(dto);
 					}
 					cnt++;
+					
+					for (BroadCastingDto element : list) {
+						System.out.println(element);
+					}
 				}
 			}
 			timeService.insertTodaySchedule(list);
