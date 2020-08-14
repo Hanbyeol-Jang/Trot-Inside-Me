@@ -46,6 +46,10 @@ public class TimeDaoImpl implements TimeDao {
 	public BroadCastingDto selectBoradCasting(int bc_idx) {
 		return session.selectOne(ns+"selectBroadCasting",bc_idx);
 	}
+	@Override
+	public String getImgByIdx(int a_idx) {
+		return session.selectOne(ns+"getImgByIdx", a_idx);
+	}
 
 
 

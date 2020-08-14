@@ -35,6 +35,7 @@ import com.web.curation.dto.UserDto;
 import com.web.curation.service.BoardService;
 import com.web.curation.service.TimeService;
 import com.web.curation.service.UserService;
+import com.web.curation.util.BroadCastingSchedule;
 import com.web.curation.util.KakaoAPI;
 import com.web.curation.util.YoutubeAPI;
 
@@ -44,7 +45,8 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/board")
 public class BoardController {
-
+	@Autowired
+	private BroadCastingSchedule broadCastingSchedule;
 	@Autowired
 	private BoardService boardService;
 	@Autowired
@@ -399,17 +401,15 @@ public class BoardController {
 	}
 
 	// Youtube Search
-	@GetMapping("/search/youtube")
-	@ApiOperation(value = "영상 좋아요순으로 정렬")
-	public ResponseEntity<String> youtubesearch(@RequestParam String keyword) {
-		String result = "";
+	@GetMapping("/test/jinyong")
+	@ApiOperation(value = "진용 테스트")
+	public ResponseEntity<String> h() {
 		try {
-			System.out.println("실행");
-			result = youtubeAPI.search(keyword);
-		} catch (IOException e) {
+			broadCastingSchedule.insertTodaySchedule();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>(result, HttpStatus.OK);
-
-	}
+		return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+		}
 }

@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.UserDto;
+import com.web.curation.service.TimeService;
 
 @Service
 public class KakaoAPI {
 
 	@Value("${KAKAO_API_KEY}")
 	private String API_KEY;
+	@Autowired
+	TimeService timeService;
 
 	public String getAccessToken(String authorize_code) {
 		String access_Token = "";
@@ -133,7 +137,8 @@ public class KakaoAPI {
 
 		String accessToken = (String) map.get("accessToken");
 		BroadCastingDto bcDto = (BroadCastingDto) map.get("broadCastingDto");
-
+		String bc_img = timeService.GetImgByIdx(bcDto.getA_idx());
+		System.out.println(bc_img);
 		try {
 			URL url = new URL(reqURL);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -147,7 +152,7 @@ public class KakaoAPI {
 			 		"        \"content\": {\r\n" + 
 			 		"            \"title\": \""+ bcDto.getBc_title() +"\",\r\n" + 
 					"            \"description\": \""+bcDto.getBc_company()+", "+bcDto.getBc_time()+"\",\r\n" + 
-					"            \"image_url\": \"http://blogfiles.naver.net/MjAyMDAxMjlfMjUy/MDAxNTgwMjgyNzAxNzcy.kZlmkLPDc-GKg7fV8aoaQCBEXhbqfZdY47L9gQCeT8kg.qcEUht24-YpNysTEG34quo4GTmj2B2rT7pazIC1DAn4g.JPEG.boeun1128/KakaoTalk_20200129_162050083_02.jpg\",\r\n" + 
+					"            \"image_url\": \""+bc_img+"\",\r\n" + 
 			 		"            \"image_width\": 640,\r\n" + 
 			 		"            \"image_height\": 640,\r\n" + 
 			 		"            \"link\": {\r\n" + 
@@ -158,6 +163,8 @@ public class KakaoAPI {
 			 		"            }\r\n" + 
 			 		"        }\r\n" + 
 			 		"    }";
+			System.out.println("==========================");
+			System.out.println(msg);
 			
 			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 			wr.write(msg);
