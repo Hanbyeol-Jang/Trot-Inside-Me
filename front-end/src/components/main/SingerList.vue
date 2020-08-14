@@ -6,22 +6,27 @@
             <v-row v-if="singers.length">
               <v-col
                 v-for="singer in singers"
-                :key="singer.s_name"
+                :key="singer.s_idx"
                 cols="4"
               >
-              <div class="cursor_test">
+              <div class="cursor_test d-flex justify-center">
                   <router-link :to="{ name: 'SingerDetailView', params: { singerId: singer.s_idx }}">
-                    <v-avatar size="80">
+                    <v-avatar size="85"
+                      class="text-center elevation-3">
                       <img
+                        v-if="singer.s_img"
                         :src="singer.s_img"
-                        alt="John"
-                      height="100%"
-                      width="100%"
+                        alt="Singer Default"
+                      >
+                      <img
+                        v-else
+                        src="@/assets/image/user_default.png"
                       >
                     </v-avatar>
                   </router-link>
-                <h4 class="text-center">{{singer.s_name}}</h4>
+                
               </div>
+              <h3 class="text-center mt-3">{{singer.s_name}}</h3>
               </v-col>
             </v-row>
             <p class="text-center" v-if="!singers.length">찾는 가수 없음</p>

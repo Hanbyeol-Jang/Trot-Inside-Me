@@ -38,8 +38,9 @@
               required
               height="50px"
           ></v-text-field>
-          <div class="row justify-center px-3"><v-btn height="45px" block class="btn-color" @click="submit">로그인</v-btn></div>
-          <div class="row justify-center px-3"><v-btn height="45px" block class="btn-color" @click="getUser">get user</v-btn></div>
+          <div class="row justify-center px-3">
+            <v-btn height="45px" block class="btn-color" @click="submit">로그인</v-btn>
+          </div>
         </form>
     </div>
   </div>
@@ -68,7 +69,7 @@ export default {
         }
     },
     methods: {
-      ...mapActions(['login', 'getUser']),
+      ...mapActions(['login']),
       submit() {
           this.$v.$touch()
           if(this.$v.$invalid){

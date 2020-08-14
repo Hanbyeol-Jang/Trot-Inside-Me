@@ -20,7 +20,6 @@ import VoteView from '@/views/vote/VoteView.vue'
 
 
 import Login from '@/views/accounts/Login.vue'
-import AdminLogin from '@/views/accounts/admin/AdminLogin.vue'
 import Signup from '@/views/accounts/Signup.vue'
 import SingerDetailView from '@/views/main/SingerDetailView.vue'
 import UserDetailView from '@/views/accounts/UserDetailView.vue'
@@ -28,6 +27,14 @@ import SignupCompleteView from '@/views/accounts/SignupCompleteView.vue'
 import UserSettingView from '@/views/accounts/UserSettingView.vue'
 import VideoListView from '@/views/main/VideoListView.vue'
 import ArticleListView from '@/views/main/ArticleListView.vue'
+import SingerScheduleView from '@/views/main/SingerScheduleView.vue'
+
+import AdminLogin from '@/views/accounts/admin/AdminLogin.vue'
+import AdminView from '@/views/accounts/admin/AdminView.vue'
+import SingerManageView from '@/views/accounts/admin/SingerManageView.vue'
+import SingerCreateView from '@/views/accounts/admin/SingerCreateView.vue'
+import ProgramManageView from '@/views/accounts/admin/ProgramManageView.vue'
+import ProgramCreateView from '@/views/accounts/admin/ProgramCreateView.vue'
 
 Vue.use(VueRouter)
 
@@ -47,11 +54,6 @@ Vue.use(VueRouter)
     path: '/video/:videoId',
     name: 'VideoDetailView',
     component: VideoDetailView
-  },
-  {
-    path: '/accounts/admin/login',
-    name: 'AdminLogin',
-    component: AdminLogin
   },
   {
     path: '/accounts/login',
@@ -149,6 +151,45 @@ Vue.use(VueRouter)
     component: ArticleListView
   },
   {
+    path: '/schedule/:singerId',
+    name: 'SingerScheduleView',
+    component: SingerScheduleView
+  },
+
+  // Admin Page
+  {
+    path: '/admin',
+    name: 'AdminLogin',
+    component: AdminLogin
+  },
+  {
+    path: '/admin/main',
+    name: 'AdminView',
+    component: AdminView
+  },
+  {
+    path: '/admin/singer',
+    name: 'SingerManageView',
+    component: SingerManageView
+  },
+  {
+    path: '/admin/singer/create',
+    name: 'SingerCreateView',
+    component: SingerCreateView
+  },
+  {
+    path: '/admin/program',
+    name: 'ProgramManageView',
+    component: ProgramManageView
+  },
+  {
+    path: '/admin/program/create',
+    name: 'ProgramCreateView',
+    component: ProgramCreateView
+  },
+
+  // Error Page
+  {
     path : '*',
     name : 'PageNotFound',
     component : PageNotFound
@@ -159,11 +200,41 @@ Vue.use(VueRouter)
     component : ErrorView
   }
 ]
-
+ 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return {x: 0, y: 0}
+    }
+  }
+})
+
+router.beforeEach((to, from, next) => {
+  // const publicPages = ['Login', 'Signup', 'Home', 'AdminLogin'] // Login 안해도 됨
+  const loggedInPages = ['UserDetailView', 'UserSettingView', 
+    'AdminView', 'SingerManageView', 'SingerCreateView', 'ProgramCreateView', 'ProgramManageView',]
+  // const adminPages = ['AdminView']
+  const authPages = ['Login', 'Signup', 'AdminLogin'] // Login 되어있으면 안됨
+
+  // const authRequired = !publicPages.includes(to.name) // Login 해야함
+  const authRequired = loggedInPages.includes(to.name) // Login 해야함
+  const unAuthRequired = authPages.includes(to.name) // Login 해서는 안됨
+  const isLoggedIn = !!Vue.$cookies.isKey('auth-token')
+
+  if (unAuthRequired && isLoggedIn) {
+    next('/')
+  }
+  if (authRequired && !isLoggedIn) {
+    next({name: 'Login'})
+  } else {
+    next()
+  }
+  // authRequired && !isLoggedIn ? next({name: 'Login'}) : next()
 })
 
 export default router

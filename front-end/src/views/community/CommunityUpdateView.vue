@@ -35,7 +35,7 @@ export default {
             user:"",
             axiosConfig:{
               headers:{
-                Authorization : `Token ${this.$cookies.get('auth-token')}`
+                token : `${this.$cookies.get('auth-token')}`
               }
             },
         }
@@ -49,9 +49,9 @@ export default {
         },
 
         getuser(){
-            axios.get(`${SERVER.URL}/rest-auth/user/`,this.axiosConfig)
+            axios.get(`${SERVER.URL}/user/getUserInfo`,this.axiosConfig)
                 .then((reaponse)=>{
-                this.currentuser = reaponse.data.username
+                this.currentuser = reaponse.data.u_name
                 if (this.user !== this.currentuser){
                     this.$alert("잘 못 된 접근입니다.");
                     this.$router.push({name:'Home'})
@@ -63,11 +63,11 @@ export default {
         },
 
         getcommunity(){ 
-            axios.get(`${SERVER.URL}/community/articles/`+this.$route.params.communityId+'/')
+            axios.get(SERVER.URL+`/community/detail/${this.$route.params.communityId}`,this.axiosConfig)
             .then((reaponse)=>{
-                this.show_image = SERVER.URL+reaponse.data.data.image
-                this.content = reaponse.data.data.content
-                this.user = reaponse.data.data.user.username
+                this.content=reaponse.data.co_content,
+                this.user=reaponse.data.co_name,
+                this.show_image=reaponse.data.co_img
                 this.getuser()
             })
             .catch((err)=>{
@@ -75,14 +75,18 @@ export default {
             })
         },
 
-        updateCommunity(event){
-            event.preventDefault()
-            const data = new FormData()
-            data.append('content',this.content)
-            if (this.$refs.file.$refs.input.files[0]!==undefined){
-              data.append('image',this.image)
+        updateCommunity(){
+            // const data = new FormData()
+            // data.append('content',this.content)
+            // if (this.$refs.file.$refs.input.files[0]!==undefined){
+            //   data.append('image',this.image)
+            // }
+            const data = {
+              'co_idx':this.$route.params.communityId,
+              'co_content' : this.content,
+              'co_img' : this.image
             }
-            axios.post(`${SERVER.URL}/community/`,data,this.axiosConfig)
+            axios.put(`${SERVER.URL}/community/update`,data,this.axiosConfig)
             .then(()=>{
                 this.$router.push({ name: 'CommunityIndexView'})
             })
@@ -92,7 +96,7 @@ export default {
         },
 
         communityImage(){
-          this.image = this.$refs.file.$refs.input.files[0]
+          this.image = this.$refs.file.$refs.input.files[0].name
           this.change_image = URL.createObjectURL(this.image)
           this.flag = true
         },
@@ -100,7 +104,6 @@ export default {
     created(){
         this.checklogin()
         this.getcommunity()
-        this.getuser()
     },
 }
 </script>

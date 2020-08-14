@@ -1,20 +1,49 @@
 <template>
-  <div class="text-center mt-6">
-     <v-avatar
-      size="100px">
-      <img
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSrPi2eq64wocYIj9FMtpIUqStLMKG1_iwt7jAmpZOo1blAxD0asvOHJp6Z_SKfPIE8_XK4WieQapBuqV13lwAdnHHFC0DLhmryZW8a&usqp=CAU&ec=45682162"
-        alt="John"
-      >
-    </v-avatar>
-    <h3 class="mt-4">손님</h3>
-
+  <div class="mt-6">
+    <v-row>
+      <v-col 
+        cols="12"
+        class="d-flex justify-space-around">
+        <v-avatar
+          class="ma-3 elevation-4"
+          size="120"
+          >
+          <v-img 
+            v-if="user.u_profileImg"
+            :src="user.u_profileImg">
+          </v-img>
+          <v-img
+            v-else
+            src="@/assets/image/user_default.png">
+          </v-img>
+        </v-avatar>
+        <div class="d-flex align-center">
+          <div class="d-flex flex-column">
+            <div>{{ user.u_name }}</div>
+            <div><i class="fas fa-at mr-1"></i></div>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex'
 export default {
-    name: 'UserDetailView',
+  name: 'UserDetailView',
+  computed: {
+    ...mapState(['user']),
+    ...mapGetters(['isLoggedIn']),
+  },
+  methods: {
+    ...mapActions(['getUser']),
+  },
+  created() {
+    if (this.isLoggedIn === 1) {
+      this.getUser()
+    }
+  },
 }
 </script>
 
