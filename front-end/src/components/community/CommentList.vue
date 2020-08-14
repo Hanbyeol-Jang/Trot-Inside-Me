@@ -13,7 +13,7 @@
           </v-btn>
         </v-col>
     <div v-for="comment in comments" :key="comment.id">
-      <CommentListItem class="mb-3" @delete-comment2="commentDelete" :comment="comment"/>
+      <CommentListItem class="mb-3" @delete-comment2="commentDelete" :comment="comment" :currentUser="currentUser"/>
     </div>
       <br>
       <!-- <p class="text-center" v-if="!comments.length">No results :( </p> -->
@@ -43,6 +43,7 @@ export default {
   },
   data(){
     return {
+      currentUser:{},
       comments: [],
       commentData: {
         content: '',
@@ -51,6 +52,21 @@ export default {
     }
   },
   methods: {
+    checkAuth(){
+      const axiosConfig ={
+          headers:{
+              token : `${this.$cookies.get('auth-token')}`
+          },
+      }
+      axios.get(SERVER.URL+`/user/getUserInfo`,axiosConfig)
+      .then((reaponse)=>{
+          this.currentUser = reaponse.data
+      })
+      .catch((err)=>{
+          console.error(err)
+      })
+    },
+
     getComments(){
         const axiosConfig2 = {
           headers:{
@@ -60,7 +76,7 @@ export default {
         }
         axios.get(SERVER.URL+`/community/detail/replylist/${this.$route.params.communityId}`,axiosConfig2)
         .then((response)=>{
-            this.comments = response.data
+              this.comments.push(...response.data)
         })
         .catch((err)=>{
             console.error(err)
@@ -69,7 +85,6 @@ export default {
 
 
     infiniteHandler($state) {
-      console.log(this.page)
       const axiosConfig2 = {
         headers:{
           token: `${this.$cookies.get('auth-token')}`,
@@ -79,7 +94,6 @@ export default {
       if (parseInt(this.commentCnt / 5)+1 >= this.page){
         axios.get(SERVER.URL +`/community/detail/replylist/${this.$route.params.communityId}`, axiosConfig2)
           .then(res => {
-            console.log(res.data)
             setTimeout(() => {
               this.page+=1
               this.comments.push(...res.data)
@@ -113,7 +127,6 @@ export default {
         } else{
 -          axios.post(SERVER.URL + `/community/replyadd`,json,axiosConfig2)
            .then((res) => {
-             console.log(res)
               this.$emit('add-comment')
               this.commentData.content = ''
               this.comments = []
@@ -147,6 +160,7 @@ export default {
   
   created(){
     this.getComments()
+    this.checkAuth()
   }
 }
 </script>

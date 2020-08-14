@@ -6,7 +6,10 @@
     max-width="500"
   >
     <v-card-actions class="d-flex flex-row-reverse">
-        <v-btn text color="deep-purple accent-4" @click="updateCommunity"><v-icon class="mr-2">mdi-pencil</v-icon>글 수정하기</v-btn>
+        <v-btn  outlined color="deep-purple accent-4" @click="updateCommunity"><v-icon class="mr-2">mdi-pencil</v-icon>글 수정하기</v-btn>
+        <div class="mr-1">
+            <v-btn depressed  color="error" @click="deleteArticle">삭제</v-btn>
+        </div>
     </v-card-actions>    
     <v-card-text>
       <v-textarea solo label="여기를 눌러 새로운 소식을 남겨보세요." height="300" v-model="content"></v-textarea>
@@ -95,11 +98,41 @@ export default {
             })
         },
 
+        deleteArticle(){
+            this.$confirm(
+                {
+                message: `삭제하시겠습니까?`,
+                button: {
+                    yes: '삭제하기',
+                    no: '아니요',
+                },
+                callback: confirm => {
+                    if (confirm) {
+                        const axiosConfig2 = {
+                        headers:{
+                            token: `${this.$cookies.get('auth-token')}`,
+                            },
+                        }
+                        axios.delete(SERVER.URL+`/community/detaildelete/${this.communityIdx}`,axiosConfig2)
+                        .then(()=>{
+                            this.$alert('삭제 완료')
+                            this.$router.push({name:'CommunityIndexView'})                
+                        })
+                        .catch((err)=>{
+                            console.log(err)
+                        })                  
+                    }
+                }
+                }
+            )
+        },
+
         communityImage(){
           this.image = this.$refs.file.$refs.input.files[0].name
           this.change_image = URL.createObjectURL(this.image)
           this.flag = true
         },
+
     },
     created(){
         this.checklogin()

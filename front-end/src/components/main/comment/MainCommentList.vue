@@ -13,7 +13,7 @@
           </v-btn>
         </v-col>
     <div v-for="comment in comments" :key="comment.id">
-      <MainCommentListItem class="mb-3" @delete-comment2="commentDelete" :comment="comment"/>
+      <MainCommentListItem class="mb-3" @delete-comment2="commentDelete" :comment="comment" :currentUser="currentUser"/>
     </div>
       <br>
       <!-- <p class="text-center" v-if="!comments.length">No results :( </p> -->
@@ -44,6 +44,7 @@ export default {
   },
   data(){
     return {
+      currentUser:{},
       comments: [],
       commentData: {
         content: '',
@@ -52,6 +53,22 @@ export default {
     }
   },
   methods: {
+
+    checkAuth(){
+      const axiosConfig ={
+          headers:{
+              token : `${this.$cookies.get('auth-token')}`
+          },
+      }
+      axios.get(SERVER.URL+`/user/getUserInfo`,axiosConfig)
+      .then((reaponse)=>{
+          this.currentUser = reaponse.data
+      })
+      .catch((err)=>{
+          console.error(err)
+      })
+    },
+
     getComments(){
         const axiosConfig2 = {
           headers:{

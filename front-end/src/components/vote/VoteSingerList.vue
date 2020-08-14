@@ -68,7 +68,6 @@ export default {
             }
             axios.get(SERVER.URL+`/user/getUserInfo`,axiosConfig)
             .then((reaponse)=>{
-              console.log(reaponse)
               if(reaponse.data.u_hasVote===1){
                 this.$alert("이미 투표를 하셨습니다.")
                 this.$router.push({ name: 'VoteView'})
@@ -97,8 +96,7 @@ export default {
                         "v_area": this.$route.params.local
                     }
                     axios.post(SERVER.URL+`/vote`,voteDto)
-                    .then((res)=>{
-                      console.log(res)
+                    .then(()=>{
                       this.$router.push({ name: 'VoteView' })
                       this.$alert('투표가 완료되었습니다!')
                     })

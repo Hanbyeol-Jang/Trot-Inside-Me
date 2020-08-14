@@ -99,8 +99,7 @@ export default {
             params: {isgood:this.showLike}
         }
         axios.get(SERVER.URL+`/board/good/${this.type}/${this.id}`,axiosConfig)
-        .then((response)=>{
-          console.log(response)
+        .then(()=>{
           if(this.showLike){
               this.showLike = 0
               this.likeCnt -= 1

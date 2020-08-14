@@ -8,8 +8,8 @@
       <v-tabs
           color="pink"
           class="d-flex justify-center">
-          <v-tab @click="getLikeCommunity" ><h4>인기 순으로 보기</h4></v-tab>
           <v-tab @click="getRecentCommunity" ><h4>최신 순으로 보기</h4></v-tab>
+          <v-tab @click="getLikeCommunity" ><h4>인기 순으로 보기</h4></v-tab>
       </v-tabs>
       <br>
       <div class="mt-5">
@@ -124,7 +124,6 @@ export default {
             }
             axios.delete(SERVER.URL+`/community/delete/${idx}`,axiosConfig2)
             .then((response)=>{
-                console.log(response)
                 this.communities=[]
                 this.communities.push(...response.data)
                 this.$alert('삭제 완료')
@@ -137,7 +136,7 @@ export default {
     },
       created(){
         this.checkLogin()
-        this.getLikeCommunity()
+        this.getRecentCommunity()
       },
     }
 </script>
