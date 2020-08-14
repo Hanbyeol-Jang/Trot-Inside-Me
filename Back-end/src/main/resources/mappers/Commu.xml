@@ -102,7 +102,7 @@
 				ui.u_name as cr_name, 
 				ui.u_profileImg as cr_profileImg,
 				co_idx, 
-				co_date
+				cr_date
 		from CoReply cr 
 		left outer join UserInfo ui on ui.u_email = cr.u_email 
 		where co_idx = #{co_idx}
