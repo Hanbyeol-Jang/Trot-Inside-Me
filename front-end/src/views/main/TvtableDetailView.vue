@@ -53,13 +53,17 @@ export default {
             var date = new Date()
             if(date.getHours() === 0){
                 this.now = "00"
-            }else{
+            }else if(date.getHours()<10 && date.getHours()>0){
+                this.now = "0"+date.getHours()+':'+date.getMinutes()
+            }
+            else{
                 this.now = date.getHours()+':'+date.getMinutes()
             }
         },
         getTvtable(){
             axios.get(`${SERVER.URL}/board/schedule/todayList`)
             .then((response)=>{
+                console.log(response.data)
               this.Tvprograms = []
               const programs = _.sortBy(response.data,'bc_time')
               for (var i in programs){
@@ -77,8 +81,9 @@ export default {
             }) 
         },
         getTvtableProgram(){
-            axios.get(`${SERVER.URL}/schedule/todayList`)
+            axios.get(`${SERVER.URL}/board/schedule/todayList`)
             .then((response)=>{
+                console.log(response.data)
                 this.Tvprograms = []
                 const programs = _.sortBy(response.data,'bc_title','bc_time')
                 for (var i in programs){
@@ -95,10 +100,11 @@ export default {
             }) 
         },
         searchPrograms(keyword) {
-           axios.get(`${SERVER.URL}/schedule/todayList`)
+           axios.get(`${SERVER.URL}/board/schedule/todayList`)
                 .then(response => {
-                const resultPrograms = response.data.filter(data => data.bc_title.includes(keyword))
-                this.Tvprograms = resultPrograms
+                    console.log(response.data)
+                    const resultPrograms = response.data.filter(data => data.bc_title.includes(keyword))
+                    this.Tvprograms = resultPrograms
                 })
             .catch((err)=>{
                 console.error(err)
