@@ -16,7 +16,13 @@ public class VoteDaoImpl implements VoteDao {
 
 	@Override
 	public int voteClick(VoteDto voteDto) {
-		return session.insert(ns + "voteClick", voteDto);
+		session.insert(ns + "voteClick", voteDto);
+		return session.update(ns + "voteChange", voteDto);
+	}
+
+	@Override
+	public int voteCheck(String u_email) {
+		return session.selectOne(ns + "voteCheck", u_email);
 	}
 
 }
