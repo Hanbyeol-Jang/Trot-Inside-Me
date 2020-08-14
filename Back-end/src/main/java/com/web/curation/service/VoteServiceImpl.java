@@ -28,4 +28,34 @@ public class VoteServiceImpl implements VoteService {
 		}
 	}
 
+	@Override
+	public String idxToName(int s_idx) {
+		String temp = voteDao.idxToName(s_idx);
+		return temp;
+	}
+
+	@Override
+	public int thisWeek(int s_idx) {
+		int temp = voteDao.thisWeek(s_idx);
+		return temp;
+	}
+
+	@Override
+	public int thisWeekTotal(int s_idx) {
+		int temp = voteDao.thisWeekTotal(s_idx);
+		return temp;
+	}
+
+	@Override
+	public int lastWeek(String s_name) {
+		int temp = voteDao.lastWeek(s_name);
+		return temp;
+	}
+
+	@Override
+	public int lastWeekTotal(String s_name) {
+		int temp = voteDao.lastWeekTotal(s_name);
+		return temp;
+	}
+
 }

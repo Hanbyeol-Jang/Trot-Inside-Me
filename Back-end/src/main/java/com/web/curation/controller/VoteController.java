@@ -60,4 +60,28 @@ public class VoteController {
 		}
 	}
 
+	@ApiOperation("해당 가수 투표 현황 확인")
+	@GetMapping("/voteOverview/{s_idx}")
+	public ResponseEntity<HashMap<String, Object>> voteOverview(@PathVariable int s_idx) {
+		try {
+			String s_name = voteService.idxToName(s_idx);
+			int thisWeek = voteService.thisWeek(s_idx);
+			int thisWeekTotal = voteService.thisWeekTotal(s_idx);
+			int lastWeek = voteService.lastWeek(s_name);
+			int lastWeekTotal = voteService.lastWeekTotal(s_name);
+
+			HashMap<String, Object> map = new HashMap<>();
+
+			map.put("s_name", s_name);
+			map.put("thisWeek", thisWeek);
+			map.put("thisWeekTotal", thisWeekTotal);
+			map.put("lastWeek", lastWeek);
+			map.put("lastWeekTotal", lastWeekTotal);
+
+			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+
 }

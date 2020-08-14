@@ -20,6 +20,34 @@
 		from	UserInfo
 		where	u_email = #{u_email};
 	</select>
+	
+	<select id="idxToName" resultType="String">
+		SELECT 	s_name
+		from	Singer
+		where	s_idx = #{s_idx};
+	</select>
+	
+	<select id="thisWeek" resultType="int">
+		SELECT 	COUNT(s_idx) 
+		FROM 	Vote
+		where	s_idx = #{s_idx};
+	</select>
+
+	<select id="thisWeekTotal" resultType="int">
+		SELECT 	COUNT(s_idx) 
+		FROM 	Vote;
+	</select>
+	
+	<select id="lastWeek" resultType="int">
+		SELECT 	COUNT(s_name) 
+		FROM 	VoteResult
+		where	s_name = #{s_name};
+	</select>
+	
+	<select id="lastWeekTotal" resultType="int">
+		SELECT 	COUNT(s_name) 
+		FROM 	VoteResult;
+	</select>
 
 </mapper>
         
