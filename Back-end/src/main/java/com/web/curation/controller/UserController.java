@@ -123,6 +123,71 @@ public class UserController {
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 
+	@ApiOperation("이메일 영상 리스트")
+	@GetMapping("/videolist/{u_email}")
+	public ResponseEntity<List<BoardDto>> videolistEmail(@PathVariable String u_email, @RequestParam("page") int page) {
+
+		try {
+			GoodDto gdto = new GoodDto();
+			gdto.setB_type(1);
+			gdto.setU_email(u_email);
+			List<BoardDto> list = userService.myBoardList(gdto);
+
+			List<BoardDto> showList = new ArrayList<>();
+			int lastPageRemain = list.size() % 5;
+			int lastPage = list.size() - lastPageRemain;
+			page = 5 * page - 5;
+			// 5개씩 보여주기
+			if (page < lastPage) {
+				for (int i = page; i < page + 5; i++) {
+					showList.add(list.get(i));
+				}
+			} else if (page == lastPage) {
+				for (int i = page; i < page + lastPageRemain; i++) {
+					showList.add(list.get(i));
+				}
+			}
+
+			return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@ApiOperation("이메일 영상  리스트")
+	@GetMapping("/articlelist/{u_email}")
+	public ResponseEntity<List<BoardDto>> articlelistEmail(@PathVariable String u_email,
+			@RequestParam("page") int page) {
+
+		try {
+
+			GoodDto gdto = new GoodDto();
+			gdto.setB_type(2);
+			gdto.setU_email(u_email);
+			List<BoardDto> list = userService.myBoardList(gdto);
+			
+			List<BoardDto> showList = new ArrayList<>();
+			int lastPageRemain = list.size() % 5;
+			int lastPage = list.size() - lastPageRemain;
+			page = 5 * page - 5;
+			// 5개씩 보여주기
+			if (page < lastPage) {
+				for (int i = page; i < page + 5; i++) {
+					showList.add(list.get(i));
+				}
+			} else if (page == lastPage) {
+				for (int i = page; i < page + lastPageRemain; i++) {
+					showList.add(list.get(i));
+				}
+			}
+			return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+
 	@GetMapping("/follow/{s_idx}")
 	public ResponseEntity<Integer> followApply(@PathVariable int s_idx, HttpServletRequest request,
 			@RequestParam("isfollow") int isfollow) {
