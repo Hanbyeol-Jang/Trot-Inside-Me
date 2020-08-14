@@ -8,10 +8,9 @@
     >
     투표하기
     </v-btn>
-    <iframe class="mt-4 mx-1"                    
+    <embed class="my-4 mx-1"                    
       src="https://public.tableau.com/views/trot/1?:language=ko&:display_count=y&publish=yes&:origin=viz_share_link:showVizHome=no&:embed=true"
       width="100%" height="1400px">
-    </iframe>
     <!-- <VoteMoving /> -->
     <ScrollTopButton /> 
   </div>

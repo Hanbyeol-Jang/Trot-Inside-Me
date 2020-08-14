@@ -78,7 +78,6 @@ export default {
         }
         axios.get(SERVER.URL+`/board/replylist/${this.type}/${this.id}`,axiosConfig2)
         .then((response)=>{
-            console.log(response)
             this.comments = response.data
         })
         .catch((err)=>{
@@ -88,7 +87,6 @@ export default {
 
 
     infiniteHandler($state) {
-      console.log(this.page)
       const axiosConfig2 = {
         headers:{
           token: `${this.$cookies.get('auth-token')}`,
@@ -98,7 +96,6 @@ export default {
       if (parseInt(this.commentCnt / 5)+1 >= this.page){
         axios.get(SERVER.URL +`/board/replylist/${this.type}/${this.id}`, axiosConfig2)
           .then(res => {
-            console.log(res.data)
             setTimeout(() => {
               this.page+=1
               this.comments.push(...res.data)
