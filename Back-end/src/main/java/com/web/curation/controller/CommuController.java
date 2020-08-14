@@ -88,9 +88,10 @@ public class CommuController {
 
 	// 게시글 추가
 	@ApiOperation("게시글 추가")
-	@PostMapping("/add")
-	public ResponseEntity<String> commuAdd(
-			@RequestParam("co_img") MultipartFile co_img) {
+//	@PostMapping("/add")
+    @PostMapping(value = "/add", headers = "Content-Type= multipart/form-data")
+	public ResponseEntity<String> commuAdd(HttpServletRequest request,
+			@RequestParam(value = "co_img", required = true) MultipartFile co_img) {
 		System.out.println("파일 메소드 들어왓다 ");
 		System.out.println(co_img.getName());
 //		System.out.println(dto.getCo_img().getOriginalFilename());
@@ -110,7 +111,7 @@ public class CommuController {
 //				return new ResponseEntity<String>("커뮤니티 게시물 추가 에러 ", HttpStatus.NOT_FOUND);
 //			}
 //		}
-		return null;
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 
 	// 게시글 삭제
