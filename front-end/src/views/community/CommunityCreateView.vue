@@ -46,19 +46,15 @@ export default {
         },
 
         createCommunity(){
-            const axiosConfig2={
-              headers:{
-                'Content-Type': 'multipart/form-data'
-              }
-            }
-            const dto = new FormData()
-            dto.append('file',this.image)
+            // const dto = new FormData()
+            // dto.append('co_content',this.content)
+            // dto.append('co_img',this.image)
             // axios.post(`${SERVER.URL}/community/add`,dto,this.axiosConfig)
-            // const data = {
-            //   'co_content' : this.content,
-            //   'co_img' : this.image
-            // }
-            axios.post(`${SERVER.URL}/community/add`,dto,axiosConfig2)
+            const data = {
+              'co_content' : this.content,
+              'co_img' : this.image
+            }
+            axios.post(`${SERVER.URL}/community/add`,data,this.axiosConfig)
             .then(()=>{
                 this.$router.push({ name: 'CommunityIndexView'})
             })
