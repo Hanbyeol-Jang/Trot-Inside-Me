@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
@@ -87,19 +90,22 @@ public class CommuController {
 	// 게시글 추가
 	@ApiOperation("게시글 추가")
 	@PostMapping("/add")
-	public ResponseEntity<String> commuAdd( CommuPost dto, HttpServletRequest request) {
-		System.out.println(dto.getCo_img());
-		System.out.println(dto.toString());
+	public ResponseEntity<String> commuAdd( @RequestParam("co_img") MultipartFile co_img,
+			@RequestParam("co_content") String co_content, HttpServletRequest request) {
+		System.out.println("들어왔다");
+		System.out.println(co_img.getName());
+		System.out.println(co_img.getOriginalFilename());
+		System.out.println(co_content);
 		UserDto udto = userService.getTokenInfo(request);
-		if (udto.getU_name().equals("F")) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		} else {
-			System.out.println("aa" + udto.getU_email());
-			dto.setCo_email(udto.getU_email());
-			System.out.println("nn" + dto.getCo_email());
-			System.out.println("img  : " + dto.getCo_img());
-			System.out.println("받아온다 :  "+dto.toString());
-		}
+//		if (udto.getU_name().equals("F")) {
+//			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//		} else {
+//			System.out.println("aa" + udto.getU_email());
+//			dto.setCo_email(udto.getU_email());
+//			System.out.println("nn" + dto.getCo_email());
+//			System.out.println("img  : " + dto.getCo_img());
+//			System.out.println("받아온다 :  "+dto.toString());
+//		}
 			return new ResponseEntity<String>("커뮤니티 게시물 추가 에러 ", HttpStatus.NOT_FOUND);
 	}
 //	// 게시글 추가
