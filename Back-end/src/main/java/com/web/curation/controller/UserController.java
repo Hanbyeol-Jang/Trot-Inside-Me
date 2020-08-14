@@ -1,6 +1,7 @@
 package com.web.curation.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -118,7 +119,7 @@ public class UserController {
 			FollowDto dto = new FollowDto();
 			dto.setU_email(udto.getU_email());
 			dto.setS_idx(s_idx);
-			System.out.println("처음 받은값"+isfollow );
+			System.out.println("처음 받은값" + isfollow);
 			if (isfollow == 1) { // 좋아요 취소
 				if (userService.followDelete(dto)) {
 					isfollow = 0;
@@ -128,7 +129,7 @@ public class UserController {
 					isfollow = 1;
 				}
 			}
-			System.out.println("변경된  값"+isfollow );
+			System.out.println("변경된  값" + isfollow);
 			return new ResponseEntity<Integer>(isfollow, HttpStatus.OK);
 		}
 	}
@@ -161,6 +162,23 @@ public class UserController {
 		}
 	}
 
+	/* 커뮤니티에서 다른 사람 프로필 클릭 했을때 정보 가져오기 */
+	@ApiOperation("이메일로 다른 사람 정보 가져오기")
+	@GetMapping("/getUserInfo/{u_email}")
+	public ResponseEntity<HashMap<String, Object>> getUserInfoEmail(@PathVariable String u_email) {
+		try {
+
+			UserDto userDto = userService.getUserInfo(u_email);
+
+			HashMap<String, Object> map = new HashMap<>();
+
+			map.put("userInfo", userDto);
+
+			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
 //수정
 //	@PostMapping("/accounts/logout")
 //	@ApiOperation(value = "로그아웃")
