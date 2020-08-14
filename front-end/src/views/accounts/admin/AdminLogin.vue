@@ -38,14 +38,9 @@
               required
               height="50px"
           ></v-text-field>
-<<<<<<< HEAD
           <div class="row justify-center px-3">
             <v-btn height="45px" block class="btn-color" @click="submit">로그인</v-btn>
           </div>
-=======
-          <div class="row justify-center px-3"><v-btn height="45px" block class="btn-color" @click="submit">로그인</v-btn></div>
-          <div class="row justify-center px-3"><v-btn height="45px" block class="btn-color" @click="getUser">get user</v-btn></div>
->>>>>>> BE-Develop
         </form>
     </div>
   </div>
@@ -74,11 +69,7 @@ export default {
         }
     },
     methods: {
-<<<<<<< HEAD
       ...mapActions(['login']),
-=======
-      ...mapActions(['login', 'getUser']),
->>>>>>> BE-Develop
       submit() {
           this.$v.$touch()
           if(this.$v.$invalid){
