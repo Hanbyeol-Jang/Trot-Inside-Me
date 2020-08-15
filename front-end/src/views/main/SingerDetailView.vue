@@ -27,11 +27,11 @@
     <v-container>
       <v-row no-gutters>
         <v-col cols="6">
-          <div class="text-center animate__animated animate__fadeInLeft">
-            <v-icon 
+          <div class="text-center">
+            <v-icon
               color="pink">
               mdi-heart</v-icon>
-            {{ followCnt }}명이 좋아합니다.
+            {{ followCnt }} 명
           </div>
         </v-col>
         <v-col cols="6">
@@ -39,15 +39,12 @@
             <v-btn v-if="!followBtn" rounded color="pink" dark @click="followSinger(followBtn)">
               <h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3>
             </v-btn>
-            <v-btn v-if="followBtn" rounded outlined color="pink" dark @click="followSinger(followBtn)">
+            <v-btn v-else rounded outlined color="pink" dark @click="followSinger(followBtn)">
               <h3><i class="fas fa-times mr-2"></i>내 가수 취소하기</h3>
             </v-btn>
           </div>
         </v-col>
       </v-row>
-    <div>SINGER: {{ singer }}</div>
-    <div>USER: {{ user }}</div>
-    <div>현재 좋아하는지?</div>
     </v-container>
     <v-container class="mt-4 text-center">
       <v-row no-gutters>
@@ -95,8 +92,6 @@ export default {
         { id: 3, title: '스케줄 보기'},
         { id: 4, title: ''},
       ],
-      followBtn: false,
-      followCnt: 0,
     }
   },
   components: { 
@@ -105,22 +100,15 @@ export default {
     CalendarIcon,
   },
   computed: {
-    ...mapState(['user', 'singer']),
+    ...mapState(['user', 'singer', 'followBtn', 'followCnt']),
   },
   methods: {
     ...mapActions(['getSingerDetail', 'follow']),
     followSinger(isFollow) {
       if (isFollow) {
-        // follow 1 전달
         this.follow({ s_idx: this.singer.s_idx, f_flag: 1 })
-        this.followBtn = false
-        this.followCnt -= 1
-
       } else {
-        // follow 0 전달
         this.follow({ s_idx: this.singer.s_idx, f_flag: 0 })
-        this.followBtn = true
-        this.followCnt += 1
       }
     },
     goMenuDetail(id) {
@@ -132,14 +120,9 @@ export default {
         this.$router.push({ name: 'SingerScheduleView', params: { singerId: this.s_idx }})
       } 
     },
-    getFirstData() {
-      console.log(this.singer)
-    },
   },
   created() {
     this.getSingerDetail(this.s_idx)
-    console.log('created', this.singer)
-    this.getFirstData()
   },
 }
 </script>

@@ -21,7 +21,7 @@
         </v-row>
       </v-container>
     </v-main>
-    <BottomNav v-if="bottomNav"/>
+    <BottomNav/>
     <vue-confirm-dialog class="my-class"></vue-confirm-dialog>
   </v-app>
 </template>
@@ -43,15 +43,15 @@ export default {
   computed: {
     ...mapState(['user']),
     ...mapGetters(['isLoggedIn']),
-    bottomNav() {
-      let routeName = this.$route.name
-      if (routeName === 'Home' || routeName === 'SingerSearchView'
-        || routeName === 'VoteView' || routeName === 'CommunityIndexView') {
-          return true
-        } else {
-          return false
-        }
-    },
+    // bottomNav() {
+    //   let routeName = this.$route.name
+    //   if (routeName === 'Home' || routeName === 'SingerSearchView'
+    //     || routeName === 'VoteView' || routeName === 'CommunityIndexView') {
+    //       return true
+    //     } else {
+    //       return false
+    //     }
+    // },
   },
   methods: {
     ...mapActions(['getUser']),
