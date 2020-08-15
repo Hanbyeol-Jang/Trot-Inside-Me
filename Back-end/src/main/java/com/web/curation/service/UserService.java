@@ -5,8 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.web.curation.dto.BoardDto;
-import com.web.curation.dto.BoardPK;
-import com.web.curation.dto.CommuReply;
 import com.web.curation.dto.FollowDto;
 import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.UserDto;

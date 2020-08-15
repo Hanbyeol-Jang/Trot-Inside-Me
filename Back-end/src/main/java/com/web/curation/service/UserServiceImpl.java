@@ -1,6 +1,5 @@
 package com.web.curation.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.web.curation.dao.UserDao;
 import com.web.curation.dto.BoardDto;
-import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.FollowDto;
 import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.UserDto;

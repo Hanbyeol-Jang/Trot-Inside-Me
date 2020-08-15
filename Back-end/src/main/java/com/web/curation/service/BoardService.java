@@ -2,7 +2,6 @@ package com.web.curation.service;
 
 import java.util.List;
 
-import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.GoodDto;

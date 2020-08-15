@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +25,6 @@ import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
 import com.web.curation.dto.CommuDto;
 import com.web.curation.dto.CommuReply;
-import com.web.curation.dto.CommuUpload;
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.CommuService;
 import com.web.curation.service.UserService;
@@ -85,13 +83,26 @@ public class CommuController {
 			}
 		}
 	}
+    @PostMapping("/add")
+    public String fileTest(@RequestPart("file") MultipartFile ff) throws IllegalStateException {
+    	System.out.println("adafaf");
+       // File file = new File("C:\\sts\\workspace\\backtest\\src\\main\\resources\\static\\file\" + ff.getOriginalFilename());
+//        if (!file.getParentFile().exists())
+//            file.getParentFile().mkdirs();
+//        ff.transferTo(file);
+//
+//        System.out.println("file is " + file.getAbsolutePath());
+//        System.out.println("name is " + file.getName() );
 
+        return ff.getName();
+
+    }
 	// 게시글 추가
 	@ApiOperation("게시글 추가")
 //	@PostMapping("/add")
-    @PostMapping(value = "/add", headers = "Content-Type= multipart/form-data")
+    @PostMapping(value = "/adds", headers = "Content-Type= multipart/form-data")
 	public ResponseEntity<String> commuAdd(HttpServletRequest request,
-			@RequestParam(value = "co_img", required = true) MultipartFile co_img) {
+			@RequestPart(value = "co_img", required = true) MultipartFile co_img) {
 		System.out.println("파일 메소드 들어왓다 ");
 		System.out.println(co_img.getName());
 //		System.out.println(dto.getCo_img().getOriginalFilename());
