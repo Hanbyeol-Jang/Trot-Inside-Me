@@ -12,23 +12,20 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
-    authAdmin: cookies.get('auth-admin'),
+    isAdmin: 0,
     user: {},
-
+    userDetail: {},
     singers: [],
     singer: {},
-
     programs: [],
-
     followBtn: false,
     followCnt: 0,
+    userFollowing: [],
   },
   getters: {
     isLoggedIn: state => !!state.authToken,
     config: state => ({ headers: { token: `${state.authToken}` } }),
     singersLength: state => state.singers.length,
-    followed: state => state.followBtn,
-    followers: state => state.followCnt
   },
   mutations: {
     SET_TOKEN(state, token) {
@@ -37,6 +34,9 @@ export default new Vuex.Store({
     },
     SET_USER(state, userInfo) {
       state.user = userInfo
+    },
+    SET_ADMIN(state, isAdmin) {
+      state.isAdmin = isAdmin
     },
     SET_SINGERS(state, singers) {
       state.singers = singers
@@ -59,13 +59,17 @@ export default new Vuex.Store({
       state.followBtn = 0
       state.followCnt--
     },
+    SET_FOLLOWLIST(state, followList) {
+      state.userFollowing = followList
+    },
   },
   actions: {
     // Auth
-    login({ commit }, loginData) {
+    login({ dispatch, commit }, loginData) {
       axios.post(SERVER.URL + SERVER.ROUTES.login, loginData)
         .then(res => {
-          commit('SET_TOKEN', res.data) 
+          commit('SET_TOKEN', res.data)
+          dispatch('getUser')
           router.push({ name: 'AdminView' })
         })
         .catch(err => console.log(err))
@@ -147,12 +151,15 @@ export default new Vuex.Store({
       axios.get(SERVER.URL + SERVER.ROUTES.follow + info.s_idx, options)
       .then(res => { 
         commit('SET_FOLLOW', { f_flag: res.data, f_cnt: state.followCnt })
-        if (res.data) {
-          commit('followAdd')
-        } else {
-          commit('followBack')
-        }
+        if (res.data) { commit('followAdd') } 
+        else { commit('followBack') }
       })
+      .catch(err => { console.error(err) })
+    },
+    getFollowList({ commit }, userId) {
+      const options = { params:{ u_email : userId } }
+      axios.get(SERVER.URL + SERVER.ROUTES.followSingersList, options)
+      .then(res => { commit('SET_FOLLOWLIST', res.data) })
       .catch(err => { console.error(err) })
     },
 

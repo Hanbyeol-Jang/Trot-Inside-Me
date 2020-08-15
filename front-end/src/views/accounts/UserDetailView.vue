@@ -20,6 +20,7 @@
         <div class="d-flex align-center">
           <div class="d-flex flex-column">
             <div>{{ user.u_name }}</div>
+            <v-btn text @click="userLogout(user.u_isAdmin)"><i class="fas fa-sign-out-alt mr-1"></i>로그아웃</v-btn>
           </div>
         </div>
       </v-col>
@@ -38,6 +39,17 @@
             <v-card-title><h4><i :class="menu.icon" class="mr-2"></i>{{ menu.title }}</h4></v-card-title>
           </v-card>
         </v-col>
+        <v-col
+          v-if="user.u_isAdmin"
+          cols="12">
+          <v-card
+            color="#FCE4EC"
+            raised
+            @click="goMenuDetail(4)"
+          >
+            <v-card-title><h4><i class="fas fa-cog mr-2"></i>관리자 페이지</h4></v-card-title>
+          </v-card>
+        </v-col>
       </v-row>
     </v-container>
   </div>
@@ -51,8 +63,8 @@ export default {
     return {
       menuItems: [
         { id: 1, title: '내 가수 보기', icon: 'fas fa-music'},
-        { id: 2, title: '찜한 영상', icon: 'fas fa-table'},
-        { id: 3, title: '찜한 동영상', icon: 'fas fa-info-circle'},
+        { id: 2, title: '찜한 영상', icon: 'far fa-play-circle'},
+        { id: 3, title: '찜한 기사', icon: 'fas fa-newspaper'},
       ],
     }
   },
@@ -61,21 +73,27 @@ export default {
     ...mapGetters(['isLoggedIn']),
   },
   methods: {
-    ...mapActions(['getUser']),
+    ...mapActions(['getUser', 'logout', 'kakaoLogout']),
     goMenuDetail(id) {
       if (id === 1) {
-        console.log('내 가수 보기 해야함! 아직 안함!')
+        this.$router.push({ name: 'UserLikeSingerView' })
       } else if (id === 2) {
         this.$router.push({ name: 'UserLikeVideoView' })
       } else if (id === 3) {
         this.$router.push({ name: 'UserLikeVideoView' })
+      } else if (id === 4) {
+        this.$router.push({ name: 'AdminView' })
       }
-    }
+    },
+    userLogout(isAdmin) {
+      if(isAdmin) {
+        this.logout()
+      } else {
+        this.kakaoLogout()
+      }
+    },
   },
   created() {
-    if (this.isLoggedIn === 1) {
-      this.getUser()
-    }
   },
 }
 </script>

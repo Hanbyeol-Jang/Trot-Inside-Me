@@ -16,14 +16,6 @@
       </v-avatar>
       <h2 class="mt-4">{{ singer.s_name }}</h2>
     </div>
-    <!-- <div class="text-center">
-      <v-btn 
-        rounded 
-        color="pink" 
-        dark
-        >
-        <h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3></v-btn>
-    </div> -->
     <v-container>
       <v-row no-gutters>
         <v-col cols="6">
@@ -35,7 +27,7 @@
           </div>
         </v-col>
         <v-col cols="6">
-          <div class="text-center">
+          <div v-if="isLoggedIn" class="text-center">
             <v-btn v-if="!followBtn" rounded color="pink" dark @click="followSinger(followBtn)">
               <h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3>
             </v-btn>
@@ -43,6 +35,11 @@
               <h3><i class="fas fa-times mr-2"></i>내 가수 취소하기</h3>
             </v-btn>
           </div>
+          <div v-else class="text-center" @click="showMsg()">
+            <v-btn rounded color="pink" dark>
+              <h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3>
+            </v-btn>
+        </div>
         </v-col>
       </v-row>
     </v-container>
@@ -75,7 +72,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 import VideoIcon from '@/assets/icon/video-icon.svg'
 import MagazineIcon from '@/assets/icon/magazine-icon.svg'
@@ -100,7 +97,8 @@ export default {
     CalendarIcon,
   },
   computed: {
-    ...mapState(['user', 'singer', 'followBtn', 'followCnt']),
+    ...mapState(['singer', 'followBtn', 'followCnt']),
+    ...mapGetters(['isLoggedIn']),
   },
   methods: {
     ...mapActions(['getSingerDetail', 'follow']),
@@ -120,6 +118,18 @@ export default {
         this.$router.push({ name: 'SingerScheduleView', params: { singerId: this.s_idx }})
       } 
     },
+    showMsg() {
+      this.$confirm({
+        message: "로그인이 필요한 서비스 입니다.",
+        button: {
+          yes: '로그인 하기',
+          no: '돌아가기',
+        },
+        callback: confirm => {
+          if (confirm) { this.$router.push({ name: 'Login' }) }
+        }
+      })
+    }
   },
   created() {
     this.getSingerDetail(this.s_idx)

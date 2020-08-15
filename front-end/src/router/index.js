@@ -24,6 +24,7 @@ import Signup from '@/views/accounts/Signup.vue'
 import SingerDetailView from '@/views/main/SingerDetailView.vue'
 import UserLikeArticleView from '@/views/accounts/UserLikeArticleView.vue'
 import UserLikeVideoView from '@/views/accounts/UserLikeVideoView.vue'
+import UserLikeSingerView from '@/views/accounts/UserLikeSingerView'
 import UserDetailView from '@/views/accounts/UserDetailView.vue'
 import SignupCompleteView from '@/views/accounts/SignupCompleteView.vue'
 import UserSettingView from '@/views/accounts/UserSettingView.vue'
@@ -127,6 +128,8 @@ Vue.use(VueRouter)
     name: 'SingerDetailView',
     component: SingerDetailView
   },
+
+  // Accounts
   {
     path: '/accounts/:userId',
     name: 'UserDetailView',
@@ -142,6 +145,23 @@ Vue.use(VueRouter)
     name: 'UserSettingView',
     component: UserSettingView
   },
+  {
+    path: '/accounts/:userId/video',
+    name: 'UserLikeVideoView',
+    component: UserLikeVideoView
+  },
+  {
+    path: '/accounts/:userId/article',
+    name: 'UserLikeArticleView',
+    component: UserLikeArticleView
+  },
+  {
+    path: '/accounts/:userId/singer',
+    name: 'UserLikeSingerView',
+    component: UserLikeSingerView
+  },
+
+  // Singer Detail
   {
     path: '/singer/:singerId/videos',
     name: 'VideoListView',
@@ -190,18 +210,6 @@ Vue.use(VueRouter)
     component: ProgramCreateView
   },
 
-  // My Page
-  {
-    path: '/admin/program/create',
-    name: 'UserLikeVideoView',
-    component: UserLikeVideoView
-  },
-  {
-    path: '/admin/program/create',
-    name: 'UserLikeArticleView',
-    component: UserLikeArticleView
-  },
-  
   // Error Page
   {
     path : '*',
