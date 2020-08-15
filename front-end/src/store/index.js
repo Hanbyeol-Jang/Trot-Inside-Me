@@ -22,7 +22,7 @@ export default new Vuex.Store({
     followCnt: 0,
     userFollowing: [],
   },
-  getters: {
+  getters: { 
     isLoggedIn: state => !!state.authToken,
     config: state => ({ headers: { token: `${state.authToken}` } }),
     singersLength: state => state.singers.length,

@@ -66,7 +66,7 @@ export default {
   name: 'UserDetailView',
   data() {
     return {
-      userId: parseInt(this.$route.params.userId),
+      userId: this.$route.params.userId,
       menuItems: [
         { id: 1, title: '내 가수 보기', icon: 'fas fa-music'},
         { id: 2, title: '찜한 영상', icon: 'far fa-play-circle'},
