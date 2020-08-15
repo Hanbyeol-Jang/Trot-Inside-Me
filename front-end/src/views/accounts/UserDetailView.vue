@@ -9,8 +9,8 @@
           size="120"
           >
           <v-img 
-            v-if="user.u_profileImg"
-            :src="user.u_profileImg">
+            v-if="userDetail.u_profileImg"
+            :src="userDetail.u_profileImg">
           </v-img>
           <v-img
             v-else
@@ -19,8 +19,13 @@
         </v-avatar>
         <div class="d-flex align-center">
           <div class="d-flex flex-column">
-            <div>{{ user.u_name }}</div>
-            <v-btn text @click="userLogout(user.u_isAdmin)"><i class="fas fa-sign-out-alt mr-1"></i>로그아웃</v-btn>
+            <div>{{ userDetail.u_name }}</div>
+            <v-btn 
+              v-if="user.u_email === userDetail.u_email"
+              text
+              @click="userLogout(user.u_isAdmin)">
+              <i class="fas fa-sign-out-alt mr-1"></i>로그아웃
+            </v-btn>
           </div>
         </div>
       </v-col>
@@ -61,6 +66,7 @@ export default {
   name: 'UserDetailView',
   data() {
     return {
+      userId: parseInt(this.$route.params.userId),
       menuItems: [
         { id: 1, title: '내 가수 보기', icon: 'fas fa-music'},
         { id: 2, title: '찜한 영상', icon: 'far fa-play-circle'},
@@ -69,11 +75,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user']),
+    ...mapState(['user', 'userDetail']),
     ...mapGetters(['isLoggedIn']),
   },
   methods: {
-    ...mapActions(['getUser', 'logout', 'kakaoLogout']),
+    ...mapActions(['getUserDetail', 'logout', 'kakaoLogout']),
     goMenuDetail(id) {
       if (id === 1) {
         this.$router.push({ name: 'UserLikeSingerView' })
@@ -94,6 +100,7 @@ export default {
     },
   },
   created() {
+    this.getUserDetail(this.userId)
   },
 }
 </script>

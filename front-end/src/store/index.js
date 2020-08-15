@@ -35,6 +35,9 @@ export default new Vuex.Store({
     SET_USER(state, userInfo) {
       state.user = userInfo
     },
+    SET_USER_DETAIL(state, userInfo) {
+      state.userDetail = userInfo
+    },
     SET_ADMIN(state, isAdmin) {
       state.isAdmin = isAdmin
     },
@@ -112,7 +115,14 @@ export default new Vuex.Store({
           commit('SET_USER', res.data)
         })
         .catch((err)=>{ console.error(err) })
-      },
+    },
+    getUserDetail({ commit }, userId) {
+      axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo + `/${userId}`)
+        .then(res => {
+          commit('SET_USER_DETAIL', res.data.userInfo)
+        })
+        .catch((err)=>{ console.error(err) })
+    },
 
     // Singer Data
     fetchSingers({ commit }) {
