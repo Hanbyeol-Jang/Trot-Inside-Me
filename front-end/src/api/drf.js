@@ -25,6 +25,8 @@ export default{
         // follow
         follow: '/user/follow/',
         followSingersList: '/user/followlist/{u_email}',
+        followVideoList: '/user/videolist/',
+        followArticleList: '/user/articlelist/',
 
         // program
         programList: '/admin/tvlist',

@@ -173,7 +173,7 @@ Vue.use(VueRouter)
     component: ArticleListView
   },
   {
-    path: '/schedule/:singerId',
+    path: '/singer/:singerId/schedule',
     name: 'SingerScheduleView',
     component: SingerScheduleView
   },

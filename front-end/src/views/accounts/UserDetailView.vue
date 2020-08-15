@@ -80,7 +80,7 @@ export default {
       } else if (id === 2) {
         this.$router.push({ name: 'UserLikeVideoView' })
       } else if (id === 3) {
-        this.$router.push({ name: 'UserLikeVideoView' })
+        this.$router.push({ name: 'UserLikeArticleView' })
       } else if (id === 4) {
         this.$router.push({ name: 'AdminView' })
       }
