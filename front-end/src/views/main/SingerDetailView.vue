@@ -16,34 +16,39 @@
       </v-avatar>
       <h2 class="mt-4">{{ singer.s_name }}</h2>
     </div>
-    <div class="text-center">
+    <!-- <div class="text-center">
       <v-btn 
         rounded 
         color="pink" 
         dark
         >
         <h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3></v-btn>
-    </div>
-    <!-- <v-container>
+    </div> -->
+    <v-container>
       <v-row no-gutters>
         <v-col cols="6">
-          <div class="text-center">
-            {{ singer.f_cnt }}명이 좋아합니다.
-            현재 {{ singer.f_flag }} 
+          <div class="text-center animate__animated animate__fadeInLeft">
+            <v-icon 
+              color="pink">
+              mdi-heart</v-icon>
+            {{ followCnt }}명이 좋아합니다.
           </div>
         </v-col>
         <v-col cols="6">
           <div class="text-center">
-            <v-btn 
-              rounded 
-              color="pink" 
-              dark
-              >
-              <h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3></v-btn>
+            <v-btn v-if="!followBtn" rounded color="pink" dark @click="followSinger(followBtn)">
+              <h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3>
+            </v-btn>
+            <v-btn v-if="followBtn" rounded outlined color="pink" dark @click="followSinger(followBtn)">
+              <h3><i class="fas fa-times mr-2"></i>내 가수 취소하기</h3>
+            </v-btn>
           </div>
         </v-col>
       </v-row>
-    </v-container> -->
+    <div>SINGER: {{ singer }}</div>
+    <div>USER: {{ user }}</div>
+    <div>현재 좋아하는지?</div>
+    </v-container>
     <v-container class="mt-4 text-center">
       <v-row no-gutters>
         <template v-for="menu in menus">
@@ -84,13 +89,14 @@ export default {
   data() {
     return {
       s_idx: this.$route.params.singerId,
-      isFollow: 0,
       menus: [
         { id: 1, title: '영상 보기'},
         { id: 2, title: '기사 보기'},
         { id: 3, title: '스케줄 보기'},
         { id: 4, title: ''},
       ],
+      followBtn: false,
+      followCnt: 0,
     }
   },
   components: { 
@@ -99,20 +105,23 @@ export default {
     CalendarIcon,
   },
   computed: {
-    ...mapState(['singer']),
-    
-    followInfo() {
-      var info = {
-        s_idx: this.singer.s_idx,
-        f_flag: this.singer.f_flag
-      }
-      return info
-    }
+    ...mapState(['user', 'singer']),
   },
   methods: {
-    ...mapActions(['getSingerDetail']),
-    follow() {
+    ...mapActions(['getSingerDetail', 'follow']),
+    followSinger(isFollow) {
+      if (isFollow) {
+        // follow 1 전달
+        this.follow({ s_idx: this.singer.s_idx, f_flag: 1 })
+        this.followBtn = false
+        this.followCnt -= 1
 
+      } else {
+        // follow 0 전달
+        this.follow({ s_idx: this.singer.s_idx, f_flag: 0 })
+        this.followBtn = true
+        this.followCnt += 1
+      }
     },
     goMenuDetail(id) {
       if (id === 1) {
@@ -122,11 +131,16 @@ export default {
       } else if (id === 3) {
         this.$router.push({ name: 'SingerScheduleView', params: { singerId: this.s_idx }})
       } 
-    }
+    },
+    getFirstData() {
+      console.log(this.singer)
+    },
   },
   created() {
     this.getSingerDetail(this.s_idx)
-  }
+    console.log('created', this.singer)
+    this.getFirstData()
+  },
 }
 </script>
 

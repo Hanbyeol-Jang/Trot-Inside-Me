@@ -98,9 +98,11 @@ export default new Vuex.Store({
     },
     getUser({ getters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo, getters.config)
-        .then(res => {  commit('SET_USER', res.data) })
+        .then(res => { 
+          commit('SET_USER', res.data)
+        })
         .catch((err)=>{ console.error(err) })
-    },
+      },
 
     // Feed Data
     getContentsCount({ commit }, info) {

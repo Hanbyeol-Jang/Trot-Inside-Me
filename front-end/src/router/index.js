@@ -22,6 +22,8 @@ import VoteView from '@/views/vote/VoteView.vue'
 import Login from '@/views/accounts/Login.vue'
 import Signup from '@/views/accounts/Signup.vue'
 import SingerDetailView from '@/views/main/SingerDetailView.vue'
+import UserLikeArticleView from '@/views/accounts/UserLikeArticleView.vue'
+import UserLikeVideoView from '@/views/accounts/UserLikeVideoView.vue'
 import UserDetailView from '@/views/accounts/UserDetailView.vue'
 import SignupCompleteView from '@/views/accounts/SignupCompleteView.vue'
 import UserSettingView from '@/views/accounts/UserSettingView.vue'
@@ -188,6 +190,18 @@ Vue.use(VueRouter)
     component: ProgramCreateView
   },
 
+  // My Page
+  {
+    path: '/admin/program/create',
+    name: 'UserLikeVideoView',
+    component: UserLikeVideoView
+  },
+  {
+    path: '/admin/program/create',
+    name: 'UserLikeArticleView',
+    component: UserLikeArticleView
+  },
+  
   // Error Page
   {
     path : '*',

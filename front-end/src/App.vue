@@ -27,20 +27,22 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex'
+
 import Header from './components/main/navigation/Header'
 import BottomNav from './components/main/navigation/BottomNav'
 
 export default {
   name: 'App',
-
   components: {
     Header,
     BottomNav,
   },
   data: () => ({
-    //
   }),
   computed: {
+    ...mapState(['user']),
+    ...mapGetters(['isLoggedIn']),
     bottomNav() {
       let routeName = this.$route.name
       if (routeName === 'Home' || routeName === 'SingerSearchView'
@@ -52,7 +54,13 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['getUser']),
   },
+  created() {
+    if (this.isLoggedIn) {
+      this.getUser()
+    }
+  }
 };
 </script>
 
