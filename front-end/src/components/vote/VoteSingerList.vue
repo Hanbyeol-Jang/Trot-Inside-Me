@@ -48,8 +48,19 @@ export default {
     methods:{
         checklogin(){
             if (!(this.$cookies.get('auth-token'))){
-                this.$alert(" 로그인을 해주세요")
-                this.$router.push({name:'Home'})                
+            this.$confirm(
+                {
+                message: `로그인 해주세요.`,
+                button: {
+                    yes: '로그인 하기',
+                    no: '돌아가기',
+                },
+                callback: confirm => {
+                    if (confirm) {
+                      this.$router.push({ name: 'Login'})
+                    }
+                }})
+            this.$router.push({name:'Home'})                
             }
         },
 

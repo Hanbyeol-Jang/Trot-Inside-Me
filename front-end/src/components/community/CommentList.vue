@@ -122,8 +122,19 @@ export default {
         this.$alert('내용을 작성해주세요')
       } else{
         if (!this.$cookies.isKey('auth-token')){
-          this.$alert('로그인이 필요합니다')
-          this.commentData.content = ''
+            this.$confirm(
+                {
+                message: `로그인 해주세요.`,
+                button: {
+                    yes: '로그인 하기',
+                    no: '돌아가기',
+                },
+                callback: confirm => {
+                    if (confirm) {
+                      this.$router.push({ name: 'Login'})
+                    }
+                }})
+            this.commentData.content = ''
         } else{
 -          axios.post(SERVER.URL + `/community/replyadd`,json,axiosConfig2)
            .then((res) => {

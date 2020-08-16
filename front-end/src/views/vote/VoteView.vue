@@ -66,10 +66,10 @@ export default {
         }
       } else {
         this.$confirm({
-          message: "로그인이 해주세요!",
+          message: "로그인 해주세요!",
           button: {
               yes: '로그인 하기',
-              no: '닫기',
+              no: '돌아가기',
             },
             callback: confirm => {
               if (confirm) {

@@ -120,7 +120,7 @@ export default {
     },
     showMsg() {
       this.$confirm({
-        message: "로그인이 필요한 서비스 입니다.",
+        message: "로그인 해주세요.",
         button: {
           yes: '로그인 하기',
           no: '돌아가기',

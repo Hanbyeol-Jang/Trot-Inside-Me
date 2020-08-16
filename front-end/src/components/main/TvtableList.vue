@@ -45,7 +45,7 @@ export default {
         kakaogo(){
             axios.get(SERVER.URL+`/board/tvmsg/${this.tvprogram.bc_idx}`,this.axiosConfig)
             .then(()=>{
-              this.$alert("카카오 메세지를 확인 해 주세요!")
+              this.$alert("카카오 메세지를 확인해주세요!")
             })
             .catch((err)=>{
                 console.error(err)
