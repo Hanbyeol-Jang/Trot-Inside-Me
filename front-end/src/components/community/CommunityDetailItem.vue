@@ -25,7 +25,7 @@
         <v-card-text>
             {{community.co_date.slice(0,10)}}
         </v-card-text>
-    <v-img :src="communityimg" height=100% @click="goCommunity()"></v-img>
+    <!-- <v-img :src="communityimg" height=100% @click="goCommunity()"></v-img> -->
     <v-card-text @click="goCommunity()">
       {{community.co_content}}
     </v-card-text>
@@ -169,12 +169,12 @@ export default {
         },
     },
     computed:{
-        userimg(){
-            return this.community.userimg
-        },
-        communityimg(){
-            return `${SERVER.URL}/${this.community.co_img}`
-        },
+        // userimg(){
+        //     return this.community.userimg
+        // },
+        // communityimg(){
+        //     return `${SERVER.URL}/${this.community.co_img}`
+        // },
     },
     created(){
         this.checkLogin(),

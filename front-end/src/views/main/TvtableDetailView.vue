@@ -63,7 +63,6 @@ export default {
         getTvtable(){
             axios.get(`${SERVER.URL}/board/schedule/todayList`)
             .then((response)=>{
-                console.log(response.data)
               this.Tvprograms = []
               const programs = _.sortBy(response.data,'bc_time')
               for (var i in programs){
@@ -102,7 +101,6 @@ export default {
         searchPrograms(keyword) {
            axios.get(`${SERVER.URL}/board/schedule/todayList`)
                 .then(response => {
-                    console.log(response.data)
                     const resultPrograms = response.data.filter(data => data.bc_title.includes(keyword))
                     this.Tvprograms = resultPrograms
                 })
