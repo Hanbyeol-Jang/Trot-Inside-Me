@@ -37,7 +37,7 @@ public class JwtTokenProvider {
                 .claim("u_name", dto.getU_name())
                 .claim("u_profileImg", dto.getU_profileImg())
                 .claim("u_isAdmin", dto.getU_isAdmin())
-                .claim("u_hasVote ", dto.getU_hasVote())
+                .claim("u_hasVote", dto.getU_hasVote())
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -76,7 +76,7 @@ public class JwtTokenProvider {
 			 dto.setU_name(cl.get("u_name").toString());
 			 dto.setU_profileImg(cl.get("u_profileImg").toString());
 			 dto.setU_isAdmin(Integer.parseInt(cl.get("u_isAdmin").toString()));
-			 dto.setU_hasVote(Integer.parseInt(cl.get("u_hasVote ").toString()));
+			 dto.setU_hasVote(Integer.parseInt(cl.get("u_hasVote").toString()));
 		}else {
 			System.out.println("만료됨 새 토큰 발행받아야함.");
 			dto.setU_name("F");
