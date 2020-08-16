@@ -1,6 +1,7 @@
 package com.web.curation.controller;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.curation.dto.SingerDto;
+import com.web.curation.dto.TopDto;
 import com.web.curation.dto.VoteDto;
 import com.web.curation.service.VoteService;
 
@@ -85,6 +88,30 @@ public class VoteController {
 			map.put("lastWeekRank", lastWeekRank);
 
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@ApiOperation("이번주 top 3")
+	@GetMapping("/ThisWeekTopThree")
+	public ResponseEntity<List<TopDto>> thisWeekTopThree() {
+		try {
+			List<TopDto> list = voteService.thisWeekTopThree();
+
+			return new ResponseEntity<List<TopDto>>(list, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@ApiOperation("지난주 top 3")
+	@GetMapping("/lastWeekTopThree")
+	public ResponseEntity<List<TopDto>> lastWeekTopThree() {
+		try {
+			List<TopDto> list = voteService.lastWeekTopThree();
+
+			return new ResponseEntity<List<TopDto>>(list, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
