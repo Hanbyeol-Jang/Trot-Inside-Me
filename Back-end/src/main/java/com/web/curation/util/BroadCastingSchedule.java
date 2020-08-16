@@ -40,7 +40,12 @@ public class BroadCastingSchedule {
 		
 		//편성표 url 리스트 가져옴. 
 		List<AdminDto> broad = adminService.getBroadScheduleList();
-
+		for (int i = 1; i < broad.size(); i++) {
+			if(broad.get(i).getA_broadUrl()==null) {
+				broad.remove(i);
+			}
+		}
+		
 		//크롤링 시작
 		ArrayList<BroadCastingDto> list = new ArrayList<>();
 		try {
