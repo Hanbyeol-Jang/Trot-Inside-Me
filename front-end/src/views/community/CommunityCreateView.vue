@@ -28,7 +28,7 @@ export default {
         return{
             flag:false,
             change_image:'',
-            image:"",
+            image:null,
             content:"",
             axiosConfig:{
               headers:{
@@ -40,8 +40,19 @@ export default {
     methods:{
         checklogin(){
             if (!(this.$cookies.get('auth-token'))){
-                this.$alert(" 로그인을 해주세요")
-                this.$router.push({name:'Login'})                
+            this.$confirm(
+                {
+                message: `로그인 해주세요.`,
+                button: {
+                    yes: '로그인 하기',
+                    no: '돌아가기',
+                },
+                callback: confirm => {
+                    if (confirm) {
+                      this.$router.push({ name: 'Login'})
+                    }
+                }})
+            this.$router.push({name:'Login'})                
             }
         },
 
@@ -55,11 +66,6 @@ export default {
             let dto = new FormData()
             dto.append('co_content',this.content)
             dto.append('co_img',this.image)
-            // const data = {
-            //   'co_content' : this.content,
-            //   'co_img' : this.image
-            // }
-            console.log(dto)
             axios.post(`${SERVER.URL}/community/add`,dto,axiosConfig2)
             .then(()=>{
                 this.$router.push({ name: 'CommunityIndexView'})

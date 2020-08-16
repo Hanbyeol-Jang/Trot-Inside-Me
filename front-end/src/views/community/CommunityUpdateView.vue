@@ -8,7 +8,7 @@
     <v-card-actions class="d-flex flex-row-reverse">
         <v-btn  outlined color="deep-purple accent-4" @click="updateCommunity"><v-icon class="mr-2">mdi-pencil</v-icon>글 수정하기</v-btn>
         <div class="mr-1">
-            <v-btn depressed  color="error" @click="deleteArticle">삭제</v-btn>
+            <v-btn depressed  color="error" @click="deleteArticle2">삭제</v-btn>
         </div>
     </v-card-actions>    
     <v-card-text>
@@ -32,7 +32,7 @@ export default {
             flag:false,
             show_image:'',
             change_image:'',
-            image:"",
+            image:null,
             content:"",
             currentuser:"",
             user:"",
@@ -46,8 +46,19 @@ export default {
     methods:{
         checklogin(){
             if (!(this.$cookies.get('auth-token'))){
-                this.$alert(" 로그인을 해주세요")
-                this.$router.push({name:'Home'})                
+            this.$confirm(
+                {
+                message: `로그인 해주세요.`,
+                button: {
+                    yes: '로그인 하기',
+                    no: '돌아가기',
+                },
+                callback: confirm => {
+                    if (confirm) {
+                      this.$router.push({ name: 'Login'})
+                    }
+                }})
+            this.$router.push({name:'Home'})                
             }
         },
 
@@ -91,11 +102,6 @@ export default {
             if (this.$refs.file.$refs.input.files[0]!==undefined){
               data.append('co_img',this.image)
             }
-            // const data = {
-            //   'co_idx':this.$route.params.communityId,
-            //   'co_content' : this.content,
-            //   'co_img' : this.image
-            // }
             axios.put(`${SERVER.URL}/community/update`,data,axiosConfig2)
             .then(()=>{
                 this.$router.push({ name: 'CommunityIndexView'})
@@ -105,7 +111,7 @@ export default {
             })
         },
 
-        deleteArticle(){
+        deleteArticle2(){
             this.$confirm(
                 {
                 message: `삭제하시겠습니까?`,
@@ -120,8 +126,9 @@ export default {
                             token: `${this.$cookies.get('auth-token')}`,
                             },
                         }
-                        axios.delete(SERVER.URL+`/community/detaildelete/${this.communityIdx}`,axiosConfig2)
-                        .then(()=>{
+                        axios.delete(SERVER.URL+`/community/detaildelete/${this.$route.params.communityId}`,axiosConfig2)
+                        .then((res)=>{
+                            console.log(res)
                             this.$alert('삭제 완료')
                             this.$router.push({name:'CommunityIndexView'})                
                         })

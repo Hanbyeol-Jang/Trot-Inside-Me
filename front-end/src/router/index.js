@@ -15,7 +15,6 @@ import CommunityUpdateView from '@/views/community/CommunityUpdateView.vue'
 import VoteCreateView from '@/views/vote/VoteCreateView.vue'
 import VoteLocalSelectView from '@/views/vote/VoteLocalSelectView.vue'
 import VoteOldrankView from '@/views/vote/VoteOldrankView.vue'
-import VoteResultView from '@/views/vote/VoteResultView.vue'
 import VoteView from '@/views/vote/VoteView.vue'
 
 
@@ -31,7 +30,7 @@ import UserSettingView from '@/views/accounts/UserSettingView.vue'
 import VideoListView from '@/views/main/VideoListView.vue'
 import ArticleListView from '@/views/main/ArticleListView.vue'
 import SingerScheduleView from '@/views/main/SingerScheduleView.vue'
-
+import SingerVoteView from '@/views/vote/SingerVoteView.vue'
 import AdminLogin from '@/views/accounts/admin/AdminLogin.vue'
 import AdminView from '@/views/accounts/admin/AdminView.vue'
 import SingerManageView from '@/views/accounts/admin/SingerManageView.vue'
@@ -104,11 +103,6 @@ Vue.use(VueRouter)
     component: VoteOldrankView
   },
   {
-    path: '/vote/result',
-    name: 'VoteResultView',
-    component: VoteResultView
-  },
-  {
     path: '/vote/create',
     name: 'VoteCreateView',
     component: VoteCreateView
@@ -176,6 +170,11 @@ Vue.use(VueRouter)
     path: '/singer/:singerId/schedule',
     name: 'SingerScheduleView',
     component: SingerScheduleView
+  },
+  {
+    path: '/singer/:singerId/vote',
+    name: 'SingerVoteView',
+    component: SingerVoteView
   },
 
   // Admin Page

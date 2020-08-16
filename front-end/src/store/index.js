@@ -23,6 +23,8 @@ export default new Vuex.Store({
     followBtn: false,
     followCnt: 0,
     userFollowing: [],
+    checkvote:null,
+
 
     singerSchedule: [],
     indexedSchedule: [],
@@ -35,6 +37,9 @@ export default new Vuex.Store({
     singersLength: state => state.singers.length,
   },
   mutations: {
+    SET_VOTE(state,checkvote){
+      state.checkvote = checkvote
+    },
     SET_TOKEN(state, token) {
       state.authToken = token
       cookies.set('auth-token', token)

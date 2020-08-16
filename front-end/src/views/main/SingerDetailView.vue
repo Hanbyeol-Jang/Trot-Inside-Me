@@ -57,6 +57,7 @@
               <VideoIcon v-if="menu.id === 1" />
               <MagazineIcon v-if="menu.id === 2" />
               <CalendarIcon v-if="menu.id === 3" />
+              <CalendarIcon v-if="menu.id === 4" />
               <div class="menu-title">{{ menu.title }}</div>
             </v-card>
           </v-col>
@@ -87,7 +88,7 @@ export default {
         { id: 1, title: '영상 보기'},
         { id: 2, title: '기사 보기'},
         { id: 3, title: '스케줄 보기'},
-        { id: 4, title: ''},
+        { id: 4, title: '투표결과 보기'},
       ],
     }
   },
@@ -116,11 +117,13 @@ export default {
         this.$router.push({ name: 'ArticleListView', params: { singerId: this.s_idx }})
       } else if (id === 3) {
         this.$router.push({ name: 'SingerScheduleView', params: { singerId: this.s_idx }})
-      } 
-    },
+      } else if (id === 4) {
+        this.$router.push({ name: 'SingerVoteView', params: { singerId: this.s_idx }})
+      }     
+      },
     showMsg() {
       this.$confirm({
-        message: "로그인이 필요한 서비스 입니다.",
+        message: "로그인 해주세요.",
         button: {
           yes: '로그인 하기',
           no: '돌아가기',

@@ -22,7 +22,7 @@
       </v-container>
     </v-main>
     <BottomNav/>
-    <vue-confirm-dialog class="my-class"></vue-confirm-dialog>
+    <vue-confirm-dialog class="my-dialog"></vue-confirm-dialog>
   </v-app>
 </template>
 
@@ -72,23 +72,33 @@ export default {
   /* text-align: center; */
   color: #2c3e50;
 }
-.my-class .vc-text {
+.my-dialog .vc-text {
   font-size: 200%;
   margin: 0;
 }
-.my-class .vc-container {
+.my-dialog .vc-container {
   width: 300px;
   background-color: whitesmoke;
 }
-.my-class .vc-btn {
+.my-dialog .vc-btn {
   color: whitesmoke;
   background-color: #e91e63;
   font-size: 150%;
 }
 
-.my-class .left {
+.my-dialog .left {
   color: #e91e63;
   background-color: whitesmoke;
   font-size: 150%;
+}
+.swal2-popup {
+  font-family: 'Jua', sans-serif !important;
+}
+.swal2-content{
+  font-size: 200% !important;
+  margin: 0;
+}
+.swal2-styled.swal2-confirm{
+  background-color: #e91e63 !important;
 }
 </style>
