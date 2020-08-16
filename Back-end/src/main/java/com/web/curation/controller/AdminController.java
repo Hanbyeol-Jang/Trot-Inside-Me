@@ -1,11 +1,11 @@
 package com.web.curation.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
-import org.apache.ibatis.annotations.Options;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dto.AdminDto;
 import com.web.curation.dto.SingerDto;
+import com.web.curation.dto.SingerTVUpload;
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.AdminServcie;
 import com.web.curation.service.UserService;
@@ -45,8 +46,6 @@ public class AdminController {
 	@ApiOperation("로그인")
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody UserDto user, HttpServletRequest request) {
-		
-		//관리자 로그인 할때 다음 페이지가 관리자가 아니면 안넘어갈 수 있도록 하는 방법이 있는 지 찾아보기. -> 인터 셉터?
 		UserDto dto = userService.getUserInfo(user.getU_email());
 		String token = userService.createToken(dto);
 		
@@ -76,7 +75,14 @@ public class AdminController {
 	//관리자 - 편성표 주소 추가
 	@ApiOperation("편성표 주소 추가")
 	@PostMapping("/tvadd")
-	public ResponseEntity<String> broadSchedule(@RequestBody AdminDto dto) {
+	public ResponseEntity<String> broadSchedule(SingerTVUpload up) throws IllegalStateException, IOException {
+		String saveUrl = "C:\\SSAFY\\PTJ\\img\\" + up.getImg().getOriginalFilename();
+		File file = new File(saveUrl);
+		up.getImg().transferTo(file);
+		AdminDto dto = new AdminDto();
+		dto.setA_broadName(up.getName());
+		dto.setA_broadUrl(up.getUrl());
+		dto.setA_img(saveUrl);
 		if(adminService.addBroadSchedule(dto)) {
 			return new ResponseEntity<String>("편성표 추가 완료",HttpStatus.OK);
 		}else {
@@ -111,7 +117,14 @@ public class AdminController {
 	//관리자 - 가수 추가 
 	@ApiOperation("가수 추가 ")
 	@PostMapping("/singeradd")
-	public ResponseEntity<String> singerAdd(@RequestBody SingerDto dto) {
+	public ResponseEntity<String> singerAdd(SingerTVUpload up) throws IllegalStateException, IOException {
+		String saveUrl = "C:\\SSAFY\\PTJ\\img\\" + up.getImg().getOriginalFilename();
+		File file = new File(saveUrl);
+		up.getImg().transferTo(file);
+		SingerDto dto = new SingerDto();
+		dto.setS_name(up.getName());
+		dto.setS_cafeUrl(up.getUrl());
+		dto.setS_img(saveUrl);
 		if(adminService.addSinger(dto)) {
 			return new ResponseEntity<String>("가수 추가 완료",HttpStatus.OK);
 		}else {

@@ -1,17 +1,12 @@
 package com.web.curation.util;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.web.curation.dto.TestDto;
 import com.web.curation.dto.UserDto;
 
 import io.jsonwebtoken.Claims;

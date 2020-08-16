@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dto.BoardDto;
-import com.web.curation.dto.BoardPK;
-import com.web.curation.dto.CommuDto;
 import com.web.curation.dto.FollowDto;
 import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.UserDto;
