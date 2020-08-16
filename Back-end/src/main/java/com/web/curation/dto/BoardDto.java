@@ -14,5 +14,6 @@ public class BoardDto {
 	private String b_member;
 	private String b_content;
 	private String u_email;
+	private int br_cnt;
 	private int b_cnt;
 }

@@ -76,13 +76,15 @@ public class AdminController {
 	@ApiOperation("편성표 주소 추가")
 	@PostMapping("/tvadd")
 	public ResponseEntity<String> broadSchedule(SingerTVUpload up) throws IllegalStateException, IOException {
-		String saveUrl = "C:\\SSAFY\\PTJ\\img\\" + up.getImg().getOriginalFilename();
-		File file = new File(saveUrl);
-		up.getImg().transferTo(file);
 		AdminDto dto = new AdminDto();
+		if(up.getImg()!=null) {
+			String saveUrl = "C:\\SSAFY\\PTJ\\img\\" + up.getImg().getOriginalFilename();
+			File file = new File(saveUrl);
+			up.getImg().transferTo(file);
+			dto.setA_img(saveUrl);
+		}
 		dto.setA_broadName(up.getName());
 		dto.setA_broadUrl(up.getUrl());
-		dto.setA_img(saveUrl);
 		if(adminService.addBroadSchedule(dto)) {
 			return new ResponseEntity<String>("편성표 추가 완료",HttpStatus.OK);
 		}else {
@@ -118,13 +120,15 @@ public class AdminController {
 	@ApiOperation("가수 추가 ")
 	@PostMapping("/singeradd")
 	public ResponseEntity<String> singerAdd(SingerTVUpload up) throws IllegalStateException, IOException {
+		SingerDto dto = new SingerDto();
+		if(up.getImg()!=null) {
 		String saveUrl = "C:\\SSAFY\\PTJ\\img\\" + up.getImg().getOriginalFilename();
 		File file = new File(saveUrl);
 		up.getImg().transferTo(file);
-		SingerDto dto = new SingerDto();
+		dto.setS_img(saveUrl);
+		}
 		dto.setS_name(up.getName());
 		dto.setS_cafeUrl(up.getUrl());
-		dto.setS_img(saveUrl);
 		if(adminService.addSinger(dto)) {
 			return new ResponseEntity<String>("가수 추가 완료",HttpStatus.OK);
 		}else {
