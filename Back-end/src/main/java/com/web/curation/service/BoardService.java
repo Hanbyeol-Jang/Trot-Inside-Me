@@ -45,7 +45,7 @@ public interface BoardService {
 	boolean goodClickCancel(GoodDto dto);
 	
 	List<BroadCastingDto> broadCastAllList(); //편성표 전체 출력
-	List<BroadCastingDto> singerScheduleList(String s_name); //가수 스케줄 출력
+	List<BroadCastingDto> singerScheduleList(int s_idx); //가수 스케줄 출력
 	
 	
 

@@ -115,8 +115,8 @@ public class BoardDaoImpl implements BoardDao {
 	}
 
 	@Override
-	public List<BroadCastingDto> singerScheduleList(String s_name) {
-		return sqlSession.selectList(ns + "singerScheduleList", s_name);
+	public List<BroadCastingDto> singerScheduleList(int s_idx) {
+		return sqlSession.selectList(ns + "singerScheduleList", s_idx);
 	}
 
 //	@Override

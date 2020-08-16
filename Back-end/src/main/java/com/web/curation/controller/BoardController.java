@@ -366,8 +366,8 @@ public class BoardController {
 
 	@GetMapping("/schedule/singerScheduleList/{s_idx}")
 	public ResponseEntity<List<BroadCastingDto>> singerScheduleList(@PathVariable("s_idx") int s_idx) {
-		SingerDto singerDto = boardService.singerSearch(s_idx);
-		List<BroadCastingDto> list = boardService.singerScheduleList(singerDto.getS_name());
+//		SingerDto singerDto = boardService.singerSearch(s_idx);
+		List<BroadCastingDto> list = boardService.singerScheduleList(s_idx);
 		if (list != null) {
 			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
 		} else {

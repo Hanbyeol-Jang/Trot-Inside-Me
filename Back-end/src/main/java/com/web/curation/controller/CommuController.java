@@ -91,6 +91,7 @@ public class CommuController {
 	@PostMapping("/add")
 	public ResponseEntity<String> commuadd(CommuUpload up, HttpServletRequest request)
 			throws IllegalStateException, IOException {
+		System.out.println("commu add ");
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
