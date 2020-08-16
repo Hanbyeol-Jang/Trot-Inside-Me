@@ -153,7 +153,7 @@ public class UserController {
 		}
 	}
 
-	@ApiOperation("이메일 영상  리스트")
+	@ApiOperation("이메일 기사  리스트")
 	@GetMapping("/articlelist/{u_email}")
 	public ResponseEntity<List<BoardDto>> articlelistEmail(@PathVariable String u_email,
 			@RequestParam("page") int page) {
@@ -164,7 +164,7 @@ public class UserController {
 			gdto.setB_type(2);
 			gdto.setU_email(u_email);
 			List<BoardDto> list = userService.myBoardList(gdto);
-			
+
 			List<BoardDto> showList = new ArrayList<>();
 			int lastPageRemain = list.size() % 5;
 			int lastPage = list.size() - lastPageRemain;
