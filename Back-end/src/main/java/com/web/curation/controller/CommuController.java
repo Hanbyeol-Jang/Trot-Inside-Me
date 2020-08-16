@@ -93,20 +93,39 @@ public class CommuController {
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
-			CommuDto dto = new CommuDto();
-			if(up.getCo_img()!=null) {
+// 			CommuDto dto = new CommuDto();
+// 			if(up.getCo_img()!=null) {
 				String saveUrl = "\\home\\ubuntu\\s03p13b202\\front-end\\dist\\img\\" + up.getCo_img().getOriginalFilename();
 				File file = new File(saveUrl);
 				up.getCo_img().transferTo(file);
-				dto.setCo_img(saveUrl);
-			}
+				
+					String saveUrl = ".\\img\\" + up.getCo_img().getOriginalFilename();
+				File file = new File(saveUrl);
+				up.getCo_img().transferTo(file);
+				
+				
+					String saveUrl = ".\\dist\\img\\" + up.getCo_img().getOriginalFilename();
+				File file = new File(saveUrl);
+				up.getCo_img().transferTo(file);
+				
+					String saveUrl = .\\front-end\\dist\\img\\" + up.getCo_img().getOriginalFilename();
+				File file = new File(saveUrl);
+				up.getCo_img().transferTo(file);
+				
+					String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getCo_img().getOriginalFilename();
+				File file = new File(saveUrl);
+				up.getCo_img().transferTo(file);
+				
+				
+				// dto.setCo_img(saveUrl);
+// 			}
 
-			dto.setCo_content(up.getCo_content());
-			dto.setCo_email(udto.getU_email());
+// 			dto.setCo_content(up.getCo_content());
+// 			dto.setCo_email(udto.getU_email());
 			
-			if (commuService.addCommu(dto)) {
-				return new ResponseEntity<String>("success", HttpStatus.OK);
-			} 
+// 			if (commuService.addCommu(dto)) {
+// 				return new ResponseEntity<String>("success", HttpStatus.OK);
+// 			} 
 			
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
