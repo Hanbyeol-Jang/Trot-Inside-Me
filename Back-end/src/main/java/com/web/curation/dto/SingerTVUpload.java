@@ -5,7 +5,8 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.Data;
 
 @Data
-public class CommuUpload {
-	private String co_content;
-	private MultipartFile co_img;
+public class SingerTVUpload {
+	private String name;
+	private MultipartFile img;
+	private String url;
 }
