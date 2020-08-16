@@ -9,5 +9,45 @@
 		value(#{u_email}, #{s_idx}, #{v_area});
 	</insert>
 
+	<update id="voteChange">
+		UPDATE	UserInfo 
+		SET 	u_hasVote = 1
+		WHERE 	u_email = #{u_email};
+	</update>
+
+	<select id="voteCheck" resultType="int">
+		select	u_hasVote 
+		from	UserInfo
+		where	u_email = #{u_email};
+	</select>
+	
+	<select id="idxToName" resultType="String">
+		SELECT 	s_name
+		from	Singer
+		where	s_idx = #{s_idx};
+	</select>
+	
+	<select id="thisWeek" resultType="int">
+		SELECT 	COUNT(s_idx) 
+		FROM 	Vote
+		where	s_idx = #{s_idx};
+	</select>
+
+	<select id="thisWeekTotal" resultType="int">
+		SELECT 	COUNT(s_idx) 
+		FROM 	Vote;
+	</select>
+	
+	<select id="lastWeek" resultType="int">
+		SELECT 	COUNT(s_name) 
+		FROM 	VoteResult
+		where	s_name = #{s_name};
+	</select>
+	
+	<select id="lastWeekTotal" resultType="int">
+		SELECT 	COUNT(s_name) 
+		FROM 	VoteResult;
+	</select>
+
 </mapper>
         

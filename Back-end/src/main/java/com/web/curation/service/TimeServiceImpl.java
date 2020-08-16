@@ -49,4 +49,9 @@ public class TimeServiceImpl implements TimeService {
 		return dao.selectBoradCasting(bc_idx);
 	}
 
+	@Override
+	public String GetImgByIdx(int a_idx) {
+		return dao.getImgByIdx(a_idx);
+	}
+
 }

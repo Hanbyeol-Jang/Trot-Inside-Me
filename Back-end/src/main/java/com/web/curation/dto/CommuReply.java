@@ -1,12 +1,10 @@
 package com.web.curation.dto;
 
-import java.security.Timestamp;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.sql.Timestamp;
 
-@Getter
-@Setter
+import lombok.Data;
+@Data
 public class CommuReply {
 	private int co_idx; //게시물 번호
 	private int cr_idx; // 댓글 번호
