@@ -116,6 +116,11 @@ public class CommuController {
 				File file = new File(saveUrl);
 				up.getCo_img().transferTo(file);
 				
+				 File file = new File(".");
+                  String rootPath = file.getAbsoluteFile();
+                 System.out.println("현재 프로젝트의 경로 : "+rootPath );
+
+
 				
 				// dto.setCo_img(saveUrl);
 // 			}
