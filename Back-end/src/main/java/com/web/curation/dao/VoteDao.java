@@ -1,5 +1,8 @@
 package com.web.curation.dao;
 
+import java.util.List;
+
+import com.web.curation.dto.TopDto;
 import com.web.curation.dto.VoteDto;
 
 public interface VoteDao {
@@ -29,4 +32,11 @@ public interface VoteDao {
 
 	/* 지난주 순위 */
 	int lastWeekRank(String s_name);
+	
+	/* 이번주 top 3 */
+	List<TopDto> thisWeekTopThree();
+	
+	/* 지난주 top 3 */
+	List<TopDto> lastWeekTopThree();
+	
 }
