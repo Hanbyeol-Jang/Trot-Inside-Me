@@ -19,9 +19,15 @@ export default new Vuex.Store({
     singers: [],
     singer: {},
     programs: [],
+
     followBtn: false,
     followCnt: 0,
     userFollowing: [],
+
+    singerSchedule: [],
+    indexedSchedule: [],
+    CalendarScehdule: {},
+    events: [],
   },
   getters: { 
     isLoggedIn: state => !!state.authToken,
@@ -66,6 +72,15 @@ export default new Vuex.Store({
     SET_FOLLOWLIST(state, followList) {
       state.userFollowing = followList
     },
+    SET_SINGER_SCHEDULE(state, schedule) {
+      state.singerSchedule = schedule
+    },
+    SET_INDEX_SCHEDULE(state, schedule) {
+      state.indexedSchedule = schedule
+    },
+    SET_EVENTS(state, events) {
+      state.events = events
+    },
   },
   actions: {
     // Auth
@@ -91,16 +106,16 @@ export default new Vuex.Store({
       const axiosConfig = { headers:{ access_token : accessToken } }
       axios.post(SERVER.URL + SERVER.ROUTES.kakaoLogin, null, axiosConfig)
         .then((res)=>{
-            commit('SET_TOKEN', res.data)
-            dispatch('getUser')
-            Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: '로그인 되었습니다!',
-              showConfirmButton: false,
-              timer: 1500
-            })
-            router.push({ name: 'Home' })
+          commit('SET_TOKEN', res.data)
+          dispatch('getUser')
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: '로그인 되었습니다!',
+            showConfirmButton: false,
+            timer: 1500
+          })
+          router.push({ name: 'Home' })
         })
         .catch((err)=>{ console.log(err) })
     },
@@ -179,6 +194,48 @@ export default new Vuex.Store({
         })
         .catch(err => console.log(err))
     },
+    getSingerSchedule({ commit, dispatch }, singerId) {
+      axios.get(SERVER.URL + SERVER.ROUTES.singerScheduleList + singerId)
+        .then((res) => {
+          commit('SET_SINGER_SCHEDULE', res.data)
+          dispatch('indexingSchedule', res.data)
+        })
+        .catch(err => console.log(err))
+    },
+    indexingSchedule({ commit }, scheduleList) {
+      let result = new Object()
+      let resultCnt = new Object()
+      let events = []
+      let today = new Date()
+      let year = today.getFullYear()
+      let month = today.getMonth() + 1
+
+      if (month < 10) {
+        month = "0" + month.toString()
+      }
+      for (let i = 0; i < scheduleList.length; i++) {
+        if (scheduleList[i].bc_date) {
+          let key = `${year}-${month}-${scheduleList[i].bc_date.slice(0,2)}`
+          if (key in result) {
+            result[key].push(scheduleList[i])
+            resultCnt[key]++
+          } else {
+            result[key] = [scheduleList[i]]
+            resultCnt[key] = 1
+          }
+        }
+      }
+      commit('SET_INDEX_SCHEDULE', result)
+      for (const [key, value] of Object.entries(resultCnt)) {
+        let context = {
+          start : key,
+          title : value,
+        }
+        events.push(context)
+      }
+      commit('SET_EVENTS', events)
+    },
+
     // Follow Singer
     follow({ state, commit }, info) {
       const options = {

@@ -17,6 +17,7 @@
     text-align: center;
   }
   .title {
+    font-family: 'Jua', sans-serif !important;
     margin: 0 5px;
   }
   .next-month,
@@ -74,20 +75,25 @@
     color: #E91E63;
   }
   .events {
-    font-size: 12px;
+    font-size: 16px;
     cursor: pointer;
     padding: 0 0 0 4px;
   }
   .events .event {
-    height: 18px;
-    line-height: 18px;
+    height: 21px;
+    line-height: 21px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     margin: 0 4px 2px 0;
     color: rgba(0, 0, 0, 0.87);
-    background-color: #d4dcec;
+    background-color: #FCE4EC;
+    border: 1px solid #FCE4EC;
+    border-radius: 25px;
   }
   .events .more-link {
     color: rgba(0, 0, 0, 0.38);
+  }
+  .event-title {
+    text-align: center;
   }

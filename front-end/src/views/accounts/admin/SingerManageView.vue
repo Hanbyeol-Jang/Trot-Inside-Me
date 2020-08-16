@@ -71,8 +71,8 @@ export default {
     }
   },
   computed: {
-        ...mapState(['singers']),
-      },
+    ...mapState(['singers']),
+  },
   methods: {
     ...mapActions(['fetchSingers', 'deleteSinger']),
     goSingerCreate() {
