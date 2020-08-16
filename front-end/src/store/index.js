@@ -5,8 +5,7 @@ import cookies from 'vue-cookies'
 import router from '@/router'
 import axios from 'axios'
 
-import SERVER from '@/api/drf' 
-import { use } from 'vue/types/umd'
+import SERVER from '@/api/drf'
 
 Vue.use(Vuex)
 
