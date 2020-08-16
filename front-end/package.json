@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@svg-maps/south-korea": "^1.0.1",
+    "@syncfusion/ej2-vue-charts": "^18.2.48",
+    "@syncfusion/ej2-vue-grids": "^18.2.48",
     "animate.css": "^4.1.0",
     "axios": "^0.19.2",
     "core-js": "^3.6.5",

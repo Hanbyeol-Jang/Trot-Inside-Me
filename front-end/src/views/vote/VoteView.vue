@@ -2,16 +2,21 @@
   <div align="center mt-8">
 
       <div class="d-flex justify-space-between px-4">
-        <img src="@/assets/image/trot_logo.png" alt=""
+        <v-btn rounded 
                     
-            width="120px" class="mt-4">
+          color="blue" 
+          dark
+          class="mt-4" 
+          @click="goOld">
+            <div class="mx-2"><i class="fas fa-vote-yea mr-2"></i>지난주 결과보기</div>
+        </v-btn>
         <v-btn rounded 
                     
           color="pink" 
           dark
           class="mt-4" 
           @click="goVote">
-            <div class="mx-4"><i class="fas fa-vote-yea mr-2"></i>투표하기</div>
+            <div class="mx-2"><i class="fas fa-vote-yea mr-2"></i>투표하기</div>
         </v-btn>
       </div>
     <embed class="my-4 mx-1"                    
@@ -79,8 +84,10 @@ export default {
             }
         })
       }
-      
-    }
+    },
+    goOld(){
+      this.$router.push({ name: 'VoteOldrankView' })
+    },
   },
   created(){
     if (this.isLoggedIn) {
