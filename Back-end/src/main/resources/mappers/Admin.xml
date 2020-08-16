@@ -16,7 +16,7 @@
 	
 	<!-- 관리자 편성표 리스트 출력 -->
 	<select id="getBroadScheduleList" resultType="com.web.curation.dto.AdminDto">
-		select a_idx, a_broadName, a_broadUrl from Admin ;
+		select a_idx, a_broadName, a_broadUrl, a_img from Admin ;
 	</select>
 	
 	<!-- 가수 추가-->
@@ -32,7 +32,14 @@
 	
 	<!-- 가수 리스트 출력 -->
 	<select id="getSingerList" resultType="com.web.curation.dto.SingerDto">
-		select * from Singer ;
+		select 	s_idx,
+				s_name,
+				s_img,
+				s_url,
+				s_cafeUrl,
+				f_cnt,
+				f_flag
+		from Singer ;
 	</select>
  </mapper>
         

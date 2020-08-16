@@ -262,12 +262,22 @@
 	
 		<!-- 편성표 리스트 출력 -->
 	<select id="broadCastAllList" resultType="com.web.curation.dto.BroadCastingDto">
-		select * from BroadCasting where bc_member = "";
+		select * from BroadCasting where s_idx = 1;
 	</select>
 	
 	<!-- 가수 스케줄 출력 -->
-	<select id="singerScheduleList" parameterType="String" resultType="com.web.curation.dto.BroadCastingDto">
-		select * from BroadCasting where bc_member = #{s_name};
+	<select id="singerScheduleList" resultType="com.web.curation.dto.BroadCastingDto">
+		select 	bc_idx,
+				s_idx,
+				bc_date,
+				bc_time,
+				bc_title,
+				(	select 	s_name 
+				from Singer s
+				where s.s_idx = b.s_idx
+				)as bc_member
+		from BroadCasting b 
+		where s_idx = #{s_idx};
 	</select>
  	
 	
