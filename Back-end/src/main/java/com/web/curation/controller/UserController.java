@@ -50,7 +50,7 @@ public class UserController {
 
 	@ApiOperation("마이페이지 팔로우 리스트(이메일)")
 	@GetMapping("/followlist/{u_email}")
-	public ResponseEntity<List<FollowDto>> followlistEmail(@RequestParam String u_email) {
+	public ResponseEntity<List<FollowDto>> followlistEmail(@PathVariable String u_email) {
 
 		try {
 			List<FollowDto> list = userService.getFollowList(u_email);
