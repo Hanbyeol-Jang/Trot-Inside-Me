@@ -13,5 +13,7 @@ public interface AdminServcie {
 	boolean addSinger(SingerDto dto);
 	boolean deleteSinger(int s_idx);
 	List<SingerDto> getSingerList();
+	String getTVImgUrl(int a_idx);
+	String getSingerImgUrl(int s_idx);
 
 }

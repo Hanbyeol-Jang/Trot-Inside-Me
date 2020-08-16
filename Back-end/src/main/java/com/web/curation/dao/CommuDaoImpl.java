@@ -75,5 +75,10 @@ public class CommuDaoImpl implements CommuDao {
 		return session.delete(ns+"deleteDetail", co_idx);
 	}
 
+	@Override
+	public String getImgUrl(int co_idx) {
+		return session.selectOne(ns+"getimgurl",co_idx);
+	}
+
 
 }

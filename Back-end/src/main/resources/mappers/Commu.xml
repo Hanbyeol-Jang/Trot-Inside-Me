@@ -18,8 +18,16 @@
 	<!-- 커뮤니티 게시글 수정  -->
 	<update id="updateCommu">
 		update 	Community 
-		set 	co_content=#{co_content} , 
-				co_img=#{co_img}
+		set 	
+		<if test="co_content != null " >
+		co_content=#{co_content} 
+		</if>
+		<if test="co_img  != null and co_content != null " >
+		,
+		</if>
+		<if test="co_img  != null" >
+		co_img=#{co_img}
+		</if>
 		where 	co_idx = #{co_idx};
 	</update>
 	
@@ -145,5 +153,11 @@
 		delete 	from Community
 		where 	co_idx = #{co_idx} 
 	</delete>
+	
+	<select id="getimgurl" resultType="String">
+		select co_img
+		from Community
+		where 	co_idx = #{co_idx} 
+	</select>
  </mapper>
         

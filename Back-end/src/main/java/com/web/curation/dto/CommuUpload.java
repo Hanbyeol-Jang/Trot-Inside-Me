@@ -8,4 +8,5 @@ import lombok.Data;
 public class CommuUpload {
 	private String co_content;
 	private MultipartFile co_img;
+	private int co_idx;
 }

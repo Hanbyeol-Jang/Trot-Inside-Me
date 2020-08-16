@@ -32,6 +32,7 @@ public interface CommuDao {
 	int clickGoodCancel(CoGoodDto dto);
 	//디테일에서 게시글 삭제 
 	int deleteDetail(int co_idx);
+	String getImgUrl(int co_idx);
 	
 
 }

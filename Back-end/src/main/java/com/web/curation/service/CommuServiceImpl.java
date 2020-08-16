@@ -68,5 +68,9 @@ public class CommuServiceImpl implements CommuService {
 	public List<CommuReply> getDetailReplyList(int co_idx) {
 		return commuDao.getDetailReplyList(co_idx);
 	}
+	@Override
+	public String getImgUrl(int co_idx) {
+		return commuDao.getImgUrl(co_idx);
+	}
 	
 }

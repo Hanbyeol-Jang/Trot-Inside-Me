@@ -45,5 +45,15 @@ public class AdminDaoImpl implements AdminDao{
 		return session.delete(ns+"deleteSinger",s_idx);
 	}
 
+	@Override
+	public String getTVImgUrl(int a_idx) {
+		return session.selectOne(ns+"getTVImgUrl",a_idx);
+	}
+
+	@Override
+	public String getSingerImgUrl(int s_idx) {
+		return session.selectOne(ns+"getSingerImgUrl",s_idx);
+	}
+
 	
 }

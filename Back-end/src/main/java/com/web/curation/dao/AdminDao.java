@@ -13,5 +13,7 @@ public interface AdminDao {
 	int addSinger(SingerDto dto);
 	int deleteSinger(int s_idx);
 	List<SingerDto> getSingerList();
+	String getTVImgUrl(int a_idx);
+	String getSingerImgUrl(int s_idx);
 
 }

@@ -96,6 +96,7 @@ public class CommuController {
 			CommuDto dto = new CommuDto();
 			if(up.getCo_img()!=null) {
 				String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getCo_img().getOriginalFilename();
+//				String saveUrl = "C:\\SSAFY\\img\\" + up.getCo_img().getOriginalFilename();
 				File file = new File(saveUrl);
 				up.getCo_img().transferTo(file);
 				dto.setCo_img(saveUrl);
@@ -105,6 +106,7 @@ public class CommuController {
 			dto.setCo_email(udto.getU_email());
 			
 			if (commuService.addCommu(dto)) {
+				System.out.println(" 추가 됨 ");
 				return new ResponseEntity<String>("success", HttpStatus.OK);
 			} 
 			
@@ -122,6 +124,14 @@ public class CommuController {
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
+			//이미지 처리 
+			String imgurl = commuService.getImgUrl(co_idx);
+			System.out.println(imgurl);
+			if(imgurl!=null) {
+				File file = new File(imgurl);
+				file.delete();
+			}
+			
 			if (commuService.deleteCommu(co_idx)) {
 				List<CommuDto> list = new ArrayList<>();
 				if (no == 1) { // 좋아요순
@@ -165,6 +175,14 @@ public class CommuController {
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
+			//이미지 처리 
+			String imgurl = commuService.getImgUrl(co_idx);
+			System.out.println(imgurl);
+			if(imgurl!=null) {
+				File file = new File(imgurl);
+				file.delete();
+			}
+			
 			if (commuService.deleteCommu(co_idx)) {
 				return new ResponseEntity<String>("디테일에서 삭제 완료", HttpStatus.OK);
 			}
@@ -224,13 +242,35 @@ public class CommuController {
 	}
 
 	// 게시물 디테일 수정
-	@ApiOperation("게시물 디테일 수정")
+	@ApiOperation("게시물 디테일 수정") //co_idx + co_content + co_img
 	@PutMapping("/update")
-	public ResponseEntity<String> updateDetail(@RequestBody CommuDto dto, HttpServletRequest request) {
+	public ResponseEntity<String> updateDetail( CommuUpload up, HttpServletRequest request) throws IllegalStateException, IOException {
 		UserDto udto = userService.getTokenInfo(request);
+		System.out.println(up.toString());
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
+			//이미지 처리 
+			CommuDto dto = new CommuDto();
+			dto.setCo_idx(up.getCo_idx());
+			if(up.getCo_img()!=null) { //이미지 수정이라면 
+				String imgurl = commuService.getImgUrl(up.getCo_idx());
+				if(imgurl!=null) { //이미지 찾아서 삭제 
+					File file = new File(imgurl);
+					file.delete();
+				}
+				
+				String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getCo_img().getOriginalFilename();
+//				String saveUrl = "C:\\SSAFY\\img\\" + up.getCo_img().getOriginalFilename();
+				File file = new File(saveUrl);
+				up.getCo_img().transferTo(file);
+				dto.setCo_img(saveUrl);
+			}
+			if(up.getCo_content()!=null) {
+				dto.setCo_content(up.getCo_content());
+			}
+			
+			System.out.println("dto : "+dto.toString());
 			if (commuService.updateDetail(dto)) {
 				return new ResponseEntity<String>("디테일에서 게시글 수정 완료", HttpStatus.OK);
 			} else {

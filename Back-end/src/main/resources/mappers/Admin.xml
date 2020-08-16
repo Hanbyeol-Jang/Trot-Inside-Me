@@ -41,5 +41,17 @@
 				f_flag
 		from Singer ;
 	</select>
+	
+	<select id="getTVImgUrl" resultType="String">
+		select a_img
+		from Admin
+		where a_idx = #{a_idx}
+	</select>
+	
+	<select id="getSingerImgUrl" resultType="String">
+		select s_img
+		from Singer
+		where s_idx = #{s_idx}
+	</select>
  </mapper>
         

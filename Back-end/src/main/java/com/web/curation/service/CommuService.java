@@ -31,5 +31,7 @@ public interface CommuService {
 	boolean clickGood(CoGoodDto dto);
 	//좋아요 취소 
 	boolean clickGoodCancel(CoGoodDto dto);
+	//이미지 주소 
+	String getImgUrl(int co_idx);
 
 }

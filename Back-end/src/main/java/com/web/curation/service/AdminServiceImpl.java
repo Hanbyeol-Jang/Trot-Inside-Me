@@ -45,4 +45,14 @@ public class AdminServiceImpl implements AdminServcie {
 		return admindao.getSingerList();
 	}
 
+	@Override
+	public String getTVImgUrl(int a_idx) {
+		return admindao.getTVImgUrl(a_idx);
+	}
+
+	@Override
+	public String getSingerImgUrl(int s_idx) {
+		return admindao.getSingerImgUrl(s_idx);
+	}
+
 }
