@@ -28,7 +28,7 @@ export default {
         return{
             flag:false,
             change_image:'',
-            image:"",
+            image:null,
             content:"",
             axiosConfig:{
               headers:{
@@ -66,10 +66,6 @@ export default {
             const dto = new FormData()
             dto.append('co_content',this.content)
             dto.append('co_img',this.image)
-            // const data = {
-            //   'co_content' : this.content,
-            //   'co_img' : this.image
-            // }
             axios.post(`${SERVER.URL}/community/add`,dto,axiosConfig2)
             .then(()=>{
                 this.$router.push({ name: 'CommunityIndexView'})

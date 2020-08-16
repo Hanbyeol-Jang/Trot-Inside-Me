@@ -24,16 +24,18 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-// import axios from 'axios'
-// import SERVER from '@/api/drf'
+import axios from 'axios'
+import SERVER from '@/api/drf'
 // import VoteMoving from '@/components/vote/VoteMoving'
 import ScrollTopButton from '@/components/main/ScrollTopButton'
+// import Axios from 'axios'
 
 
 export default {
   name: 'VoteView',
   computed: {
     ...mapState(['user']),
+    ...mapState(['checkvote']),
     ...mapGetters(['isLoggedIn', 'config']),
   },
   components: {
@@ -43,27 +45,26 @@ export default {
   },
   methods:{
     ...mapActions(['getUser']),
-    // getuser() {
-    //   axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo, this.config)
-    //     .then((reaponse)=>{
-    //       if(reaponse.data.u_hasVote===0){
-    //         this.$router.push({ name: 'VoteLocalSelectView'})
-    //       }
-    //     })
-    //     .catch((err)=>{ console.error(err) })
-    // },
     goVote(){
       if (this.isLoggedIn) {
-        if (this.user.u_hasVote === 0) {
-          this.$router.push({ name: 'VoteLocalSelectView' })
-        } else {
-          this.$confirm({
-            message: "이미 투표하셨습니다!",
-            button: {
-              no: '닫기',
-            }
-          })
-        }
+        axios.get(`${SERVER.URL}/voteCheck/${this.user.u_email}`)
+        .then((res)=>{
+          if (res.data.hasVote === false) {
+            this.$store.commit('SET_VOTE',false);
+            this.$router.push({ name: 'VoteLocalSelectView' })
+          } else {
+            this.$store.commit('SET_VOTE',true);
+            this.$confirm({
+              message: "이미 이번주 투표 완료하셨습니다.",
+              button: {
+                no: '닫기',
+              }
+            })
+          }
+                })
+        .catch((err)=>{
+            console.log(err)
+        })
       } else {
         this.$confirm({
           message: "로그인 해주세요!",
