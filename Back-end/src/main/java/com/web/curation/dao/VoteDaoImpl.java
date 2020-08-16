@@ -49,5 +49,15 @@ public class VoteDaoImpl implements VoteDao {
 	public int lastWeekTotal(String s_name) {
 		return session.selectOne(ns + "lastWeekTotal", s_name);
 	}
+	
+	@Override
+	public int thisWeekRank(int s_idx) {
+		return session.selectOne(ns + "thisWeekRank", s_idx);
+	}
+	
+	@Override
+	public int lastWeekRank(String s_name) {
+		return session.selectOne(ns + "lastWeekRank", s_name);
+	}
 
 }

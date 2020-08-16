@@ -70,6 +70,9 @@ public class VoteController {
 			int lastWeek = voteService.lastWeek(s_name);
 			int lastWeekTotal = voteService.lastWeekTotal(s_name);
 
+			int thisWeekRank = voteService.thisWeekRank(s_idx);
+			int lastWeekRank = voteService.lastWeekRank(s_name);
+
 			HashMap<String, Object> map = new HashMap<>();
 
 			map.put("s_name", s_name);
@@ -77,6 +80,9 @@ public class VoteController {
 			map.put("thisWeekTotal", thisWeekTotal);
 			map.put("lastWeek", lastWeek);
 			map.put("lastWeekTotal", lastWeekTotal);
+
+			map.put("thisWeekRank", thisWeekRank);
+			map.put("lastWeekRank", lastWeekRank);
 
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
