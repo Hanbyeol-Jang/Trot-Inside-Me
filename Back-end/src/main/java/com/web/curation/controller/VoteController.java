@@ -44,7 +44,7 @@ public class VoteController {
 
 	/* 투표하기 */
 	@ApiOperation("투표했는지 확인")
-	@GetMapping("/voteCheck/{u_email}/{u_hasVote}")
+	@GetMapping("/voteCheck/{u_email}")
 	public ResponseEntity<HashMap<String, Object>> voteCheck(@PathVariable String u_email) {
 		try {
 

@@ -76,7 +76,7 @@ public class JwtTokenProvider {
 			 dto.setU_name(cl.get("u_name").toString());
 			 dto.setU_profileImg(cl.get("u_profileImg").toString());
 			 dto.setU_isAdmin(Integer.parseInt(cl.get("u_isAdmin").toString()));
-			 dto.setU_hasVote(Integer.parseInt(cl.get("u_hasVote ").toString()));
+			 dto.setU_hasVote(Integer.parseInt(cl.get("u_hasVote").toString()));
 		}else {
 			System.out.println("만료됨 새 토큰 발행받아야함.");
 			dto.setU_name("F");
