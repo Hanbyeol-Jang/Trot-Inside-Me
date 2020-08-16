@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
@@ -95,22 +93,19 @@ public class CommuController {
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
-			String saveUrl = "C:\\SSAFY\\PTJ\\img\\" + up.getCo_img().getOriginalFilename();
-			File file = new File(saveUrl);
-//			if (!file.getParentFile().exists())
-//				file.getParentFile().mkdirs();
-			up.getCo_img().transferTo(file);
-
 			CommuDto dto = new CommuDto();
+			if(up.getCo_img()!=null) {
+				String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getCo_img().getOriginalFilename();
+				File file = new File(saveUrl);
+				up.getCo_img().transferTo(file);
+				dto.setCo_img(saveUrl);
+			}
+
 			dto.setCo_content(up.getCo_content());
-			dto.setCo_img(saveUrl);
 			dto.setCo_email(udto.getU_email());
 			
 			if (commuService.addCommu(dto)) {
-				System.out.println("file is " + file.getAbsolutePath());
-				System.out.println("name is " + file.getName());
-				
-				return new ResponseEntity<String>(file.getName(), HttpStatus.OK);
+				return new ResponseEntity<String>("success", HttpStatus.OK);
 			} 
 			
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -165,12 +160,13 @@ public class CommuController {
 	@ApiOperation("게시글 디테일에서 삭제")
 	@DeleteMapping("/detaildelete/{co_idx}")
 	public ResponseEntity<String> deleteCommu(@PathVariable int co_idx, HttpServletRequest request) {
+		System.out.println("detail delete");
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
 			if (commuService.deleteCommu(co_idx)) {
-				return new ResponseEntity<String>("디테일에서 삭제 완료", HttpStatus.NOT_FOUND);
+				return new ResponseEntity<String>("디테일에서 삭제 완료", HttpStatus.OK);
 			}
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
