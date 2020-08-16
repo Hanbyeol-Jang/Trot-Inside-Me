@@ -44,16 +44,26 @@ export default {
             }
         },
 
-        createCommunity(){
-            // const dto = new FormData()
-            // dto.append('co_content',this.content)
-            // dto.append('co_img',this.image)
-            // axios.post(`${SERVER.URL}/community/add`,dto,this.axiosConfig)
-            const data = {
-              'co_content' : this.content,
-              'co_img' : this.image
+         createCommunity(){
+            const axiosConfig2={
+              headers:{
+                token : `${this.$cookies.get('auth-token')}`,
+                'Content-Type': 'multipart/form-data'
+              }
             }
-            axios.post(`${SERVER.URL}/community/add`,data,this.axiosConfig)
+            const dto = new FormData()
+            dto.append('co_content',this.content)
+            dto.append('co_img',this.image)
+            // const data = {
+            //   'co_content' : this.content,
+            //   'co_img' : this.image
+            // }
+            console.log(dto)
+            for(var key of dto.values())
+       {
+         console.log(key)
+       }
+            axios.post(`${SERVER.URL}/community/add`,dto,axiosConfig2)
             .then(()=>{
                 this.$router.push({ name: 'CommunityIndexView'})
             })
