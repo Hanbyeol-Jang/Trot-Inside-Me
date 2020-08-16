@@ -37,7 +37,7 @@ public class JwtTokenProvider {
                 .claim("u_name", dto.getU_name())
                 .claim("u_profileImg", dto.getU_profileImg())
                 .claim("u_isAdmin", dto.getU_isAdmin())
-                .claim("u_hasVote ", dto.getU_hasVote())
+                .claim("u_hasVote", dto.getU_hasVote())
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
