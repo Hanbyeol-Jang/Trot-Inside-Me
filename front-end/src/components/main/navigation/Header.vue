@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 var today = new Date()
 
 export default {
@@ -76,7 +76,6 @@ export default {
       },
     },
     methods: {
-      ...mapActions(['getUser']),
       goBack() {
           history.back()
       },
@@ -92,19 +91,10 @@ export default {
       },
       goUserDetail() {
         if(this.isLoggedIn && this.$route.name !== 'UserDetailView') {
-            this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
+            this.$router.push({ name: 'UserDetailView', params: { userId: this.user.u_email } }).catch(()=>{})
         } else {
           this.$router.push({ name: 'Login' })
         }
-        // if(this.isLoggedIn && this.$route.name !== 'UserDetailView') {
-        //     if (this.user.u_isAdmin) {
-        //       this.$router.push({ name: 'AdminView' })
-        //     } else {
-        //       this.$router.push({ name: 'UserDetailView', params: { userId: 1 } }).catch(()=>{})
-        //     }
-        // } else {
-        //   this.$router.push({ name: 'Login' })
-        // }
       },
     },
     created() {
@@ -115,11 +105,8 @@ export default {
           this.month = '0' + this.month
       }
       this.todayDate = this.month +'월 ' + this.date + '일'
-      if (this.isLoggedIn) {
-        this.getUser()
-      }
     }
-}
+  }
 </script>
 
 <style scoped>
@@ -153,9 +140,4 @@ export default {
 .main-logo {
   bottom: 0;
 }
-
-/* .header {
-  position: fixed !important;
-} */
-
 </style>

@@ -5,25 +5,27 @@ import cookies from 'vue-cookies'
 import router from '@/router'
 import axios from 'axios'
 
-import SERVER from '@/api/drf' 
+import SERVER from '@/api/drf'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
-    authAdmin: cookies.get('auth-admin'),
+    isAdmin: 0,
+    user: {},
+    userDetail: {},
     singers: [],
     singer: {},
     programs: [],
-    contentsCount: 0,
-    user: {},
-    isFollow: 0,
+    followBtn: false,
+    followCnt: 0,
+    userFollowing: [],
   },
-  getters: {
+  getters: { 
     isLoggedIn: state => !!state.authToken,
     config: state => ({ headers: { token: `${state.authToken}` } }),
-    singersLength: state => state.singers.length
+    singersLength: state => state.singers.length,
   },
   mutations: {
     SET_TOKEN(state, token) {
@@ -32,6 +34,12 @@ export default new Vuex.Store({
     },
     SET_USER(state, userInfo) {
       state.user = userInfo
+    },
+    SET_USER_DETAIL(state, userInfo) {
+      state.userDetail = userInfo
+    },
+    SET_ADMIN(state, isAdmin) {
+      state.isAdmin = isAdmin
     },
     SET_SINGERS(state, singers) {
       state.singers = singers
@@ -42,20 +50,29 @@ export default new Vuex.Store({
     SET_PROGRAMS(state, programs) {
       state.programs = programs
     },
-    SET_CONTENTS_CNT(state, cnt) {
-      state.contentsCount = cnt
-    },
     SET_FOLLOW(state, isFollow) {
-      state.isFollow = isFollow
+      state.followBtn = isFollow.f_flag
+      state.followCnt = isFollow.f_cnt
+    },
+    followAdd(state) {
+      state.followBtn = 1
+      state.followCnt++
+    },
+    followBack(state) {
+      state.followBtn = 0
+      state.followCnt--
+    },
+    SET_FOLLOWLIST(state, followList) {
+      state.userFollowing = followList
     },
   },
   actions: {
     // Auth
-    login({ commit }, loginData) {
+    login({ dispatch, commit }, loginData) {
       axios.post(SERVER.URL + SERVER.ROUTES.login, loginData)
         .then(res => {
-          console.log('Admin Login SUCCESS')
-          commit('SET_TOKEN', res.data) 
+          commit('SET_TOKEN', res.data)
+          dispatch('getUser')
           router.push({ name: 'AdminView' })
         })
         .catch(err => console.log(err))
@@ -63,7 +80,6 @@ export default new Vuex.Store({
     logout({ getters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.logout, getters.config)
         .then(() => {
-          console.log('Admin Logout SUCCESS')
           commit('SET_TOKEN', null)
           cookies.remove('auth-token')
           router.push({ name: 'Home' })
@@ -74,7 +90,6 @@ export default new Vuex.Store({
       const axiosConfig = { headers:{ access_token : accessToken } }
       axios.post(SERVER.URL + SERVER.ROUTES.kakaoLogin, null, axiosConfig)
         .then((res)=>{
-          console.log('Kakao Login SUCCESS')
             commit('SET_TOKEN', res.data)
             dispatch('getUser')
             router.push({ name: 'Home' })
@@ -82,32 +97,31 @@ export default new Vuex.Store({
         .catch((err)=>{ console.log(err) })
     },
     kakaoLogout({ commit }) {
-      window.location.href = SERVER.ROUTES.kakaoLogout;
-      console.log('Kakao Logout SUCCESS')
+      window.location.href = SERVER.ROUTES.kakaoLogout
       commit('SET_TOKEN', null)
       cookies.remove('auth-token')
       router.push({ name: 'Home' })
     },
     kakaoOff({ getters }) { 
       axios.post(SERVER.URL + SERVER.ROUTES.kakaoOff, null, getters.config)
-        .then((res) => {  
-            console.log('Kakao OFF', res) 
+        .then(() => { 
             router.push({ name: 'Home' })
           })
         .catch((err)=>{ console.error(err) }) 
     },
     getUser({ getters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo, getters.config)
-        .then(res => {  commit('SET_USER', res.data) })
+        .then(res => { 
+          commit('SET_USER', res.data)
+        })
         .catch((err)=>{ console.error(err) })
     },
-
-    // Feed Data
-    getContentsCount({ commit }, info) {
-      const options = { params: { b_type: info.mediaType, s_idx: info.singerId }}
-      axios.get(SERVER.URL + '/board/count', options)
-        .then(res => { commit('SET_CONTENTS_CNT', res.data) })
-        .catch(err => { console.error(err) })
+    getUserDetail({ commit }, userId) {
+      axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo + `/${userId}`)
+        .then(res => {
+          commit('SET_USER_DETAIL', res.data.userInfo)
+        })
+        .catch((err)=>{ console.error(err) })
     },
 
     // Singer Data
@@ -119,7 +133,6 @@ export default new Vuex.Store({
     postSinger(context, singerData) {
       axios.post(SERVER.URL + SERVER.ROUTES.singerCreate, singerData)
         .then(() => {
-          console.log('Singer POST SUCCESS')
           router.push({ name: 'SingerManageView' })
         })
         .catch(err => console.log(err))
@@ -127,7 +140,6 @@ export default new Vuex.Store({
     deleteSinger(context, singerId) { 
       axios.delete(SERVER.URL + SERVER.ROUTES.singerDelete + singerId)
         .then(() => {
-          console.log('Singer DELETE SUCCESS')
           location.reload(true)
         })
         .catch(err => console.log(err))
@@ -136,23 +148,30 @@ export default new Vuex.Store({
       axios.get(SERVER.URL + SERVER.ROUTES.singerDetail + singerId, getters.config)
         .then((res) => {
           commit('SET_SINGER', res.data)
+          commit('SET_FOLLOW', { f_flag: res.data.f_flag, f_cnt: res.data.f_cnt })
         })
         .catch(err => console.log(err))
     },
     // Follow Singer
     follow({ state, commit }, info) {
-      console.log('follow')
       const options = {
         headers:{ token: state.authToken },
         params: { isfollow: info.f_flag }
       }
       axios.get(SERVER.URL + SERVER.ROUTES.follow + info.s_idx, options)
       .then(res => { 
-        commit('SET_FOLLOW', res.data) 
-        console.log(res.data)
+        commit('SET_FOLLOW', { f_flag: res.data, f_cnt: state.followCnt })
+        if (res.data) { commit('followAdd') } 
+        else { commit('followBack') }
       })
       .catch(err => { console.error(err) })
     },
+    getFollowList({ commit }, userId) {
+      axios.get(SERVER.URL + SERVER.ROUTES.followSingersList + userId)
+      .then(res => { commit('SET_FOLLOWLIST', res.data) })
+      .catch(err => { console.error(err) })
+    },
+
     // Program Data
     fetchPrograms({ commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.programList)
@@ -162,7 +181,6 @@ export default new Vuex.Store({
     postProgram(context, singerData) {
       axios.post(SERVER.URL + SERVER.ROUTES.programCreate, singerData)
         .then(() => {
-          console.log('Singer POST SUCCESS')
           router.push({ name: 'ProgramManageView' })
         })
         .catch(err => console.log(err))
@@ -170,12 +188,10 @@ export default new Vuex.Store({
     deleteProgram(context, programId) { 
       axios.delete(SERVER.URL + SERVER.ROUTES.programDelete + programId)
         .then(() => {
-          console.log('Singer DELETE SUCCESS')
           location.reload(true)
         })
         .catch(err => console.log(err))
     },
-
     scrollToTop() {
       scroll(0, 0)
     },

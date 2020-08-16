@@ -22,6 +22,9 @@ import VoteView from '@/views/vote/VoteView.vue'
 import Login from '@/views/accounts/Login.vue'
 import Signup from '@/views/accounts/Signup.vue'
 import SingerDetailView from '@/views/main/SingerDetailView.vue'
+import UserLikeArticleView from '@/views/accounts/UserLikeArticleView.vue'
+import UserLikeVideoView from '@/views/accounts/UserLikeVideoView.vue'
+import UserLikeSingerView from '@/views/accounts/UserLikeSingerView'
 import UserDetailView from '@/views/accounts/UserDetailView.vue'
 import SignupCompleteView from '@/views/accounts/SignupCompleteView.vue'
 import UserSettingView from '@/views/accounts/UserSettingView.vue'
@@ -125,6 +128,8 @@ Vue.use(VueRouter)
     name: 'SingerDetailView',
     component: SingerDetailView
   },
+
+  // Accounts
   {
     path: '/accounts/:userId',
     name: 'UserDetailView',
@@ -141,6 +146,23 @@ Vue.use(VueRouter)
     component: UserSettingView
   },
   {
+    path: '/accounts/:userId/video',
+    name: 'UserLikeVideoView',
+    component: UserLikeVideoView
+  },
+  {
+    path: '/accounts/:userId/article',
+    name: 'UserLikeArticleView',
+    component: UserLikeArticleView
+  },
+  {
+    path: '/accounts/:userId/singer',
+    name: 'UserLikeSingerView',
+    component: UserLikeSingerView
+  },
+
+  // Singer Detail
+  {
     path: '/singer/:singerId/videos',
     name: 'VideoListView',
     component: VideoListView
@@ -151,7 +173,7 @@ Vue.use(VueRouter)
     component: ArticleListView
   },
   {
-    path: '/schedule/:singerId',
+    path: '/singer/:singerId/schedule',
     name: 'SingerScheduleView',
     component: SingerScheduleView
   },

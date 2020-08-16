@@ -21,38 +21,46 @@
         </v-row>
       </v-container>
     </v-main>
-    <BottomNav v-if="bottomNav"/>
+    <BottomNav/>
     <vue-confirm-dialog class="my-class"></vue-confirm-dialog>
   </v-app>
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex'
+
 import Header from './components/main/navigation/Header'
 import BottomNav from './components/main/navigation/BottomNav'
 
 export default {
   name: 'App',
-
   components: {
     Header,
     BottomNav,
   },
   data: () => ({
-    //
   }),
   computed: {
-    bottomNav() {
-      let routeName = this.$route.name
-      if (routeName === 'Home' || routeName === 'SingerSearchView'
-        || routeName === 'VoteView' || routeName === 'CommunityIndexView') {
-          return true
-        } else {
-          return false
-        }
-    },
+    ...mapState(['user']),
+    ...mapGetters(['isLoggedIn']),
+    // bottomNav() {
+    //   let routeName = this.$route.name
+    //   if (routeName === 'Home' || routeName === 'SingerSearchView'
+    //     || routeName === 'VoteView' || routeName === 'CommunityIndexView') {
+    //       return true
+    //     } else {
+    //       return false
+    //     }
+    // },
   },
   methods: {
+    ...mapActions(['getUser']),
   },
+  created() {
+    if (this.isLoggedIn) {
+      this.getUser()
+    }
+  }
 };
 </script>
 

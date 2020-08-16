@@ -41,7 +41,7 @@ export default {
             articles: [],
             page: 1,
             mediaType: 2,
-            videoCnt: 0,
+            articleCnt: 0,
         }
     },
     components: {
