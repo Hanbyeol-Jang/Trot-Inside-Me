@@ -6,6 +6,7 @@ import router from '@/router'
 import axios from 'axios'
 
 import SERVER from '@/api/drf' 
+import { use } from 'vue/types/umd'
 
 Vue.use(Vuex)
 
@@ -167,8 +168,7 @@ export default new Vuex.Store({
       .catch(err => { console.error(err) })
     },
     getFollowList({ commit }, userId) {
-      const options = { params:{ u_email : userId } }
-      axios.get(SERVER.URL + SERVER.ROUTES.followSingersList, options)
+      axios.get(SERVER.URL + SERVER.ROUTES.followSingersList + userId)
       .then(res => { commit('SET_FOLLOWLIST', res.data) })
       .catch(err => { console.error(err) })
     },
