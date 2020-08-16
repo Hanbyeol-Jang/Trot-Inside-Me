@@ -12,6 +12,7 @@
       <v-textarea solo label="여기를 눌러 새로운 소식을 남겨보세요." height="300" v-model="content"></v-textarea>
       <v-img :src="change_image" width="100%" height="100%" v-show="flag"></v-img>
       <v-file-input show-size counter multiple label="사진을 등록 할 수 있습니다." type="file" id="file" ref="file" @change="communityImage()"></v-file-input>
+      <!-- <input type="file" id="file" ref="file" @change="communityImage()"/> -->
     </v-card-text>
   </v-card>
   </div>
@@ -27,7 +28,7 @@ export default {
         return{
             flag:false,
             change_image:'',
-            image:"",
+            image:null,
             content:"",
             axiosConfig:{
               headers:{
@@ -39,21 +40,33 @@ export default {
     methods:{
         checklogin(){
             if (!(this.$cookies.get('auth-token'))){
-                this.$alert(" 로그인을 해주세요")
-                this.$router.push({name:'Login'})                
+            this.$confirm(
+                {
+                message: `로그인 해주세요.`,
+                button: {
+                    yes: '로그인 하기',
+                    no: '돌아가기',
+                },
+                callback: confirm => {
+                    if (confirm) {
+                      this.$router.push({ name: 'Login'})
+                    }
+                }})
+            this.$router.push({name:'Login'})                
             }
         },
 
         createCommunity(){
-            // const dto = new FormData()
-            // dto.append('co_content',this.content)
-            // dto.append('co_img',this.image)
-            // axios.post(`${SERVER.URL}/community/add`,dto,this.axiosConfig)
-            const data = {
-              'co_content' : this.content,
-              'co_img' : this.image
+            const axiosConfig2={
+              headers:{
+                token : `${this.$cookies.get('auth-token')}`,
+                'Content-Type': 'multipart/form-data'
+              }
             }
-            axios.post(`${SERVER.URL}/community/add`,data,this.axiosConfig)
+            let dto = new FormData()
+            dto.append('co_content',this.content)
+            dto.append('co_img',this.image)
+            axios.post(`${SERVER.URL}/community/add`,dto,axiosConfig2)
             .then(()=>{
                 this.$router.push({ name: 'CommunityIndexView'})
             })

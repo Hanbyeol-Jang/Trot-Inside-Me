@@ -26,7 +26,6 @@ export default {
     },
     methods: {
         searchSinger: function () {
-          console.log('검색!')
           if (!this.keyword.trim()){
               this.$alert('가수 이름을 입력해주세요!')
           } else {

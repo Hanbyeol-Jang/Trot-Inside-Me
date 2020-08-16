@@ -30,7 +30,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['singers'])
+        ...mapState(['singers','checkvote'])
     },
     methods:{
         ...mapActions(['fetchSingers']),
@@ -40,9 +40,16 @@ export default {
         },
         showAll() {
             this.singersData = this.singers
-        }
+        },
+        checkAuth(){
+            if(this.checkvote === null){
+            this.$alert("잘못된 접근입니다.")
+            this.$router.push({ name: 'Home' })
+            }
+        },
     },
     created(){
+        this.checkAuth()
         this.fetchSingers()
         this.singersData = this.singers
     }
