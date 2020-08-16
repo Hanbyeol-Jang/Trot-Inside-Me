@@ -17,12 +17,13 @@
       </v-card-actions>
       <v-card-text>
         <form>
+          <h3 class="mb-3">가수 이름</h3>
           <v-text-field
             solo
             v-model="name"
             :error-messages="nameErrors"
             :counter="5"
-            label="가수 이름"
+            label="가수 이름을 입력해주세요."
             required
             @input="$v.name.$touch()"
             @blur="$v.name.$touch()"
@@ -37,31 +38,17 @@
             solo
             v-model="cafeUrl"
             :error-messages="cafeUrlErrors"
-            label="가수 팬카페 URL" 
+            label="가수 팬카페 URL을 입력해 주세요." 
             required
             @input="$v.cafeUrl.$touch()"
             @blur="$v.cafeUrl.$touch()"
             height="80" 
           ></v-textarea>
-
-          <v-textarea 
-            solo 
-            v-model="ImgUrl"
-            :error-messages="ImgUrlErrors"
-            label="가수 이미지 URL"
-            required
-            @input="$v.ImgUrl.$touch()"
-            @blur="$v.ImgUrl.$touch()"
-            height="80" 
-          ></v-textarea>
         </form>
-        <v-img width="100%" height="100%"></v-img>
-        <v-file-input 
-          show-size 
-          counter 
-          multiple 
-          label="가수 이미지를 등록하세요." 
-          type="file" id="file" ref="file"></v-file-input>
+        <h3>가수 이미지</h3>
+        <v-img :src="change_image" width="100%" height="100%" v-show="flag"></v-img>
+        <v-file-input show-size counter multiple label="가수 이미지를 등록하세요." 
+          type="file" id="file" ref="file" @change="singerImage()"></v-file-input>
       </v-card-text>
     </v-card>
   </div>
@@ -72,19 +59,22 @@ import { mapActions } from 'vuex'
 import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
 
+import Swal from 'sweetalert2'
+
 export default {
     name: 'SingerCreateView',
     mixins: [validationMixin],
     validations: {
       name: { required, maxLength: maxLength(5) },
       cafeUrl: { required },
-      ImgUrl: { required },
     },
     data() {
       return {
+        flag: false,
+        change_image: '',
+        image: null,
         name: '',
         cafeUrl: '',
-        ImgUrl: '',
         radios: 'yes',
       }
     },
@@ -93,19 +83,13 @@ export default {
         const errors = []
         if (!this.$v.name.$dirty) return errors
         !this.$v.name.maxLength && errors.push('최대 5글자 입력이 가능합니다.')
-        !this.$v.name.required && errors.push('가수 이름을 입력해 주세요.')
+        !this.$v.name.required && errors.push('필수 항목입니다.')
         return errors
       },
       cafeUrlErrors () {
         const errors = []
         if (!this.$v.cafeUrl.$dirty) return errors
-        !this.$v.cafeUrl.required && errors.push('URL을 입력해 주세요.')
-        return errors
-      },
-      ImgUrlErrors () {
-        const errors = []
-        if (!this.$v.ImgUrl.$dirty) return errors
-        !this.$v.ImgUrl.required && errors.push('URL을 입력해 주세요.')
+        !this.$v.cafeUrl.required && errors.push('필수 항목입니다.')
         return errors
       },
     },
@@ -117,19 +101,31 @@ export default {
         }
         this.$v.$touch()
         if(this.$v.$invalid){
-            alert('모든 값을 입력해 주세요!')
+            Swal.fire({
+              icon: 'error',
+              text: '모든 값을 입력해주세요.',
+            })
+            this.cafeUrl = ''
         } else {
           if (this.radios === 'no') {
-            this.cafeUrl = ''
+            this.cafeUrl = null
           }
-          let singerData = {
-              s_cafeUrl: this.cafeUrl,
-              s_img: this.ImgUrl,
-              s_name: this.name,
-            }
+          let singerData = new FormData()
+          singerData.append('name', this.name)
+          if (this.image) {
+            singerData.append('img', this.image)
+          }
+          if (this.cafeUrl) {
+            singerData.append('url', this.cafeUrl)
+          }
           this.postSinger(singerData)
         }
-      }
+      },
+      singerImage(){
+        this.image = this.$refs.file.$refs.input.files[0]
+        this.change_image = URL.createObjectURL(this.image)
+        this.flag = true
+      },
     },
 }
 </script>

@@ -18,12 +18,16 @@ export default{
         singerDelete: '/admin/singerdelete/',
         singerVideoList: '/board/videolist/',
         singerArticleList: '/board/articlelist/',
+        singerScheduleList: '/board/schedule/singerScheduleList/',
 
         // main
         mainList: '/board/mainlist/',
         
         // follow
         follow: '/user/follow/',
+        followSingersList: '/user/followlist/',
+        followVideoList: '/user/videolist/',
+        followArticleList: '/user/articlelist/',
 
         // program
         programList: '/admin/tvlist',

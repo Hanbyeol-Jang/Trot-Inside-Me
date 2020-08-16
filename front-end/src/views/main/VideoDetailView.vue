@@ -90,7 +90,19 @@ export default {
 
     showLikeChange(){
       if (!(this.$cookies.get('auth-token'))){
-          this.$alert(" 로그인을 해주세요")
+            this.$confirm(
+                {
+                message: `로그인 해주세요.`,
+                button: {
+                    yes: '로그인 하기',
+                    no: '돌아가기',
+                },
+                callback: confirm => {
+                    if (confirm) {
+                      this.$router.push({ name: 'Login'})
+                    }
+                }})
+
       }else{
         const axiosConfig = {
             headers:{
@@ -99,8 +111,7 @@ export default {
             params: {isgood:this.showLike}
         }
         axios.get(SERVER.URL+`/board/good/${this.type}/${this.id}`,axiosConfig)
-        .then((response)=>{
-          console.log(response)
+        .then(()=>{
           if(this.showLike){
               this.showLike = 0
               this.likeCnt -= 1

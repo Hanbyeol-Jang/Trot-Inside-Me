@@ -9,9 +9,12 @@
         <div class="d-flex flex-wrap justify-content-between">
           <div class="d-flex align-center">
             <h3 class="font-weight-bold">{{ comment.cr_name }}</h3>
-            <!-- <pre class="text-secondary ml-3">{{ updateTime }}</pre> -->
+            <pre class="text-secondary ml-3">{{ updateTime }}</pre>
           </div>
-          <div v-if="isAuth" class="ml-auto">
+          <div v-if="currentUser.u_isAdmin === '1'" class="ml-auto">
+            <v-btn depressed outlined color="error" @click="deleteComment">삭제</v-btn>
+          </div>
+          <div  v-else-if="comment.cr_name === currentUser.u_name" class="ml-auto">
             <v-btn depressed outlined color="error" @click="deleteComment">삭제</v-btn>
           </div>
         </div>
@@ -26,30 +29,20 @@
 </template>
 
 <script>
-import axios from 'axios'
-import SERVER from '@/api/drf'
+// import SERVER from '@/api/drf'
 
 export default {
   name: 'CommentListItem',
   props: {
     comment: Object,
-  },
-  data(){
-    return {
-      isAuth: false,
-      axiosConfig :{
-          headers:{
-              token : `${this.$cookies.get('auth-token')}`
-          },
-      }
-    }
+    currentUser:Object,
   },
   computed: {
-    profileImage(){
-      return SERVER.URL + this.comment.cr_profileImg
-    },
+    // profileImage(){
+    //   return SERVER.URL + this.comment.cr_profileImg
+    // },
     updateTime(){
-      return this.comment.updated_at.slice(0,10)
+      return this.comment.cr_date.slice(0,10)
     },
   },
 
@@ -65,33 +58,12 @@ export default {
           },
           callback: confirm => {
             if (confirm) {
-              this.isAuth=false
               this.$emit('delete-comment2',idx)
             }
           }
         }
       )
     },
-
-    checkAuth(){
-      axios.get(SERVER.URL+`/user/getUserInfo`,this.axiosConfig)
-      .then((reaponse)=>{
-          const currentUser = reaponse.data.u_name
-          if(Number(reaponse.data.u_isAdmin)){
-              this.isAuth = true
-          }else{
-              if (this.comment.cr_name === currentUser){
-                  this.isAuth = true
-              }
-          }
-      })
-      .catch((err)=>{
-          console.error(err)
-      })
-    }
-  },
-  mounted(){
-    this.checkAuth()
   },
 }
 </script>

@@ -3,7 +3,7 @@
     <Header/>
     <v-main 
       id="scrolling-techniques-7"
-      class="mt-4">
+      class="mt-4 mb-8">
       <v-container
         fluid
       >
@@ -21,38 +21,46 @@
         </v-row>
       </v-container>
     </v-main>
-    <BottomNav v-if="bottomNav"/>
-    <vue-confirm-dialog class="my-class"></vue-confirm-dialog>
+    <BottomNav/>
+    <vue-confirm-dialog class="my-dialog"></vue-confirm-dialog>
   </v-app>
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex'
+
 import Header from './components/main/navigation/Header'
 import BottomNav from './components/main/navigation/BottomNav'
 
 export default {
   name: 'App',
-
   components: {
     Header,
     BottomNav,
   },
   data: () => ({
-    //
   }),
   computed: {
-    bottomNav() {
-      let routeName = this.$route.name
-      if (routeName === 'Home' || routeName === 'SingerSearchView'
-        || routeName === 'VoteView' || routeName === 'CommunityIndexView') {
-          return true
-        } else {
-          return false
-        }
-    },
+    ...mapState(['user']),
+    ...mapGetters(['isLoggedIn']),
+    // bottomNav() {
+    //   let routeName = this.$route.name
+    //   if (routeName === 'Home' || routeName === 'SingerSearchView'
+    //     || routeName === 'VoteView' || routeName === 'CommunityIndexView') {
+    //       return true
+    //     } else {
+    //       return false
+    //     }
+    // },
   },
   methods: {
+    ...mapActions(['getUser']),
   },
+  created() {
+    if (this.isLoggedIn) {
+      this.getUser()
+    }
+  }
 };
 </script>
 
@@ -64,23 +72,33 @@ export default {
   /* text-align: center; */
   color: #2c3e50;
 }
-.my-class .vc-text {
+.my-dialog .vc-text {
   font-size: 200%;
   margin: 0;
 }
-.my-class .vc-container {
+.my-dialog .vc-container {
   width: 300px;
   background-color: whitesmoke;
 }
-.my-class .vc-btn {
+.my-dialog .vc-btn {
   color: whitesmoke;
   background-color: #e91e63;
   font-size: 150%;
 }
 
-.my-class .left {
+.my-dialog .left {
   color: #e91e63;
   background-color: whitesmoke;
   font-size: 150%;
+}
+.swal2-popup {
+  font-family: 'Jua', sans-serif !important;
+}
+.swal2-content{
+  font-size: 200% !important;
+  margin: 0;
+}
+.swal2-styled.swal2-confirm{
+  background-color: #e91e63 !important;
 }
 </style>

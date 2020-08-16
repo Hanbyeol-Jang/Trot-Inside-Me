@@ -41,9 +41,9 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
-import axios from 'axios'
-import SERVER from '@/api/drf'
+import { mapState, mapGetters } from 'vuex'
+// import axios from 'axios'
+// import SERVER from '@/api/drf'
 
 export default {
     name:"VoteLocalSelectView",
@@ -55,28 +55,17 @@ export default {
         }
     },
     computed: {
-      ...mapState(['user']),
+      ...mapState(['user','checkvote']),
       ...mapGetters(['isLoggedIn']),
     },
     methods:{
-      ...mapActions(['getUser']),
-      getuser(){
-          const axiosConfig ={
-              headers:{
-                  token : `${this.$cookies.get('auth-token')}`
-              },
-          }
-          axios.get(SERVER.URL+`/user/getUserInfo`,axiosConfig)
-          .then((reaponse)=>{
-            if(reaponse.data.u_hasVote === 1){
-              this.$alert("이미 투표를 하셨습니다.")
-              this.$router.push({ name: 'VoteView'})
-            }
-          })
-          .catch((err)=>{
-              console.error(err)
-          })
+      checkAuth(){
+        if(this.checkvote === null){
+          this.$alert("잘못된 접근입니다.")
+          this.$router.push({ name: 'Home' })
+        }
       },
+
 
       checkDialog(local){
         this.$confirm(
@@ -101,9 +90,7 @@ export default {
       },
     },
     created(){
-      if (this.isLoggedIn) {
-        this.getuser()
-      }
+      this.checkAuth()
     }
 }
 </script>
