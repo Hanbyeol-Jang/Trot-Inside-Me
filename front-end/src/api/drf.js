@@ -18,6 +18,7 @@ export default{
         singerDelete: '/admin/singerdelete/',
         singerVideoList: '/board/videolist/',
         singerArticleList: '/board/articlelist/',
+        singerScheduleList: '/board/schedule/singerScheduleList/',
 
         // main
         mainList: '/board/mainlist/',

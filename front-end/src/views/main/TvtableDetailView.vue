@@ -7,7 +7,7 @@
       >
       <div class="text-center">
         <v-card-title v-if="fastTimeProgram">현재 보실 수 있는 프로그램은 <br />
-            <span class="highlight-program mr-3" color="pink">{{ fastTimeProgram.bc_title }}</span> 입니다.
+            <span class="highlight-program mx-3" color="pink">{{ fastTimeProgram.bc_title }}</span> 입니다.
         </v-card-title>
         <v-card-title v-else>
             현재 방영중인 프로그램이 없습니다.
@@ -85,7 +85,6 @@ export default {
         getTvtableProgram(){
             axios.get(`${SERVER.URL}/board/schedule/todayList`)
             .then((response)=>{
-                console.log(response.data)
                 this.Tvprograms = []
                 const programs = _.sortBy(response.data,'bc_title','bc_time')
                 for (var i in programs){

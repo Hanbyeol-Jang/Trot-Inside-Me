@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 // <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 import VideoIcon from '@/assets/icon/video-icon.svg'
 import MagazineIcon from '@/assets/icon/magazine-icon.svg'
@@ -85,6 +85,7 @@ export default {
   },
   computed: {
     ...mapState(['user']),
+    ...mapGetters(['isLoggedIn']),
   },
   methods: {
     goMenu(m_idx) {
@@ -95,7 +96,22 @@ export default {
       } else if (m_idx === 3) {
         this.$router.push({ name: 'TvtableDetailView' })
       } else if (m_idx === 4) {
-        this.$router.push({ name: 'UserLikeSingerView', params: { userId: this.user.u_email }})
+        if (this.isLoggedIn) {
+          this.$router.push({ name: 'UserLikeSingerView', params: { userId: this.user.u_email }})
+        } else {
+          this.$confirm({
+          message: "로그인 해주세요!",
+          button: {
+              yes: '로그인 하기',
+              no: '돌아가기',
+            },
+            callback: confirm => {
+              if (confirm) {
+                this.$router.push({ name: 'Login' })
+              }
+            }
+          })
+        }
       }
     },
   },
