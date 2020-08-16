@@ -44,7 +44,7 @@ public class BroadCastingSchedule {
 		//크롤링 시작
 		ArrayList<BroadCastingDto> list = new ArrayList<>();
 		try {
-			for (int i = 0; i < broad.size(); i++) {
+			for (int i = 1; i < broad.size(); i++) {
 				System.out.println(broad.get(i).getA_broadName());
 				Document doc = Jsoup.connect(broad.get(i).getA_broadUrl()).get();
 				ArrayList<String> brlist = new ArrayList<>();
@@ -61,9 +61,12 @@ public class BroadCastingSchedule {
 						dto.setBc_company(brlist.get(cnt));
 						dto.setBc_time(ee.text());
 						dto.setBc_title(broad.get(i).getA_broadName());
+						dto.setA_idx(broad.get(i).getA_idx());
+						dto.setS_idx(1);
 						list.add(dto);
 					}
 					cnt++;
+					
 				}
 			}
 			timeService.insertTodaySchedule(list);
@@ -75,12 +78,12 @@ public class BroadCastingSchedule {
 
 
 	// 하루에 한번 스케쥴 넣기
-//	@Scheduled(cron = "0 0 0 * * ?")
-	@Scheduled(cron = "0 30 10 * * ?")
+//	@Scheduled(cron = "0 30 10 * * ?")
+	@Scheduled(cron = "0 0 0 * * ?")
 	public void insertSingerSchedule() throws Exception {
 		// db 가수 리스트 받아옴.
 		List<SingerDto> dsList = timeService.selectSinger();
-		for (int i = 0; i < dsList.size(); i++) {
+		for (int i = 1; i < dsList.size(); i++) {
 			if(dsList.get(i).getS_cafeUrl()==null) {
 				dsList.remove(i);
 			}
@@ -94,12 +97,11 @@ public class BroadCastingSchedule {
 		optins.addArguments("headless");
 		WebDriver driver = new ChromeDriver(optins); // Driver 생성
 		List<BroadCastingDto> slist = new ArrayList<>();
-		for (int i = 0; i < dsList.size(); i++) {
+		for (int i = 1; i < dsList.size(); i++) {
 			System.out.println(dsList.get(i).getS_name());
 			driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 			driver.get(dsList.get(i).getS_cafeUrl());
 			
-//			 System.out.println(driver.getPageSource());
 			List<WebElement> schedule_detail_list = driver.findElements(By.className("schedule_detail"));
 			for (WebElement web : schedule_detail_list) {
 				String txt_day = web.findElement(By.className("txt_day")).getText();
@@ -111,7 +113,8 @@ public class BroadCastingSchedule {
 					time.setBc_time(inner_tit);
 					String tit_subject = web.findElement(By.className("tit_subject")).getText();
 					time.setBc_title(tit_subject);
-					time.setBc_member(dsList.get(i).getS_name());
+					time.setA_idx(1);
+					time.setS_idx(dsList.get(i).getS_idx());
 					slist.add(time);
 				}else {
 					List<WebElement> timel = web.findElements(By.className("inner_tit"));
@@ -121,7 +124,8 @@ public class BroadCastingSchedule {
 						time.setBc_date(txt_day);
 						time.setBc_time(timel.get(j).getText());
 						time.setBc_title(titlel.get(j).getText());
-						time.setBc_member(dsList.get(i).getS_name());
+						time.setA_idx(1);
+						time.setS_idx(dsList.get(i).getS_idx());
 						slist.add(time);
 					}
 				

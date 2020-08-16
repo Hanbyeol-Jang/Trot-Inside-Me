@@ -5,21 +5,21 @@
 <mapper namespace="com.web.curation.dao.TimeDao">
 
 	<insert id="insertTodaySchedule" parameterType="com.web.curation.dto.BroadCastingDto">
- 		insert into BroadCasting(bc_company,bc_time,bc_title) 
- 		value (#{bc_company},#{bc_time},#{bc_title})
+ 		insert into BroadCasting(bc_company,bc_time,bc_title,a_idx,s_idx) 
+ 		value (#{bc_company},#{bc_time},#{bc_title},#{a_idx},#{s_idx})
 	</insert>
 
  	<delete id="deleteYesterDaySchedule" >
- 		delete from BroadCasting where bc_member = "";
+ 		delete from BroadCasting where s_idx =1;
  	</delete>
  	
  	<insert id="insertSingerSchedule" parameterType="com.web.curation.dto.BroadCastingDto">
- 		insert into BroadCasting(bc_date, bc_company,bc_time, bc_member, bc_title) 
- 		value (#{bc_date},#{bc_company},#{bc_time},#{bc_member},#{bc_title})
+ 		insert into BroadCasting(bc_date, bc_company,bc_time, bc_title, a_idx, s_idx) 
+ 					value (#{bc_date},#{bc_company},#{bc_time},#{bc_title},#{a_idx},#{s_idx})
  	</insert>
  	
  	<delete id="deleteSingerSchedule" >
- 		delete from BroadCasting where bc_member != "";
+ 		delete from BroadCasting where a_idx = 1;
  	</delete>
  	
  	<select id="selectSinger" resultType="com.web.curation.dto.SingerDto">
@@ -30,6 +30,11 @@
  		select * from BroadCasting
  		where 1=1
  		and bc_idx = #{bc_idx}
+ 	</select>
+ 	
+ 	<select id="getImgByIdx" resultType="String">
+ 		select a_img from Admin
+ 		where a_idx = #{a_idx}
  	</select>
  </mapper>
         

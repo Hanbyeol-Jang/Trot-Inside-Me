@@ -1,5 +1,7 @@
 package com.web.curation.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import com.web.curation.dto.CoGoodDto;
 import com.web.curation.dto.CoReplyDto;
 import com.web.curation.dto.CommuDto;
 import com.web.curation.dto.CommuReply;
+import com.web.curation.dto.CommuUpload;
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.CommuService;
 import com.web.curation.service.UserService;
@@ -44,8 +46,8 @@ public class CommuController {
 	// 게시글 리스트 출력 + 좋아요 수 추가 + 댓글 수 추가
 	@ApiOperation("게시글 전체 리스트 출력")
 	@GetMapping("/list")
-	public ResponseEntity<List<CommuDto>> getCommuList(@RequestParam int page, 
-			@RequestParam int no, HttpServletRequest request) {
+	public ResponseEntity<List<CommuDto>> getCommuList(@RequestParam int page, @RequestParam int no,
+			HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -76,33 +78,39 @@ public class CommuController {
 					}
 				}
 				return new ResponseEntity<List<CommuDto>>(showList, HttpStatus.OK);
-			
+
 			} else {
 				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			}
 		}
 	}
 
-	// 게시글 추가
-	@ApiOperation("게시글 추가")
+	@ApiOperation("게시물 등록")
 	@PostMapping("/add")
-	public ResponseEntity<String> commuAdd(@RequestBody CommuDto dto, HttpServletRequest request) {
-		System.out.println(dto.getCo_img());
-		System.out.println(dto.toString());
+	public ResponseEntity<String> commuadd(CommuUpload up, HttpServletRequest request)
+			throws IllegalStateException, IOException {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
-			System.out.println("aa" + udto.getU_email());
-			dto.setCo_email(udto.getU_email());
-			System.out.println("nn" + dto.getCo_email());
-			System.out.println("img  : " + dto.getCo_img());
-			if (commuService.addCommu(dto)) {
-				return new ResponseEntity<String>("커뮤니티 게시물 추가 완료", HttpStatus.OK);
-			} else {
-				return new ResponseEntity<String>("커뮤니티 게시물 추가 에러 ", HttpStatus.NOT_FOUND);
+			CommuDto dto = new CommuDto();
+			if(up.getCo_img()!=null) {
+				String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getCo_img().getOriginalFilename();
+				File file = new File(saveUrl);
+				up.getCo_img().transferTo(file);
+				dto.setCo_img(saveUrl);
 			}
+
+			dto.setCo_content(up.getCo_content());
+			dto.setCo_email(udto.getU_email());
+			
+			if (commuService.addCommu(dto)) {
+				return new ResponseEntity<String>("success", HttpStatus.OK);
+			} 
+			
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
+
 	}
 
 	// 게시글 삭제
@@ -135,7 +143,7 @@ public class CommuController {
 						for (int i = 0; i < page + lastPageRemain; i++) {
 							showList.add(list.get(i));
 						}
-					}else {
+					} else {
 						return new ResponseEntity<List<CommuDto>>(list, HttpStatus.OK);
 					}
 					return new ResponseEntity<List<CommuDto>>(showList, HttpStatus.OK);
@@ -148,6 +156,21 @@ public class CommuController {
 		}
 	}
 
+	// 게시글 삭제
+	@ApiOperation("게시글 디테일에서 삭제")
+	@DeleteMapping("/detaildelete/{co_idx}")
+	public ResponseEntity<String> deleteCommu(@PathVariable int co_idx, HttpServletRequest request) {
+		System.out.println("detail delete");
+		UserDto udto = userService.getTokenInfo(request);
+		if (udto.getU_name().equals("F")) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		} else {
+			if (commuService.deleteCommu(co_idx)) {
+				return new ResponseEntity<String>("디테일에서 삭제 완료", HttpStatus.OK);
+			}
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
 
 	// 게시글 디테일 + 댓글 수 추가
 	@ApiOperation("게시글 디테일 + 댓글 리스트 출력 + 댓글 수 추가")
@@ -170,9 +193,10 @@ public class CommuController {
 	// 디테일 댓글 리스트 + 5개씩 페이징
 	@ApiOperation("디테일 댓글 리스트 + 5개씩 페이징")
 	@GetMapping("/detail/replylist/{co_idx}")
-	public ResponseEntity<List<CommuReply>> getDetailReplyList(@PathVariable int co_idx, @RequestParam("page") int page) {
-		System.out.println("스크롤 시켰다  page : "+page);
-		
+	public ResponseEntity<List<CommuReply>> getDetailReplyList(@PathVariable int co_idx,
+			@RequestParam("page") int page) {
+		System.out.println("스크롤 시켰다  page : " + page);
+
 		List<CommuReply> showList = new ArrayList<>();
 		try {
 			List<CommuReply> list = commuService.getDetailReplyList(co_idx);
@@ -190,13 +214,16 @@ public class CommuController {
 					showList.add(list.get(i));
 				}
 			}
+			for (CommuReply commuReply : list) {
+				System.out.println(commuReply.toString());
+			}
 			return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.OK);
 		}
 	}
 
-	 //게시물 디테일 수정
+	// 게시물 디테일 수정
 	@ApiOperation("게시물 디테일 수정")
 	@PutMapping("/update")
 	public ResponseEntity<String> updateDetail(@RequestBody CommuDto dto, HttpServletRequest request) {
@@ -215,8 +242,8 @@ public class CommuController {
 	// 댓글 추가
 	@ApiOperation("댓글 추가")
 	@PostMapping("/replyadd")
-	public ResponseEntity<List<CommuReply>> addCommuReply(@RequestBody CoReplyDto dto,
-			@RequestParam("page") int page, HttpServletRequest request) {
+	public ResponseEntity<List<CommuReply>> addCommuReply(@RequestBody CoReplyDto dto, @RequestParam("page") int page,
+			HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -239,7 +266,7 @@ public class CommuController {
 						for (int i = 0; i < page + lastPageRemain; i++) {
 							showList.add(list.get(i));
 						}
-					}else {
+					} else {
 						return new ResponseEntity<List<CommuReply>>(list, HttpStatus.OK);
 					}
 					return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
@@ -277,22 +304,20 @@ public class CommuController {
 						for (int i = 0; i < page + lastPageRemain; i++) {
 							showList.add(list.get(i));
 						}
-					}else {
+					} else {
 						return new ResponseEntity<List<CommuReply>>(list, HttpStatus.OK);
 					}
 					return new ResponseEntity<List<CommuReply>>(showList, HttpStatus.OK);
-				} 
+				}
 			}
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
 
 	// 게시글 좋아요 클릭
 	@ApiOperation("게시글 좋아요 선택 ")
 	@GetMapping("/good/{co_idx}")
-	public ResponseEntity<Integer> getGood(@PathVariable int co_idx, 
-			@RequestParam int isgood,
+	public ResponseEntity<Integer> getGood(@PathVariable int co_idx, @RequestParam int isgood,
 			HttpServletRequest request) {
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {

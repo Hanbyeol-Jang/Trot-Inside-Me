@@ -200,8 +200,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BroadCastingDto> singerScheduleList(String s_name) {
-		return boardDao.singerScheduleList(s_name);
+	public List<BroadCastingDto> singerScheduleList(int s_idx) {
+		return boardDao.singerScheduleList(s_idx);
 	}
 
 

@@ -2,7 +2,6 @@ package com.web.curation.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,10 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.BoardPK;
 import com.web.curation.dto.BroadCastingDto;
-import com.web.curation.dto.CommuReply;
 import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.ReplyDto;
 import com.web.curation.dto.SingerDto;
@@ -35,6 +31,7 @@ import com.web.curation.dto.UserDto;
 import com.web.curation.service.BoardService;
 import com.web.curation.service.TimeService;
 import com.web.curation.service.UserService;
+import com.web.curation.util.BroadCastingSchedule;
 import com.web.curation.util.KakaoAPI;
 import com.web.curation.util.YoutubeAPI;
 
@@ -44,7 +41,8 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/board")
 public class BoardController {
-
+	@Autowired
+	private BroadCastingSchedule broadCastingSchedule;
 	@Autowired
 	private BoardService boardService;
 	@Autowired
@@ -368,8 +366,8 @@ public class BoardController {
 
 	@GetMapping("/schedule/singerScheduleList/{s_idx}")
 	public ResponseEntity<List<BroadCastingDto>> singerScheduleList(@PathVariable("s_idx") int s_idx) {
-		SingerDto singerDto = boardService.singerSearch(s_idx);
-		List<BroadCastingDto> list = boardService.singerScheduleList(singerDto.getS_name());
+//		SingerDto singerDto = boardService.singerSearch(s_idx);
+		List<BroadCastingDto> list = boardService.singerScheduleList(s_idx);
 		if (list != null) {
 			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
 		} else {
@@ -399,17 +397,15 @@ public class BoardController {
 	}
 
 	// Youtube Search
-	@GetMapping("/search/youtube")
-	@ApiOperation(value = "영상 좋아요순으로 정렬")
-	public ResponseEntity<String> youtubesearch(@RequestParam String keyword) {
-		String result = "";
+	@GetMapping("/test/jinyong")
+	@ApiOperation(value = "진용 테스트")
+	public ResponseEntity<String> h() {
 		try {
-			System.out.println("실행");
-			result = youtubeAPI.search(keyword);
-		} catch (IOException e) {
+			broadCastingSchedule.insertTodaySchedule();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<String>(result, HttpStatus.OK);
-
-	}
+		return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+		}
 }

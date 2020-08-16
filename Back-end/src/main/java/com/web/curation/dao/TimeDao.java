@@ -14,5 +14,6 @@ public interface TimeDao {
 	void deleteSingerSchedule();
 	void insertSingerSchedule(List<BroadCastingDto> slist);
 	BroadCastingDto selectBoradCasting(int bc_idx);
+	String getImgByIdx(int a_idx);
 	
 }

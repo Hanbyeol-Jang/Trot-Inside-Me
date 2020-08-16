@@ -1,6 +1,7 @@
 package com.web.curation.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,13 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dto.BoardDto;
-import com.web.curation.dto.BoardPK;
-import com.web.curation.dto.CommuDto;
 import com.web.curation.dto.FollowDto;
 import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.UserDto;
@@ -43,6 +43,19 @@ public class UserController {
 		} else {
 			List<FollowDto> list = userService.getFollowList(dto.getU_email());
 			return new ResponseEntity<List<FollowDto>>(list, HttpStatus.OK);
+		}
+	}
+
+	@ApiOperation("마이페이지 팔로우 리스트(이메일)")
+	@GetMapping("/followlist/{u_email}")
+	public ResponseEntity<List<FollowDto>> followlistEmail(@PathVariable String u_email) {
+
+		try {
+			List<FollowDto> list = userService.getFollowList(u_email);
+
+			return new ResponseEntity<List<FollowDto>>(list, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -108,6 +121,71 @@ public class UserController {
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 
+	@ApiOperation("이메일 영상 리스트")
+	@GetMapping("/videolist/{u_email}")
+	public ResponseEntity<List<BoardDto>> videolistEmail(@PathVariable String u_email, @RequestParam("page") int page) {
+
+		try {
+			GoodDto gdto = new GoodDto();
+			gdto.setB_type(1);
+			gdto.setU_email(u_email);
+			List<BoardDto> list = userService.myBoardList(gdto);
+
+			List<BoardDto> showList = new ArrayList<>();
+			int lastPageRemain = list.size() % 5;
+			int lastPage = list.size() - lastPageRemain;
+			page = 5 * page - 5;
+			// 5개씩 보여주기
+			if (page < lastPage) {
+				for (int i = page; i < page + 5; i++) {
+					showList.add(list.get(i));
+				}
+			} else if (page == lastPage) {
+				for (int i = page; i < page + lastPageRemain; i++) {
+					showList.add(list.get(i));
+				}
+			}
+
+			return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@ApiOperation("이메일 영상  리스트")
+	@GetMapping("/articlelist/{u_email}")
+	public ResponseEntity<List<BoardDto>> articlelistEmail(@PathVariable String u_email,
+			@RequestParam("page") int page) {
+
+		try {
+
+			GoodDto gdto = new GoodDto();
+			gdto.setB_type(2);
+			gdto.setU_email(u_email);
+			List<BoardDto> list = userService.myBoardList(gdto);
+			
+			List<BoardDto> showList = new ArrayList<>();
+			int lastPageRemain = list.size() % 5;
+			int lastPage = list.size() - lastPageRemain;
+			page = 5 * page - 5;
+			// 5개씩 보여주기
+			if (page < lastPage) {
+				for (int i = page; i < page + 5; i++) {
+					showList.add(list.get(i));
+				}
+			} else if (page == lastPage) {
+				for (int i = page; i < page + lastPageRemain; i++) {
+					showList.add(list.get(i));
+				}
+			}
+			return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+
 	@GetMapping("/follow/{s_idx}")
 	public ResponseEntity<Integer> followApply(@PathVariable int s_idx, HttpServletRequest request,
 			@RequestParam("isfollow") int isfollow) {
@@ -118,7 +196,7 @@ public class UserController {
 			FollowDto dto = new FollowDto();
 			dto.setU_email(udto.getU_email());
 			dto.setS_idx(s_idx);
-			System.out.println("처음 받은값"+isfollow );
+			System.out.println("처음 받은값" + isfollow);
 			if (isfollow == 1) { // 좋아요 취소
 				if (userService.followDelete(dto)) {
 					isfollow = 0;
@@ -128,7 +206,7 @@ public class UserController {
 					isfollow = 1;
 				}
 			}
-			System.out.println("변경된  값"+isfollow );
+			System.out.println("변경된  값" + isfollow);
 			return new ResponseEntity<Integer>(isfollow, HttpStatus.OK);
 		}
 	}
@@ -161,6 +239,23 @@ public class UserController {
 		}
 	}
 
+	/* 커뮤니티에서 다른 사람 프로필 클릭 했을때 정보 가져오기 */
+	@ApiOperation("이메일로 다른 사람 정보 가져오기")
+	@GetMapping("/getUserInfo/{u_email}")
+	public ResponseEntity<HashMap<String, Object>> getUserInfoEmail(@PathVariable String u_email) {
+		try {
+
+			UserDto userDto = userService.getUserInfo(u_email);
+
+			HashMap<String, Object> map = new HashMap<>();
+
+			map.put("userInfo", userDto);
+
+			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
 //수정
 //	@PostMapping("/accounts/logout")
 //	@ApiOperation(value = "로그아웃")
