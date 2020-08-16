@@ -1,10 +1,18 @@
 <template>
   <div>
-    <div class="my-5 d-flex justify-sm-space-between">
-      <v-spacer></v-spacer>       
-      <v-btn x-large color="primary" @click="createCommunity"><v-icon class="mr-2">mdi-pencil</v-icon>게시글 작성</v-btn>
-    </div>
-    <br>
+      <div class="d-flex justify-space-between px-4 mb-2">
+        <img src="@/assets/image/trot_logo.png" alt=""
+                    
+            width="120px" class="mt-4">
+        <v-btn rounded 
+                    
+          color="pink" 
+          dark
+          class="mt-4" 
+          @click="createCommunity">
+          <div class="mx-2"><v-icon class="mr-2">mdi-pencil</v-icon>게시글 작성</div>   
+        </v-btn>
+      </div>
       <v-tabs
           color="pink"
           class="d-flex justify-center">

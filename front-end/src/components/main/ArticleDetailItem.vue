@@ -11,7 +11,7 @@
                 >{{ article.b_company }}</v-card-title>
 
                 <v-card-subtitle>{{ article.b_date }}</v-card-subtitle>
-                <v-btn rounded color="pink" dark class="ml-3" target="_blank" :href="article.b_url">
+                <v-btn rounded color="pink" dark class="ml-3" :href="article.b_url">
                     <h3><i class="fas fa-newspaper mr-2"></i>기사 보기</h3></v-btn>
               </div>
               <v-avatar

@@ -1,13 +1,19 @@
 <template>
   <div align="center mt-8">
-    <v-btn
-        color="pink"
-        class="mt-4"
-        dark
-        @click="goVote"
-    >
-    투표하기
-    </v-btn>
+
+      <div class="d-flex justify-space-between px-4">
+        <img src="@/assets/image/trot_logo.png" alt=""
+                    
+            width="120px" class="mt-4">
+        <v-btn rounded 
+                    
+          color="pink" 
+          dark
+          class="mt-4" 
+          @click="goVote">
+            <div class="mx-4"><i class="fas fa-vote-yea mr-2"></i>투표하기</div>
+        </v-btn>
+      </div>
     <embed class="my-4 mx-1"                    
       src="https://public.tableau.com/views/trot/1?:language=ko&:display_count=y&publish=yes&:origin=viz_share_link:showVizHome=no&:embed=true"
       width="100%" height="1400px">
