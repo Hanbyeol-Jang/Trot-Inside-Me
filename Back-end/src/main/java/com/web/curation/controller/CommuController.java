@@ -95,7 +95,7 @@ public class CommuController {
 		} else {
 			CommuDto dto = new CommuDto();
 			if(up.getCo_img()!=null) {
-				String saveUrl = "C:\\SSAFY\\PTJ\\img\\" + up.getCo_img().getOriginalFilename();
+				String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getCo_img().getOriginalFilename();
 				File file = new File(saveUrl);
 				up.getCo_img().transferTo(file);
 				dto.setCo_img(saveUrl);
