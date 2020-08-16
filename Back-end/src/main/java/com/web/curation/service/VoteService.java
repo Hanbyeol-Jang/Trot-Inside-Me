@@ -24,4 +24,10 @@ public interface VoteService {
 
 	/* 지난주 가수 투표 전체 */
 	int lastWeekTotal(String s_name);
+	
+	/* 이번주 순위 */
+	int thisWeekRank(int s_idx);
+
+	/* 지난주 순위 */
+	int lastWeekRank(String s_name);
 }

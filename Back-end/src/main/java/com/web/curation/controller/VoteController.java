@@ -44,7 +44,7 @@ public class VoteController {
 
 	/* 투표하기 */
 	@ApiOperation("투표했는지 확인")
-	@GetMapping("/voteCheck/{u_email}/{u_hasVote}")
+	@GetMapping("/voteCheck/{u_email}")
 	public ResponseEntity<HashMap<String, Object>> voteCheck(@PathVariable String u_email) {
 		try {
 
@@ -52,7 +52,7 @@ public class VoteController {
 
 			HashMap<String, Object> map = new HashMap<>();
 
-			map.put("hasVote?", flag);
+			map.put("hasVote", flag);
 
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
@@ -70,6 +70,9 @@ public class VoteController {
 			int lastWeek = voteService.lastWeek(s_name);
 			int lastWeekTotal = voteService.lastWeekTotal(s_name);
 
+			int thisWeekRank = voteService.thisWeekRank(s_idx);
+			int lastWeekRank = voteService.lastWeekRank(s_name);
+
 			HashMap<String, Object> map = new HashMap<>();
 
 			map.put("s_name", s_name);
@@ -77,6 +80,9 @@ public class VoteController {
 			map.put("thisWeekTotal", thisWeekTotal);
 			map.put("lastWeek", lastWeek);
 			map.put("lastWeekTotal", lastWeekTotal);
+
+			map.put("thisWeekRank", thisWeekRank);
+			map.put("lastWeekRank", lastWeekRank);
 
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {

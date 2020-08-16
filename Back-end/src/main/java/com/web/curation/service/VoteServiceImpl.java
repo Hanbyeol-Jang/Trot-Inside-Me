@@ -58,4 +58,16 @@ public class VoteServiceImpl implements VoteService {
 		return temp;
 	}
 
+	@Override
+	public int thisWeekRank(int s_idx) {
+		int temp = voteDao.thisWeekRank(s_idx);
+		return temp;
+	}
+
+	@Override
+	public int lastWeekRank(String s_name) {
+		int temp = voteDao.lastWeekRank(s_name);
+		return temp;
+	}
+
 }
