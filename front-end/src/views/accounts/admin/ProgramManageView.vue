@@ -10,29 +10,33 @@
       <template v-slot:default>
         <thead>
           <tr>
+            <th class="text-left">이미지</th>
             <th class="text-left">프로그램명</th>
             <th class="text-center">삭제</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="program in programs" :key="program.a_idx">
-            <td><a :href="program.a_broadUrl">{{ program.a_broadName }}<i class="fas fa-external-link-alt ml-1"></i></a></td>
-            <!-- <td v-if="program.a_broadUrl"><a :href="program.a_broadUrl">URL<i class="fas fa-external-link-alt ml-1"></i></a></td> -->
-            <!-- <td v-else>미등록</td> -->
+            <td>
+              <v-avatar
+                class="my-3 elevation-2 singer-detail"
+                size="60">
+                <img
+                  v-if="program.a_img"
+                  :src="program.a_img"
+                  alt="Program Default"
+                >
+                <img
+                  v-else
+                  src="@/assets/image/default_img.png">
+              </v-avatar>
+            </td>
+            <td>
+              <a :href="program.a_broadUrl">
+                {{ program.a_broadName }}<i class="fas fa-external-link-alt ml-1"></i>
+              </a>
+            </td>
             <td class="text-center">
-              <!-- <v-btn
-              depressed
-              small
-            >
-              View User
-
-              <v-icon
-                color="orange darken-4"
-                right
-              >
-                mdi-open-in-new
-              </v-icon>
-            </v-btn> -->
               <v-btn icon @click="deleteProgram(program.a_idx)"><i class="fas fa-trash-alt"></i></v-btn>
             </td>
           </tr>

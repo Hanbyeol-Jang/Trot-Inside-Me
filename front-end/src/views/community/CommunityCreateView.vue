@@ -52,13 +52,14 @@ export default {
                 'Content-Type': 'multipart/form-data'
               }
             }
-            const dto = new FormData()
+            let dto = new FormData()
             dto.append('co_content',this.content)
             dto.append('co_img',this.image)
             // const data = {
             //   'co_content' : this.content,
             //   'co_img' : this.image
             // }
+            console.log(dto)
             axios.post(`${SERVER.URL}/community/add`,dto,axiosConfig2)
             .then(()=>{
                 this.$router.push({ name: 'CommunityIndexView'})

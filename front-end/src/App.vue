@@ -3,7 +3,7 @@
     <Header/>
     <v-main 
       id="scrolling-techniques-7"
-      class="mt-4">
+      class="mt-4 mb-8">
       <v-container
         fluid
       >

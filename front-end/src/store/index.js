@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import cookies from 'vue-cookies'
 import router from '@/router'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 import SERVER from '@/api/drf'
 
@@ -92,15 +93,24 @@ export default new Vuex.Store({
         .then((res)=>{
             commit('SET_TOKEN', res.data)
             dispatch('getUser')
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: '로그인 되었습니다!',
+              showConfirmButton: false,
+              timer: 1500
+            })
             router.push({ name: 'Home' })
         })
         .catch((err)=>{ console.log(err) })
     },
     kakaoLogout({ commit }) {
       window.location.href = SERVER.ROUTES.kakaoLogout
+
       commit('SET_TOKEN', null)
       cookies.remove('auth-token')
       router.push({ name: 'Home' })
+      // 로그아웃 확인 버튼
     },
     kakaoOff({ getters }) { 
       axios.post(SERVER.URL + SERVER.ROUTES.kakaoOff, null, getters.config)
@@ -131,15 +141,32 @@ export default new Vuex.Store({
         .catch(err => { console.error(err) })
     },
     postSinger(context, singerData) {
-      axios.post(SERVER.URL + SERVER.ROUTES.singerCreate, singerData)
+      const config ={
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }
+      axios.post(SERVER.URL + SERVER.ROUTES.singerCreate, singerData, config)
         .then(() => {
           router.push({ name: 'SingerManageView' })
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            text: '가수 등록 완료!',
+            showConfirmButton: false,
+            timer: 1500
+          })
         })
         .catch(err => console.log(err))
     },
     deleteSinger(context, singerId) { 
       axios.delete(SERVER.URL + SERVER.ROUTES.singerDelete + singerId)
         .then(() => {
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            text: '가수 삭제 완료!',
+            showConfirmButton: false,
+            timer: 500
+          })
           location.reload(true)
         })
         .catch(err => console.log(err))
@@ -178,10 +205,20 @@ export default new Vuex.Store({
         .then(res => { commit('SET_PROGRAMS', res.data) })
         .catch(err => { console.error(err) })
     },
-    postProgram(context, singerData) {
-      axios.post(SERVER.URL + SERVER.ROUTES.programCreate, singerData)
+    postProgram(context, programData) {
+      const config ={
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }
+      axios.post(SERVER.URL + SERVER.ROUTES.programCreate, programData, config)
         .then(() => {
           router.push({ name: 'ProgramManageView' })
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            text: '프로그램 등록 완료!',
+            showConfirmButton: false,
+            timer: 1500
+          })
         })
         .catch(err => console.log(err))
     },
@@ -189,6 +226,13 @@ export default new Vuex.Store({
       axios.delete(SERVER.URL + SERVER.ROUTES.programDelete + programId)
         .then(() => {
           location.reload(true)
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            text: '프로그램 삭제 완료!',
+            showConfirmButton: false,
+            timer: 500
+          })
         })
         .catch(err => console.log(err))
     },
