@@ -52,7 +52,7 @@ public class VoteController {
 
 			HashMap<String, Object> map = new HashMap<>();
 
-			map.put("hasVote?", flag);
+			map.put("hasVote", flag);
 
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
