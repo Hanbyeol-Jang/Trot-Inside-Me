@@ -31,7 +31,6 @@ import com.web.curation.dto.UserDto;
 import com.web.curation.service.BoardService;
 import com.web.curation.service.TimeService;
 import com.web.curation.service.UserService;
-import com.web.curation.util.BroadCastingSchedule;
 import com.web.curation.util.KakaoAPI;
 import com.web.curation.util.YoutubeAPI;
 
@@ -41,8 +40,6 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/board")
 public class BoardController {
-	@Autowired
-	private BroadCastingSchedule broadCastingSchedule;
 	@Autowired
 	private BoardService boardService;
 	@Autowired
@@ -54,30 +51,30 @@ public class BoardController {
 	@Autowired
 	private YoutubeAPI youtubeAPI;
 
-	// 가수 리스트
+	//메인 가수 리스트
 	@GetMapping("/singerlist")
-	@ApiOperation(value = "가수 리스트")
+	@ApiOperation(value = "메인 가수 리스트")
 	public ResponseEntity<List<SingerDto>> singerList() {
 		List<SingerDto> list = boardService.singerAllList();
 		if (list != null) {
+			list.remove(0);
 			return new ResponseEntity<List<SingerDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
 
-	// 가수 디테일
+	
+	//메인 가수 디테일
 	@GetMapping("/singerdetail/{s_idx}")
-	@ApiOperation(value = "가수 디테일")
+	@ApiOperation(value = "메인 가수 디테일")
 	public ResponseEntity<SingerDto> singerDetail(@PathVariable int s_idx, HttpServletRequest request) {
 		String token = request.getHeader("token");
 		GoodDto dto = new GoodDto();
 		dto.setB_idx(s_idx);
 		if (!token.equals("null")) {// 회원
-			System.out.println("회원이다잉");
 			dto.setU_email(userService.getTokenInfo(request).getU_email());
 		}
-		System.out.println(dto.toString());
 		SingerDto singerDto = boardService.singerDetail(dto);
 		if (singerDto != null) {
 			return new ResponseEntity<SingerDto>(singerDto, HttpStatus.OK);
@@ -85,10 +82,13 @@ public class BoardController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	
+	
 
-	// 해당 영상/기사 리스트 - 좋아요
+	//메인 해당 영상/기사 리스트 - 좋아요
 	@GetMapping("/mainlist/{b_type}")
-	@ApiOperation(value = "메인 리스트 ")
+	@ApiOperation(value = "메인 기사, 영상 리스트 ")
 	public ResponseEntity<List<BoardPK>> mainList(@PathVariable int b_type, @RequestParam int page) {
 		List<BoardPK> showList = new ArrayList<BoardPK>();
 		List<BoardPK> list = boardService.mainlist(b_type);
@@ -108,6 +108,32 @@ public class BoardController {
 		return new ResponseEntity<List<BoardPK>>(showList, HttpStatus.OK);
 	}
 
+	//메인 디테일
+	@GetMapping("/detail/{b_type}/{b_idx}")
+	@ApiOperation(value = "메인 영상/기사  디테일 ")
+	public ResponseEntity<BoardPK> videoDetail(@PathVariable("b_type") int b_type, @PathVariable("b_idx") int b_idx,
+			HttpServletRequest request) {
+		String token = request.getHeader("token");
+		GoodDto dto = new GoodDto();
+		dto.setB_idx(b_idx);
+		dto.setB_type(b_type);
+		if (!token.equals("null")) {// 회원
+			UserDto udto = userService.getTokenInfo(request);
+			if (udto.getU_name().equals("F")) {
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			}
+			dto.setU_email(udto.getU_email());
+		}
+		BoardPK boardDto = boardService.detail(dto);
+		if (boardDto != null) {
+			return new ResponseEntity<BoardPK>(boardDto, HttpStatus.OK);
+		}
+
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	}
+
+	
+	
 	// 해당 가수 영상 리스트
 	@GetMapping("/videolist/{s_idx}")
 	@ApiOperation(value = "가수로 검색 비디오")
@@ -134,11 +160,9 @@ public class BoardController {
 		// 5개씩 보여주기
 		if (page < lastPage) {
 			for (int i = page; i < page + 5; i++) {
-				System.out.println("5개");
 				showList.add(list.get(i));
 			}
 		} else if (page == lastPage) {
-			System.out.println("나머지");
 			for (int i = page; i < page + lastPageRemain; i++) {
 				showList.add(list.get(i));
 			}
@@ -172,11 +196,9 @@ public class BoardController {
 		// 5개씩 보여주기
 		if (page < lastPage) {
 			for (int i = page; i < page + 5; i++) {
-				System.out.println("5개");
 				showList.add(list.get(i));
 			}
 		} else if (page == lastPage) {
-			System.out.println("나머지");
 			for (int i = page; i < page + lastPageRemain; i++) {
 				showList.add(list.get(i));
 			}
@@ -188,36 +210,11 @@ public class BoardController {
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 
-	@GetMapping("/detail/{b_type}/{b_idx}")
-	@ApiOperation(value = "영상/기사  디테일 ")
-	public ResponseEntity<BoardPK> videoDetail(@PathVariable("b_type") int b_type, @PathVariable("b_idx") int b_idx,
-			HttpServletRequest request) {
-		String token = request.getHeader("token");
-		System.out.println(token);
-		GoodDto dto = new GoodDto();
-		dto.setB_idx(b_idx);
-		dto.setB_type(b_type);
-		if (!token.equals("null")) {// 회원
-			UserDto udto = userService.getTokenInfo(request);
-			if (udto.getU_name().equals("F")) {
-				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-			}
-			dto.setU_email(udto.getU_email());
-		}
-		System.out.println(token + " /// " + dto.toString());
-		BoardPK boardDto = boardService.detail(dto);
-		if (boardDto != null) {
-			return new ResponseEntity<BoardPK>(boardDto, HttpStatus.OK);
-		}
-
-		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-	}
 
 	@GetMapping("/replylist/{b_type}/{b_idx}")
 	@ApiOperation(value = "댓글리스트  ")
 	public ResponseEntity<List<ReplyDto>> replylist(@PathVariable("b_type") int b_type, @RequestParam("page") int page,
 			@PathVariable("b_idx") int b_idx) {
-		System.out.println("reply - page" + page);
 		GoodDto dto = new GoodDto();
 		dto.setB_idx(b_idx);
 		dto.setB_type(b_type);
@@ -330,7 +327,6 @@ public class BoardController {
 	@GetMapping("/good/{b_type}/{b_idx}")
 	public ResponseEntity<Integer> goodClick(@PathVariable("b_type") int b_type, @PathVariable("b_idx") int b_idx,
 			@RequestParam int isgood, HttpServletRequest request) {
-		System.out.println("좋아요 입력 : " + isgood);
 		UserDto udto = userService.getTokenInfo(request);
 		if (udto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -348,12 +344,13 @@ public class BoardController {
 					isgood = 1;
 				}
 			}
-			System.out.println("변경후  좋아요 상태 : " + isgood);
 			return new ResponseEntity<Integer>(isgood, HttpStatus.OK);
 
 		}
 	}
 
+	//편성표 리스트
+	@ApiOperation("편성표 리스트 ")
 	@GetMapping("/schedule/todayList")
 	public ResponseEntity<List<BroadCastingDto>> todaylist() {
 		List<BroadCastingDto> list = boardService.broadCastAllList();
@@ -364,9 +361,10 @@ public class BoardController {
 		}
 	}
 
+	//가수 스케줄 리스트
+	@ApiOperation("가수 스케줄 리스트 ")
 	@GetMapping("/schedule/singerScheduleList/{s_idx}")
 	public ResponseEntity<List<BroadCastingDto>> singerScheduleList(@PathVariable("s_idx") int s_idx) {
-//		SingerDto singerDto = boardService.singerSearch(s_idx);
 		List<BroadCastingDto> list = boardService.singerScheduleList(s_idx);
 		if (list != null) {
 			return new ResponseEntity<List<BroadCastingDto>>(list, HttpStatus.OK);
@@ -378,12 +376,9 @@ public class BoardController {
 	// 나에게 메세지 보내기 (알림)
 	@GetMapping("/tvmsg/{bc_idx}")
 	public ResponseEntity<String> selectBroadCasting(@PathVariable("bc_idx") int bc_idx, HttpServletRequest request) {
-
 		String useremail = userService.getTokenInfo(request).getU_email();
 		String accessToken = userService.getUserInfo(useremail).getU_accessToken();
-		System.out.println(bc_idx);
 		BroadCastingDto broadCastingDto = timeService.selectBroadCasting(bc_idx);
-		System.out.println("broadCastingDto  : " + broadCastingDto);
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		map.put("broadCastingDto", broadCastingDto);
 		map.put("accessToken", accessToken);
@@ -395,17 +390,4 @@ public class BoardController {
 			return new ResponseEntity<String>("FAIL", HttpStatus.NOT_FOUND);
 		}
 	}
-
-	// Youtube Search
-	@GetMapping("/test/jinyong")
-	@ApiOperation(value = "진용 테스트")
-	public ResponseEntity<String> h() {
-		try {
-			broadCastingSchedule.insertTodaySchedule();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
-		}
 }

@@ -26,7 +26,6 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	BoardDao boardDao;
 
-	
 	static Map<String, String> m = new HashMap<String, String>() {
 		{
 			put("Jan", "01");
@@ -58,7 +57,7 @@ public class BoardServiceImpl implements BoardService {
 	public SingerDto singerDetail(GoodDto dto) {
 		return boardDao.singerDetail(dto);
 	}
-	
+
 	@Override
 	public List<BoardPK> mainlist(int b_type) {
 		return boardDao.mainlist(b_type);
@@ -81,10 +80,10 @@ public class BoardServiceImpl implements BoardService {
 
 				String vsrc = "https://tv.naver.com/embed/" + vno;
 				if (isUrl(vno, s_name)) {
-					System.out.println(s_name + "에 대한 " + vno + "가  DB에 있습니다.");
+//					System.out.println(s_name + "에 대한 " + vno + "가  DB에 있습니다.");
 					continue;
 				} else {
-					System.out.println(vno + "가  DB에 없습니다.");
+//					System.out.println(vno + "가  DB에 없습니다.");
 					BoardDto boardDto = new BoardDto();
 					boardDto.setB_thumbnail(e.select("a img").attr("src")); // 썸네일
 					boardDto.setB_title(e.select("a").attr("title")); // 제목
@@ -120,7 +119,6 @@ public class BoardServiceImpl implements BoardService {
 					System.out.println(s_name + "에 대한 " + e.select("link").text() + "가  DB에 있습니다.");
 				} else {
 					String b_date = e.select("pubDate").text();
-//					System.out.println(b_date.substring(12, 16)+"년 " + m.get(b_date.substring(8,11))+"월 "+b_date.substring(5,7)+"일");
 					BoardDto boardDto = new BoardDto();
 					boardDto.setB_title(e.select("title").text());
 					boardDto.setB_url(e.select("link").text());
@@ -175,7 +173,6 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.replylist(b_idx);
 	}
 
-
 	@Override
 	public boolean addComment(ReplyDto replyDto) {
 		return boardDao.addComment(replyDto) == 1;
@@ -185,14 +182,17 @@ public class BoardServiceImpl implements BoardService {
 	public boolean deleteComment(GoodDto replyDto) {
 		return boardDao.deleteComment(replyDto) == 1;
 	}
+
 	@Override
 	public boolean goodClick(GoodDto dto) {
 		return boardDao.goodClick(dto) == 1;
 	}
+
 	@Override
 	public boolean goodClickCancel(GoodDto dto) {
 		return boardDao.goodClickCancel(dto) == 1;
 	}
+
 	// 편성표 전체 출력
 	@Override
 	public List<BroadCastingDto> broadCastAllList() {
@@ -204,9 +204,6 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.singerScheduleList(s_idx);
 	}
 
-
-
-
 //
 //	@Override
 //	public int goodCount(BoardPK boardPK) {
@@ -217,5 +214,5 @@ public class BoardServiceImpl implements BoardService {
 //	public int commentCount(BoardPK boardPK) {
 //		return boardDao.commentCount(boardPK);
 //	}
-	
+
 }

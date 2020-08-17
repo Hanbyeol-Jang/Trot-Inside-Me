@@ -20,22 +20,22 @@ public interface UserDao {
 
 	/* 회원정보 삭제 */
 	public void delete(UserDto userDto) throws SQLException;
-	
+
 	/* 비밀번호 찾기 */
 	public String findPassword(String email);
 
 	/* 비밀번호 변경 */
 	public void changePassword(UserDto userDto);
 
-	//팔로우 전체 리스트 출력
+	// 팔로우 전체 리스트 출력
 	public List<FollowDto> getFollowList(String userEmail);
 
-	//팔로우 추가
+	// 팔로우 추가
 	public int followApply(FollowDto dto);
 
-	//팔로우 삭제
+	// 팔로우 삭제
 	public int followDelete(FollowDto dto);
 
-	//마이페이지 영상, 기사 리스트 
+	// 마이페이지 영상, 기사 리스트
 	public List<BoardDto> myBoardList(GoodDto gdto);
 }

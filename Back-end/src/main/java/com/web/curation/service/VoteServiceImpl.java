@@ -39,6 +39,12 @@ public class VoteServiceImpl implements VoteService {
 	}
 
 	@Override
+	public String singerImg(int s_idx) {
+		String temp = voteDao.singerImg(s_idx);
+		return temp;
+	}
+
+	@Override
 	public int thisWeek(int s_idx) {
 		int temp = voteDao.thisWeek(s_idx);
 		return temp;

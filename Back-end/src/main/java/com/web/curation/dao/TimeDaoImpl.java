@@ -19,38 +19,42 @@ public class TimeDaoImpl implements TimeDao {
 
 	@Override
 	public void deleteYesterDaySchedule() {
-		session.delete(ns+"deleteYesterDaySchedule");
+		session.delete(ns + "deleteYesterDaySchedule");
 	}
+
 	@Override
 	public void insertTodaySchedule(ArrayList<BroadCastingDto> list) {
 		for (BroadCastingDto timeDto : list) {
-			session.insert(ns+"insertTodaySchedule", timeDto);
+			session.insert(ns + "insertTodaySchedule", timeDto);
 		}
 	}
+
 	@Override
 	public List<SingerDto> selectSinger() {
-		return session.selectList(ns+"selectSinger");
+		return session.selectList(ns + "selectSinger");
 	}
+
 	@Override
 	public void deleteSingerSchedule() {
-		//bc_member가 널이 아니면
-		session.delete(ns+"deleteSingerSchedule");
+		// bc_member가 널이 아니면
+		session.delete(ns + "deleteSingerSchedule");
 	}
+
 	@Override
 	public void insertSingerSchedule(List<BroadCastingDto> slist) {
 		for (BroadCastingDto timeDto : slist) {
-			session.insert(ns+"insertSingerSchedule", timeDto);
+			session.insert(ns + "insertSingerSchedule", timeDto);
 		}
 	}
+
 	@Override
 	public BroadCastingDto selectBoradCasting(int bc_idx) {
-		return session.selectOne(ns+"selectBroadCasting",bc_idx);
+		return session.selectOne(ns + "selectBroadCasting", bc_idx);
 	}
+
 	@Override
 	public String getImgByIdx(int a_idx) {
-		return session.selectOne(ns+"getImgByIdx", a_idx);
+		return session.selectOne(ns + "getImgByIdx", a_idx);
 	}
-
-
 
 }

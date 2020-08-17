@@ -16,6 +16,9 @@ public interface VoteService {
 	/* idx 이름으로 변환 */
 	String idxToName(int s_idx);
 
+	/* singer 이미지 */
+	String singerImg(int s_idx);
+
 	/* 가수 투표 현황 */
 	int thisWeek(int s_idx);
 
@@ -27,16 +30,16 @@ public interface VoteService {
 
 	/* 지난주 가수 투표 전체 */
 	int lastWeekTotal(String s_name);
-	
+
 	/* 이번주 순위 */
 	int thisWeekRank(int s_idx);
 
 	/* 지난주 순위 */
 	int lastWeekRank(String s_name);
-	
+
 	/* 이번주 top 3 */
 	List<TopDto> thisWeekTopThree();
-	
+
 	/* 지난주 top 3 */
 	List<TopDto> lastWeekTopThree();
 }

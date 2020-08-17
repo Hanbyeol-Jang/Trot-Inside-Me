@@ -16,7 +16,6 @@ public class TimeServiceImpl implements TimeService {
 	@Autowired
 	TimeDao dao;
 
-
 	@Override
 	public void deleteYesterDaySchedule() {
 		dao.deleteYesterDaySchedule();
@@ -35,7 +34,7 @@ public class TimeServiceImpl implements TimeService {
 	@Override
 	public void deleteSingerSchedule() {
 		dao.deleteSingerSchedule();
-	
+
 	}
 
 	@Override
@@ -45,7 +44,6 @@ public class TimeServiceImpl implements TimeService {
 
 	@Override
 	public BroadCastingDto selectBroadCasting(int bc_idx) {
-		
 		return dao.selectBoradCasting(bc_idx);
 	}
 

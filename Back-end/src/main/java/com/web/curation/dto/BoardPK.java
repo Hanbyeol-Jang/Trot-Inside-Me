@@ -13,10 +13,10 @@ public class BoardPK {
 	private String b_company;
 	private String b_member;
 	private String b_content;
-	
-	private int b_cnt; // 게시글 총 갯수 
+
+	private int b_cnt; // 게시글 총 갯수
 	private int br_cnt; // 댓글 수
-	
-	private int good_cnt; // 좋아요 수 
-	private int good_flag ; //좋아요 클릭 유무 
+
+	private int good_cnt; // 좋아요 수
+	private int good_flag; // 좋아요 클릭 유무
 }

@@ -27,6 +27,12 @@
 		where	s_idx = #{s_idx};
 	</select>
 	
+	<select id="singerImg" resultType="String">
+		SELECT 	s_img
+		from	Singer
+		where	s_idx = #{s_idx};
+	</select>
+	
 	<select id="thisWeek" resultType="int">
 		SELECT 	COUNT(s_idx) 
 		FROM 	Vote
@@ -78,9 +84,11 @@
 	
 	<select id="thisWeekTopThree" resultType="com.web.curation.dto.TopDto">
 		SELECT 	sub.rankk,
-				sub.s_name
+				sub.s_name,
+				sub.s_img
 		from	(	select	v.s_idx,
 							s.s_name,
+							s.s_img,
 							COUNT(v.s_idx) as cnt,
 							RANK () OVER (ORDER by cnt DESC ) as rankk
 					from	Vote v left outer join Singer s
@@ -93,12 +101,15 @@
 	
 	<select id="lastWeekTopThree" resultType="com.web.curation.dto.TopDto">
 		SELECT 	sub.rankk,
-				sub.s_name
+				sub.s_name,
+				sub.s_img
 		from
-		(select	v.s_name,
+		(		select	v.s_name,
+						s.s_img,
 				COUNT(v.s_name) as cnt,
 				RANK () OVER (ORDER by cnt DESC ) as rankk
-		from	VoteResult v
+		from	VoteResult v left outer join Singer s
+					on v.s_name =s.s_name 
 		GROUP 	by s_name 
 		) as sub
 		order	by sub.rankk

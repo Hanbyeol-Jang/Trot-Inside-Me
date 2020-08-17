@@ -34,6 +34,11 @@ public class VoteDaoImpl implements VoteDao {
 	}
 
 	@Override
+	public String singerImg(int s_idx) {
+		return session.selectOne(ns + "singerImg", s_idx);
+	}
+
+	@Override
 	public int thisWeek(int s_idx) {
 		return session.selectOne(ns + "thisWeek", s_idx);
 	}

@@ -24,7 +24,6 @@ import com.web.curation.dto.SingerTVUpload;
 import com.web.curation.dto.UserDto;
 import com.web.curation.service.AdminServcie;
 import com.web.curation.service.UserService;
-import com.web.curation.util.JwtTokenProvider;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -37,13 +36,10 @@ public class AdminController {
 	private UserService userService;
 
 	@Autowired
-	JwtTokenProvider jwt;
-
-	@Autowired
 	private AdminServcie adminService;
 
-	// 로그인
-	@ApiOperation("로그인")
+	// 관리자 로그인
+	@ApiOperation("관리자 로그인")
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody UserDto user, HttpServletRequest request) {
 		UserDto dto = userService.getUserInfo(user.getU_email());
@@ -52,7 +48,8 @@ public class AdminController {
 		return new ResponseEntity<>(token, HttpStatus.OK);
 	}
 
-	// 로그아웃..
+	// 관리자 로그아웃..
+	@ApiOperation("관리자 로그아웃")
 	@GetMapping("/logout")
 	public ResponseEntity<String> logout() {
 		return new ResponseEntity<>("로그아웃", HttpStatus.OK);
@@ -64,6 +61,7 @@ public class AdminController {
 	public ResponseEntity<List<AdminDto>> broadSchedulelist() {
 		List<AdminDto> list = adminService.getBroadScheduleList();
 		if (list != null) {
+			list.remove(0);
 			return new ResponseEntity<List<AdminDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -77,7 +75,6 @@ public class AdminController {
 		AdminDto dto = new AdminDto();
 		if (up.getImg() != null) {
 			String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getImg().getOriginalFilename();
-//			String saveUrl = "C:\\SSAFY\\img\\" + up.getImg().getOriginalFilename();
 			File file = new File(saveUrl);
 			up.getImg().transferTo(file);
 			dto.setA_img(saveUrl);
@@ -99,8 +96,7 @@ public class AdminController {
 	public ResponseEntity<String> DeleteBroadSchedule(@PathVariable int a_idx) {
 		// 이미지 처리
 		String imgurl = adminService.getTVImgUrl(a_idx);
-		System.out.println(imgurl);
-		if (imgurl != null) { // 이미지 찾아서 삭제
+		if (imgurl != null) { 
 			File file = new File(imgurl);
 			file.delete();
 		}
@@ -117,6 +113,7 @@ public class AdminController {
 	public ResponseEntity<List<SingerDto>> getSingerList() {
 		List<SingerDto> list = adminService.getSingerList();
 		if (list != null) {
+			list.remove(0);
 			return new ResponseEntity<List<SingerDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -131,7 +128,6 @@ public class AdminController {
 		dto.setS_name(up.getName());
 		if (up.getImg() != null) {
 			String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getImg().getOriginalFilename();
-//			String saveUrl = "C:\\SSAFY\\img\\" + up.getImg().getOriginalFilename();
 			File file = new File(saveUrl);
 			up.getImg().transferTo(file);
 			dto.setS_img(saveUrl);
@@ -152,8 +148,7 @@ public class AdminController {
 	public ResponseEntity<String> deleteSinger(@PathVariable int s_idx) {
 		// 이미지 처리
 		String imgurl = adminService.getSingerImgUrl(s_idx);
-		System.out.println(imgurl);
-		if (imgurl != null) { // 이미지 찾아서 삭제
+		if (imgurl != null) { 
 			File file = new File(imgurl);
 			file.delete();
 		}

@@ -8,10 +8,10 @@ import com.web.curation.dto.UserDto;
 
 @Service
 public class KakaoServiceImpl implements KakaoService {
-	
+
 	@Autowired
 	private KakaoDao kakaoDao;
-	
+
 	@Override
 	public Boolean isEmail(String email) {
 		return kakaoDao.isEmail(email);
@@ -31,8 +31,5 @@ public class KakaoServiceImpl implements KakaoService {
 	public void deleteKakao(String email) {
 		kakaoDao.deleteKakao(email);
 	}
-
-	
-
 
 }
