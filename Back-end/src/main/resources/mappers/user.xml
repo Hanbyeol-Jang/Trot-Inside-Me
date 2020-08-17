@@ -43,6 +43,11 @@
 				b.b_member ,
 				b.b_content ,
 				(	select 	COUNT(*) 
+					from 	ssafy_trot.Board bb
+					where 	bb.b_type = b.b_type
+							and bb.b_idx = b.b_idx
+				) as b_cnt,
+				(	select 	COUNT(*) 
 					from 	ssafy_trot.Reply r 
 					where 	1=1 
 					and		r.b_type = b.b_type
@@ -52,7 +57,7 @@
 					from	ssafy_trot.Good gg
 					where 	gg.b_type = g.b_type 
 					and		gg.b_idx	= g.b_idx
-				) as b_cnt
+				) as bg_cnt
 		from 	ssafy_trot.Good g left outer join ssafy_trot.Board b
 				on b.b_type = g.b_type and b.b_idx = g.b_idx 
 		where 	g.b_type = #{b_type}
