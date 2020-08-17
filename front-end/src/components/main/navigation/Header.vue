@@ -27,6 +27,10 @@
         <span v-if="routeName === 'SingerCreateView'" class="">가수 등록</span>
         <span v-if="routeName === 'ProgramManageView'" class="">프로그램 관리</span>
         <span v-if="routeName === 'ProgramCreateView'" class="">프로그램 등록</span>
+        <span v-if="routeName === 'UserLikeSingerView'">
+          <span v-if="this.$route.params.userId === user.u_email">내 가수 보기</span>
+          <span v-else>찜한 가수</span>
+        </span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-if="navBool" icon @click="goUserDetail"><i class="fas fa-user fa-lg"></i></v-btn>
@@ -44,6 +48,7 @@ export default {
     name: 'Header',
     data() {
       return {
+        userId: this.$route.params.userId,
         date: today.getDate(),
         month: today.getMonth() + 1,
         year: today.getFullYear(),

@@ -6,7 +6,6 @@
           <img v-if="profileImage" :src="profileImage" alt="User">
           <img v-else src="@/assets/image/user_default.png" alt="User">
         </v-avatar>
-        <!-- <b-avatar variant="secondary" :src="profileImage" size="3.5rem"></b-avatar> -->
       </div>
       <div class="col-10 pl-2">
         <div class="d-flex flex-wrap justify-content-between">
@@ -32,13 +31,11 @@
 </template>
 
 <script>
-// import SERVER from '@/api/drf'
-
 export default {
   name: 'CommentListItem',
   props: {
     comment: Object,
-    currentUser:Object,
+    currentUser: Object,
   },
   computed: {
     profileImage(){
