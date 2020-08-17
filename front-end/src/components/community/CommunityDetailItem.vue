@@ -6,13 +6,13 @@
     class="mx-auto"
     >
     <v-list-item class="d-flex">
-      <v-list-item-avatar>      
+      <v-list-item-avatar @click="goUserDetail(community.co_email)">      
         <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
         <!-- <img :src="userimg" alt="userimg"> -->
       </v-list-item-avatar>
       <v-list-item-content class="d-flex justify-space-between">
         <div class="d-flex">
-            <v-list-item-title @click="goCommunity()" >{{community.co_name}}</v-list-item-title>
+            <v-list-item-title @click="goUserDetail(community.co_email)" >{{community.co_name}}</v-list-item-title>
             <div class="mr-1" v-show="deleteuser">
                 <v-btn depressed color="error" @click="deleteArticle">삭제</v-btn>
             </div>
@@ -92,8 +92,6 @@ export default {
                     this.$router.push({name:'Home'})                
                 }
             },
-
-            
         getuser(){
             axios.get(SERVER.URL+`/user/getUserInfo`,this.axiosConfig)
             .then((reaponse)=>{
@@ -142,10 +140,11 @@ export default {
 
 
         goCommunity(){
-            this.$router.push({ name: 'CommunityDetailView', params: { communityId: this.community.co_idx, page:this.page }})
+          this.$router.push({ name: 'CommunityDetailView', params: { communityId: this.community.co_idx, page:this.page }})
         },
-
-
+        goUserDetail(userId) {
+          this.$router.push({ name: 'UserDetailView', params: { userId: userId }})
+        },
         deleteArticle(){
             this.$confirm(
                 {

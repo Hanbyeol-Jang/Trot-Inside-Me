@@ -7,7 +7,7 @@ export default{
         logout: '/admin/logout',
         kakaoLogin: '/signin/kakao',
         // kakaoLogout: 'https://kauth.kakao.com/oauth/logout?client_id=3b520fb7e5e907ebebfde93be5b8a1aa&logout_redirect_uri=https://i3b202.p.ssafy.io:443/',
-        kakaoLogout: 'https://kauth.kakao.com/oauth/logout?client_id=3b520fb7e5e907ebebfde93be5b8a1aa&logout_redirect_uri=https://localhost:8081/',
+        kakaoLogout: 'https://kauth.kakao.com/oauth/logout?client_id=3b520fb7e5e907ebebfde93be5b8a1aa&logout_redirect_uri=http://localhost:8081/',
         kakaoOff: '/user/kakao/unlink',
         getUserInfo: '/user/getUserInfo',
 
@@ -34,6 +34,10 @@ export default{
         programCreate: '/admin/tvadd',
         programDelete: '/admin/tvdelete/',
         programSchedule: '/board/schedule/todayList',
+
+        // vote
+        thisWeekTopThree: '/ThisWeekTopThree',
+        lastWeekTopThree: '/lastWeekTopThree',
 
     }
 }
