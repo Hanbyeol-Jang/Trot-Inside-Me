@@ -38,6 +38,7 @@ public class JwtTokenProvider {
 	// 토큰에서 헤더 값 가져옴
 	public String resolveToken(HttpServletRequest request) {
 		String token = request.getHeader("token");
+		System.out.println("logger - Header token: ["+token+"]");
 		return token;
 	}
 
