@@ -25,7 +25,7 @@
                 size="60">
                 <img
                   v-if="singer.s_img"
-                  :src="singer.s_img"
+                  :src="singerImg"
                   alt="Singer Default"
                 >
                 <img
@@ -72,6 +72,9 @@ export default {
   },
   computed: {
     ...mapState(['singers']),
+    singerImg() {
+      return '/img/' + this.singer.s_img
+    }
   },
   methods: {
     ...mapActions(['fetchSingers', 'deleteSinger']),
