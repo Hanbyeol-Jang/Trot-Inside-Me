@@ -23,7 +23,7 @@
                 size="60">
                 <img
                   v-if="program.a_img"
-                  :src="program.a_img"
+                  :src="programImg"
                   alt="Program Default"
                 >
                 <img
@@ -61,6 +61,9 @@ export default {
   },
   computed: {
         ...mapState(['programs']),
+        programImg() {
+          return '/img/' + this.program.a_img
+        }
       },
   methods: {
     ...mapActions(['fetchPrograms', 'deleteProgram']),
