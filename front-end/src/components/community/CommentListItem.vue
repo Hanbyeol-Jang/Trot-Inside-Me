@@ -2,7 +2,10 @@
   <div>
     <div class="row d-flex align-center">
       <div class="col-2">
-        <v-avatar color="indigo" @click="goUserDetail(comment.cr_email)"><v-icon dark>mdi-account-circle</v-icon></v-avatar>
+        <v-avatar @click="goUserDetail(comment.cr_email)">
+          <img v-if="profileImage" :src="profileImage" alt="User">
+          <img v-else src="@/assets/image/user_default.png" alt="User">
+        </v-avatar>
         <!-- <b-avatar variant="secondary" :src="profileImage" size="3.5rem"></b-avatar> -->
       </div>
       <div class="col-10 pl-2">
@@ -38,9 +41,9 @@ export default {
     currentUser:Object,
   },
   computed: {
-    // profileImage(){
-    //   return SERVER.URL + this.comment.cr_profileImg
-    // },
+    profileImage(){
+      return this.comment.cr_profileImg
+    },
     updateTime(){
       return this.comment.cr_date.slice(0,10)
     },

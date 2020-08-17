@@ -165,7 +165,7 @@ export default new Vuex.Store({
     fetchSingers({ commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.singerList)
         .then(res => {
-          commit('SET_SINGERS', res.data.slice(1)) 
+          commit('SET_SINGERS', res.data) 
         })
         .catch(err => { console.error(err) })
     },

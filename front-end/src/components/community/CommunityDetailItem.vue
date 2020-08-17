@@ -7,7 +7,8 @@
     >
     <v-list-item class="d-flex">
       <v-list-item-avatar @click="goUserDetail(community.co_email)">      
-        <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
+        <img v-if="community.co_profileImg" :src="community.co_profileImg" alt="User">
+        <img v-else src="@/assets/image/user_default.png" alt="User">
         <!-- <img :src="userimg" alt="userimg"> -->
       </v-list-item-avatar>
       <v-list-item-content class="d-flex justify-space-between">

@@ -8,8 +8,8 @@
     >
     <v-list-item class="d-flex">
       <v-list-item-avatar>      
-        <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
-        <!-- <img :src="userimg" alt="userimg"> -->
+        <img v-if="userImg" :src="userImg" alt="User">
+        <img v-else src="@/assets/image/user_default.png" alt="User">
       </v-list-item-avatar>
       <v-list-item-content class="d-flex justify-space-between">
         <div class="d-flex">
@@ -136,7 +136,7 @@ export default {
                 this.showLike=reaponse.data.good_flag,
                 this.communityUser=reaponse.data.co_name,
                 this.communityIdx=reaponse.data.co_idx
-                // this.userImg=reaponse.data.co_img
+                this.userImg=reaponse.data.co_profileImg
                 this.communityImg=reaponse.data.co_img
                 this.getuser()
             })
