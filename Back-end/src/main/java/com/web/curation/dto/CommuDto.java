@@ -17,6 +17,7 @@ public class CommuDto {
 	private Timestamp co_date;
 	private String co_email;
 	private String co_name;
+	private String co_profileImg;
 	private int co_cnt; // 게시글 총 갯수
 	private int cr_cnt; // 댓글 수
 
