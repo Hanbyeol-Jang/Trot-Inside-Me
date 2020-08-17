@@ -9,7 +9,8 @@ import VueCookies from 'vue-cookies'
 import VueSession from 'vue-session'
 import InfiniteLoading from 'vue-infinite-loading';
 import VueConfirmDialog from 'vue-confirm-dialog'
-
+import { AccumulationChartPlugin } from "@syncfusion/ej2-vue-charts";
+Vue.use(AccumulationChartPlugin);
 Vue.use(VueConfirmDialog)
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 

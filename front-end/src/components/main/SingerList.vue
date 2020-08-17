@@ -40,7 +40,7 @@
 export default {
     name:"SingerList",
     props:{
-        singers:Array,
+        singers: Array,
     },
     methods:{
 

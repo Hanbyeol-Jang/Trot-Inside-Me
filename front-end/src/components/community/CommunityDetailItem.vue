@@ -25,7 +25,7 @@
         <v-card-text>
             {{community.co_date.slice(0,10)}}
         </v-card-text>
-    <v-img :src="communityimg" height=100% @click="goCommunity()"></v-img>
+    <!-- <v-img :src="communityimg" height=100% @click="goCommunity()"></v-img> -->
     <v-card-text @click="goCommunity()">
       {{community.co_content}}
     </v-card-text>
@@ -88,7 +88,7 @@ export default {
     methods: {
         checkLogin(){
                 if (!(this.$cookies.get('auth-token'))){
-                    this.$alert(" 로그인을 해주세요")
+                    this.$alert("로그인 해주세요")
                     this.$router.push({name:'Home'})                
                 }
             },
@@ -169,12 +169,12 @@ export default {
         },
     },
     computed:{
-        userimg(){
-            return this.community.userimg
-        },
-        communityimg(){
-            return `${SERVER.URL}/${this.community.co_img}`
-        },
+        // userimg(){
+        //     return this.community.userimg
+        // },
+        // communityimg(){
+        //     return `${SERVER.URL}/${this.community.co_img}`
+        // },
     },
     created(){
         this.checkLogin(),

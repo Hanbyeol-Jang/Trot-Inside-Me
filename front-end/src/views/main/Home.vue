@@ -10,8 +10,8 @@
           v-for="(item,i) in items"
           :key="i"
           :src="item.src"
-          
-        ></v-carousel-item>
+        >
+        </v-carousel-item>
       </v-carousel>
       <v-container class="mt-4">
         <v-row no-gutters>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 // <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 import VideoIcon from '@/assets/icon/video-icon.svg'
 import MagazineIcon from '@/assets/icon/magazine-icon.svg'
@@ -88,7 +88,6 @@ export default {
     ...mapGetters(['isLoggedIn']),
   },
   methods: {
-    ...mapActions(['getUser']),
     goMenu(m_idx) {
       if (m_idx === 1) {
         this.$router.push({ name: 'VideoListView', params: { singerId: 0 }})
@@ -96,14 +95,26 @@ export default {
         this.$router.push({ name: 'ArticleListView', params: { singerId: 0 }})
       } else if (m_idx === 3) {
         this.$router.push({ name: 'TvtableDetailView' })
+      } else if (m_idx === 4) {
+        if (this.isLoggedIn) {
+          this.$router.push({ name: 'UserLikeSingerView', params: { userId: this.user.u_email }})
+        } else {
+          this.$confirm({
+          message: "로그인 해주세요!",
+          button: {
+              yes: '로그인 하기',
+              no: '돌아가기',
+            },
+            callback: confirm => {
+              if (confirm) {
+                this.$router.push({ name: 'Login' })
+              }
+            }
+          })
+        }
       }
     },
   },
-  created() {
-    if (this.isLoggedIn === 1) {
-      this.getUser()
-    }
-  }
 }
 </script>
 

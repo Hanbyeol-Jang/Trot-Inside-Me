@@ -11,7 +11,10 @@
             <h3 class="font-weight-bold">{{ comment.r_name }}</h3>
             <!-- <pre class="text-secondary ml-3">{{ updateTime }}</pre> -->
           </div>
-          <div v-if="isAuth" class="ml-auto">
+          <div v-if="currentUser.u_isAdmin === '1'" class="ml-auto">
+            <v-btn depressed outlined color="error" @click="deleteComment">삭제</v-btn>
+          </div>
+          <div  v-else-if="comment.cr_name === currentUser.u_name" class="ml-auto">
             <v-btn depressed outlined color="error" @click="deleteComment">삭제</v-btn>
           </div>
         </div>
@@ -33,6 +36,7 @@ export default {
   name: 'MainCommentListItem',
   props: {
     comment: Object,
+    currentUser:Object,
   },
   data(){
     return {
@@ -49,7 +53,7 @@ export default {
       return SERVER.URL + this.comment.r_profileImg
     },
     updateTime(){
-      return this.comment.updated_at.slice(0,10)
+      return this.comment.r_date.slice(0,10)
     },
   },
 
@@ -65,7 +69,6 @@ export default {
           },
           callback: confirm => {
             if (confirm) {
-                  this.isAuth = false
                   this.$emit('delete-comment2',idx)
             }
           }
