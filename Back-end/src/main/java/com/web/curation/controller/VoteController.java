@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web.curation.dto.SingerDto;
 import com.web.curation.dto.TopDto;
 import com.web.curation.dto.VoteDto;
 import com.web.curation.service.VoteService;
@@ -64,6 +63,12 @@ public class VoteController {
 			int thisWeekTotal = voteService.thisWeekTotal(s_idx);
 			int lastWeek = voteService.lastWeek(s_name);
 			int lastWeekTotal = voteService.lastWeekTotal(s_name);
+
+
+			double thisWeekRatio = Math.round(((double) thisWeek / (double) thisWeekTotal * 1000)) / 100.0;
+			double lastWeekRatio = Math.round(((double) lastWeek / (double) lastWeekTotal * 1000)) / 100.0;
+
+
 			int thisWeekRank = voteService.thisWeekRank(s_idx);
 			int lastWeekRank = voteService.lastWeekRank(s_name);
 
@@ -74,6 +79,9 @@ public class VoteController {
 			map.put("thisWeekTotal", thisWeekTotal);
 			map.put("lastWeek", lastWeek);
 			map.put("lastWeekTotal", lastWeekTotal);
+
+			map.put("thisWeekRatio", thisWeekRatio);
+			map.put("lastWeekRatio", lastWeekRatio);
 
 			map.put("thisWeekRank", thisWeekRank);
 			map.put("lastWeekRank", lastWeekRank);

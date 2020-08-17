@@ -27,6 +27,12 @@
 				b.b_company ,
 				b.b_member ,
 				b.b_content ,
+				b.b_content ,
+				(	select 	COUNT(*) 
+					from 	Board bb
+					where 	bb.b_type = b.b_type
+							and bb.b_idx = b.b_idx
+				) as b_cnt,
 				(	select 	COUNT(*) 
 					from 	Reply r 
 					where 	1=1 
@@ -37,7 +43,7 @@
 					from	Good gg
 					where 	gg.b_type = g.b_type 
 					and		gg.b_idx	= g.b_idx
-				) as b_cnt
+				) as good_cnt
 		from 	Good g left outer join Board b
 				on b.b_type = g.b_type and b.b_idx = g.b_idx 
 		where 	g.b_type = #{b_type}

@@ -10,6 +10,7 @@ import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.UserDto;
 
 public interface UserService {
+
 	/* 로그인 */
 	public UserDto getUserInfo(String u_email);
 
@@ -17,6 +18,7 @@ public interface UserService {
 	public String createToken(UserDto dto);
 
 	// 토큰 - 회원정보 조회
+
 	public UserDto getTokenInfo(HttpServletRequest request);
 
 	// 팔로우 리스트
