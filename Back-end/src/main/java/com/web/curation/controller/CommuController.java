@@ -98,8 +98,10 @@ public class CommuController {
 				up.getCo_img().transferTo(file);
 				dto.setCo_img(saveUrl);
 			}
-
-			dto.setCo_content(up.getCo_content());
+			
+			if(up.getCo_content()!=null) {
+				dto.setCo_content(up.getCo_content());
+			}
 			dto.setCo_email(udto.getU_email());
 			
 			if (commuService.addCommu(dto)) {
