@@ -29,7 +29,7 @@
 
 <script>
 export default {
-    name: 'VideoFeedItem',
+    name: 'VideoFeedItem', 
     props: {
         video: Object,
     },
