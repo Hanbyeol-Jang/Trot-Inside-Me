@@ -30,6 +30,7 @@ export default new Vuex.Store({
     indexedSchedule: [],
     CalendarScehdule: {},
     events: [],
+    singerVote:0,
   },
   getters: { 
     isLoggedIn: state => !!state.authToken,
@@ -37,6 +38,9 @@ export default new Vuex.Store({
     singersLength: state => state.singers.length,
   },
   mutations: {
+    SET_SINGERVOTE(state,singerVote){
+      state.singerVote = singerVote
+    },
     SET_VOTE(state,checkvote){
       state.checkvote = checkvote
     },

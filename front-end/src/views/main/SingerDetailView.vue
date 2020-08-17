@@ -74,7 +74,8 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-
+import axios from 'axios'
+import SERVER from '@/api/drf'
 import VideoIcon from '@/assets/icon/video-icon.svg'
 import MagazineIcon from '@/assets/icon/magazine-icon.svg'
 import CalendarIcon from '@/assets/icon/calendar-icon.svg'
@@ -118,7 +119,14 @@ export default {
       } else if (id === 3) {
         this.$router.push({ name: 'SingerScheduleView', params: { singerId: this.s_idx }})
       } else if (id === 4) {
-        this.$router.push({ name: 'SingerVoteView', params: { singerId: this.s_idx }})
+            axios.get(`${SERVER.URL}/voteOverview/${this.s_idx}`)
+            .then((res)=>{
+            this.$store.commit('SET_SINGERVOTE',res.data);
+            this.$router.push({ name: 'SingerVoteView', params: { singerId: this.s_idx }})
+            })
+            .catch((err)=>{
+                console.error(err)
+            }) 
       }     
       },
     showMsg() {

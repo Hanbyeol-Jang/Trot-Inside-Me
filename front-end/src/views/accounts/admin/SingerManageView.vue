@@ -80,7 +80,6 @@ export default {
     },
     goSingerDetail(singerId) {
       this.$router.push({ name: 'SingerDetailView', params: { singerId: singerId }})
-      console.log(singerId)
     },
   },
   created() {

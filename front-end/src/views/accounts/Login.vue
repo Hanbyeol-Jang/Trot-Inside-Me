@@ -46,8 +46,8 @@ export default {
             console.log("kakao sucess")
             this.kakaoLogin(data.access_token)
         },
-        onFailure(data){
-            console.log("kakao failure", data)
+        onFailure(){
+            console.log("kakao failure")
         },
     },
     created() {
