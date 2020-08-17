@@ -14,7 +14,7 @@
             <h3 class="font-weight-bold" @click="goUserDetail(comment.cr_email)">{{ comment.cr_name }}</h3>
             <pre class="text-secondary ml-3">{{ updateTime }}</pre>
           </div>
-          <div v-if="currentUser.u_isAdmin === '1'" class="ml-auto">
+          <div v-if="currentUser.u_isAdmin === 1" class="ml-auto">
             <v-btn depressed outlined color="error" @click="deleteComment">삭제</v-btn>
           </div>
           <div  v-else-if="comment.cr_name === currentUser.u_name" class="ml-auto">
