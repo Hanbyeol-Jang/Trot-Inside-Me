@@ -119,19 +119,4 @@ public class BoardDaoImpl implements BoardDao {
 		return sqlSession.selectList(ns + "singerScheduleList", s_idx);
 	}
 
-//	@Override
-//	public int goodClickCancel(BoardPK boardPK) {
-//		return sqlSession.delete(ns + "goodClickCancel", boardPK);
-//	}
-//
-//	@Override
-//	public int goodCount(BoardPK boardPK) {
-//		return sqlSession.selectOne(ns + "goodCount", boardPK);
-//	}
-
-//	@Override
-//	public int commentCount(BoardPK boardPK) {
-//		return sqlSession.selectOne(ns + "commentcount", boardPK);
-//	}
-
 }

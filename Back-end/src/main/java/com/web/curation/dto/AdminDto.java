@@ -9,4 +9,3 @@ public class AdminDto {
 	private int a_idx;
 	private String a_img;
 }
-

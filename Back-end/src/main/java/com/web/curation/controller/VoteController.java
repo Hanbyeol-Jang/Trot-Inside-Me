@@ -32,13 +32,9 @@ public class VoteController {
 	@PostMapping("/vote")
 	public ResponseEntity<HashMap<String, Object>> voteClick(@RequestBody VoteDto voteDto) {
 		try {
-
 			boolean flag = voteService.voteClick(voteDto);
-
 			HashMap<String, Object> map = new HashMap<>();
-
 			map.put("vote_boolean", flag);
-
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -50,13 +46,9 @@ public class VoteController {
 	@GetMapping("/voteCheck/{u_email}")
 	public ResponseEntity<HashMap<String, Object>> voteCheck(@PathVariable String u_email) {
 		try {
-
 			boolean flag = voteService.voteCheck(u_email);
-
 			HashMap<String, Object> map = new HashMap<>();
-
 			map.put("hasVote", flag);
-
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -72,7 +64,6 @@ public class VoteController {
 			int thisWeekTotal = voteService.thisWeekTotal(s_idx);
 			int lastWeek = voteService.lastWeek(s_name);
 			int lastWeekTotal = voteService.lastWeekTotal(s_name);
-
 			int thisWeekRank = voteService.thisWeekRank(s_idx);
 			int lastWeekRank = voteService.lastWeekRank(s_name);
 

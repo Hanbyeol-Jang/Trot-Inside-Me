@@ -26,7 +26,6 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	BoardDao boardDao;
 
-	
 	static Map<String, String> m = new HashMap<String, String>() {
 		{
 			put("Jan", "01");
@@ -58,7 +57,7 @@ public class BoardServiceImpl implements BoardService {
 	public SingerDto singerDetail(GoodDto dto) {
 		return boardDao.singerDetail(dto);
 	}
-	
+
 	@Override
 	public List<BoardPK> mainlist(int b_type) {
 		return boardDao.mainlist(b_type);
@@ -175,7 +174,6 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.replylist(b_idx);
 	}
 
-
 	@Override
 	public boolean addComment(ReplyDto replyDto) {
 		return boardDao.addComment(replyDto) == 1;
@@ -185,14 +183,17 @@ public class BoardServiceImpl implements BoardService {
 	public boolean deleteComment(GoodDto replyDto) {
 		return boardDao.deleteComment(replyDto) == 1;
 	}
+
 	@Override
 	public boolean goodClick(GoodDto dto) {
 		return boardDao.goodClick(dto) == 1;
 	}
+
 	@Override
 	public boolean goodClickCancel(GoodDto dto) {
 		return boardDao.goodClickCancel(dto) == 1;
 	}
+
 	// 편성표 전체 출력
 	@Override
 	public List<BroadCastingDto> broadCastAllList() {
@@ -204,9 +205,6 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.singerScheduleList(s_idx);
 	}
 
-
-
-
 //
 //	@Override
 //	public int goodCount(BoardPK boardPK) {
@@ -217,5 +215,5 @@ public class BoardServiceImpl implements BoardService {
 //	public int commentCount(BoardPK boardPK) {
 //		return boardDao.commentCount(boardPK);
 //	}
-	
+
 }
