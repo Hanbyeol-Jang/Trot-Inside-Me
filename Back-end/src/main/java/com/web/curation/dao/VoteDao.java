@@ -15,6 +15,9 @@ public interface VoteDao {
 	/* idx 이름으로 변환 */
 	String idxToName(int s_idx);
 
+	/* singer 이미지 */
+	String singerImg(int s_idx);
+
 	/* 가수 투표 현황 */
 	int thisWeek(int s_idx);
 
