@@ -14,7 +14,7 @@
           <div v-if="currentUser.u_isAdmin === '1'" class="ml-auto">
             <v-btn depressed outlined color="error" @click="deleteComment">삭제</v-btn>
           </div>
-          <div  v-else-if="comment.cr_name === currentUser.u_name" class="ml-auto">
+          <div  v-else-if="comment.r_name === currentUser.u_name" class="ml-auto">
             <v-btn depressed outlined color="error" @click="deleteComment">삭제</v-btn>
           </div>
         </div>
@@ -80,7 +80,6 @@ export default {
       if (`${this.$cookies.get('auth-token')}`){
         axios.get(SERVER.URL+`/user/getUserInfo`,this.axiosConfig)
         .then((reaponse)=>{
-          console.log(reaponse)
             const currentUser = reaponse.data.u_name
             if(Number(reaponse.data.u_isAdmin)){
                 this.isAuth = true

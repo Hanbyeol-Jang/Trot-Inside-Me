@@ -127,8 +127,7 @@ export default {
                             },
                         }
                         axios.delete(SERVER.URL+`/community/detaildelete/${this.$route.params.communityId}`,axiosConfig2)
-                        .then((res)=>{
-                            console.log(res)
+                        .then(()=>{
                             this.$alert('삭제 완료')
                             this.$router.push({name:'CommunityIndexView'})                
                         })

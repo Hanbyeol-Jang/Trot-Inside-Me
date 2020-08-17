@@ -174,6 +174,7 @@ export default {
   
   created(){
     this.getComments()
+    this.checkAuth()
   }
 }
 </script>
