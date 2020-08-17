@@ -1,13 +1,13 @@
 export default{
-    // URL:'https://i3b202.p.ssafy.io:8080',
-    URL:'https://localhost:8080',
+    URL:'https://i3b202.p.ssafy.io:8080',
+    // URL:'https://localhost:8080',
     ROUTES: {
         // auth
         login: '/admin/login',
         logout: '/admin/logout',
         kakaoLogin: '/signin/kakao',
-        // kakaoLogout: 'https://kauth.kakao.com/oauth/logout?client_id=3b520fb7e5e907ebebfde93be5b8a1aa&logout_redirect_uri=https://i3b202.p.ssafy.io:443/',
-        kakaoLogout: 'https://kauth.kakao.com/oauth/logout?client_id=3b520fb7e5e907ebebfde93be5b8a1aa&logout_redirect_uri=http://localhost:8081/',
+        kakaoLogout: 'https://kauth.kakao.com/oauth/logout?client_id=3b520fb7e5e907ebebfde93be5b8a1aa&logout_redirect_uri=https://i3b202.p.ssafy.io:443/',
+        // kakaoLogout: 'https://kauth.kakao.com/oauth/logout?client_id=3b520fb7e5e907ebebfde93be5b8a1aa&logout_redirect_uri=http://localhost:8081/',
         kakaoOff: '/user/kakao/unlink',
         getUserInfo: '/user/getUserInfo',
 
