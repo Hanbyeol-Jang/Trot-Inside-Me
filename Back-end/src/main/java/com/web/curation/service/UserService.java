@@ -11,13 +11,14 @@ import com.web.curation.dto.UserDto;
 
 public interface UserService {
 	/* 회원가입 */
-	//public boolean join(UserDto user);
+	// public boolean join(UserDto user);
 
 	/* 로그인 */
 	public UserDto getUserInfo(String u_email);
+
 	public String createToken(UserDto dto);
 
-	//	/* 회원정보 변경 */
+	// /* 회원정보 변경 */
 //	public UserDto edit(UserDto userDto) throws SQLException;
 //
 //	/* 회원정보 삭제 */
@@ -29,23 +30,19 @@ public interface UserService {
 //	//비밀번호 변경
 //	public void changePassword(UserDto userDto);
 
-	//접속
+	// 접속
 	public UserDto getTokenInfo(HttpServletRequest request);
-	
-	//팔로우 리스트
+
+	// 팔로우 리스트
 	public List<FollowDto> getFollowList(String tokenInfo_userEmail);
 
-	//팔로우 추가
-	public boolean followApply(FollowDto dto); 
+	// 팔로우 추가
+	public boolean followApply(FollowDto dto);
 
-	//팔로우 삭제
+	// 팔로우 삭제
 	public boolean followDelete(FollowDto dto);
-	
-	//마이페이지 영상, 기사 리스트 
+
+	// 마이페이지 영상, 기사 리스트
 	public List<BoardDto> myBoardList(GoodDto gdto);
-	
-
-	
-
 
 }
