@@ -6,4 +6,5 @@ import lombok.Data;
 public class TopDto {
 	private int rankk;
 	private String s_name;
+	private String s_img;
 }
