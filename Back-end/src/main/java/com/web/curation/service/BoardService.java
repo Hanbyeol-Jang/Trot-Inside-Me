@@ -63,5 +63,9 @@ public interface BoardService {
 
 	// 가수 스케줄 출력
 	List<BroadCastingDto> singerScheduleList(int s_idx);
+	
+	// 키워드로 영상검색
+	List<BoardPK> searchVideo(String word);
+	
 
 }

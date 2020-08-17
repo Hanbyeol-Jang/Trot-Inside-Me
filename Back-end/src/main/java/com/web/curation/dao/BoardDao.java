@@ -65,4 +65,7 @@ public interface BoardDao {
 	// 가수 스케줄 리스트 출력
 	List<BroadCastingDto> singerScheduleList(int s_idx);
 
+	//키워드로 영상 검색
+	List<BoardPK> searchVideo(String word);
+
 }

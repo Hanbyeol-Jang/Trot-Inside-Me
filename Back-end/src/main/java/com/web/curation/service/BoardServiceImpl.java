@@ -204,6 +204,11 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.singerScheduleList(s_idx);
 	}
 
+	@Override
+	public List<BoardPK> searchVideo(String word) {
+		return boardDao.searchVideo(word);
+	}
+
 //
 //	@Override
 //	public int goodCount(BoardPK boardPK) {
