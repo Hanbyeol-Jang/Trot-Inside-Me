@@ -77,7 +77,7 @@ public class AdminController {
 			String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getImg().getOriginalFilename();
 			File file = new File(saveUrl);
 			up.getImg().transferTo(file);
-			dto.setA_img(saveUrl);
+			dto.setA_img(up.getImg().getOriginalFilename());
 		}
 		dto.setA_broadName(up.getName());
 		if(up.getUrl()!=null) {
@@ -130,7 +130,7 @@ public class AdminController {
 			String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getImg().getOriginalFilename();
 			File file = new File(saveUrl);
 			up.getImg().transferTo(file);
-			dto.setS_img(saveUrl);
+			dto.setS_img(up.getImg().getOriginalFilename());
 		}
 		if(up.getUrl()!=null) {
 			dto.setS_cafeUrl(up.getUrl());
