@@ -18,6 +18,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.UserDto;
+import com.web.curation.service.BoardService;
 import com.web.curation.service.TimeService;
 
 @Service
@@ -27,6 +28,8 @@ public class KakaoAPI {
 	private String API_KEY;
 	@Autowired
 	TimeService timeService;
+	@Autowired
+	private BoardService boardService;
 
 	public String getAccessToken(String authorize_code) {
 		String access_Token = "";
@@ -138,9 +141,15 @@ public class KakaoAPI {
 			conn.setDoOutput(true);
 
 			conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+			String str = "";
+			if(bcDto.getBc_company()!= null) {
+				str = bcDto.getBc_company();
+			} else {
+				str = boardService.singerSearch(bcDto.getS_idx()).getS_name();
+			}
 			String msg = "template_object={\r\n" + "        \"object_type\": \"feed\",\r\n"
 					+ "        \"content\": {\r\n" + "            \"title\": \"" + bcDto.getBc_title() + "\",\r\n"
-					+ "            \"description\": \"" + bcDto.getBc_company() + ", " + bcDto.getBc_time() + "\",\r\n"
+					+ "            \"description\": \"" + str + ", " + bcDto.getBc_time() + "\",\r\n"
 					+ "            \"image_url\": \"" + bc_img + "\",\r\n" + "            \"image_width\": 640,\r\n"
 					+ "            \"image_height\": 640,\r\n" + "            \"link\": {\r\n"
 					+ "            \"web_url\": \"http://i3b202.p.ssafy.io\",\r\n"
