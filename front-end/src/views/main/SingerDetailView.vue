@@ -6,7 +6,7 @@
         size="150px">
         <img
           v-if="singer.s_img"
-          :src="singerImg"
+          :src="'/img/' + singer.s_img"
           alt="Singer Default"
         >
         <img
@@ -103,9 +103,6 @@ export default {
   computed: {
     ...mapState(['singer', 'followBtn', 'followCnt']),
     ...mapGetters(['isLoggedIn']),
-    singerImg() {
-      return '/img/' + this.singer.s_img
-    }
   },
   methods: {
     ...mapActions(['getSingerDetail', 'follow']),
