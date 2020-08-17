@@ -107,8 +107,7 @@ export default {
                         "v_area": this.$route.params.local
                     }
                     axios.post(SERVER.URL+`/vote`,voteDto)
-                    .then((res)=>{
-                      console.log(res)
+                    .then(()=>{
                       this.$router.push({ name: 'VoteView' })
                       this.$alert('투표가 완료되었습니다!')
                     })

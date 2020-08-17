@@ -1,16 +1,20 @@
 <template>
   <div class="home">
-    <div class="text-center">
-      <v-carousel 
+    <div class="text-center mt-4">
+      <v-carousel
         height="200px"
         hide-delimiters
         cycle
         >
-        <v-carousel-item
+        <CarouselItem 
           v-for="(item,i) in items"
           :key="i"
-          :src="item.src"
-        >
+          :imgSrc="item.src"/>
+        <v-carousel-item>
+          <VoteThisWeek />
+        </v-carousel-item>
+        <v-carousel-item>
+          <VoteLastWeek />
         </v-carousel-item>
       </v-carousel>
       <v-container class="mt-4">
@@ -50,6 +54,9 @@ import VideoIcon from '@/assets/icon/video-icon.svg'
 import MagazineIcon from '@/assets/icon/magazine-icon.svg'
 import TelevisionIcon from '@/assets/icon/television-icon.svg'
 import MicrophoneIcon from '@/assets/icon/microphone-icon.svg'
+import CarouselItem from '@/components/main/CarouselItem'
+import VoteThisWeek from '@/components/vote/VoteThisWeek'
+import VoteLastWeek from '@/components/vote/VoteLastWeek'
 
 export default {
   name: 'Home',
@@ -58,6 +65,9 @@ export default {
     MagazineIcon,
     TelevisionIcon,
     MicrophoneIcon,
+    CarouselItem,
+    VoteThisWeek,
+    VoteLastWeek,
   },
   data() {
     return {
@@ -76,9 +86,6 @@ export default {
           },
           {
             src: 'https://t1.daumcdn.net/cfile/tistory/993095345F05621F27',
-          },
-          {
-            src: '@/assets/image/last_week_top3.png',
           },
         ],
     }

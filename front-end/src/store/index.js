@@ -30,6 +30,7 @@ export default new Vuex.Store({
     indexedSchedule: [],
     CalendarScehdule: {},
     events: [],
+    singerVote:0,
   },
   getters: { 
     isLoggedIn: state => !!state.authToken,
@@ -37,6 +38,9 @@ export default new Vuex.Store({
     singersLength: state => state.singers.length,
   },
   mutations: {
+    SET_SINGERVOTE(state,singerVote){
+      state.singerVote = singerVote
+    },
     SET_VOTE(state,checkvote){
       state.checkvote = checkvote
     },
@@ -139,10 +143,13 @@ export default new Vuex.Store({
           })
         .catch((err)=>{ console.error(err) }) 
     },
-    getUser({ getters, commit }) {
+    getUser({ getters, commit, dispatch }) {
       axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo, getters.config)
         .then(res => { 
           commit('SET_USER', res.data)
+          if(!res.data) {
+            dispatch('kakaoLogout')
+          }
         })
         .catch((err)=>{ console.error(err) })
     },
@@ -157,7 +164,9 @@ export default new Vuex.Store({
     // Singer Data
     fetchSingers({ commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.singerList)
-        .then(res => { commit('SET_SINGERS', res.data) })
+        .then(res => {
+          commit('SET_SINGERS', res.data) 
+        })
         .catch(err => { console.error(err) })
     },
     postSinger(context, singerData) {

@@ -1,7 +1,8 @@
 <template>
   <div>
     <v-card
-      class="mx-auto mt-5">
+      class="mx-auto mt-5"
+      v-if="singerSchedule.length" >
       <vue-calendar
         class="ma-1"
         :show-limit="3"
@@ -23,7 +24,7 @@
         <SingerScheduleList :singerPrograms="singerPrograms"/>
       </v-timeline>
     </div>
-    <div v-else>아직 등록된 스케줄이 없습니다 :(</div>
+    <div v-else class="mt-5">아직 등록된 스케줄이 없습니다 :(</div>
   </div>
 </template> 
  

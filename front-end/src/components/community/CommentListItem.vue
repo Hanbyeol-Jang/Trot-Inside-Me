@@ -2,13 +2,16 @@
   <div>
     <div class="row d-flex align-center">
       <div class="col-2">
-        <v-avatar color="indigo"><v-icon dark>mdi-account-circle</v-icon></v-avatar>
+        <v-avatar @click="goUserDetail(comment.cr_email)">
+          <img v-if="profileImage" :src="profileImage" alt="User">
+          <img v-else src="@/assets/image/user_default.png" alt="User">
+        </v-avatar>
         <!-- <b-avatar variant="secondary" :src="profileImage" size="3.5rem"></b-avatar> -->
       </div>
       <div class="col-10 pl-2">
         <div class="d-flex flex-wrap justify-content-between">
           <div class="d-flex align-center">
-            <h3 class="font-weight-bold">{{ comment.cr_name }}</h3>
+            <h3 class="font-weight-bold" @click="goUserDetail(comment.cr_email)">{{ comment.cr_name }}</h3>
             <pre class="text-secondary ml-3">{{ updateTime }}</pre>
           </div>
           <div v-if="currentUser.u_isAdmin === '1'" class="ml-auto">
@@ -38,9 +41,9 @@ export default {
     currentUser:Object,
   },
   computed: {
-    // profileImage(){
-    //   return SERVER.URL + this.comment.cr_profileImg
-    // },
+    profileImage(){
+      return this.comment.cr_profileImg
+    },
     updateTime(){
       return this.comment.cr_date.slice(0,10)
     },
@@ -63,6 +66,9 @@ export default {
           }
         }
       )
+    },
+    goUserDetail(userId) {
+      this.$router.push({ name: 'UserDetailView', params: { userId: userId }})
     },
   },
 }

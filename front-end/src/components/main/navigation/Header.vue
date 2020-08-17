@@ -22,7 +22,7 @@
         <span v-if="routeName === 'VideoListView'" class="">영상 보기</span>
         <span v-if="routeName === 'ArticleListView'" class="">기사 보기</span>
         <span v-if="routeName === 'AdminView'" class="">관리자 페이지</span>
-        <span v-if="routeName === 'UserDetailView'" class="">내 정보</span>
+        <span v-if="routeName === 'UserDetailView'" class="">프로필</span>
         <span v-if="routeName === 'SingerManageView'" class="">가수 관리</span>
         <span v-if="routeName === 'SingerCreateView'" class="">가수 등록</span>
         <span v-if="routeName === 'ProgramManageView'" class="">프로그램 관리</span>
@@ -31,7 +31,7 @@
       <v-spacer></v-spacer>
       <v-btn v-if="navBool" icon @click="goUserDetail"><i class="fas fa-user fa-lg"></i></v-btn>
       <v-btn v-else icon @click="goHome"><i class="fas fa-home fa-lg"></i></v-btn>
-      <v-btn v-if="navSetting" icon @click="goSettings"><i class="fas fa-cog fa-lg"></i></v-btn>
+      <!-- <v-btn v-if="navSetting" icon @click="goSettings"><i class="fas fa-cog fa-lg"></i></v-btn> -->
     </v-app-bar>
   </div>
 </template>

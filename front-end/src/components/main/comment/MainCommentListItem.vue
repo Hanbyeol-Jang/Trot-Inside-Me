@@ -2,8 +2,10 @@
   <div>
     <div class="row d-flex align-center">
       <div class="col-2">
-        <v-avatar color="indigo"><v-icon dark>mdi-account-circle</v-icon></v-avatar>
-        <!-- <b-avatar variant="secondary" :src="profileImage" size="3.5rem"></b-avatar> -->
+        <v-avatar>
+          <img v-if="profileImage" :src="profileImage" alt="User">
+          <img v-else src="@/assets/image/user_default.png" alt="User">
+        </v-avatar>
       </div>
       <div class="col-10 pl-2">
         <div class="d-flex flex-wrap justify-content-between">
@@ -14,7 +16,7 @@
           <div v-if="currentUser.u_isAdmin === '1'" class="ml-auto">
             <v-btn depressed outlined color="error" @click="deleteComment">삭제</v-btn>
           </div>
-          <div  v-else-if="comment.cr_name === currentUser.u_name" class="ml-auto">
+          <div  v-else-if="comment.r_name === currentUser.u_name" class="ml-auto">
             <v-btn depressed outlined color="error" @click="deleteComment">삭제</v-btn>
           </div>
         </div>
@@ -50,7 +52,7 @@ export default {
   },
   computed: {
     profileImage(){
-      return SERVER.URL + this.comment.r_profileImg
+      return this.comment.r_profileImg
     },
     updateTime(){
       return this.comment.r_date.slice(0,10)
@@ -80,7 +82,6 @@ export default {
       if (`${this.$cookies.get('auth-token')}`){
         axios.get(SERVER.URL+`/user/getUserInfo`,this.axiosConfig)
         .then((reaponse)=>{
-          console.log(reaponse)
             const currentUser = reaponse.data.u_name
             if(Number(reaponse.data.u_isAdmin)){
                 this.isAuth = true
