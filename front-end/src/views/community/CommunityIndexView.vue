@@ -110,7 +110,6 @@ export default {
             }
               axios.get(SERVER.URL + `/community/list`,axiosConfig)
                 .then((response) => {
-                  console.log(response.data)
                   this.communityNum = response.data[0].co_cnt
                   this.communities.push(...response.data)
                 })

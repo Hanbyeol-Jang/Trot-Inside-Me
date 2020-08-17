@@ -26,8 +26,7 @@
         <v-card-text>
             {{communityDate.slice(0,10)}}
         </v-card-text>
-    <!-- <v-img :src="communityimg" height=100%></v-img> -->
-
+    <v-img :src="communityImg" height=100%></v-img>
     <v-card-text>
         <h1>
             {{communityContent}}
@@ -138,6 +137,7 @@ export default {
                 this.communityIdx=reaponse.data.co_idx
                 this.userImg=reaponse.data.co_profileImg
                 this.communityImg=reaponse.data.co_img
+                console.log(this.communityImg)
                 this.getuser()
             })
             .catch((err)=>{
@@ -210,14 +210,14 @@ export default {
             this.commentCnt -= 1
         }
     },
-    computed:{
-        userimg(){
-            return this.userImg
-        },
-        communityimg(){
-            return this.communityImg
-        },
-    },
+    // computed:{
+    //     userimg(){
+    //         return this.userImg
+    //     },
+    //     communityimg(){
+    //         return this.communityImg
+    //     },
+    // },
     created(){
         this.checkLogin(),
         this.getCommunity()

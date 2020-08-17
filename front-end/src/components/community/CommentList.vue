@@ -76,7 +76,6 @@ export default {
         }
         axios.get(SERVER.URL+`/community/detail/replylist/${this.$route.params.communityId}`,axiosConfig2)
         .then((response)=>{
-          console.log(response.data)
           this.comments.push(...response.data)
         })
         .catch((err)=>{
