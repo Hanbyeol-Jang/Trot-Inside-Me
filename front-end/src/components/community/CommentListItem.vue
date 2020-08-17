@@ -2,13 +2,13 @@
   <div>
     <div class="row d-flex align-center">
       <div class="col-2">
-        <v-avatar color="indigo"><v-icon dark>mdi-account-circle</v-icon></v-avatar>
+        <v-avatar color="indigo" @click="goUserDetail(comment.cr_email)"><v-icon dark>mdi-account-circle</v-icon></v-avatar>
         <!-- <b-avatar variant="secondary" :src="profileImage" size="3.5rem"></b-avatar> -->
       </div>
       <div class="col-10 pl-2">
         <div class="d-flex flex-wrap justify-content-between">
           <div class="d-flex align-center">
-            <h3 class="font-weight-bold">{{ comment.cr_name }}</h3>
+            <h3 class="font-weight-bold" @click="goUserDetail(comment.cr_email)">{{ comment.cr_name }}</h3>
             <pre class="text-secondary ml-3">{{ updateTime }}</pre>
           </div>
           <div v-if="currentUser.u_isAdmin === '1'" class="ml-auto">
@@ -63,6 +63,9 @@ export default {
           }
         }
       )
+    },
+    goUserDetail(userId) {
+      this.$router.push({ name: 'UserDetailView', params: { userId: userId }})
     },
   },
 }

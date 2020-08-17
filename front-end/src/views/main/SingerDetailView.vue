@@ -57,7 +57,7 @@
               <VideoIcon v-if="menu.id === 1" />
               <MagazineIcon v-if="menu.id === 2" />
               <CalendarIcon v-if="menu.id === 3" />
-              <CalendarIcon v-if="menu.id === 4" />
+              <VoteIcon v-if="menu.id === 4" />
               <div class="menu-title">{{ menu.title }}</div>
             </v-card>
           </v-col>
@@ -78,6 +78,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import VideoIcon from '@/assets/icon/video-icon.svg'
 import MagazineIcon from '@/assets/icon/magazine-icon.svg'
 import CalendarIcon from '@/assets/icon/calendar-icon.svg'
+import VoteIcon from '@/assets/icon/vote-icon.svg'
 
 export default {
   name: 'SingerDetailView',
@@ -96,6 +97,7 @@ export default {
     VideoIcon,
     MagazineIcon,
     CalendarIcon,
+    VoteIcon,
   },
   computed: {
     ...mapState(['singer', 'followBtn', 'followCnt']),

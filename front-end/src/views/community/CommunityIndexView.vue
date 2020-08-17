@@ -21,14 +21,15 @@
       </v-tabs>
       <br>
       <div class="mt-5">
-          <div v-for="community in communities" :key="community.id">
-              <CommunityDetailItem :community="community" :page="page" @community-delete="deleteArticle"/>
-          </div>
-          <div  class="mt-5 my-10 text-center">
-            <p class="mt-2" v-if="!communities.length">No results :(</p>
-            <infinite-loading v-if="communities.length" @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
-          </div>
-      </div>      
+        <div v-for="community in communities" :key="community.id">
+            <CommunityDetailItem :community="community" :page="page" @community-delete="deleteArticle"/>
+        </div>
+        <div  class="mt-5 my-10 text-center">
+          <p class="mt-2" v-if="!communities.length">No results :(</p>
+          <infinite-loading v-if="communities.length" @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
+        </div>
+      </div>    
+    <ScrollTopButton />   
   </div>
 </template>
 
@@ -38,11 +39,14 @@ import CommunityDetailItem from '@/components/community/CommunityDetailItem.vue'
 import InfiniteLoading from 'vue-infinite-loading'
 import SERVER from '@/api/drf'
 
+import ScrollTopButton from '@/components/main/ScrollTopButton'
+
 export default {
     name: 'CommunityIndexView',
     components: {
       CommunityDetailItem,
       InfiniteLoading,
+      ScrollTopButton,
     },  
     data(){
       return{
@@ -106,6 +110,7 @@ export default {
             }
               axios.get(SERVER.URL + `/community/list`,axiosConfig)
                 .then((response) => {
+                  console.log(response.data)
                   this.communityNum = response.data[0].co_cnt
                   this.communities.push(...response.data)
                 })

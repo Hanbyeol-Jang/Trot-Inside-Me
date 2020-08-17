@@ -139,10 +139,13 @@ export default new Vuex.Store({
           })
         .catch((err)=>{ console.error(err) }) 
     },
-    getUser({ getters, commit }) {
+    getUser({ getters, commit, dispatch }) {
       axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo, getters.config)
         .then(res => { 
           commit('SET_USER', res.data)
+          if(!res.data) {
+            dispatch('kakaoLogout')
+          }
         })
         .catch((err)=>{ console.error(err) })
     },
@@ -157,7 +160,9 @@ export default new Vuex.Store({
     // Singer Data
     fetchSingers({ commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.singerList)
-        .then(res => { commit('SET_SINGERS', res.data) })
+        .then(res => {
+          commit('SET_SINGERS', res.data.slice(1)) 
+        })
         .catch(err => { console.error(err) })
     },
     postSinger(context, singerData) {

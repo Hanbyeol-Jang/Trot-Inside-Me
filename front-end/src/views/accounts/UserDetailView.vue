@@ -45,7 +45,7 @@
           </v-card>
         </v-col>
         <v-col
-          v-if="user.u_isAdmin"
+          v-if="user.u_isAdmin === 1"
           cols="12">
           <v-card
             color="#FCE4EC"
@@ -68,7 +68,7 @@ export default {
     return {
       userId: this.$route.params.userId,
       menuItems: [
-        { id: 1, title: '내 가수 보기', icon: 'fas fa-music'},
+        { id: 1, title: '찜한 가수', icon: 'fas fa-music'},
         { id: 2, title: '찜한 영상', icon: 'far fa-play-circle'},
         { id: 3, title: '찜한 기사', icon: 'fas fa-newspaper'},
       ],
