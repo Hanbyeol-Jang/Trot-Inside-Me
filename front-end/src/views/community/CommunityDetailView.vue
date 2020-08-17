@@ -182,9 +182,8 @@ export default {
                             token: `${this.$cookies.get('auth-token')}`,
                             },
                         }
-                        axios.delete(SERVER.URL+`/community/delete/${this.communityIdx}`,axiosConfig2)
-                        .then((response)=>{
-                            console.log(response)
+                        axios.delete(SERVER.URL+`/community/detaildelete/${this.communityIdx}`,axiosConfig2)
+                        .then(()=>{
                             this.$alert('삭제 완료')
                             this.$router.push({name:'CommunityIndexView'})                
                         })

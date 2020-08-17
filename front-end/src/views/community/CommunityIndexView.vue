@@ -1,15 +1,23 @@
 <template>
   <div>
-    <div class="my-5 d-flex justify-sm-space-between">
-      <v-spacer></v-spacer>       
-      <v-btn x-large color="primary" @click="createCommunity"><v-icon class="mr-2">mdi-pencil</v-icon>게시글 작성</v-btn>
-    </div>
-    <br>
+      <div class="d-flex justify-space-between px-4 mb-5">
+        <img src="@/assets/image/trot_logo.png" alt=""
+                    
+            width="120px" class="mt-4">
+        <v-btn rounded 
+                    
+          color="pink" 
+          dark
+          class="mt-4" 
+          @click="createCommunity">
+          <div class="mx-2"><v-icon class="mr-2">mdi-pencil</v-icon>게시글 작성</div>   
+        </v-btn>
+      </div>
       <v-tabs
           color="pink"
           class="d-flex justify-center">
-          <v-tab @click="getLikeCommunity" ><h4>인기 순으로 보기</h4></v-tab>
           <v-tab @click="getRecentCommunity" ><h4>최신 순으로 보기</h4></v-tab>
+          <v-tab @click="getLikeCommunity" ><h4>인기 순으로 보기</h4></v-tab>
       </v-tabs>
       <br>
       <div class="mt-5">
@@ -48,8 +56,19 @@ export default {
     methods:{
       checkLogin(){
             if (!(this.$cookies.get('auth-token'))){
-                this.$alert(" 로그인을 해주세요")
-                this.$router.push({name:'Home'})                
+            this.$confirm(
+                {
+                message: `로그인 해주세요.`,
+                button: {
+                    yes: '로그인 하기',
+                    no: '돌아가기',
+                },
+                callback: confirm => {
+                    if (confirm) {
+                      this.$router.push({ name: 'Login'})
+                    }
+                }})
+            this.$router.push({name:'Home'})                
             }
         },
 
@@ -124,7 +143,6 @@ export default {
             }
             axios.delete(SERVER.URL+`/community/delete/${idx}`,axiosConfig2)
             .then((response)=>{
-                console.log(response)
                 this.communities=[]
                 this.communities.push(...response.data)
                 this.$alert('삭제 완료')
@@ -137,7 +155,7 @@ export default {
     },
       created(){
         this.checkLogin()
-        this.getLikeCommunity()
+        this.getRecentCommunity()
       },
     }
 </script>

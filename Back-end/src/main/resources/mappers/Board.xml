@@ -31,13 +31,13 @@
 						and 	f.u_email  =  #{u_email}
 					)as f_flag
 				</if>
-		from ssafy_trot.Singer s
+		from Singer s
 		where s_idx =#{b_idx};
 	</select>
 	
  	<select id="singerSearch" resultType="com.web.curation.dto.SingerDto">
 	 	select s_name
-		from ssafy_trot.Singer 
+		from Singer 
 		where s_idx =#{s_idx};
 	</select>
 	
@@ -53,23 +53,23 @@
 			b_company,
 			b_content ,
 			(	select 	COUNT(*) 
-				from ssafy_trot.Board bb
+				from Board bb
 				where 	bb.b_type = b.b_type
 			) as b_cnt,
 			(	select 	COUNT(*) 
-				from 	ssafy_trot.Reply r 
+				from 	Reply r 
 				where 	1=1 
 				and 	r.b_idx = b.b_idx
 				and		r.b_type =b.b_type 
 			) as br_cnt,
 			(
 				SELECT COUNT(*) 
-				from ssafy_trot.Good g
+				from Good g
 				where 1=1
 				and 	g.b_idx = b.b_idx
 				and		g.b_type =b.b_type 
 			) as good_cnt
-		from ssafy_trot.Board b
+		from Board b
 		where b_type = #{b_type}
 		order by good_cnt desc;
 	</select>
@@ -99,17 +99,17 @@
 				b_company,
 				b_content ,
 				(	select 	COUNT(*) 
-					from ssafy_trot.Board 	
+					from Board 	
 				) as b_cnt,
 				(	select 	COUNT(*) 
-					from 	ssafy_trot.Reply r 
+					from 	Reply r 
 					where 	1=1 
 					and 	r.b_idx = b.b_idx
 					and		r.b_type =b.b_type 
 				) as br_cnt,
 				(
 					SELECT COUNT(*) 
-					from ssafy_trot.Good g
+					from Good g
 					where 1=1
 					and 	g.b_idx = b.b_idx
 					and		g.b_type =b.b_type 
@@ -152,22 +152,22 @@
 			b_company,
 			b_content ,
 			(	select 	COUNT(*) 
-				from ssafy_trot.Board 	
+				from Board 	
 			) as b_cnt,
 			(	select 	COUNT(*) 
-				from 	ssafy_trot.Reply r 
+				from 	Reply r 
 				where 	1=1 
 				and 	r.b_idx = b.b_idx
 				and		r.b_type =b.b_type 
 			) as br_cnt,
 			(
 				SELECT COUNT(*) 
-				from ssafy_trot.Good g
+				from Good g
 				where 1=1
 				and 	g.b_idx = b.b_idx
 				and		g.b_type =b.b_type 
 			) as good_cnt
-		from ssafy_trot.Board b 
+		from Board b 
 		where 	b_member = #{s_name}
 		and 	b_type = 2
 		order by b_idx desc;
@@ -186,7 +186,7 @@
 			b_company,
 			b_content,
 			(	select 	COUNT(*) 
-				from 	ssafy_trot.Reply r 
+				from 	Reply r 
 				where 	1=1 
 				and 	r.b_idx = b.b_idx
 				and		r.b_type =b.b_type 
@@ -194,7 +194,7 @@
 			<if test='u_email  != "" and u_email   != null ' >
 			(
 				select COUNT(*)
-				from ssafy_trot.Good g
+				from Good g
 				where 1 =1
 				and g.b_idx =b.b_idx
 				and g.b_type =b.b_type
@@ -202,12 +202,12 @@
 			)as good_flag, </if>
 				(	
 				SELECT COUNT(*) 
-				from ssafy_trot.Good g
+				from Good g
 				where 1=1
 				and 	g.b_idx = b.b_idx
 				and		g.b_type =b.b_type 
 			) as good_cnt
-		from ssafy_trot.Board b
+		from Board b
 		where 1=1 
 		and b_idx = #{b_idx}
 		and b_type = #{b_type};
@@ -222,8 +222,8 @@
 				r.b_type,
 				r.b_idx,
 				r.r_date
-		from ssafy_trot.Reply r 
-		left outer join ssafy_trot.UserInfo ui
+		from Reply r 
+		left outer join UserInfo ui
 				on ui.u_email = r.u_email 
 		where 	r.b_idx = #{b_idx}
 				and r.b_type = #{b_type}
@@ -262,39 +262,23 @@
 	
 		<!-- 편성표 리스트 출력 -->
 	<select id="broadCastAllList" resultType="com.web.curation.dto.BroadCastingDto">
-		select * from BroadCasting where bc_member = "";
+		select * from BroadCasting where s_idx = 1;
 	</select>
 	
 	<!-- 가수 스케줄 출력 -->
-	<select id="singerScheduleList" parameterType="String" resultType="com.web.curation.dto.BroadCastingDto">
-		select * from BroadCasting where bc_member = #{s_name};
+	<select id="singerScheduleList" resultType="com.web.curation.dto.BroadCastingDto">
+		select 	bc_idx,
+				s_idx,
+				bc_date,
+				bc_time,
+				bc_title,
+				(	select 	s_name 
+				from Singer s
+				where s.s_idx = b.s_idx
+				)as bc_member
+		from BroadCasting b 
+		where s_idx = #{s_idx};
 	</select>
  	
-	
-	<!-- 게시물 좋아요 클릭취소 -->
-	<!-- <delete id="goodClickCancel">
-		delete	from Good
-		where 	b_type = #{b_type} AND
-				b_idx = #{b_idx} AND 
-				u_email = #{u_email};
-	</delete>
- -->
-	<!-- 좋아요 수 출력  -->
-<!-- 	<select id="goodCount" parameterType="int" resultType="int">
-		SELECT 	count(u_email)
-		FROM 	Board b left outer join Good g
-				ON b.b_type =g.b_type and b.b_idx = g.b_idx
-		where	b.b_type = #{b_type} and
-				b.b_idx	 = #{b_idx};
-	</select>
-	 -->
-	<!-- 댓글 수 출력  -->
-<!-- 	<select id="commentcount" parameterType="int" resultType="int">
-		SELECT 	COUNT(r.r_idx)
-		FROM 	Board b left outer join Reply r
-				ON b.b_type =r.b_type and b.b_idx = r.b_idx
-		where	b.b_type = #{b_type} AND
-				b.b_idx = #{b_idx};
-	</select> -->
  </mapper>
         

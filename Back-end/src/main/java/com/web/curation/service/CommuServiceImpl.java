@@ -17,56 +17,68 @@ public class CommuServiceImpl implements CommuService {
 
 	@Autowired
 	CommuDao commuDao;
-	
+
 	@Override
-	public List<CommuDto> getCommuList(String u_email,String order) {
+	public List<CommuDto> getCommuList(String u_email, String order) {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("u_email", u_email);
 		map.put("order", order);
 		return commuDao.getCommuList(map);
 	}
+
 	@Override
 	public boolean addCommu(CommuDto dto) {
-		return commuDao.addCommu(dto)==1;
+		return commuDao.addCommu(dto) == 1;
 	}
 
 	@Override
 	public boolean deleteCommu(int co_idx) {
-		return commuDao.deleteCommu(co_idx)==1;
-	}
-	@Override
-	public boolean updateDetail(CommuDto dto) {
-		return commuDao.updateDetail(dto)==1;
+		return commuDao.deleteCommu(co_idx) == 1;
 	}
 
+	@Override
+	public boolean updateDetail(CommuDto dto) {
+		return commuDao.updateDetail(dto) == 1;
+	}
 
 	@Override
 	public boolean addCommuReply(CoReplyDto dto) {
-		return commuDao.addCommuReply(dto)==1;
+		return commuDao.addCommuReply(dto) == 1;
 	}
+
 	@Override
 	public boolean deleteCommuReply(CoReplyDto dto) {
-		return commuDao.deleteCommuReply(dto)==1;
+		return commuDao.deleteCommuReply(dto) == 1;
 	}
+
 	@Override
 	public boolean clickGood(CoGoodDto dto) {
-		return commuDao.clickGood(dto)==1;
+		return commuDao.clickGood(dto) == 1;
 	}
+
 	@Override
 	public boolean clickGoodCancel(CoGoodDto dto) {
-		return commuDao.clickGoodCancel(dto)==1;
+		return commuDao.clickGoodCancel(dto) == 1;
 	}
+
 	@Override
 	public boolean deleteDetail(int co_idx) {
-		return commuDao.deleteDetail(co_idx)==1;
+		return commuDao.deleteDetail(co_idx) == 1;
 	}
+
 	@Override
 	public CommuDto getCommuDetail(CoGoodDto gdto) {
 		return commuDao.getCommuDetail(gdto);
 	}
+
 	@Override
 	public List<CommuReply> getDetailReplyList(int co_idx) {
 		return commuDao.getDetailReplyList(co_idx);
 	}
-	
+
+	@Override
+	public String getImgUrl(int co_idx) {
+		return commuDao.getImgUrl(co_idx);
+	}
+
 }

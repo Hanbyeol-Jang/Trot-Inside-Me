@@ -18,8 +18,16 @@
 	<!-- 커뮤니티 게시글 수정  -->
 	<update id="updateCommu">
 		update 	Community 
-		set 	co_content=#{co_content} , 
-				co_img=#{co_img}
+		set 	
+		<if test="co_content != null " >
+		co_content=#{co_content} 
+		</if>
+		<if test="co_img  != null and co_content != null " >
+		,
+		</if>
+		<if test="co_img  != null" >
+		co_img=#{co_img}
+		</if>
 		where 	co_idx = #{co_idx};
 	</update>
 	
@@ -35,26 +43,30 @@
 				) as co_cnt,
 				c.u_email as co_email,
 				(	select u_name 
-					from ssafy_trot.UserInfo ui 
+					from UserInfo ui 
 					where c.u_email =ui.u_email 
 				) as co_name,
+				(	select 	ui.u_profileImg 
+					from 	UserInfo ui 
+					where 	ui.u_email = c.u_email 
+				) as co_profileImg,
 				(
 					SELECT  COUNT(cr_idx)
-					from 	ssafy_trot.CoReply cr 
+					from 	CoReply cr 
 					where cr.co_idx  = c.co_idx 
 				) as cr_cnt,
 				(
 					SELECT 	COUNT(co_idx)
-					from	ssafy_trot.CoGood cg 
+					from	CoGood cg 
 					where cg.co_idx = c.co_idx  
 				) as good_cnt,
 				(
 					select count(*) 
-					from ssafy_trot.CoGood g 
+					from CoGood g 
 					where c.co_idx = g.co_idx 
 					and g.u_email  = #{u_email}
 				) as good_flag 
-		from ssafy_trot.Community c 
+		from Community c 
 		ORDER BY ${order} desc;
 	</select>
 	
@@ -71,38 +83,42 @@
 				) as co_cnt,
 				c.u_email as co_email,
 				(	select u_name 
-					from ssafy_trot.UserInfo ui 
+					from UserInfo ui 
 					where c.u_email =ui.u_email 
 				) as co_name,
+				(	select 	ui.u_profileImg 
+					from 	UserInfo ui 
+					where 	ui.u_email = c.u_email 
+				) as co_profileImg,
 				(
 					SELECT  COUNT(cr_idx)
-					from 	ssafy_trot.CoReply cr 
+					from 	CoReply cr 
 					where cr.co_idx  = c.co_idx 
 				) as cr_cnt,
 				(
 					SELECT 	COUNT(co_idx)
-					from	ssafy_trot.CoGood cg 
+					from	CoGood cg 
 					where cg.co_idx = c.co_idx  
 				) as good_cnt,
 				(
 					select count(*) 
-					from ssafy_trot.CoGood g 
+					from CoGood g 
 					where c.co_idx = g.co_idx 
 					and g.u_email  = #{u_email}
 				) as good_flag 
-		from ssafy_trot.Community c 
+		from Community c 
 		where co_idx = #{co_idx};
 	</select>
 	
 	<!-- 커뮤니티 디테일 댓글 리스트  -->
 	<select id="getDetailReplyList" resultType="com.web.curation.dto.CommuReply">
-		select 	cr_idx, 
+	select 	cr_idx, 
 				cr_content, 
 				cr.u_email as cr_email,
 				ui.u_name as cr_name, 
 				ui.u_profileImg as cr_profileImg,
 				co_idx, 
-				co_date
+				cr_date
 		from CoReply cr 
 		left outer join UserInfo ui on ui.u_email = cr.u_email 
 		where co_idx = #{co_idx}
@@ -145,5 +161,11 @@
 		delete 	from Community
 		where 	co_idx = #{co_idx} 
 	</delete>
+	
+	<select id="getimgurl" resultType="String">
+		select co_img
+		from Community
+		where 	co_idx = #{co_idx} 
+	</select>
  </mapper>
         

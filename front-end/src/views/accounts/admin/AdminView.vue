@@ -25,7 +25,6 @@
           <div class="d-flex flex-column">
             <div>{{ user.u_name }}</div>
             <div><i class="fas fa-at mr-1"></i>{{ user.u_email }}</div>
-            <v-btn text @click="logout"><i class="fas fa-sign-out-alt mr-1"></i>로그아웃</v-btn>
           </div>
         </div>
       </v-col>
@@ -50,7 +49,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'AdminView',
@@ -65,10 +64,8 @@ export default {
   },
   computed: {
     ...mapState(['user']),
-    ...mapGetters(['isLoggedIn']),
   },
   methods: {
-    ...mapActions(['logout', 'getUser']),
     goMenuDetail(id) {
       if (id === 1) {
         this.$router.push({ name: 'SingerManageView' })
@@ -77,11 +74,6 @@ export default {
       }
     }
   },
-  created() {
-    if (this.isLoggedIn) {
-      this.getUser()
-    }
-  }
 }
 </script>
 

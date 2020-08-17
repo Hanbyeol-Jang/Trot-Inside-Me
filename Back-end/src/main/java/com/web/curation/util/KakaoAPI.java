@@ -18,6 +18,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.web.curation.dto.BroadCastingDto;
 import com.web.curation.dto.UserDto;
+import com.web.curation.service.BoardService;
 import com.web.curation.service.TimeService;
 
 @Service
@@ -27,12 +28,13 @@ public class KakaoAPI {
 	private String API_KEY;
 	@Autowired
 	TimeService timeService;
+	@Autowired
+	private BoardService boardService;
 
 	public String getAccessToken(String authorize_code) {
 		String access_Token = "";
 		String refresh_Token = "";
 		String reqURL = "https://kauth.kakao.com/oauth/token";
-		System.out.println("[logger - getAccessToken method]");
 		try {
 			URL url = new URL(reqURL);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -50,11 +52,9 @@ public class KakaoAPI {
 			sb.append("&code=" + authorize_code);
 			bw.write(sb.toString());
 			bw.flush();
-//            System.out.println(sb);
 
 			// 결과 코드가 200이라면 성공
 			int responseCode = conn.getResponseCode();
-			System.out.println("responseCode : " + responseCode);
 
 			// 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -64,7 +64,6 @@ public class KakaoAPI {
 			while ((line = br.readLine()) != null) {
 				result += line;
 			}
-			System.out.println("response body : " + result);
 
 			// Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
 			JsonParser parser = new JsonParser();
@@ -81,8 +80,6 @@ public class KakaoAPI {
 	}
 
 	public UserDto getUserInfo(String access_Token) {
-		System.out.println("[logger - kakao getUserInfo method]");
-
 		UserDto userDto = new UserDto();
 		String reqURL = "https://kapi.kakao.com/v2/user/me";
 
@@ -94,7 +91,6 @@ public class KakaoAPI {
 			conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
 			int responseCode = conn.getResponseCode();
-			System.out.println("responseCode : " + responseCode);
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
@@ -104,26 +100,25 @@ public class KakaoAPI {
 			while ((line = br.readLine()) != null) {
 				result += line;
 			}
-			System.out.println("response body : " + result);
 
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(result);
 
 			JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
 
-			if(properties.getAsJsonObject().get("nickname") != null)
+			if (properties.getAsJsonObject().get("nickname") != null)
 				userDto.setU_name(properties.getAsJsonObject().get("nickname").getAsString());
 			userDto.setU_email(element.getAsJsonObject().get("id").getAsString());
-	         if(properties.getAsJsonObject().get("thumbnail_image") !=null) {
-	        	 	userDto.setU_thumbnail(properties.getAsJsonObject().get("thumbnail_image").getAsString());
-	            } else {
-	            	userDto.setU_thumbnail("");
-	            }
-	         if(properties.getAsJsonObject().get("profile_image") != null) {
-	         userDto.setU_profileImg(properties.getAsJsonObject().get("profile_image").getAsString());
-	         } else {
-	            userDto.setU_profileImg("");
-	         }
+			if (properties.getAsJsonObject().get("thumbnail_image") != null) {
+				userDto.setU_thumbnail(properties.getAsJsonObject().get("thumbnail_image").getAsString());
+			} else {
+				userDto.setU_thumbnail("");
+			}
+			if (properties.getAsJsonObject().get("profile_image") != null) {
+				userDto.setU_profileImg(properties.getAsJsonObject().get("profile_image").getAsString());
+			} else {
+				userDto.setU_profileImg("");
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -138,7 +133,6 @@ public class KakaoAPI {
 		String accessToken = (String) map.get("accessToken");
 		BroadCastingDto bcDto = (BroadCastingDto) map.get("broadCastingDto");
 		String bc_img = timeService.GetImgByIdx(bcDto.getA_idx());
-		System.out.println(bc_img);
 		try {
 			URL url = new URL(reqURL);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -147,31 +141,28 @@ public class KakaoAPI {
 			conn.setDoOutput(true);
 
 			conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-			String msg = "template_object={\r\n" + 
-			 		"        \"object_type\": \"feed\",\r\n" + 
-			 		"        \"content\": {\r\n" + 
-			 		"            \"title\": \""+ bcDto.getBc_title() +"\",\r\n" + 
-					"            \"description\": \""+bcDto.getBc_company()+", "+bcDto.getBc_time()+"\",\r\n" + 
-					"            \"image_url\": \""+bc_img+"\",\r\n" + 
-			 		"            \"image_width\": 640,\r\n" + 
-			 		"            \"image_height\": 640,\r\n" + 
-			 		"            \"link\": {\r\n" + 
-			 		"            \"web_url\": \"http://i3b202.p.ssafy.io\",\r\n" + 
-			 		"            \"mobile_web_url\": \"http://i3b202.p.ssafy.io\",\r\n" + 
-			 		"            \"android_execution_params\": \"contentId=100\",\r\n" + 
-			 		"            \"ios_execution_params\": \"contentId=100\"\r\n" + 
-			 		"            }\r\n" + 
-			 		"        }\r\n" + 
-			 		"    }";
-			System.out.println("==========================");
-			System.out.println(msg);
-			
+			String str = "";
+			if(bcDto.getBc_company()!= null) {
+				str = bcDto.getBc_company();
+			} else {
+				str = boardService.singerSearch(bcDto.getS_idx()).getS_name();
+			}
+			String msg = "template_object={\r\n" + "        \"object_type\": \"feed\",\r\n"
+					+ "        \"content\": {\r\n" + "            \"title\": \"" + bcDto.getBc_title() + "\",\r\n"
+					+ "            \"description\": \"" + str + ", " + bcDto.getBc_time() + "\",\r\n"
+					+ "            \"image_url\": \"" + bc_img + "\",\r\n" + "            \"image_width\": 640,\r\n"
+					+ "            \"image_height\": 640,\r\n" + "            \"link\": {\r\n"
+					+ "            \"web_url\": \"http://i3b202.p.ssafy.io\",\r\n"
+					+ "            \"mobile_web_url\": \"http://i3b202.p.ssafy.io\",\r\n"
+					+ "            \"android_execution_params\": \"contentId=100\",\r\n"
+					+ "            \"ios_execution_params\": \"contentId=100\"\r\n" + "            }\r\n"
+					+ "        }\r\n" + "    }";
+
 			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 			wr.write(msg);
 			wr.flush();
 
 			int responseCode = conn.getResponseCode();
-//			System.out.println("responseCode : " + responseCode);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -179,8 +170,6 @@ public class KakaoAPI {
 
 	// 로그아웃
 	public void kakaoLogout(String access_Token) {
-		System.out.println("logger - logout method");
-
 		String reqURL = "https://kapi.kakao.com/v1/user/logout";
 
 		try {
@@ -189,11 +178,9 @@ public class KakaoAPI {
 			conn.setRequestMethod("POST");
 
 			// 요청에 필요한 Header에 포함될 내용
-			System.out.println("!! " + access_Token);
 			conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
 			int responseCode = conn.getResponseCode();
-			System.out.println("responseCode : " + responseCode);
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
@@ -203,7 +190,6 @@ public class KakaoAPI {
 			while ((line = br.readLine()) != null) {
 				result += line;
 			}
-			System.out.println("response body : " + result);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -211,7 +197,6 @@ public class KakaoAPI {
 
 	// 카카오 계정 로그아웃
 	public void kakaoUnlink(String access_Token) {
-		System.out.println("logger - unlink method");
 
 		String reqURL = "https://kapi.kakao.com/v1/user/unlink";
 		try {
@@ -220,10 +205,8 @@ public class KakaoAPI {
 			conn.setRequestMethod("POST");
 
 			// 요청에 필요한 Header에 포함될 내용
-			System.out.println("!! " + access_Token);
 			conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 			int responseCode = conn.getResponseCode();
-			System.out.println("responseCode : " + responseCode);
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
@@ -233,7 +216,6 @@ public class KakaoAPI {
 			while ((line = br.readLine()) != null) {
 				result += line;
 			}
-			System.out.println("response body : " + result);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -14,21 +14,6 @@
  		select * from UserInfo
  		where u_email = #{email};
  	</select>
- 	
- 	<!-- 비밀번호 찾기 -->
- 	<!-- <select id="findpassword" resultType="String">
- 		select u_pw 
- 		from UserInfo
- 		where 1=1
- 		and u_email = #{email}
- 	</select> -->
- 	
- 	<!-- 비밀번호 변경 -->
- 	<!-- <update id="changepassword">
- 		update UserInfo set u_pw = #{u_pw},u_pw2 = #{u_pw}
- 		where 1=1
- 		and u_email = #{u_email} 
- 	</update -->
 
 	<!-- 마이페이지 리스트 -->
  	<select id="myBoardList" resultType="BoardDto">
@@ -42,16 +27,27 @@
 				b.b_company ,
 				b.b_member ,
 				b.b_content ,
+				b.b_content ,
+				(	select 	COUNT(*) 
+					from 	Board bb
+					where 	bb.b_type = b.b_type
+							and bb.b_idx = b.b_idx
+				) as b_cnt,
+				(	select 	COUNT(*) 
+					from 	Reply r 
+					where 	1=1 
+					and		r.b_type = b.b_type
+					and 	r.b_idx =  b.b_idx 
+				) as br_cnt,
 				(	select	COUNT(*) 
-					from	ssafy_trot.Good gg
+					from	Good gg
 					where 	gg.b_type = g.b_type 
-					and 	gg.u_email =g.u_email 
-				) as b_cnt
-		from 	ssafy_trot.Good g
-		left outer join ssafy_trot.Board b
+					and		gg.b_idx	= g.b_idx
+				) as good_cnt
+		from 	Good g left outer join Board b
 				on b.b_type = g.b_type and b.b_idx = g.b_idx 
 		where 	g.b_type = #{b_type}
-		and 	g.u_email = #{u_email};
+				and g.u_email = #{u_email};
  	</select>
  	<!-- 팔로우 전체 리스트 출력 -->
  	<select id="getFollowList"  resultType="com.web.curation.dto.FollowDto">
@@ -60,7 +56,7 @@
 				s.s_name ,
 				s.s_img 
 		from 	ssafy_trot.`Following` f
-		left outer join	ssafy_trot.Singer s
+		left outer join	Singer s
 				on s.s_idx = f.s_idx
 		where 	u_email = #{userEmail};
  	</select>
