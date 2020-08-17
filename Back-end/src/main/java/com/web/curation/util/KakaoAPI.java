@@ -146,6 +146,7 @@ public class KakaoAPI {
 				str = bcDto.getBc_company();
 			} else {
 				str = boardService.singerSearch(bcDto.getS_idx()).getS_name();
+				bc_img =  boardService.singerSearch(bcDto.getS_idx()).getS_img();
 			}
 			String msg = "template_object={\r\n" + "        \"object_type\": \"feed\",\r\n"
 					+ "        \"content\": {\r\n" + "            \"title\": \"" + bcDto.getBc_title() + "\",\r\n"
