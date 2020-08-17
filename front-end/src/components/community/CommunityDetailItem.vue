@@ -26,7 +26,7 @@
         <v-card-text>
             {{community.co_date.slice(0,10)}}
         </v-card-text>
-    <v-img v-if="community.co_img" :src="communityimg" height=100% @click="goCommunity()"></v-img>
+    <v-img v-show="community.co_img" :src="communityimg" height=100% @click="goCommunity()"></v-img>
     <v-card-text @click="goCommunity()">
       {{community.co_content}}
     </v-card-text>
