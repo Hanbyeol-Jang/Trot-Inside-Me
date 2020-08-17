@@ -57,6 +57,7 @@ public class BoardController {
 	public ResponseEntity<List<SingerDto>> singerList() {
 		List<SingerDto> list = boardService.singerAllList();
 		if (list != null) {
+			list.remove(0);
 			return new ResponseEntity<List<SingerDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

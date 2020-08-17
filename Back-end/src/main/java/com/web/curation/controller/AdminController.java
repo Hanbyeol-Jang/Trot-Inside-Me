@@ -61,6 +61,7 @@ public class AdminController {
 	public ResponseEntity<List<AdminDto>> broadSchedulelist() {
 		List<AdminDto> list = adminService.getBroadScheduleList();
 		if (list != null) {
+			list.remove(0);
 			return new ResponseEntity<List<AdminDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -112,6 +113,7 @@ public class AdminController {
 	public ResponseEntity<List<SingerDto>> getSingerList() {
 		List<SingerDto> list = adminService.getSingerList();
 		if (list != null) {
+			list.remove(0);
 			return new ResponseEntity<List<SingerDto>>(list, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
