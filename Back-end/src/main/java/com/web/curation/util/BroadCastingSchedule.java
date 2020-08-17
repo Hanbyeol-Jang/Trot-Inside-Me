@@ -84,12 +84,14 @@ public class BroadCastingSchedule {
 
 	// 하루에 한번 스케쥴 넣기
 //	@Scheduled(cron = "0 30 10 * * ?")
-	@Scheduled(cron = "0 0 0 * * ?")
+	@Scheduled(cron = "30 20 13 * * ?")
 	public void insertSingerSchedule() throws Exception {
 		// db 가수 리스트 받아옴.
 		List<SingerDto> dsList = timeService.selectSinger();
 		for (int i = 1; i < dsList.size(); i++) {
 			if(dsList.get(i).getS_cafeUrl()==null) {
+				dsList.remove(i);
+			}else if(!dsList.get(i).getS_cafeUrl().contains("https://m.cafe.daum.net/")) {
 				dsList.remove(i);
 			}
 		}
@@ -103,7 +105,7 @@ public class BroadCastingSchedule {
 		WebDriver driver = new ChromeDriver(optins); // Driver 생성
 		List<BroadCastingDto> slist = new ArrayList<>();
 		for (int i = 1; i < dsList.size(); i++) {
-			System.out.println(dsList.get(i).getS_name());
+			System.out.println(dsList.get(i).getS_name()+"의 스케줄 크롤링 중 ");
 			driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 			driver.get(dsList.get(i).getS_cafeUrl());
 			
@@ -141,6 +143,7 @@ public class BroadCastingSchedule {
 
 		// 가수 리스트 디비 저장
 		timeService.insertSingerSchedule(slist);
+		System.out.println("가수 스케줄 저장 완료 ");
 	}
 
 	
