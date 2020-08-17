@@ -68,6 +68,7 @@ public class VoteController {
 	public ResponseEntity<HashMap<String, Object>> voteOverview(@PathVariable int s_idx) {
 		try {
 			String s_name = voteService.idxToName(s_idx);
+			String s_img = voteService.singerImg(s_idx);
 			int thisWeek = voteService.thisWeek(s_idx);
 			int thisWeekTotal = voteService.thisWeekTotal(s_idx);
 			int lastWeek = voteService.lastWeek(s_name);
@@ -82,6 +83,7 @@ public class VoteController {
 			HashMap<String, Object> map = new HashMap<>();
 
 			map.put("s_name", s_name);
+			map.put("s_img", s_img);
 			map.put("thisWeek", thisWeek);
 			map.put("thisWeekTotal", thisWeekTotal);
 			map.put("lastWeek", lastWeek);

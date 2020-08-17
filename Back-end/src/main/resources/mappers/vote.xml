@@ -27,6 +27,12 @@
 		where	s_idx = #{s_idx};
 	</select>
 	
+	<select id="singerImg" resultType="String">
+		SELECT 	s_img
+		from	Singer
+		where	s_idx = #{s_idx};
+	</select>
+	
 	<select id="thisWeek" resultType="int">
 		SELECT 	COUNT(s_idx) 
 		FROM 	Vote
