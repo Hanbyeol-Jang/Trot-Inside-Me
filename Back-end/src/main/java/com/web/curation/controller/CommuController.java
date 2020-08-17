@@ -96,7 +96,7 @@ public class CommuController {
 				String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getCo_img().getOriginalFilename();
 				File file = new File(saveUrl);
 				up.getCo_img().transferTo(file);
-				dto.setCo_img(saveUrl);
+				dto.setCo_img(up.getCo_img().getOriginalFilename());
 			}
 			
 			if(up.getCo_content()!=null) {
@@ -123,7 +123,7 @@ public class CommuController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
 			//이미지 처리 
-			String imgurl = commuService.getImgUrl(co_idx);
+			String imgurl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + commuService.getImgUrl(co_idx);
 			if(imgurl!=null) {
 				File file = new File(imgurl);
 				file.delete();
@@ -172,7 +172,7 @@ public class CommuController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
 			//이미지 처리 
-			String imgurl = commuService.getImgUrl(co_idx);
+			String imgurl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + commuService.getImgUrl(co_idx);
 			if(imgurl!=null) {
 				File file = new File(imgurl);
 				file.delete();
@@ -243,7 +243,7 @@ public class CommuController {
 			CommuDto dto = new CommuDto();
 			dto.setCo_idx(up.getCo_idx());
 			if(up.getCo_img()!=null) { //이미지 수정이라면 
-				String imgurl = commuService.getImgUrl(up.getCo_idx());
+				String imgurl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + commuService.getImgUrl(up.getCo_idx());
 				if(imgurl!=null) { //이미지 찾아서 삭제 
 					File file = new File(imgurl);
 					file.delete();
@@ -252,7 +252,7 @@ public class CommuController {
 				String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getCo_img().getOriginalFilename();
 				File file = new File(saveUrl);
 				up.getCo_img().transferTo(file);
-				dto.setCo_img(saveUrl);
+				dto.setCo_img(up.getCo_img().getOriginalFilename());
 			}
 			if(up.getCo_content()!=null) {
 				dto.setCo_content(up.getCo_content());
