@@ -10,7 +10,7 @@
                             <h4 class="msg-info pl-0 text-center">로그인해주세요 :)</h4>
                             <div class="row justify-center px-3">
                             <KakaoLogin
-                                api-key="3b520fb7e5e907ebebfde93be5b8a1aa"
+                                :api-key="apiKey"
                                 :on-success=onSuccess
                                 :on-failure=onFailure
                             />
@@ -34,6 +34,7 @@ export default {
         return {
             email: '',
             password: '',
+            apiKey: '3b520fb7e5e907ebebfde93be5b8a1aa'
         }
     },
     methods: {
