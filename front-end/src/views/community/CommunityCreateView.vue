@@ -10,8 +10,8 @@
     <v-card-text>
       <v-textarea solo label="여기를 눌러 새로운 소식을 남겨보세요." height="300" v-model="content"></v-textarea>
       <v-img :src="change_image" width="100%" height="100%" v-show="flag"></v-img>
-      <v-file-input show-size counter multiple label="사진을 등록 할 수 있습니다." type="file" id="file" ref="file" @change="communityImage()"></v-file-input>
-      <!-- <input type="file" id="file" ref="file" @change="communityImage()"/> -->
+      <!-- <v-file-input show-size counter multiple label="사진을 등록 할 수 있습니다." type="file" id="file" ref="file" @change="communityImage()"></v-file-input> -->
+      <input type="file" label="사진을 등록 할 수 있습니다." id="file" ref="file" @change="communityImage()"/>
     </v-card-text>
   </v-card>
   </div>
@@ -83,7 +83,7 @@ export default {
         },
 
         communityImage(){
-          this.image = this.$refs.file.$refs.input.files[0]
+          this.image = this.$refs.file.files[0]
           this.change_image = URL.createObjectURL(this.image)
           this.flag = true
         },
