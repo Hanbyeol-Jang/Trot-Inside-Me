@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import axios from 'axios'
 import SERVER from '@/api/drf'
 
@@ -45,16 +46,34 @@ export default {
             },
         }
     },
+    computed: {
+      ...mapGetters(['isLoggedIn']),
+    },
     methods:{
-        kakaogo(idx){
-            axios.get(SERVER.URL+`/board/tvmsg/${idx}`,this.axiosConfig)
+      kakaogo(idx){
+        if (this.isLoggedIn) {
+          axios.get(SERVER.URL+`/board/tvmsg/${idx}`,this.axiosConfig)
             .then(()=>{
               this.$alert("카카오 메세지를 확인 해 주세요!")
             })
             .catch((err)=>{
                 console.error(err)
             })
-        },
+        } else {
+          this.$confirm({
+          message: "로그인 해주세요!",
+          button: {
+              yes: '로그인 하기',
+              no: '돌아가기',
+            },
+            callback: confirm => {
+              if (confirm) {
+                this.$router.push({ name: 'Login' })
+              }
+            }
+          })
+        }
+      },
     },
 }
 </script>

@@ -3,7 +3,7 @@
     <div class="text-center">
       <v-avatar
         class="ma-3 elevation-4"
-        size="150px">
+        size="120px">
         <img
           v-if="singer.s_img"
           :src="'/img/' + singer.s_img"
@@ -14,19 +14,15 @@
           src="@/assets/image/user_default.png"
         >
       </v-avatar>
-      <h2 class="mt-4">{{ singer.s_name }}</h2>
+      <div class="mt-4 d-flex justify-center">
+        <h2 class="mr-2">{{ singer.s_name }} </h2>
+        <v-icon
+          color="pink">
+          mdi-heart
+        </v-icon><span class="subheading mx-2">{{ followCnt }} 명</span>
+        </div>
     </div>
     <v-container>
-      <v-row no-gutters>
-        <v-col cols="6">
-          <div class="text-center">
-            <v-icon
-              color="pink">
-              mdi-heart</v-icon>
-            {{ followCnt }} 명
-          </div>
-        </v-col>
-        <v-col cols="6">
           <div v-if="isLoggedIn" class="text-center">
             <v-btn v-if="!followBtn" rounded color="pink" dark @click="followSinger(followBtn)">
               <h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3>
@@ -40,10 +36,8 @@
               <h3><i class="fas fa-plus mr-2"></i>내 가수 추가하기</h3>
             </v-btn>
         </div>
-        </v-col>
-      </v-row>
     </v-container>
-    <v-container class="mt-4 text-center">
+    <v-container class="mt-2 text-center">
       <v-row no-gutters>
         <template v-for="menu in menus">
           <v-col :key="menu.id">
