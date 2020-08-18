@@ -81,7 +81,7 @@ export default {
             .then((reaponse)=>{
                 this.content=reaponse.data.co_content,
                 this.user=reaponse.data.co_name,
-                this.show_image=reaponse.data.co_img
+                this.show_image='/img/'+reaponse.data.co_img
                 this.getuser()
             })
             .catch((err)=>{
