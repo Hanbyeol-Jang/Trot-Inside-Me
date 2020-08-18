@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="mx-auto mb-10"
+    class="mx-auto mb-10 mt-10"
     max-width="700"
   >
     <v-container fluid>

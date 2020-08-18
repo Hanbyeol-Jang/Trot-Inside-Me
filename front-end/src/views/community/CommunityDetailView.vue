@@ -142,7 +142,6 @@ export default {
                 this.communityIdx=reaponse.data.co_idx
                 this.userImg = reaponse.data.co_profileImg
                 this.communityImg = reaponse.data.co_img
-                console.log(this.communityImg)
                 this.getuser()
             })
             .catch((err)=>{

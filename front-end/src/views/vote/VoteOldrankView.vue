@@ -31,6 +31,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import SERVER from '@/api/drf'
+import Swal from 'sweetalert2'
 // import VoteMoving from '@/components/vote/VoteMoving'
 import ScrollTopButton from '@/components/main/ScrollTopButton'
 // import Axios from 'axios'
@@ -85,11 +86,25 @@ export default {
         })
       }
     },
+
+
     goOld(){
       this.$router.push({ name: 'VoteView' })
     },
+
+
+    loaddata(){
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: '데이터를 불러오는 중입니다!',
+        showConfirmButton: false,
+        timer: 2000
+      })
+    }
   },
   created(){
+    this.loaddata()
     if (this.isLoggedIn) {
       this.getUser()
       }

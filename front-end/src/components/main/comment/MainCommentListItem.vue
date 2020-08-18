@@ -79,7 +79,7 @@ export default {
     },
 
     checkAuth(){
-      if (`${this.$cookies.get('auth-token')}`){
+      if (this.$cookies.get('auth-token')){
         axios.get(SERVER.URL+`/user/getUserInfo`,this.axiosConfig)
         .then((reaponse)=>{
             const currentUser = reaponse.data.u_name
