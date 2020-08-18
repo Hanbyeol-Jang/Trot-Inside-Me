@@ -119,4 +119,10 @@ public class BoardDaoImpl implements BoardDao {
 		return sqlSession.selectList(ns + "singerScheduleList", s_idx);
 	}
 
+	@Override
+	public List<BoardPK> searchVideo(String word) {
+
+		return sqlSession.selectList(ns + "searchVideo", word);
+	}
+
 }

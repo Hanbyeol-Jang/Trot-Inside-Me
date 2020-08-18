@@ -176,6 +176,37 @@ public class BoardController {
 
 	}
 
+	// 해당 가수 영상 리스트
+		@GetMapping("/videolist/search")
+		@ApiOperation(value = "영상 검색 기능")
+		public ResponseEntity<List<BoardPK>> searchVideo(@RequestParam String word, @RequestParam int page) {
+			List<BoardPK> list = null;
+			List<BoardPK> showList = new LinkedList<BoardPK>();
+			// 키워드로 영상 검색
+			
+			list = boardService.searchVideo(word);
+			// 최신순 , 가수 같이 검색
+			int lastPageRemain = list.size() % 5;
+			int lastPage = list.size() - lastPageRemain;
+			page = 5 * page - 5;
+			// 5개씩 보여주기
+			if (page < lastPage) {
+				for (int i = page; i < page + 5; i++) {
+					showList.add(list.get(i));
+				}
+			} else if (page == lastPage) {
+				for (int i = page; i < page + lastPageRemain; i++) {
+					showList.add(list.get(i));
+				}
+			}
+
+			if (showList != null) {
+				return new ResponseEntity<List<BoardPK>>(showList, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			}
+
+		}
 	// 해당 가수 기사 리스트
 	@GetMapping("/articlelist/{s_idx}")
 	@ApiOperation(value = "가수로 검색 기사 ")

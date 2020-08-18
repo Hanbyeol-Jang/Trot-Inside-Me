@@ -66,12 +66,19 @@ public class kakaoController {
 	// 로그아웃 앱서비스와의 연동을 끊음 => 카카오 로그인 탈퇴시 사용
 	@PostMapping(value = "/user/kakao/unlink")
 	@ApiOperation("카카오 로그아웃 (unlink) ")
-	public void kakaoUnlink(HttpServletRequest request) {
+	public ResponseEntity<String> kakaoUnlink(HttpServletRequest request) {
 		String useremail = jwtTokenProvider.getInfo(request).getU_email();
 		String accessToken = userService.getUserInfo(useremail).getU_accessToken();
-
+		try {
 		kakaoAPI.kakaoUnlink(accessToken);
 		kakaoService.deleteKakao(useremail);
+		kakaoAPI.kakaoLogout(accessToken);
+		return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+		}
+		catch(Exception e){
+			return new ResponseEntity<String>("FAIL",HttpStatus.OK);
+			
+		}
 	}
 
 }

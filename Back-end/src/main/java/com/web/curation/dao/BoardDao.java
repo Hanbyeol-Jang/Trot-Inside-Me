@@ -23,23 +23,19 @@ public interface BoardDao {
 	// 메인리스트
 	List<BoardPK> mainlist(int b_type);
 
-	// 네이버 동영상 DB에 넣기
-	public void insertVideo(BoardDto boardDto);
+	public void insertVideo(BoardDto boardDto); // 네이버 동영상 DB에 넣기
 
-	// 네이버 기사 DB에 넣기
-	public void insertArticle(BoardDto boardDto);
-
+	public void insertArticle(BoardDto boardDto); // 네이버 기사 DB에 넣기
 	// 가수 검색후 영상 리스트
+
 	public List<BoardPK> selectVideoList(String s_name);
 
 	// 가수 검색후 기사 리스트
 	public List<BoardPK> selectArticleList(String s_name);
 
-	// 네이버 동영상 vno가 db에 있는지 확인
-	public boolean isUrl(String vno, String name);
+	public boolean isUrl(String vno, String name); // 네이버 동영상 vno가 db에 있는지 확인
 
-	// 네이버 기사 url이 db에 있는지 확인
-	boolean isUrl2(String url, String name);
+	boolean isUrl2(String url, String name); // 네이버 기사 url이 db에 있는지 확인
 
 	// 기사+동영상 디테일
 	public BoardPK detail(GoodDto dto);
@@ -59,10 +55,19 @@ public interface BoardDao {
 	/* 좋아요 취소 */
 	int goodClickCancel(GoodDto dto);
 
-	// 편성표 전체 출력
-	List<BroadCastingDto> broadCastAllList();
+	List<BroadCastingDto> broadCastAllList(); // 편성표 전체 출력
 
-	// 가수 스케줄 리스트 출력
-	List<BroadCastingDto> singerScheduleList(int s_idx);
+	List<BroadCastingDto> singerScheduleList(int s_idx);// 가수 스케줄 리스트 출력
+
+	List<BoardPK> searchVideo(String word);
+
+//	/* 좋아요 취소 */
+//	int goodClickCancel(BoardPK boardPK);
+//
+//	/* 좋아요 수 표시 */
+//	int goodCount(BoardPK boardPK);
+
+	/* 댓글 수 표시 */
+//	int commentCount(BoardPK boardPK);
 
 }
