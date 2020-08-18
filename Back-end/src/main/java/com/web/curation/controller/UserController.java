@@ -97,6 +97,7 @@ public class UserController {
 		if (dto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
+		
 		GoodDto gdto = new GoodDto();
 		gdto.setB_type(2);
 		gdto.setU_email(dto.getU_email());
@@ -131,6 +132,10 @@ public class UserController {
 			gdto.setU_email(u_email);
 			List<BoardDto> list = userService.myBoardList(gdto);
 
+			for (int i = 0; i < list.size(); i++) {
+				System.out.println(list.get(i));
+			}
+			
 			List<BoardDto> showList = new ArrayList<>();
 			int lastPageRemain = list.size() % 5;
 			int lastPage = list.size() - lastPageRemain;
@@ -145,7 +150,6 @@ public class UserController {
 					showList.add(list.get(i));
 				}
 			}
-
 			return new ResponseEntity<List<BoardDto>>(showList, HttpStatus.OK);
 
 		} catch (Exception e) {

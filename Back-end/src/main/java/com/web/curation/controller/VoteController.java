@@ -67,21 +67,39 @@ public class VoteController {
 	@GetMapping("/voteOverview/{s_idx}")
 	public ResponseEntity<HashMap<String, Object>> voteOverview(@PathVariable int s_idx) {
 		try {
+
 			String s_name = voteService.idxToName(s_idx);
+
+
+			
 			String s_img = voteService.singerImg(s_idx);
 			int thisWeek = voteService.thisWeek(s_idx);
 			int thisWeekTotal = voteService.thisWeekTotal(s_idx);
 			int lastWeek = voteService.lastWeek(s_name);
 			int lastWeekTotal = voteService.lastWeekTotal(s_name);
-
+			
 			double thisWeekRatio = Math.round(((double) thisWeek / (double) thisWeekTotal * 1000)) / 100.0;
 			double lastWeekRatio = Math.round(((double) lastWeek / (double) lastWeekTotal * 1000)) / 100.0;
 
+
+			
 			int thisWeekRank = voteService.thisWeekRank(s_idx);
 			int lastWeekRank = voteService.lastWeekRank(s_name);
 
+			System.out.println(s_name);
+			System.out.println(s_name);
+			System.out.println(s_name);
+			
+			
+			
+			
 			HashMap<String, Object> map = new HashMap<>();
 
+			
+
+
+			
+			
 			map.put("s_name", s_name);
 			map.put("s_img", s_img);
 			map.put("thisWeek", thisWeek);

@@ -32,7 +32,7 @@
 
 	<!-- 마이페이지 리스트 -->
  	<select id="myBoardList" resultType="BoardDto">
- 		select 	g.u_email ,
+		select 	g.u_email ,
 				b.b_idx,
 				b.b_type,
 				b.b_title ,
@@ -43,8 +43,12 @@
 				b.b_member ,
 				b.b_content ,
 				(	select 	COUNT(*) 
-					from 	ssafy_trot.Board bb
-					where 	bb.b_type = b.b_type
+					from 	ssafy_trot.Good g left outer join ssafy_trot.Board b
+							on b.b_type = g.b_type and b.b_idx = g.b_idx
+							where 	b.b_type = g.b_type
+							and b.b_idx = g.b_idx
+			 				and g.u_email = #{u_email}
+			 				and b.b_type = #{b_type}
 				) as b_cnt,
 				(	select 	COUNT(*) 
 					from 	ssafy_trot.Reply r 
@@ -58,9 +62,9 @@
 					and		gg.b_idx	= g.b_idx
 				) as good_cnt
 		from 	ssafy_trot.Good g left outer join ssafy_trot.Board b
-				on b.b_type = g.b_type and b.b_idx = g.b_idx 
-		where 	g.b_type = #{b_type}
-				and g.u_email = #{u_email};
+				on b.b_type = g.b_type and b.b_idx = g.b_idx
+		where 	g.u_email = #{u_email}
+				and b.b_type = #{b_type};
  	</select>
  	<!-- 팔로우 전체 리스트 출력 -->
  	<select id="getFollowList"  resultType="com.web.curation.dto.FollowDto">
