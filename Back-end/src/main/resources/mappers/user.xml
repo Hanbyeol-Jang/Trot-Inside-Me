@@ -31,7 +31,6 @@
 				(	select 	COUNT(*) 
 					from 	Board bb
 					where 	bb.b_type = b.b_type
-							and bb.b_idx = b.b_idx
 				) as b_cnt,
 				(	select 	COUNT(*) 
 					from 	Reply r 
