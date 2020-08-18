@@ -59,6 +59,8 @@ public interface BoardDao {
 
 	List<BroadCastingDto> singerScheduleList(int s_idx);// 가수 스케줄 리스트 출력
 
+	List<BoardPK> searchVideo(String word);
+
 //	/* 좋아요 취소 */
 //	int goodClickCancel(BoardPK boardPK);
 //

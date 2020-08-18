@@ -121,8 +121,8 @@ public class BoardDaoImpl implements BoardDao {
 
 	@Override
 	public List<BoardPK> searchVideo(String word) {
-		
-		return sqlSession.selectList(ns+ "searchVideo",word);
+
+		return sqlSession.selectList(ns + "searchVideo", word);
 	}
 
 }
