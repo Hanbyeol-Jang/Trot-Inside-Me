@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/main/Home.vue'
+import About from '@/views/main/About.vue'
 import ArticleDetailView from '@/views/main/ArticleDetailView'
 import VideoDetailView from '@/views/main/VideoDetailView'
 import TvtableDetailView from '@/views/main/TvtableDetailView'
@@ -47,7 +48,11 @@ Vue.use(VueRouter)
     component: Home
   },
   {
-    // path: '/article/:articleId',
+    path: '/',
+    name: 'About',
+    component: About
+  },
+  {
     path: '/article/:articleId',
     name: 'ArticleDetailView',
     component: ArticleDetailView

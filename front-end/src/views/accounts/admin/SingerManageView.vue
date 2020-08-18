@@ -25,7 +25,7 @@
                 size="60">
                 <img
                   v-if="singer.s_img"
-                  :src="singerImg"
+                  :src="'/img/' + singer.s_img"
                   alt="Singer Default"
                 >
                 <img
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   data () {
@@ -71,10 +71,9 @@ export default {
     }
   },
   computed: {
+    ...mapState(['user']),
+    ...mapGetters(['isLoggedIn']),
     ...mapState(['singers']),
-    singerImg() {
-      return '/img/' + this.singer.s_img
-    }
   },
   methods: {
     ...mapActions(['fetchSingers', 'deleteSinger']),
@@ -87,6 +86,10 @@ export default {
   },
   created() {
     this.fetchSingers()
+    if (this.isLoggedIn && !this.user.u_isAdmin) {
+      this.$alert("잘못된 접근입니다.")
+      this.$router.push({ name: 'Home' })
+    }
   }
 }
 </script>

@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
 
@@ -79,6 +79,8 @@ export default {
       }
     },
     computed: {
+      ...mapState(['user']),
+      ...mapGetters(['isLoggedIn']),
       nameErrors () {
         const errors = []
         if (!this.$v.name.$dirty) return errors
@@ -126,6 +128,12 @@ export default {
         this.change_image = URL.createObjectURL(this.image)
         this.flag = true
       },
+    },
+    created() {
+      if (this.isLoggedIn && !this.user.u_isAdmin) {
+        this.$alert("잘못된 접근입니다.")
+        this.$router.push({ name: 'Home' })
+      }
     },
 }
 </script>

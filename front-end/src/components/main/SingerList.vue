@@ -15,7 +15,7 @@
                       class="text-center elevation-3">
                       <img
                         v-if="singer.s_img"
-                        :src="singerImg"
+                        :src="'/img/' + singer.s_img"
                         alt="Singer Default"
                       >
                       <img
@@ -41,11 +41,6 @@ export default {
     name:"SingerList",
     props:{
       singers: Array,
-    },
-    computed: {
-      singerImg() {
-        return '/img/' + this.singers.s_img
-      }
     },
     methods:{
 

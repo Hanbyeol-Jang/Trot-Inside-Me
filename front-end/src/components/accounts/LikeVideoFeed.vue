@@ -51,6 +51,15 @@ export default {
         axios.get(SERVER.URL + SERVER.ROUTES.followVideoList + this.userId, options)
           .then((res) => {
             this.videoCnt = res.data[0].b_cnt
+            console.log(res.data)
+            res.data.forEach(item => {
+              const parser = new DOMParser()
+              const doc = parser.parseFromString(item.b_title, 'text/html')
+              item.b_title = doc.body.innerText
+              if (item.b_title.length > 35) {
+                item.b_title = item.b_title.slice(0, 35) + '...'
+              }
+            })
             setTimeout(() => { this.videos.push(...res.data) }, 500) 
           })
           .catch(err => console.log(err))
@@ -63,6 +72,14 @@ export default {
             .then(res => {
               setTimeout(() => {
                 this.videos.push(...res.data)
+                res.data.forEach(item => {
+                  const parser = new DOMParser()
+                  const doc = parser.parseFromString(item.b_title, 'text/html')
+                  item.b_title = doc.body.innerText
+                  if (item.b_title.length > 35) {
+                    item.b_title = item.b_title.slice(0, 35) + '...'
+                  }
+                })
                 $state.loaded()
               }, 500);
             })

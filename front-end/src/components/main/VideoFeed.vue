@@ -76,6 +76,14 @@ export default {
           axios.get(SERVER.URL + SERVER.ROUTES.singerVideoList + this.singerId, options)
             .then((res) => {
               this.videoCnt = res.data[0].b_cnt
+              res.data.forEach(item => {
+                const parser = new DOMParser()
+                const doc = parser.parseFromString(item.b_title, 'text/html')
+                item.b_title = doc.body.innerText
+                if (item.b_title.length > 40) {
+                  item.b_title = item.b_title.slice(0, 40) + '...'
+                }
+              })
               setTimeout(() => { this.videos.push(...res.data) }, 500) 
             })
             .catch(err => console.log(err))
@@ -88,6 +96,14 @@ export default {
           axios.get(SERVER.URL + SERVER.ROUTES.mainList + this.mediaType, options)
             .then((res) => {
               this.videoCnt = res.data[0].b_cnt
+              res.data.forEach(item => {
+                const parser = new DOMParser()
+                const doc = parser.parseFromString(item.b_title, 'text/html')
+                item.b_title = doc.body.innerText
+                if (item.b_title.length > 35) {
+                  item.b_title = item.b_title.slice(0, 35) + '...'
+                }
+              })
               setTimeout(() => { this.videos.push(...res.data) }, 500) 
             })
             .catch(err => console.log(err))

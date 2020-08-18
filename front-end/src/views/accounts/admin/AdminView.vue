@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'AdminView',
@@ -64,6 +64,7 @@ export default {
   },
   computed: {
     ...mapState(['user']),
+    ...mapGetters(['isLoggedIn']),
   },
   methods: {
     goMenuDetail(id) {
@@ -72,6 +73,12 @@ export default {
       } else if (id === 2) {
         this.$router.push({ name: 'ProgramManageView' })
       }
+    }
+  },
+  created() {
+    if (this.isLoggedIn && !this.user.u_isAdmin) {
+      this.$alert("잘못된 접근입니다.")
+      this.$router.push({ name: 'Home' })
     }
   },
 }
