@@ -1,7 +1,7 @@
 <template>
   <div class="mt-5">
     <div class="text-center">
-      <h2 class="mt-4">{{ singer.s_name }}</h2>
+      <h1 class="mt-4">{{ singer.s_name }}</h1>
     </div>
     <SingerVoteResult/>
   </div>

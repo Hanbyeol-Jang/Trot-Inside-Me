@@ -121,7 +121,6 @@ export default {
         }
         axios.get(SERVER.URL + "/board/videolist/search", options)
           .then((res) => {
-            console.log(res)
             this.videoCnt = res.data[0].b_cnt
             setTimeout(() => { this.videos.push(...res.data) }, 500) 
           })

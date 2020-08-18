@@ -55,18 +55,20 @@ export default {
   methods: {
 
     checkAuth(){
-      const axiosConfig ={
-          headers:{
-              token : `${this.$cookies.get('auth-token')}`
-          },
+      if (this.$cookies.get('auth-token')){
+        const axiosConfig ={
+            headers:{
+                token : `${this.$cookies.get('auth-token')}`
+            },
+        }
+        axios.get(SERVER.URL+`/user/getUserInfo`,axiosConfig)
+        .then((reaponse)=>{
+            this.currentUser = reaponse.data
+        })
+        .catch((err)=>{
+            console.error(err)
+        })
       }
-      axios.get(SERVER.URL+`/user/getUserInfo`,axiosConfig)
-      .then((reaponse)=>{
-          this.currentUser = reaponse.data
-      })
-      .catch((err)=>{
-          console.error(err)
-      })
     },
 
     getComments(){
