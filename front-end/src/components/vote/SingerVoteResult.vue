@@ -1,6 +1,12 @@
 <template>
-    <v-container class="mt-4">
-        <div class="text-center mt-4"> 이번주 투표 현황 및 순위</div>
+  <v-card>
+    <v-container class="singerVoteResult mt-4">
+        <div class="text-center mt-4">
+          <h4>
+            이번주 투표 현황 및 순위
+          </h4>
+        </div>
+        <hr>
         <div class="mt-5">{{singerVote.thisWeekTotal}} 중 {{singerVote.thisWeek}} 득표</div>
       <div class="d-flex">
         <div>
@@ -10,11 +16,19 @@
             </e-accumulation-series-collection>
           </ejs-accumulationchart>
         </div>
-        <div class="d-flex align-center">
+        <div class="d-flex">
             {{singerVote.thisWeekRank}} 등
         </div>
       </div>
-    <div class="text-center mt-4"> 지난주 투표 결과 및 순위</div>
+      <br>
+      <hr>
+      <hr>
+    <div class="text-center mt-4"> 
+          <h4>
+            지난주 투표 결과 및 순위
+          </h4>
+    </div>
+    <hr>
     <div class="mt-5">{{singerVote.lastWeekTotal}} 중 {{singerVote.lastWeek}} 득표</div>
       <div class="d-flex">
         <div>
@@ -24,11 +38,15 @@
             </e-accumulation-series-collection>
           </ejs-accumulationchart>
         </div>
-        <div class="d-flex align-center">
+        <div class="d-flex">
             {{singerVote.lastWeekRank}} 등
         </div>
       </div>
+      <br>
+      <hr>
+      <hr>
     </v-container>
+  </v-card>
 </template>
 
 <script>
@@ -52,5 +70,8 @@ export default {
 </script>
 
 <style>
+.singerVoteResult{
+  font-size: 200%;
+}
 
 </style>
