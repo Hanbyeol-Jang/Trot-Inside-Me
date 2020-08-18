@@ -81,7 +81,7 @@ public class BroadCastingSchedule {
 	}
 
 	// 하루에 한번 스케쥴 넣기
-	@Scheduled(cron = "0 0 0 * * ?")
+	@Scheduled(cron = "10 0 0 * * ?")
 	public void insertSingerSchedule() throws Exception {
 		// db 가수 리스트 받아옴.
 		List<SingerDto> dsList = timeService.selectSinger();
@@ -102,6 +102,7 @@ public class BroadCastingSchedule {
 		WebDriver driver = new ChromeDriver(optins); // Driver 생성
 		List<BroadCastingDto> slist = new ArrayList<>();
 		for (int i = 1; i < dsList.size(); i++) {
+			System.out.println(dsList.get(i).getS_name());
 			driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 			driver.get(dsList.get(i).getS_cafeUrl());
 

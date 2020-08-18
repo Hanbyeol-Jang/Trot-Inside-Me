@@ -215,7 +215,7 @@ public class UserController {
 	public ResponseEntity<UserDto> getUserInfo(HttpServletRequest request) {
 		String token = request.getHeader("token");
 		if (token.equals("null")) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(null, HttpStatus.OK);
 		}
 		UserDto dto = userService.getTokenInfo(request); // 헤더에서 유저정보 추출
 		if (dto.getU_name().equals("F")) {
