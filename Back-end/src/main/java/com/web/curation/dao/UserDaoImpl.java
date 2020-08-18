@@ -7,7 +7,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.web.curation.dto.BoardDto;
 import com.web.curation.dto.FollowDto;
+import com.web.curation.dto.GoodDto;
 import com.web.curation.dto.UserDto;
 
 @Repository
@@ -16,7 +18,6 @@ public class UserDaoImpl implements UserDao {
 	@Autowired
 	private SqlSession sqlSession;
 	String ns = "com.web.curation.dao.UserDao.";
-
 
 	@Override
 	public UserDto edit(UserDto userDto) throws SQLException {
@@ -30,38 +31,42 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public String findPassword(String email) {
-		return sqlSession.selectOne(ns+".findpassword", email);
+		return sqlSession.selectOne(ns + ".findpassword", email);
 	}
 
 	@Override
 	public void changePassword(UserDto userDto) {
-		sqlSession.update(ns+"changepassword", userDto);
+		sqlSession.update(ns + "changepassword", userDto);
 	}
 
 	@Override
 	public int join(UserDto user) {
-		return sqlSession.insert(ns+"join", user);
+		return sqlSession.insert(ns + "join", user);
 	}
 
 	@Override
 	public UserDto getUserInfoSuc(String email) {
-		return sqlSession.selectOne(ns+"getUserInfoSuc", email);
+		return sqlSession.selectOne(ns + "getUserInfoSuc", email);
 	}
 
 	@Override
 	public List<FollowDto> getFollowList(String userEmail) {
-		return sqlSession.selectList(ns+"getFollowList", userEmail);
+		return sqlSession.selectList(ns + "getFollowList", userEmail);
 	}
 
 	@Override
 	public int followApply(FollowDto dto) {
-		return sqlSession.insert(ns+"followApply",dto);
+		return sqlSession.insert(ns + "followApply", dto);
 	}
 
 	@Override
 	public int followDelete(FollowDto dto) {
-		return sqlSession.delete(ns+"followDelete",dto);
+		return sqlSession.delete(ns + "followDelete", dto);
 	}
-	
-	
+
+	@Override
+	public List<BoardDto> myBoardList(GoodDto gdto) {
+		return sqlSession.selectList(ns + "myBoardList", gdto);
+	}
+
 }

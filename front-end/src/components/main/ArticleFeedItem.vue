@@ -1,25 +1,27 @@
 <template>
     <v-card
-        color="#EEEEEE"
-        v-if="article.b_title"
-        class="my-4"
-        @click="goArticleoDetail"
-        shaped
-        >
-        <v-card-title class="">{{ article.b_title }}</v-card-title>
-        <v-card-subtitle>{{ article.b_company }}</v-card-subtitle>
-        <v-row
+      color="#EEEEEE"
+      v-if="article.b_title"
+      class="my-4"
+      @click="goArticleoDetail"
+      shaped
+      >
+      <v-card-title class="">{{ article.b_title }}</v-card-title>
+      <v-card-subtitle>{{ article.b_company }}</v-card-subtitle>
+      <v-row
         align="center"
         justify="end"
-        class="mr-5 pb-3"
-        >
-        {{ article.b_date }}
-        <v-icon class="mr-1">mdi-heart</v-icon>
-        <span class="subheading mr-2">{{ article.b_good }}</span>
-        <span class="mr-1">·</span>
-        <i class="fas fa-comment fa-lg mr-1"></i>
-        <span class="subheading mr-2">{{ article.b_reply }}</span>
-        </v-row>
+        class="mx-4 pb-3 d-flex justify-space-between"
+      >
+        <div>{{ article.b_date }}</div>
+        <div>
+          <v-icon v-if="article.good_flag" color="pink">mdi-heart</v-icon>
+          <v-icon v-else>mdi-heart</v-icon>
+          <span class="subheading mx-2">{{ article.good_cnt }}</span>
+          <v-icon>mdi-message-text</v-icon>
+          <span class="subheading mx-2">{{ article.br_cnt }}</span>      
+        </div>
+      </v-row>
     </v-card>
 </template>
 

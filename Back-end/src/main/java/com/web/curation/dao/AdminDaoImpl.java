@@ -10,7 +10,7 @@ import com.web.curation.dto.AdminDto;
 import com.web.curation.dto.SingerDto;
 
 @Repository
-public class AdminDaoImpl implements AdminDao{
+public class AdminDaoImpl implements AdminDao {
 	@Autowired
 	SqlSession session;
 
@@ -18,32 +18,42 @@ public class AdminDaoImpl implements AdminDao{
 
 	@Override
 	public int addBroadSchedule(AdminDto dto) {
-		return session.insert(ns+"addBroadSchedule",dto);
+		return session.insert(ns + "addBroadSchedule", dto);
 	}
 
 	@Override
-	public int	deleteBroadSchedule(int a_idx) {
-		return session.delete(ns+"deleteBroadSchedule",a_idx);
+	public int deleteBroadSchedule(int a_idx) {
+		return session.delete(ns + "deleteBroadSchedule", a_idx);
 	}
 
 	@Override
 	public List<AdminDto> getBroadScheduleList() {
-		return session.selectList(ns+"getBroadScheduleList");
+		return session.selectList(ns + "getBroadScheduleList");
 	}
+
 	@Override
 	public List<SingerDto> getSingerList() {
-		return session.selectList(ns+"getSingerList");
+		return session.selectList(ns + "getSingerList");
 	}
 
 	@Override
 	public int addSinger(SingerDto dto) {
-		return session.insert(ns+"addSinger",dto);
+		return session.insert(ns + "addSinger", dto);
 	}
 
 	@Override
 	public int deleteSinger(int s_idx) {
-		return session.delete(ns+"deleteSinger",s_idx);
+		return session.delete(ns + "deleteSinger", s_idx);
 	}
 
-	
+	@Override
+	public String getTVImgUrl(int a_idx) {
+		return session.selectOne(ns + "getTVImgUrl", a_idx);
+	}
+
+	@Override
+	public String getSingerImgUrl(int s_idx) {
+		return session.selectOne(ns + "getSingerImgUrl", s_idx);
+	}
+
 }

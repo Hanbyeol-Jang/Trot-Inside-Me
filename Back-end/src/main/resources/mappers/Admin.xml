@@ -5,8 +5,8 @@
 <mapper namespace="com.web.curation.dao.AdminDao">
 	<!-- 관리자 편성표 추가-->
 	<insert id="addBroadSchedule" parameterType="com.web.curation.dto.AdminDto">
-		insert into Admin(a_broadName, a_broadUrl)
-		value(#{a_broadName}, #{a_broadUrl} );
+		insert into Admin(a_broadName, a_broadUrl, a_img)
+		value(#{a_broadName}, #{a_broadUrl} , #{a_img});
 	</insert>
 	
 	<!-- 관리자 편성표 삭제 -->
@@ -16,13 +16,13 @@
 	
 	<!-- 관리자 편성표 리스트 출력 -->
 	<select id="getBroadScheduleList" resultType="com.web.curation.dto.AdminDto">
-		select a_broadName, a_broadUrl from Admin ;
+		select a_idx, a_broadName, a_broadUrl, a_img from Admin ;
 	</select>
 	
 	<!-- 가수 추가-->
 	<insert id="addSinger" parameterType="com.web.curation.dto.SingerDto">
-		insert into Singer(s_name, s_cafeUrl)
-		value(#{s_name}, #{s_cafeUrl} );
+		insert into Singer(s_name, s_cafeUrl, s_img)
+		value(#{s_name}, #{s_cafeUrl} , #{s_img});
 	</insert>
 	
 	<!-- 가수 삭제 -->
@@ -32,7 +32,26 @@
 	
 	<!-- 가수 리스트 출력 -->
 	<select id="getSingerList" resultType="com.web.curation.dto.SingerDto">
-		select * from Singer ;
+		select 	s_idx,
+				s_name,
+				s_img,
+				s_url,
+				s_cafeUrl,
+				f_cnt,
+				f_flag
+		from Singer ;
+	</select>
+	
+	<select id="getTVImgUrl" resultType="String">
+		select a_img
+		from Admin
+		where a_idx = #{a_idx}
+	</select>
+	
+	<select id="getSingerImgUrl" resultType="String">
+		select s_img
+		from Singer
+		where s_idx = #{s_idx}
 	</select>
  </mapper>
         

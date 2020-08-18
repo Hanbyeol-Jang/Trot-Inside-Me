@@ -1,12 +1,14 @@
 <template>
   <div class="my-5">
-    <h1 class="d-flex">커뮤니티 수정</h1>
   <v-card
     class="mx-auto mt-5"
     max-width="500"
   >
     <v-card-actions class="d-flex flex-row-reverse">
-        <v-btn text color="deep-purple accent-4" @click="updateCommunity"><v-icon class="mr-2">mdi-pencil</v-icon>글 수정하기</v-btn>
+        <v-btn  outlined color="deep-purple accent-4" @click="updateCommunity"><v-icon class="mr-2">mdi-pencil</v-icon>글 수정하기</v-btn>
+        <div class="mr-1">
+            <v-btn depressed  color="error" @click="deleteArticle2">삭제</v-btn>
+        </div>
     </v-card-actions>    
     <v-card-text>
       <v-textarea solo label="여기를 눌러 새로운 소식을 남겨보세요." height="300" v-model="content"></v-textarea>
@@ -29,13 +31,13 @@ export default {
             flag:false,
             show_image:'',
             change_image:'',
-            image:"",
+            image:null,
             content:"",
             currentuser:"",
             user:"",
             axiosConfig:{
               headers:{
-                Authorization : `Token ${this.$cookies.get('auth-token')}`
+                token : `${this.$cookies.get('auth-token')}`
               }
             },
         }
@@ -43,15 +45,26 @@ export default {
     methods:{
         checklogin(){
             if (!(this.$cookies.get('auth-token'))){
-                this.$alert(" 로그인을 해주세요")
-                this.$router.push({name:'Home'})                
+            this.$confirm(
+                {
+                message: `로그인 해주세요.`,
+                button: {
+                    yes: '로그인 하기',
+                    no: '돌아가기',
+                },
+                callback: confirm => {
+                    if (confirm) {
+                      this.$router.push({ name: 'Login'})
+                    }
+                }})
+            this.$router.push({name:'Home'})                
             }
         },
 
         getuser(){
-            axios.get(`${SERVER.URL}/rest-auth/user/`,this.axiosConfig)
+            axios.get(`${SERVER.URL}/user/getUserInfo`,this.axiosConfig)
                 .then((reaponse)=>{
-                this.currentuser = reaponse.data.username
+                this.currentuser = reaponse.data.u_name
                 if (this.user !== this.currentuser){
                     this.$alert("잘 못 된 접근입니다.");
                     this.$router.push({name:'Home'})
@@ -63,11 +76,11 @@ export default {
         },
 
         getcommunity(){ 
-            axios.get(`${SERVER.URL}/community/articles/`+this.$route.params.communityId+'/')
+            axios.get(SERVER.URL+`/community/detail/${this.$route.params.communityId}`,this.axiosConfig)
             .then((reaponse)=>{
-                this.show_image = SERVER.URL+reaponse.data.data.image
-                this.content = reaponse.data.data.content
-                this.user = reaponse.data.data.user.username
+                this.content=reaponse.data.co_content,
+                this.user=reaponse.data.co_name,
+                this.show_image='/img/'+reaponse.data.co_img
                 this.getuser()
             })
             .catch((err)=>{
@@ -75,14 +88,20 @@ export default {
             })
         },
 
-        updateCommunity(event){
-            event.preventDefault()
-            const data = new FormData()
-            data.append('content',this.content)
-            if (this.$refs.file.$refs.input.files[0]!==undefined){
-              data.append('image',this.image)
+        updateCommunity(){
+            const axiosConfig2={
+              headers:{
+                token : `${this.$cookies.get('auth-token')}`,
+                'Content-Type': 'multipart/form-data'
+              }
             }
-            axios.post(`${SERVER.URL}/community/`,data,this.axiosConfig)
+            const data = new FormData()
+            data.append('co_idx',this.$route.params.communityId)
+            data.append('co_content',this.content)
+            if (this.$refs.file.$refs.input.files[0]!==undefined){
+              data.append('co_img',this.image)
+            }
+            axios.put(`${SERVER.URL}/community/update`,data,axiosConfig2)
             .then(()=>{
                 this.$router.push({ name: 'CommunityIndexView'})
             })
@@ -91,16 +110,45 @@ export default {
             })
         },
 
+        deleteArticle2(){
+            this.$confirm(
+                {
+                message: `삭제하시겠습니까?`,
+                button: {
+                    yes: '삭제하기',
+                    no: '아니요',
+                },
+                callback: confirm => {
+                    if (confirm) {
+                        const axiosConfig2 = {
+                        headers:{
+                            token: `${this.$cookies.get('auth-token')}`,
+                            },
+                        }
+                        axios.delete(SERVER.URL+`/community/detaildelete/${this.$route.params.communityId}`,axiosConfig2)
+                        .then(()=>{
+                            this.$alert('삭제 완료')
+                            this.$router.push({name:'CommunityIndexView'})                
+                        })
+                        .catch((err)=>{
+                            console.log(err)
+                        })                  
+                    }
+                }
+                }
+            )
+        },
+
         communityImage(){
           this.image = this.$refs.file.$refs.input.files[0]
           this.change_image = URL.createObjectURL(this.image)
           this.flag = true
         },
+
     },
     created(){
         this.checklogin()
         this.getcommunity()
-        this.getuser()
     },
 }
 </script>

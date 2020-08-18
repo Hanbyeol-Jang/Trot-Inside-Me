@@ -1,30 +1,38 @@
 <template>
-  <v-container>
-    <div v-for="video in videos" :key="video.b_idx"  class="mb-5">
-      <VideoFeedItem :video="video"/>
-    </div>
-    <div class="mt-10" v-if="!videos.length">
-      <div class="d-flex justify-center">
-        <circle8></circle8>
+  <div>
+    <VideoFeedSearch v-show="!singerId" @search-video="fetchVideoData2" @video="fetchVideoData"/>
+    <v-container>
+      <div v-for="video in videos" :key="video.b_idx"  class="mb-5">
+        <VideoFeedItem :video="video"/>
       </div>
-      <h2 class="text-center mt-4">
-        잠시만 기다려 주세요!
-      </h2>
-    </div>
-    <infinite-loading v-if="videos.length" @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
-
-  </v-container>
+      <div class="mt-10" v-if="!videos.length">
+        <div class="d-flex justify-center">
+          <circle8></circle8>
+        </div>
+        <h2 class="text-center mt-4">
+          잠시만 기다려 주세요!
+        </h2> 
+      </div>
+      <ScrollTopButton /> 
+      <infinite-loading 
+        v-if="videos.length" @infinite="infiniteHandler" spinner="waveDots">
+      </infinite-loading>
+    </v-container>
+  </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import VideoFeedSearch from '@/components/main/VideoFeedSearch'
+
+import { mapState } from 'vuex'
 
 import axios from 'axios'
+import SERVER from '@/api/drf'
 import InfiniteLoading from 'vue-infinite-loading'
 import { Circle8 } from 'vue-loading-spinner'
 
-import SERVER from '@/api/drf'
 import VideoFeedItem from './VideoFeedItem'
+import ScrollTopButton from './ScrollTopButton'
 
 export default {
     name: 'VideoFeed',
@@ -32,89 +40,154 @@ export default {
       return {
         videos: [],
         page: 1,
-        pageAll: 1,
         mediaType: 1,
+        videoCnt: 0,
+        searchFlag:false,
+        keyword:'',
       }
     },
     components: {
       VideoFeedItem,
       InfiniteLoading,
       Circle8,
+      ScrollTopButton,
+      VideoFeedSearch
     },
     props: {
       singerId: Number,
     },
     computed: {
-      ...mapState(['contentsCount']),
+      ...mapState(['authToken']),
       routeSingerId() {
         return parseInt(this.$route.params.singerId)
       }
     },
     methods: {
-      ...mapActions(['getContentsCount']),
       fetchVideoData() {
+        this.searchFlag=false
+        this.videos=[]
+        this.page = 1
         if (this.routeSingerId) {
-          const options = { params: { page: this.page++ }}
-          axios.get(SERVER.URL + `/singer/${this.singerId}/videos`, options)
-            .then(res => {
-              setTimeout(() => {
-                this.videos.push(...res.data)
-              }, 1000);
+          // singer
+          const options = {
+              headers:{ token: this.authToken },
+              params: { page: this.page++ }
+          }
+          axios.get(SERVER.URL + SERVER.ROUTES.singerVideoList + this.singerId, options)
+            .then((res) => {
+              this.videoCnt = res.data[0].b_cnt
+              res.data.forEach(item => {
+                const parser = new DOMParser()
+                const doc = parser.parseFromString(item.b_title, 'text/html')
+                item.b_title = doc.body.innerText
+                if (item.b_title.length > 40) {
+                  item.b_title = item.b_title.slice(0, 40) + '...'
+                }
+              })
+              setTimeout(() => { this.videos.push(...res.data) }, 500) 
             })
             .catch(err => console.log(err))
         } else {
-          console.log('all')
-          const options = { params: { page: this.page++ }}
-          axios.get(SERVER.URL + `/${this.mediaType}/good`, options)
-            .then(res => {
-              setTimeout(() => {
-                this.videos.push(...res.data)
-              }, 500);
+          // all
+          const options = {
+              headers:{ token: this.authToken },
+              params: { page: this.page++ }
+          }
+          axios.get(SERVER.URL + SERVER.ROUTES.mainList + this.mediaType, options)
+            .then((res) => {
+              this.videoCnt = res.data[0].b_cnt
+              res.data.forEach(item => {
+                const parser = new DOMParser()
+                const doc = parser.parseFromString(item.b_title, 'text/html')
+                item.b_title = doc.body.innerText
+                if (item.b_title.length > 35) {
+                  item.b_title = item.b_title.slice(0, 35) + '...'
+                }
+              })
+              setTimeout(() => { this.videos.push(...res.data) }, 500) 
             })
             .catch(err => console.log(err))
         }
       },
+
+      fetchVideoData2(keyword) {
+        this.page = 1
+        this.searchFlag=true
+        this.videos=[]
+        this.keyword=keyword
+        const options = {
+            // headers:{ token: this.authToken },
+            params: { word:keyword,page: this.page++ }
+        }
+        axios.get(SERVER.URL + "/board/videolist/search", options)
+          .then((res) => {
+            this.videoCnt = res.data[0].b_cnt
+            setTimeout(() => { this.videos.push(...res.data) }, 500) 
+          })
+          .catch(err => console.log(err))
+      },
+      // Pagination
       infiniteHandler($state){
-        if (this.routeSingerId) {
-          if (parseInt(this.contentsCount / 5) + 1 >= this.page){
-            const options = {params: { page: this.page++ }}
-            axios.get(SERVER.URL + `/singer/${this.singerId}/videos`, options)
-              .then(res => {
-                setTimeout(() => {
-                  this.videos.push(...res.data)
-                  $state.loaded()
-                }, 1000);
-              })
-              .catch(err => console.log(err))
-          } else{
-            $state.complete()
+        if(!this.searchFlag){
+          if (this.routeSingerId) {
+            // singer
+            if (parseInt(this.videoCnt / 5) + 1 >= this.page){
+              const options = {
+                headers:{ token: this.authToken },
+                params: { page: this.page++ }
+              }
+              axios.get(SERVER.URL + SERVER.ROUTES.singerVideoList + this.singerId, options)
+                .then(res => {
+                  setTimeout(() => {
+                    this.videos.push(...res.data)
+                    $state.loaded()
+                  }, 500);
+                })
+                .catch(err => console.log(err))
+            } else{
+              $state.complete()
+            }
+          } else {
+            // all
+            if (parseInt(this.videoCnt / 5) + 1 >= this.page){
+              const options = {
+                headers:{ token: this.authToken },
+                params: { page: this.page++ }
+              }
+              axios.get(SERVER.URL + SERVER.ROUTES.mainList + this.mediaType, options)
+                .then(res => {
+                  setTimeout(() => {
+                    this.videos.push(...res.data)
+                    $state.loaded()
+                  }, 500);
+                })
+                .catch(err => console.log(err))
+            } else{
+              $state.complete()
+            }
           }
-        } else {
-          console.log('all')
-          if (parseInt(this.contentsCount / 5) + 1 >= this.page){
-            const options = {params: { page: this.page++ }}
-            axios.get(SERVER.URL + `/${this.mediaType}/good`, options)
-              .then(res => {
-                setTimeout(() => {
-                  this.videos.push(...res.data)
-                  $state.loaded()
-                }, 1000);
-              })
-              .catch(err => console.log(err))
-          } else{
-            $state.complete()
-          }
+        }else{
+            if (parseInt(this.videoCnt / 5) + 1 >= this.page){
+              const options = {
+                // headers:{ token: this.authToken },
+                params: { word:this.keyword,page: this.page++ }
+              }
+              axios.get(SERVER.URL + "/board/videolist/search", options)
+                .then(res => {
+                  setTimeout(() => {
+                    this.videos.push(...res.data)
+                    $state.loaded()
+                  }, 500);
+                })
+                .catch(err => console.log(err))
+            } else{
+              $state.complete()
+            }
         }
       },
     },
     created() {
-      const info = { mediaType: 1, singerId: this.$route.params.singerId }
-      this.getContentsCount(info)
       this.fetchVideoData()
     },
 }
 </script>
-
-<style scoped>
-
-</style>

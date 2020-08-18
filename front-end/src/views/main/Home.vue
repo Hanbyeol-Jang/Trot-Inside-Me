@@ -1,16 +1,21 @@
 <template>
   <div class="home">
-    <div class="text-center">
-      <v-carousel 
+    <div class="text-center mt-4">
+      <v-carousel
         height="200px"
         hide-delimiters
         cycle
         >
-        <v-carousel-item
+        <CarouselItem 
           v-for="(item,i) in items"
           :key="i"
-          :src="item.src"
-        ></v-carousel-item>
+          :imgSrc="item.src"/>
+        <v-carousel-item>
+          <VoteThisWeek />
+        </v-carousel-item>
+        <v-carousel-item>
+          <VoteLastWeek />
+        </v-carousel-item>
       </v-carousel>
       <v-container class="mt-4">
         <v-row no-gutters>
@@ -43,11 +48,15 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
 // <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 import VideoIcon from '@/assets/icon/video-icon.svg'
 import MagazineIcon from '@/assets/icon/magazine-icon.svg'
 import TelevisionIcon from '@/assets/icon/television-icon.svg'
 import MicrophoneIcon from '@/assets/icon/microphone-icon.svg'
+import CarouselItem from '@/components/main/CarouselItem'
+import VoteThisWeek from '@/components/vote/VoteThisWeek'
+import VoteLastWeek from '@/components/vote/VoteLastWeek'
 
 export default {
   name: 'Home',
@@ -56,6 +65,9 @@ export default {
     MagazineIcon,
     TelevisionIcon,
     MicrophoneIcon,
+    CarouselItem,
+    VoteThisWeek,
+    VoteLastWeek,
   },
   data() {
     return {
@@ -75,11 +87,12 @@ export default {
           {
             src: 'https://t1.daumcdn.net/cfile/tistory/993095345F05621F27',
           },
-          {
-            src: 'https://ww.namu.la/s/a2ad1d574127aeee0a954f6dda80e03523905049e7b1e967386f5c6f908fd62984552557122c41470dacd9159e43d3cda340b408e906747f0ac9dc2db757814b2354671e76fe84815de0689d982e30618c5a0bb0ff74c5b45c5a79c5f5110f81',
-          },
         ],
     }
+  },
+  computed: {
+    ...mapState(['user']),
+    ...mapGetters(['isLoggedIn']),
   },
   methods: {
     goMenu(m_idx) {
@@ -89,6 +102,23 @@ export default {
         this.$router.push({ name: 'ArticleListView', params: { singerId: 0 }})
       } else if (m_idx === 3) {
         this.$router.push({ name: 'TvtableDetailView' })
+      } else if (m_idx === 4) {
+        if (this.isLoggedIn) {
+          this.$router.push({ name: 'UserLikeSingerView', params: { userId: this.user.u_email }})
+        } else {
+          this.$confirm({
+          message: "로그인 해주세요!",
+          button: {
+              yes: '로그인 하기',
+              no: '돌아가기',
+            },
+            callback: confirm => {
+              if (confirm) {
+                this.$router.push({ name: 'Login' })
+              }
+            }
+          })
+        }
       }
     },
   },

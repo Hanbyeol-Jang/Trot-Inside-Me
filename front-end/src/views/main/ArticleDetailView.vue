@@ -1,31 +1,36 @@
 <template>
   <v-card
-    class="mx-auto my-10"
+    class="mx-auto mb-10 mt-10"
     max-width="700"
   >
     <v-container fluid>
       <v-row dense>
           <v-card>
             <ArticleDetailItem :article="article"/>
+            <hr>
             <v-card-actions class="d-flex justify-space-around">
 
-              <div @click="showLikeChange()">
+              <div class="d-flex" @click="showLikeChange()">
                 <v-btn icon>
                   <v-icon v-show="!showLike">mdi-heart</v-icon>
                   <v-icon v-show="showLike" color="red">mdi-heart</v-icon>
-                  {{likeCnt}}
                 </v-btn>
+                <div class="my-2 mx-2">
+                    {{likeCnt}}
+                </div>
               </div>
 
-              <div  @click="showCommentsChange()">
+              <div  class="d-flex" @click="showCommentsChange()">
                 <v-btn icon>
                   <v-icon v-show="!showComments">mdi-message-text</v-icon>
                   <v-icon v-show="showComments" large color="blue darken-2">mdi-message-text</v-icon>
                 </v-btn>
+                <div class="my-2 mx-2">
+                    {{commentCnt}}
+                </div>
               </div>
-
             </v-card-actions>
-            <CommentList v-show="showComments" :id="id"/>
+            <MainCommentList v-show="showComments" @add-comment="addcomment" @delete-comment="deleteComment" :commentCnt="commentCnt" :id="id" :type="type"/>
           </v-card>
       </v-row>
     </v-container>
@@ -35,64 +40,103 @@
 <script>
 import axios from 'axios'
 import ArticleDetailItem from '@/components/main/ArticleDetailItem.vue'
-import CommentList from '@/components/main/CommentList.vue'
+import MainCommentList from '@/components/main/comment/MainCommentList.vue'
 import SERVER from '@/api/drf'
 
 export default {
   name: 'ArticleDetailView',
   components: {
     ArticleDetailItem,
-    CommentList,
+    MainCommentList,
   },
   data(){
     return {
-      article: [],
+      article: {},
       likeCnt:'',
-      showLike: false,
+      showLike: '',
+      commentCnt:0,
       showComments: false,
-      id : this.$route.params.articleId,
-      axiosConfig : {
-          headers:{
-          token : `${this.$cookies.get('auth-token')}`
-          },
-      }
+      id : Number(this.$route.params.articleId),
+      type:2,
     }
   },
   methods: {
-    // checkBookmarklike(){
-    //   const axiosConfig = {
-    //       headers:{
-    //       Authorization : `Token ${this.$cookies.get('auth-token')}`
-    //       },
-    //   }
-    //   axios.get(SERVER.URL + '/',this.article.id,axiosConfig)
-    //   .then((response)=>{
-    //     this.showBookmark = response.data.data
-    //     this.showLike = response.data.data
-    //   })
-    //   .catch((err) => {console.log(err.response.data)})
-    // },
-    showLikeChange(){
-      axios.post(SERVER.URL + `/${this.id}/`,this.axiosConfig)
-      .then((response)=>{
-        this.showLike = response.data.data
-        this.likeCnt = response.data.data
-      })
-      .catch((err) => {console.log(err.response.data)})
+    checkId(){
+      this.id = Number(this.$route.params.articleId)
     },
+
+
     getArticle(){
-      axios.get(SERVER.URL +`/singer/articles/${this.$route.params.articleId}`)
+      const axiosConfig = {
+          headers:{
+          token: `${this.$cookies.get('auth-token')}`
+          },
+      }
+      axios.get(SERVER.URL +`/board/detail/2/${this.id}`,axiosConfig)
         .then((response) => {
-            console.log(response.data)
-            this.article = response.data
+          this.article = response.data
+          this.type = response.data.b_type
+          this.likeCnt = response.data.good_cnt
+          this.commentCnt = response.data.br_cnt
+          this.showLike = response.data.good_flag
+          
         })
         .catch((err) => {console.log(err.response.data)})
     },
+
+
+    showLikeChange(){
+      if (!(this.$cookies.get('auth-token'))){
+            this.$confirm(
+                {
+                message: `로그인 해주세요.`,
+                button: {
+                    yes: '로그인 하기',
+                    no: '돌아가기',
+                },
+                callback: confirm => {
+                    if (confirm) {
+                      this.$router.push({ name: 'Login'})
+                    }
+                }})
+      }else{
+        const axiosConfig = {
+            headers:{
+            token: `${this.$cookies.get('auth-token')}`
+            },
+            params: {isgood:this.showLike}
+        }
+        axios.get(SERVER.URL+`/board/good/${this.type}/${this.id}`,axiosConfig)
+        .then(()=>{
+          if(this.showLike){
+              this.showLike = 0
+              this.likeCnt -= 1
+          }else{
+              this.showLike = 1
+              this.likeCnt += 1
+          }
+        })
+        .catch((err) => {console.log(err.response.data)})
+      }
+    },
+
+
     showCommentsChange(){
       this.showComments = !this.showComments
     },
+
+    addcomment(){
+        this.commentCnt += 1
+    },
+
+
+    deleteComment(){
+        this.commentCnt -= 1
+    }
+
   },
-    created(){      
+    created(){
+      this.checkId()      
       this.getArticle()
     },
     

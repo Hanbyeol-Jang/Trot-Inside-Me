@@ -13,54 +13,13 @@
     <script src="https://kit.fontawesome.com/7fbacfd6ef.js" crossorigin="anonymous"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-    <!-- kakao -->
-    <script type="text/javascript">
-      // 웹 플랫폼 도메인 등 초기화한 앱의 설정이 그대로 적용됩니다.
-      // 초기화한 앱에 현재 도메인이 등록되지 않은 경우 에러가 발생합니다.
-      Kakao.init('c089c8172def97eb00c07217cae17495')
-      function kakaoLogout() {
-        if (!Kakao.Auth.getAccessToken()) {
-          alert('Not logged in.')
-          return
-        }
-        Kakao.Auth.logout(function() {
-          alert('logout ok\naccess token -> ' + Kakao.Auth.getAccessToken())
-        })
-      }
-    </script>  
-  
-  <script type="text/javascript">
-    // 웹 플랫폼 도메인 등 초기화한 앱의 설정이 그대로 적용됩니다.
-    // 초기화한 앱에 현재 도메인이 등록되지 않은 경우 에러가 발생합니다.
-    Kakao.init('c089c8172def97eb00c07217cae17495')
-    function loginWithKakao() {
-      Kakao.Auth.authorize({
-        // 초기화한 앱의 로그인 Redirect URI에 등록된 URI여야 합니다.
-        redirectUri: 'https://developers.kakao.com/tool/demo/oauth'
-      })
-    }
-    // 아래는 데모를 위한 UI 코드입니다.
-    getToken()
-    function getToken() {
-      const token = getCookie('authorize-access-token')
-      if(token) {
-        Kakao.Auth.setAccessToken(token)
-        document.getElementById('token-result').innerText = 'login success. token: ' + Kakao.Auth.getAccessToken()
-      }
-    }
-    function getCookie(name) {
-      const value = "; " + document.cookie;
-      const parts = value.split("; " + name + "=");
-      if (parts.length === 2) return parts.pop().split(";").shift();
-    }
-  </script>
-  
   </head>
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
+    <div id="app">
+    </div>
     <!-- built files will be auto injected -->
   </body>
 </html>

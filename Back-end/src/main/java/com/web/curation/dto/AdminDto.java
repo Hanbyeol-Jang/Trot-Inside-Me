@@ -7,5 +7,5 @@ public class AdminDto {
 	private String a_broadName;
 	private String a_broadUrl;
 	private int a_idx;
+	private String a_img;
 }
-
