@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import axios from 'axios'
 import CommunityDetailItem from '@/components/community/CommunityDetailItem.vue'
 import InfiniteLoading from 'vue-infinite-loading'
@@ -56,6 +57,9 @@ export default {
         communityNum:null,
         changeFlag:true,
       }
+    },
+    computed: {
+      ...mapGetters(['isLoggedIn']),
     },
     methods:{
       checkLogin(){
@@ -159,7 +163,10 @@ export default {
     },
       created(){
         this.checkLogin()
-        this.getRecentCommunity()
+        if (this.isLoggedIn) {
+          this.getRecentCommunity()
+        }
+        
       },
     }
 </script>

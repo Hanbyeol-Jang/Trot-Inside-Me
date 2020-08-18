@@ -43,7 +43,7 @@ export default {
       VideoFeedItem,
       InfiniteLoading,
       Circle8,
-      ScrollTopButton,
+      ScrollTopButton, 
     },
     props: {
       singerId: Number,

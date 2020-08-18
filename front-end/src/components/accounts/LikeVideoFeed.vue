@@ -53,6 +53,7 @@ export default {
             this.videoCnt = res.data[0].b_cnt
             console.log(res.data)
             res.data.forEach(item => {
+              console.log(res.data[0].b_cnt)
               const parser = new DOMParser()
               const doc = parser.parseFromString(item.b_title, 'text/html')
               item.b_title = doc.body.innerText

@@ -7,11 +7,8 @@
         class="ma-1"
         :show-limit="3"
         :events="events"
-
-        @show-all="showAll"
         @day-clicked="dayClicked"
         @event-clicked="eventClicked"
-        @month-changed="monthChanged"
       ></vue-calendar>
     </v-card>
     <div v-if="singerSchedule.length" >
@@ -19,12 +16,14 @@
         align-top
         dense
         v-for="(singerPrograms, key) in indexedSchedule" :key="key"
+        :id="key"
         >
         <div>{{ key }}</div>
         <SingerScheduleList :singerPrograms="singerPrograms"/>
       </v-timeline>
     </div>
     <div v-else class="mt-5">아직 등록된 스케줄이 없습니다 :(</div>
+    <ScrollTopButton />   
   </div>
 </template> 
  
@@ -32,6 +31,7 @@
 import { mapState, mapActions } from 'vuex'
 
 import SingerScheduleList from '@/components/main/SingerScheduleList'
+import ScrollTopButton from '@/components/main/ScrollTopButton'
 
 export default {
   name: 'SingerScheduleView',
@@ -42,28 +42,49 @@ export default {
   },
   components:{
     SingerScheduleList,
+    ScrollTopButton,
   },
   computed: {
     ...mapState(['singerSchedule', 'indexedSchedule', 'events']),
   },
   methods: {
     ...mapActions(['getSingerSchedule']),
-    showAll(events) {
-      // Do something...
-      console.log(events)
-    },
     dayClicked(day) {
-      // Do something...
-      console.log(day)
+      this.year = day.date.getFullYear()
+      this.month = day.date.getMonth() + 1
+      this.date = day.date.getDate()
+
+      let month = this.changeToString(this.month)
+      let date = this.changeToString(this.date)
+      let dateId = this.year + '-' + month + '-' + date
+      let element = document.getElementById(dateId)
+      if (element) {
+        element.scrollIntoView()
+      }
+      
     },
     eventClicked(event) {
-      // Do something...
-      console.log(event)
+      let today = new Date()
+      let year = today.getFullYear()
+
+      let month = event.start.slice(5, 7)
+      let date = event.start.slice(8, 10)
+      let dateId = year + '-' + month + '-' + date
+      let element = document.getElementById(dateId)
+      if (element) {
+        element.scrollIntoView()
+      }
     },
-    monthChanged(start, end) {
-      // Do something...
-      console.log(start, end)
-    }
+    changeToString(number){
+      var str = ''
+      if (number < 10) {
+        str = '0' + number.toString()
+      } else {
+        str = number.toString()
+      }
+      return str
+    },
+
   },
   created() {
     this.getSingerSchedule(this.s_idx)
