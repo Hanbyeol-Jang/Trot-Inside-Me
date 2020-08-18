@@ -12,7 +12,7 @@
               <v-avatar size="85"
                 class="text-center elevation-3">
                 <img
-                  :src="singer.s_img"
+                  :src="'/img/' + singer.s_img"
                 >
               </v-avatar>
         </div>

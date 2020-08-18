@@ -136,12 +136,16 @@ export default new Vuex.Store({
       router.push({ name: 'Home' })
       // 로그아웃 확인 버튼
     },
-    kakaoOff({ getters }) { 
+    kakaoOff({ getters, commit }) { 
       axios.post(SERVER.URL + SERVER.ROUTES.kakaoOff, null, getters.config)
         .then(() => { 
-            router.push({ name: 'Home' })
+          commit('SET_TOKEN', null)
+          cookies.remove('auth-token')
+          router.push({ name: 'Home' })
           })
-        .catch((err)=>{ console.error(err) }) 
+        .catch((err)=>{ 
+          console.error('errrrrrrrrrr')
+          console.error(err) }) 
     },
     getUser({ getters, commit, dispatch }) {
       axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo, getters.config)
@@ -165,7 +169,6 @@ export default new Vuex.Store({
     fetchSingers({ commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.singerList)
         .then(res => {
-          console.log(res.data)
           commit('SET_SINGERS', res.data) 
         })
         .catch(err => { console.error(err) })

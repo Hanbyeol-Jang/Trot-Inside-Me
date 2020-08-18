@@ -1,10 +1,8 @@
 <template>
-    <div class="container px-4 py-5 mx-auto">
+    <div class="container">
         <div class="card card0">
-            <div class="d-flex flex-lg-row flex-column-reverse">
-                <div class="card card1">
-                    <div class="row justify-center my-auto">
-                        <div class="col-md-8 col-10 mt-3 mb-2">
+            <div class="card card1">
+                    <div class="mt-3 mb-2">
                             <div class="text-center">
                                 <img src="../../assets/image/rainbow_trot.png" alt=""
                                     width="200px">
@@ -12,15 +10,13 @@
                             <h4 class="msg-info pl-0 text-center">로그인해주세요 :)</h4>
                             <div class="row justify-center px-3">
                             <KakaoLogin
-                                api-key="3b520fb7e5e907ebebfde93be5b8a1aa"
+                                :api-key="apiKey"
                                 :on-success=onSuccess
                                 :on-failure=onFailure
                             />
                             </div>
                         </div>
-                    </div>
                 </div>
-            </div>
         </div>
     </div>
 </template>
@@ -38,16 +34,15 @@ export default {
         return {
             email: '',
             password: '',
+            apiKey: '3b520fb7e5e907ebebfde93be5b8a1aa'
         }
     },
     methods: {
         ...mapActions(['kakaoLogin']),
         onSuccess(data){
-            console.log("kakao sucess")
             this.kakaoLogin(data.access_token)
         },
         onFailure(){
-            console.log("kakao failure")
         },
     },
     created() {

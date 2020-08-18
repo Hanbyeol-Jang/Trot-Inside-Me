@@ -1,6 +1,5 @@
 <template>
   <div class="my-5">
-    <h1 class="d-flex">커뮤니티 수정</h1>
   <v-card
     class="mx-auto mt-5"
     max-width="500"
@@ -81,7 +80,7 @@ export default {
             .then((reaponse)=>{
                 this.content=reaponse.data.co_content,
                 this.user=reaponse.data.co_name,
-                this.show_image=reaponse.data.co_img
+                this.show_image='/img/'+reaponse.data.co_img
                 this.getuser()
             })
             .catch((err)=>{

@@ -28,6 +28,7 @@
     >
     <TvtableList :tvprogram="tvprogram" :tvprogramid="Tvprograms.indexOf(tvprogram)"/>
     </v-timeline>
+    <ScrollTopButton />
 </div>
 </template>
 
@@ -37,12 +38,14 @@ import SERVER from '@/api/drf'
 import _ from 'lodash'
 import TvtableSearch from '@/components/main/TvtableSearch.vue'
 import TvtableList from '@/components/main/TvtableList.vue'
+import ScrollTopButton from '@/components/main/ScrollTopButton'
 
 export default {
     name: "TvtableDetailView",
     components:{
         TvtableList,
-        TvtableSearch
+        TvtableSearch,
+        ScrollTopButton,
     },
     data(){
         return{

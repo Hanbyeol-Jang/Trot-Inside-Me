@@ -5,7 +5,7 @@
   >
     <img v-if="videoThumbnail" :src="videoThumbnail" alt="video thumbnail" 
         width="100%"/>
-    <img v-else src="@/assets/image/content_default.png" alt="video thumbnail default"
+    <img v-else src="@/assets/image/img_thumbnail.png" alt="video thumbnail default"
         width="100%"/>
     <v-card-title>
     {{ videoTitle }}
