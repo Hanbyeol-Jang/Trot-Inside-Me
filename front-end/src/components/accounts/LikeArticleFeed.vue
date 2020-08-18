@@ -55,6 +55,7 @@ export default {
       const options = { params: { page: this.page++ } }
       axios.get(SERVER.URL + SERVER.ROUTES.followArticleList + this.userId, options)
         .then((res) => {
+          console.log(res.data[0].b_cnt)
           this.articleCnt = res.data[0].b_cnt
           setTimeout(() => { this.articles.push(...res.data) }, 500) 
         })

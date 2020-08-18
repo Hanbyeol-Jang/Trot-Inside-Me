@@ -45,7 +45,7 @@
       <v-spacer></v-spacer>
       <v-btn v-if="navBool" icon @click="goUserDetail"><i class="fas fa-user fa-lg"></i></v-btn>
       <v-btn v-else icon @click="goHome"><i class="fas fa-home fa-lg"></i></v-btn>
-      <!-- <v-btn v-if="navSetting" icon @click="goSettings"><i class="fas fa-cog fa-lg"></i></v-btn> -->
+      <v-btn v-if="navSetting" icon @click="goSettings"><i class="fas fa-cog fa-lg"></i></v-btn>
     </v-app-bar>
   </div>
 </template>
@@ -73,10 +73,7 @@ export default {
         return this.$route.name
       },
       navBool() {
-        if (this.$route.name === 'Home'
-          || this.$route.name === 'CommunityIndexView' 
-          || this.$route.name === 'VoteView'
-          || this.$route.name === 'SingerSearchView'){
+        if (this.$route.name === 'Home'){
           return true
         } else {
           return false
