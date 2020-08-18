@@ -9,7 +9,7 @@
       scroll-target="#scrolling-techniques-7"
       class="header"
     >
-      <v-btn v-if="navBool" icon><i class="fas fa-bell fa-lg"></i></v-btn>
+      <v-btn v-if="navBool" icon @click="goInfo"><i class="fas fa-info-circle fa-lg"></i></v-btn>
       <v-btn v-if="!navBool" icon @click="goBack"><i class="fas fa-chevron-left fa-lg"></i></v-btn>
       <v-spacer></v-spacer>
       <v-toolbar-title class="d-flex align-center">
@@ -27,6 +27,16 @@
         <span v-if="routeName === 'SingerCreateView'" class="">가수 등록</span>
         <span v-if="routeName === 'ProgramManageView'" class="">프로그램 관리</span>
         <span v-if="routeName === 'ProgramCreateView'" class="">프로그램 등록</span>
+        <span v-if="routeName === 'SingerScheduleView'" class="">가수 스케줄</span>
+        <span v-if="routeName === 'CommunityCreateView'" class="">게시글 작성</span>
+        <span v-if="routeName === 'CommunityUpdateView'" class="">게시글 수정</span>
+        <span v-if="routeName === 'UserLikeVideoView'" class="">찜한 영상</span>
+        <span v-if="routeName === 'UserLikeArticleView'" class="">찜한 기사</span>
+        <span v-if="routeName === 'SingerDetailView'">가수 정보</span>
+        <span v-if="routeName === 'SingerVoteView'">투표 결과</span>
+        <span v-if="routeName === 'VideoDetailView'">영상 상세 보기</span>
+        <span v-if="routeName === 'ArticleDetailView'">기사 상세 보기</span>
+        <span v-if="routeName === 'About'">서비스 소개</span>
         <span v-if="routeName === 'UserLikeSingerView'">
           <span v-if="this.$route.params.userId === user.u_email">내 가수 보기</span>
           <span v-else>찜한 가수</span>
@@ -83,6 +93,11 @@ export default {
     methods: {
       goBack() {
           history.back()
+      },
+      goInfo() {
+        if (this.$route.name !== 'About') {
+          this.$router.push({ name: 'About' }).catch(()=>{})
+        }
       },
       goHome() {
         if (this.$route.name !== 'Home') {

@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   data () {
@@ -60,8 +60,10 @@ export default {
     }
   },
   computed: {
-        ...mapState(['programs']),
-      },
+    ...mapState(['user']),
+    ...mapGetters(['isLoggedIn']),
+    ...mapState(['programs']),
+  },
   methods: {
     ...mapActions(['fetchPrograms', 'deleteProgram']),
     goProgramCreate() {
@@ -70,6 +72,10 @@ export default {
   },
   created() {
     this.fetchPrograms()
+    if (this.isLoggedIn && !this.user.u_isAdmin) {
+      this.$alert("잘못된 접근입니다.")
+      this.$router.push({ name: 'Home' })
+    }
   }
 }
 </script>
