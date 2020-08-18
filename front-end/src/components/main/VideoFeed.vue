@@ -112,7 +112,6 @@ export default {
 
       fetchVideoData2(keyword) {
         this.page = 1
-        console.log(keyword)
         this.searchFlag=true
         this.videos=[]
         this.keyword=keyword
