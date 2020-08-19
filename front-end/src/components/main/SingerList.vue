@@ -15,7 +15,7 @@
                       class="text-center elevation-3">
                       <img
                         v-if="singer.s_img"
-                        :src="'/images/' + singer.s_img" 
+                        :src="'/img/' + singer.s_img"
                         alt="Singer Default"
                       >
                       <img
@@ -29,26 +29,7 @@
               <h3 class="text-center mt-3">{{singer.s_name}}</h3>
               </v-col>
             </v-row>
-            <div class="mt-10" v-if="this.$route.name === 'UserLikeSingerView'">
-              <div v-if="!singers.length">
-                <div class="text-center">
-                  <img src="@/assets/image/trot_logo.png" alt="My Trot" width="200px">
-                </div>
-                <h2 class="text-center mt-4">
-                  찜한 가수가 없습니다!
-                </h2> 
-              </div>
-            </div>
-            <div class="mt-10" v-else>
-              <div v-if="!singers.length">
-                <div class="text-center">
-                <img src="@/assets/image/trot_logo.png" alt="My Trot" width="200px">
-                </div>
-                <h2 class="text-center mt-4">
-                  찾는 가수가 없습니다!
-                </h2>
-              </div>
-            </div>
+            <p class="text-center" v-if="!singers.length">찾는 가수 없음</p>
           </v-container>
       </v-col>
     </v-row>

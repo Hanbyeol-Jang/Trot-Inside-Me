@@ -5,23 +5,13 @@
         <div v-for="article in articles" :key="article.b_idx">
             <ArticleFeedItem :article="article"/>
         </div>
-        <div class="mt-10" v-if="isWaiting">
+        <div class="mt-10" v-if="!articles.length">
           <div class="d-flex justify-center">
             <circle8></circle8>
           </div>
           <h2 class="text-center mt-4">
             잠시만 기다려 주세요!
-          </h2> 
-        </div>
-        <div class="mt-10" v-else>
-          <div v-if="!isData">
-            <div class="text-center">
-            <img src="@/assets/image/trot_logo.png" alt="My Trot" width="200px">
-            </div>
-            <h2 class="text-center mt-4">
-              찜한 기사가 없습니다!
-            </h2>
-          </div>
+          </h2>
         </div>
       </v-col>
       <transition name="fade">
@@ -52,8 +42,6 @@ export default {
       page: 1,
       articleCnt: 0,
       scrolled: false,
-      isData: false,
-      isWaiting :true,
     }
   },
   components: {
@@ -70,15 +58,8 @@ export default {
       const options = { params: { page: this.page++ } }
       axios.get(SERVER.URL + SERVER.ROUTES.followArticleList + this.userId, options)
         .then((res) => {
-          if (res.data.length) {
-            this.articleCnt = res.data[0].b_cnt
-            setTimeout(() => { 
-              this.articles.push(...res.data)
-              this.isWaiting = false 
-              this.isData = true }, 500) 
-          } else {
-            this.isWaiting = false
-          }
+          this.articleCnt = res.data[0].b_cnt
+          setTimeout(() => { this.articles.push(...res.data) }, 500) 
         })
         .catch(err => console.log(err))
     },

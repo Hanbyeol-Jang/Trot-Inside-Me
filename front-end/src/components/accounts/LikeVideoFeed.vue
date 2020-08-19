@@ -1,25 +1,15 @@
 <template>
   <v-container>
-    <div v-for="video in videos" :key="video.b_idx" class="mb-5">
+    <div v-for="video in videos" :key="video.b_idx"  class="mb-5">
       <VideoFeedItem :video="video"/>
     </div>
-    <div class="mt-10" v-if="isWaiting">
+    <div class="mt-10" v-if="!videos.length">
       <div class="d-flex justify-center">
         <circle8></circle8>
       </div>
       <h2 class="text-center mt-4">
         잠시만 기다려 주세요!
       </h2> 
-    </div>
-    <div class="mt-10" v-else>
-      <div v-if="!isData">
-        <div class="text-center">
-          <img src="@/assets/image/trot_logo.png" alt="My Trot" width="200px">
-        </div>
-        <h2 class="text-center mt-4">
-          찜한 영상이 없습니다!
-        </h2>
-      </div>
     </div>
     <transition name="fade">
       <ScrollTopButton v-if="scrolled"/>
@@ -47,8 +37,6 @@ export default {
         page: 1,
         videoCnt: 0,
         scrolled: false,
-        isData: false,
-        isWaiting :true,
       }
     },
     components: {
@@ -65,23 +53,16 @@ export default {
         const options = { params: { page: this.page++ } }
         axios.get(SERVER.URL + SERVER.ROUTES.followVideoList + this.userId, options)
           .then((res) => {
-            if (res.data.length) {
-              this.videoCnt = res.data[0].b_cnt
-              res.data.forEach(item => {
-                const parser = new DOMParser()
-                const doc = parser.parseFromString(item.b_title, 'text/html')
-                item.b_title = doc.body.innerText
-                if (item.b_title.length > 35) {
-                  item.b_title = item.b_title.slice(0, 35) + '...'
-                }
-              })
-              setTimeout(() => { 
-                this.videos.push(...res.data)
-                this.isWaiting = false 
-                this.isData = true }, 500)
-            } else {
-              this.isWaiting = false
-            }
+            this.videoCnt = res.data[0].b_cnt
+            res.data.forEach(item => {
+              const parser = new DOMParser()
+              const doc = parser.parseFromString(item.b_title, 'text/html')
+              item.b_title = doc.body.innerText
+              if (item.b_title.length > 35) {
+                item.b_title = item.b_title.slice(0, 35) + '...'
+              }
+            })
+            setTimeout(() => { this.videos.push(...res.data) }, 500) 
           })
           .catch(err => console.log(err))
       },

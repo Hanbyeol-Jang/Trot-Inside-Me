@@ -81,9 +81,7 @@ export default {
           this.showLike = response.data.good_flag
           
         })
-        .catch(() => {
-          this.$router.push({name:"PageNotFound"})
-        })
+        .catch((err) => {console.log(err.response.data)})
     },
     showLikeChange(){
       if (!(this.$cookies.get('auth-token'))){
