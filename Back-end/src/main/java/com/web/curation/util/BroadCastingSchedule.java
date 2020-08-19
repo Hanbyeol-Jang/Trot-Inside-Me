@@ -33,7 +33,7 @@ public class BroadCastingSchedule {
 	@Autowired
 	AdminServcie adminService;
 
-	@Scheduled(cron = "0 0 0 * * ?")
+	@Scheduled(cron = "0 50 10 * * ?")
 	public void insertTodaySchedule() throws Exception {
 		// 편성표 삭제
 		timeService.deleteYesterDaySchedule();
@@ -78,11 +78,8 @@ public class BroadCastingSchedule {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-	}
-
-	// 하루에 한번 스케쥴 넣기
-	@Scheduled(cron = "0 45 10 * * ?")
-	public void insertSingerSchedule() throws Exception {
+		
+		
 		// db 가수 리스트 받아옴.
 		System.out.println("메소드 시작");
 		List<SingerDto> dsList = timeService.selectSinger();
@@ -147,6 +144,13 @@ public class BroadCastingSchedule {
 
 		// 가수 리스트 디비 저장
 		timeService.insertSingerSchedule(slist);
+		
+	}
+
+	// 하루에 한번 스케쥴 넣기
+	@Scheduled(cron = "30 50 10 * * ?")
+	public void insertSingerSchedule() throws Exception {
+		System.out.println("dsklafnkl;fl;ebwl;wefablwef;bwef;");
 	}
 
 }
