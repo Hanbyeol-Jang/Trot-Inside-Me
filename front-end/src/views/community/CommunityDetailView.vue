@@ -100,7 +100,7 @@ export default {
     },
     computed: {
         communImg() {
-            return '/img/' + this.communityImg
+            return '/images/' + this.communityImg
         }
     },
     methods: {
@@ -151,9 +151,9 @@ export default {
                 this.communityImg = reaponse.data.co_img
                 this.getuser()
             })
-            .catch((err)=>{
-                console.error(err)
-            })
+        .catch(() => {
+          this.$router.push({name:"PageNotFound"})
+        })
         },
 
 
