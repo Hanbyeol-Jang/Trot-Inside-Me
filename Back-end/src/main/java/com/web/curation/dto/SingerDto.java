@@ -8,4 +8,7 @@ public class SingerDto {
 	private String s_name;
 	private String s_img;
 	private String s_url;
+	private String s_cafeUrl;
+	private int f_cnt;
+	private int f_flag;
 }
