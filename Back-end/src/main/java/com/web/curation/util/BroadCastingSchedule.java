@@ -81,9 +81,10 @@ public class BroadCastingSchedule {
 	}
 
 	// 하루에 한번 스케쥴 넣기
-	@Scheduled(cron = "0 40 10 * * ?")
+	@Scheduled(cron = "0 45 10 * * ?")
 	public void insertSingerSchedule() throws Exception {
 		// db 가수 리스트 받아옴.
+		System.out.println("메소드 시작");
 		List<SingerDto> dsList = timeService.selectSinger();
 		for (int i = 1; i < dsList.size(); i++) {
 			if (dsList.get(i).getS_cafeUrl() == null) {
@@ -97,6 +98,12 @@ public class BroadCastingSchedule {
 
 		// 크롤링시작.
 		System.setProperty("webdriver.chrome.driver", "/home/ubuntu/s03p13b202/Back-end/src/main/resources/driver/chromedriver.exe");
+		System.out.println();
+		System.out.println("크롤링 셀레니움 ");
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
 		ChromeOptions optins = new ChromeOptions();
 		optins.addArguments("headless");
 		WebDriver driver = new ChromeDriver(optins); // Driver 생성
