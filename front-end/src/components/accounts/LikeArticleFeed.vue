@@ -61,7 +61,10 @@ export default {
           this.articleCnt = res.data[0].b_cnt
           setTimeout(() => { this.articles.push(...res.data) }, 500) 
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          if(err.message==="Request failed with status code 404"){
+            this.$router.push({name:"PageNotFound"})
+          }})
     },
     // Pagination
     infiniteHandler($state){
@@ -74,8 +77,11 @@ export default {
               $state.loaded()
             }, 500);
           })
-          .catch(err => console.log(err))
-      } else{
+          .catch(err => {
+            if(err.message==="Request failed with status code 404"){
+              this.$router.push({name:"PageNotFound"})
+            }})
+    } else{
         $state.complete()
       }
     },
