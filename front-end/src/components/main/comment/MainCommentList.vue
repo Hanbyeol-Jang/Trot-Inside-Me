@@ -1,7 +1,7 @@
 <template>
  <v-card-text>
    <hr>
-        <v-col cols="10" class="row text-center mx-auto">
+        <v-col class="row text-center mx-auto">
           <v-text-field
             label="댓글을 작성해주세요."
             single-line
