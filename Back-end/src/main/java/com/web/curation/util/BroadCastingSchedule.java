@@ -33,7 +33,7 @@ public class BroadCastingSchedule {
 	@Autowired
 	AdminServcie adminService;
 
-	@Scheduled(cron = "0 50 10 * * ?")
+	@Scheduled(cron = "0 0 0 * * ?")
 	public void insertTodaySchedule() throws Exception {
 		// 편성표 삭제
 		timeService.deleteYesterDaySchedule();
@@ -94,7 +94,7 @@ public class BroadCastingSchedule {
 		timeService.deleteSingerSchedule();
 
 		// 크롤링시작.
-		System.setProperty("webdriver.chrome.driver", "/home/ubuntu/s03p13b202/Back-end/src/main/resources/driver/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "src/main/resources/driver/chromedriver.exe");
 		System.out.println();
 		System.out.println("크롤링 셀레니움 ");
 		System.out.println();
