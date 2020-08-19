@@ -12,10 +12,10 @@
               <div class="cursor_test" @click="inputsinger(singer)">
                     <v-avatar size="80">
                       <img
-                        :src="singer.s_img"
+                        :src="'/img/' + singer.s_img" 
                         alt="John"
-                      height="100%"
-                      width="100%"
+                        height="100%"
+                        width="100%"
                       >
                     </v-avatar>
                 <h4 class="text-center">{{singer.s_name}}</h4>

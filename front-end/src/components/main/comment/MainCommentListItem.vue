@@ -1,18 +1,19 @@
 <template>
   <div>
     <div class="row d-flex align-center">
-      <div class="col-2">
-        <v-avatar>
+      <div class="col-9">
+        <v-avatar @click="goUserDetail(comment.r_email)">
           <img v-if="profileImage" :src="profileImage" alt="User">
           <img v-else src="@/assets/image/user_default.png" alt="User">
         </v-avatar>
+        <div 
+          class="font-weight-bold ml-4 comment-user my-3"
+          @click="goUserDetail(comment.r_email)">{{ comment.r_name }}</div>
+        <div class="text-secondary comment-date ml-3">{{ updateTime }}</div>
       </div>
-      <div class="col-10 pl-2">
+        
+      <div class="col-3 pl-2">
         <div class="d-flex flex-wrap justify-content-between">
-          <div class="d-flex align-center">
-            <h3 class="font-weight-bold">{{ comment.r_name }}</h3>
-            <!-- <pre class="text-secondary ml-3">{{ updateTime }}</pre> -->
-          </div>
           <div v-if="currentUser.u_isAdmin === 1" class="ml-auto">
             <v-btn depressed outlined color="error" @click="deleteComment">삭제</v-btn>
           </div>
@@ -23,7 +24,7 @@
       </div>
     </div>
         <div class="ml-10 pl-10">
-          <h1 class=""> {{ comment.r_content }}</h1>
+          <div class="comment-content">{{ comment.r_content }}</div>
         </div>
     <br>
     <hr>
@@ -77,7 +78,6 @@ export default {
         }
       )
     },
-
     checkAuth(){
       if (this.$cookies.get('auth-token')){
         axios.get(SERVER.URL+`/user/getUserInfo`,this.axiosConfig)
@@ -95,7 +95,10 @@ export default {
             console.error(err)
         })
       }
-    }
+    },
+    goUserDetail(userId) {
+      this.$router.push({ name: 'UserDetailView', params: { userId: userId }})
+    },
   },
   mounted(){
     this.checkAuth()
@@ -104,5 +107,15 @@ export default {
 </script>
 
 <style>
-
+.comment-user {
+  font-size: 16px;
+  display: inline-block;
+}
+.comment-date {
+  font-size: 12px;
+  display: inline-block;
+}
+.comment-content {
+  font-size: 20px;
+}
 </style>

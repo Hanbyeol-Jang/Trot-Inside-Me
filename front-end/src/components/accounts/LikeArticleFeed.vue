@@ -1,25 +1,27 @@
 <template>
   <v-container> 
-        <v-row dense>
-            <v-col cols="12">
-              <div v-for="article in articles" :key="article.b_idx">
-                  <ArticleFeedItem :article="article"/>
-              </div>
-              <div class="mt-10" v-if="!articles.length">
-                <div class="d-flex justify-center">
-                  <circle8></circle8>
-                </div>
-                <h2 class="text-center mt-4">
-                  잠시만 기다려 주세요!
-                </h2>
-              </div>
-            </v-col>
-            <ScrollTopButton />
-            <v-col cols="12">
-              <infinite-loading v-if="articles.length" 
-                @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
-            </v-col>
-      </v-row>
+    <v-row dense>
+      <v-col cols="12">
+        <div v-for="article in articles" :key="article.b_idx">
+            <ArticleFeedItem :article="article"/>
+        </div>
+        <div class="mt-10" v-if="!articles.length">
+          <div class="d-flex justify-center">
+            <circle8></circle8>
+          </div>
+          <h2 class="text-center mt-4">
+            잠시만 기다려 주세요!
+          </h2>
+        </div>
+      </v-col>
+      <transition name="fade">
+        <ScrollTopButton v-if="scrolled"/>
+      </transition> 
+      <v-col cols="12">
+        <infinite-loading v-if="articles.length" 
+          @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
+      </v-col>                                    
+    </v-row>  
   </v-container>
 </template>
 
@@ -39,6 +41,7 @@ export default {
       articles: [],
       page: 1,
       articleCnt: 0,
+      scrolled: false,
     }
   },
   components: {
@@ -76,10 +79,19 @@ export default {
         $state.complete()
       }
     },
+    detectWindowScrollY() {
+      this.scrolled = window.scrollY > 0
+    }
   },
   created() {
     this.fetchArticleData()
   },
+  mounted() {
+    window.addEventListener('scroll', this.detectWindowScrollY)
+    },
+  beforeDestory() {
+    window.removeEventListener('scroll', this.detectWindowScrollY)
+  }
 }
 </script>
 

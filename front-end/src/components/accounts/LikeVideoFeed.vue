@@ -11,7 +11,9 @@
         잠시만 기다려 주세요!
       </h2> 
     </div>
-    <ScrollTopButton /> 
+    <transition name="fade">
+      <ScrollTopButton v-if="scrolled"/>
+    </transition> 
     <infinite-loading 
       v-if="videos.length" @infinite="infiniteHandler" spinner="waveDots">
     </infinite-loading>
@@ -34,6 +36,7 @@ export default {
         videos: [],
         page: 1,
         videoCnt: 0,
+        scrolled: false,
       }
     },
     components: {
@@ -51,9 +54,7 @@ export default {
         axios.get(SERVER.URL + SERVER.ROUTES.followVideoList + this.userId, options)
           .then((res) => {
             this.videoCnt = res.data[0].b_cnt
-            console.log(res.data)
             res.data.forEach(item => {
-              console.log(res.data[0].b_cnt)
               const parser = new DOMParser()
               const doc = parser.parseFromString(item.b_title, 'text/html')
               item.b_title = doc.body.innerText
@@ -89,9 +90,18 @@ export default {
           $state.complete()
         }
       },
+      detectWindowScrollY() {
+        this.scrolled = window.scrollY > 0
+      }
     },
     created() {
       this.fetchVideoData()
     },
+    mounted() {
+      window.addEventListener('scroll', this.detectWindowScrollY)
+      },
+    beforeDestory() {
+      window.removeEventListener('scroll', this.detectWindowScrollY)
+    }
 }
 </script>

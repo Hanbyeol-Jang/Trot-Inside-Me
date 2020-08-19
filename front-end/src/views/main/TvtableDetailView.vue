@@ -28,7 +28,9 @@
     >
     <TvtableList :tvprogram="tvprogram" :tvprogramid="Tvprograms.indexOf(tvprogram)"/>
     </v-timeline>
-    <ScrollTopButton />
+    <transition name="fade">
+      <ScrollTopButton v-if="scrolled"/>
+    </transition>
 </div>
 </template>
 
@@ -36,6 +38,7 @@
 import axios from 'axios'
 import SERVER from '@/api/drf'
 import _ from 'lodash'
+
 import TvtableSearch from '@/components/main/TvtableSearch.vue'
 import TvtableList from '@/components/main/TvtableList.vue'
 import ScrollTopButton from '@/components/main/ScrollTopButton'
@@ -48,29 +51,49 @@ export default {
         ScrollTopButton,
     },
     data(){
-        return{
-            Tvprograms: [],
-            now: "",
-            fastTimeProgram: {},
-        }
+      return{
+        Tvprograms: [],
+        now: "",
+        fastTimeProgram: {},
+        scrolled: false,
+      }
     },
     methods:{
-        getTime(){
-            var date = new Date()
-            if(date.getHours() === 0){
-                this.now = "00"
-            }else if(date.getHours()<10 && date.getHours()>0){
-                this.now = "0"+date.getHours()+':'+date.getMinutes()
+      getTime(){
+        let date = new Date()
+        if(date.getHours() === 0){
+            this.now = "00"
+        }else if(date.getHours() < 10 && date.getHours() > 0){
+            this.now = "0" + date.getHours() + ':' + date.getMinutes()
+        }
+        else{
+            this.now = date.getHours() + ':' + date.getMinutes()
+        }
+      },
+      getTvtable(){
+          axios.get(`${SERVER.URL}/board/schedule/todayList`)
+          .then((response)=>{
+            this.Tvprograms = []
+            const programs = _.sortBy(response.data,'bc_time')
+            for (var i in programs){
+                if (programs[i].bc_time >= this.now){
+                  if (programs[i].bc_title ==="신청곡을 불러드립니다 - 사랑의 콜센타"){
+                      programs[i].bc_title = "사랑의 콜센타"
+                  }
+                  this.Tvprograms.push(programs[i])
+                }
             }
-            else{
-                this.now = date.getHours()+':'+date.getMinutes()
-            }
-        },
-        getTvtable(){
-            axios.get(`${SERVER.URL}/board/schedule/todayList`)
-            .then((response)=>{
+            this.fastTimeProgram = this.Tvprograms[0]
+          })
+          .catch((err)=>{
+              console.error(err)
+          }) 
+      },
+      getTvtableProgram(){
+          axios.get(`${SERVER.URL}/board/schedule/todayList`)
+          .then((response)=>{
               this.Tvprograms = []
-              const programs = _.sortBy(response.data,'bc_time')
+              const programs = _.sortBy(response.data,'bc_title','bc_time')
               for (var i in programs){
                   if (programs[i].bc_time >= this.now){
                       if (programs[i].bc_title ==="신청곡을 불러드립니다 - 사랑의 콜센타"){
@@ -79,45 +102,35 @@ export default {
                       this.Tvprograms.push(programs[i])
                   }
               }
-              this.fastTimeProgram = this.Tvprograms[0]
-            })
-            .catch((err)=>{
-                console.error(err)
-            }) 
-        },
-        getTvtableProgram(){
-            axios.get(`${SERVER.URL}/board/schedule/todayList`)
-            .then((response)=>{
-                this.Tvprograms = []
-                const programs = _.sortBy(response.data,'bc_title','bc_time')
-                for (var i in programs){
-                    if (programs[i].bc_time >= this.now){
-                        if (programs[i].bc_title ==="신청곡을 불러드립니다 - 사랑의 콜센타"){
-                            programs[i].bc_title = "사랑의 콜센타"
-                        }
-                        this.Tvprograms.push(programs[i])
-                    }
-                }
-            })
-            .catch((err)=>{
-                console.error(err)
-            }) 
-        },
-        searchPrograms(keyword) {
-           axios.get(`${SERVER.URL}/board/schedule/todayList`)
-                .then(response => {
-                    const resultPrograms = response.data.filter(data => data.bc_title.includes(keyword))
-                    this.Tvprograms = resultPrograms
-                })
-            .catch((err)=>{
-                console.error(err)
-            })
-            },
+          })
+          .catch((err)=>{
+              console.error(err)
+          }) 
+      },
+      searchPrograms(keyword) {
+          axios.get(`${SERVER.URL}/board/schedule/todayList`)
+              .then(response => {
+                  const resultPrograms = response.data.filter(data => data.bc_title.includes(keyword))
+                  this.Tvprograms = resultPrograms
+              })
+          .catch((err)=>{
+              console.error(err)
+          })
+          },
+      detectWindowScrollY() {
+        this.scrolled = window.scrollY > 0
+      }
     },
     created(){
         this.getTvtable(),
         this.getTime()
-    }
+    },
+    mounted() {
+      window.addEventListener('scroll', this.detectWindowScrollY)
+    },
+    beforeDestory() {
+      window.removeEventListener('scroll', this.detectWindowScrollY)
+    } 
 }
 </script>
 

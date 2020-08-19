@@ -23,7 +23,9 @@
       </v-timeline>
     </div>
     <div v-else class="mt-5">아직 등록된 스케줄이 없습니다 :(</div>
-    <ScrollTopButton />   
+    <transition name="fade">
+      <ScrollTopButton v-if="scrolled"/>
+    </transition>
   </div>
 </template> 
  
@@ -38,6 +40,7 @@ export default {
   data() {
     return {
       s_idx: this.$route.params.singerId,
+      scrolled: false,
     }
   },
   components:{
@@ -84,12 +87,21 @@ export default {
       }
       return str
     },
+    detectWindowScrollY() {
+      this.scrolled = window.scrollY > 0
+    }
 
   },
   created() {
     this.getSingerSchedule(this.s_idx)
     this.$calendar.eventBus.$on("show-all", events => this.showAll(events));
     this.$calendar.eventBus.$on("day-clicked", day => this.dayClicked(day));
+  },
+  mounted() {
+    window.addEventListener('scroll', this.detectWindowScrollY)
+    },
+  beforeDestory() {
+    window.removeEventListener('scroll', this.detectWindowScrollY)
   }
 }
 </script>
