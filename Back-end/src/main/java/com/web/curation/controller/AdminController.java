@@ -37,7 +37,7 @@ public class AdminController {
 
 	@Autowired
 	private AdminServcie adminService;
-	static String serverUrl = "/home/ubuntu/img/";
+	static String serverUrl = "/home/ubuntu/img";
 	// 관리자 로그인
 	@ApiOperation("관리자 로그인")
 	@PostMapping("/login")
