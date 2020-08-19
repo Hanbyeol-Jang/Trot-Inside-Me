@@ -283,7 +283,7 @@ export default new Vuex.Store({
       axios.get(SERVER.URL + SERVER.ROUTES.followSingersList + userId)
       .then(res => { commit('SET_FOLLOWLIST', res.data) })
       .catch(() => {
-        this.$router.push({name:"PageNotFound"})
+        router.push({name:"PageNotFound"})
       })      
     },
 
