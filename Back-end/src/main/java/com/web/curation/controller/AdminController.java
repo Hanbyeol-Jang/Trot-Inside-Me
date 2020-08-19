@@ -37,7 +37,7 @@ public class AdminController {
 
 	@Autowired
 	private AdminServcie adminService;
-
+	static String serverUrl = "/home/ubuntu/img";
 	// 관리자 로그인
 	@ApiOperation("관리자 로그인")
 	@PostMapping("/login")
@@ -74,7 +74,7 @@ public class AdminController {
 	public ResponseEntity<String> broadSchedule(SingerTVUpload up) throws IllegalStateException, IOException {
 		AdminDto dto = new AdminDto();
 		if (up.getImg() != null) {
-			String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getImg().getOriginalFilename();
+			String saveUrl = serverUrl + up.getImg().getOriginalFilename();
 			File file = new File(saveUrl);
 			up.getImg().transferTo(file);
 			dto.setA_img(up.getImg().getOriginalFilename());
@@ -95,7 +95,7 @@ public class AdminController {
 	@DeleteMapping("/tvdelete/{a_idx}")
 	public ResponseEntity<String> DeleteBroadSchedule(@PathVariable int a_idx) {
 		// 이미지 처리
-		String imgurl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + adminService.getTVImgUrl(a_idx);
+		String imgurl = serverUrl + adminService.getTVImgUrl(a_idx);
 		if (imgurl != null) { 
 			File file = new File(imgurl);
 			file.delete();
@@ -127,7 +127,7 @@ public class AdminController {
 		SingerDto dto = new SingerDto();
 		dto.setS_name(up.getName());
 		if (up.getImg() != null) {
-			String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getImg().getOriginalFilename();
+			String saveUrl = serverUrl + up.getImg().getOriginalFilename();
 			File file = new File(saveUrl);
 			up.getImg().transferTo(file);
 			dto.setS_img(up.getImg().getOriginalFilename());
@@ -147,7 +147,7 @@ public class AdminController {
 	@DeleteMapping("/singerdelete/{s_idx}")
 	public ResponseEntity<String> deleteSinger(@PathVariable int s_idx) {
 		// 이미지 처리
-		String imgurl ="/home/ubuntu/s03p13b202/front-end/dist/img/" + adminService.getSingerImgUrl(s_idx);
+		String imgurl =serverUrl + adminService.getSingerImgUrl(s_idx);
 		if (imgurl != null) { 
 			File file = new File(imgurl);
 			file.delete();

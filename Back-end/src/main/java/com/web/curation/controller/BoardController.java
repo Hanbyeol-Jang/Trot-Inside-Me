@@ -99,10 +99,12 @@ public class BoardController {
 		if (page < lastPage) {
 			for (int i = page; i < page + 5; i++) {
 				showList.add(list.get(i));
+				list.get(i).setB_cnt(list.size());
 			}
 		} else if (page == lastPage) {
 			for (int i = page; i < page + lastPageRemain; i++) {
 				showList.add(list.get(i));
+				list.get(i).setB_cnt(list.size());
 			}
 		}
 		return new ResponseEntity<List<BoardPK>>(showList, HttpStatus.OK);
@@ -142,6 +144,7 @@ public class BoardController {
 		List<BoardPK> showList = new LinkedList<BoardPK>();
 		// s_idx로 가수 이름 검색
 		SingerDto singerDto = boardService.singerSearch(s_idx);
+		if(singerDto==null) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
 		if (page == 1) {
 			// 크롤링 후 디비 저장
@@ -161,10 +164,12 @@ public class BoardController {
 		if (page < lastPage) {
 			for (int i = page; i < page + 5; i++) {
 				showList.add(list.get(i));
+				list.get(i).setB_cnt(list.size());
 			}
 		} else if (page == lastPage) {
 			for (int i = page; i < page + lastPageRemain; i++) {
 				showList.add(list.get(i));
+				list.get(i).setB_cnt(list.size());
 			}
 		}
 
@@ -189,16 +194,20 @@ public class BoardController {
 			int lastPageRemain = list.size() % 5;
 			int lastPage = list.size() - lastPageRemain;
 			page = 5 * page - 5;
+			
 			// 5개씩 보여주기
 			if (page < lastPage) {
 				for (int i = page; i < page + 5; i++) {
 					showList.add(list.get(i));
+					list.get(i).setB_cnt(list.size());
 				}
 			} else if (page == lastPage) {
 				for (int i = page; i < page + lastPageRemain; i++) {
 					showList.add(list.get(i));
+					list.get(i).setB_cnt(list.size());
 				}
 			}
+			
 
 			if (showList != null) {
 				return new ResponseEntity<List<BoardPK>>(showList, HttpStatus.OK);
@@ -214,7 +223,7 @@ public class BoardController {
 		List<BoardPK> list = null;
 		List<BoardPK> showList = new LinkedList<BoardPK>();
 		SingerDto singerDto = boardService.singerSearch(s_idx);
-
+		if(singerDto==null) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		if (page == 1) {
 			// 네이버 기사 검색 후 디비에 넣기
 			boardService.insertArticle(singerDto.getS_name());
