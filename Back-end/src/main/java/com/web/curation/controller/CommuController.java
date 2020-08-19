@@ -42,7 +42,7 @@ public class CommuController {
 	@Autowired
 	private CommuService commuService;
 	
-	static String serverUrl = "/home/ubuntu/img";
+	static String serverUrl = "/home/ubuntu/img/";
 	// 게시글 전체 리스트 출력
 	@ApiOperation("게시글 전체 리스트 출력")
 	@GetMapping("/list")
