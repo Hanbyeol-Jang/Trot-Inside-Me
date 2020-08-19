@@ -133,13 +133,8 @@ export default new Vuex.Store({
 
       commit('SET_TOKEN', null)
       cookies.remove('auth-token')
-
       router.push({ name: 'Home' })
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: '로그아웃 되었습니다!',
-      })
+      // 로그아웃 확인 버튼
     },
     kakaoOff({ getters, commit }) { 
       axios.post(SERVER.URL + SERVER.ROUTES.kakaoOff, null, getters.config)
@@ -167,9 +162,7 @@ export default new Vuex.Store({
         .then(res => {
           commit('SET_USER_DETAIL', res.data.userInfo)
         })
-        .catch(() => {
-          router.push({name:"PageNotFound"})
-        })
+        .catch((err)=>{ console.error(err) })
     },
 
     // Singer Data
@@ -217,9 +210,7 @@ export default new Vuex.Store({
           commit('SET_SINGER', res.data)
           commit('SET_FOLLOW', { f_flag: res.data.f_flag, f_cnt: res.data.f_cnt })
         })
-        .catch(() => {
-          router.push({name:"PageNotFound"})
-        })
+        .catch(err => console.log(err))
     },
     getSingerSchedule({ commit, dispatch }, singerId) {
       axios.get(SERVER.URL + SERVER.ROUTES.singerScheduleList + singerId)
@@ -227,9 +218,7 @@ export default new Vuex.Store({
           commit('SET_SINGER_SCHEDULE', res.data)
           dispatch('indexingSchedule', res.data)
         })
-        .catch(() => {
-          router.push({name:"PageNotFound"})
-        })
+        .catch(err => console.log(err))
     },
     indexingSchedule({ commit }, scheduleList) {
       let result = new Object()
@@ -282,9 +271,7 @@ export default new Vuex.Store({
     getFollowList({ commit }, userId) {
       axios.get(SERVER.URL + SERVER.ROUTES.followSingersList + userId)
       .then(res => { commit('SET_FOLLOWLIST', res.data) })
-      .catch(() => {
-        this.$router.push({name:"PageNotFound"})
-      })      
+      .catch(err => { console.error(err) })
     },
 
     // Program Data

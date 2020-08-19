@@ -114,9 +114,8 @@ export default {
             },
             params: {page: this.page}
         }
-      if (!this.commentData.content.trim()){
+      if (!this.commentData.content){
         this.$alert('내용을 작성해주세요')
-        this.commentData.content =''
       } else{
         if (!this.$cookies.isKey('auth-token')){
             this.$confirm(
