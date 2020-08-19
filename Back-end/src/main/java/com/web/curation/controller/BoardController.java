@@ -144,6 +144,7 @@ public class BoardController {
 		List<BoardPK> showList = new LinkedList<BoardPK>();
 		// s_idx로 가수 이름 검색
 		SingerDto singerDto = boardService.singerSearch(s_idx);
+		if(singerDto==null) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
 		if (page == 1) {
 			// 크롤링 후 디비 저장
@@ -222,7 +223,7 @@ public class BoardController {
 		List<BoardPK> list = null;
 		List<BoardPK> showList = new LinkedList<BoardPK>();
 		SingerDto singerDto = boardService.singerSearch(s_idx);
-
+		if(singerDto==null) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		if (page == 1) {
 			// 네이버 기사 검색 후 디비에 넣기
 			boardService.insertArticle(singerDto.getS_name());

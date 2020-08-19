@@ -51,6 +51,7 @@ public class UserController {
 	public ResponseEntity<List<FollowDto>> followlistEmail(@PathVariable String u_email) {
 		try {
 			List<FollowDto> list = userService.getFollowList(u_email);
+			if(list.size()==0) return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
 			return new ResponseEntity<List<FollowDto>>(list, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -129,8 +130,9 @@ public class UserController {
 			GoodDto gdto = new GoodDto();
 			gdto.setB_type(1);
 			gdto.setU_email(u_email);
+			
 			List<BoardDto> list = userService.myBoardList(gdto);
-
+			if(list.size()==0) return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
 			for (int i = 0; i < list.size(); i++) {
 				System.out.println(list.get(i));
 			}
@@ -166,7 +168,7 @@ public class UserController {
 			gdto.setB_type(2);
 			gdto.setU_email(u_email);
 			List<BoardDto> list = userService.myBoardList(gdto);
-
+			if(list.size()==0) return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
 			List<BoardDto> showList = new ArrayList<>();
 			int lastPageRemain = list.size() % 5;
 			int lastPage = list.size() - lastPageRemain;
