@@ -15,7 +15,7 @@
       <v-img :src="show_image" width="100%" height="100%" v-show="!flag"></v-img>
       <v-img :src="change_image" width="100%" height="100%" v-show="flag"></v-img>
       <!-- <v-file-input show-size counter multiple label="사진을 등록 할 수 있습니다." type="file" id="file" ref="file" @change="communityImage()"></v-file-input> -->
-        <input type="file" label="사진을 등록 할 수 있습니다." id="file" ref="file" @change="communityImage()"/>     
+        <input type="file" label="사진을 등록 할 수 있습니다." id="file" ref="file" accept="image/*" @change="communityImage()"/>     
     </v-card-text>
   </v-card>
   </div>
