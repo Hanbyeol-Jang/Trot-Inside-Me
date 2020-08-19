@@ -132,7 +132,7 @@ public class UserController {
 			gdto.setU_email(u_email);
 			
 			List<BoardDto> list = userService.myBoardList(gdto);
-			if(list.size()==0) return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+			if(list.size()==0) return new ResponseEntity<>(list,HttpStatus.BAD_REQUEST);
 			for (int i = 0; i < list.size(); i++) {
 				System.out.println(list.get(i));
 			}
@@ -168,7 +168,7 @@ public class UserController {
 			gdto.setB_type(2);
 			gdto.setU_email(u_email);
 			List<BoardDto> list = userService.myBoardList(gdto);
-			if(list.size()==0) return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+			if(list.size()==0) return new ResponseEntity<>(list,HttpStatus.BAD_REQUEST);
 			List<BoardDto> showList = new ArrayList<>();
 			int lastPageRemain = list.size() % 5;
 			int lastPage = list.size() - lastPageRemain;
@@ -237,6 +237,7 @@ public class UserController {
 	public ResponseEntity<HashMap<String, Object>> getUserInfoEmail(@PathVariable String u_email) {
 		try {
 			UserDto userDto = userService.getUserInfo(u_email);
+			if(userDto==null) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			HashMap<String, Object> map = new HashMap<>();
 			map.put("userInfo", userDto);
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
