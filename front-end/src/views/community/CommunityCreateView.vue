@@ -56,8 +56,9 @@ export default {
         },
 
         createCommunity(){
-          if(!this.content && !this.image){
+          if(!this.content.trim() && !this.image){
             this.$alert("입력 된 값이 없습니다.")
+            this.content = ''
           }else{
             const axiosConfig2={
               headers:{
@@ -104,5 +105,12 @@ export default {
 </script>
 
 <style>
-
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
 </style>
