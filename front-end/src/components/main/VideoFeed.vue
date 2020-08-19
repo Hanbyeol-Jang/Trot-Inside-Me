@@ -76,7 +76,6 @@ export default {
               headers:{ token: this.authToken },
               params: { page: this.page++ }
           }
-          console.log(this.page)
           axios.get(SERVER.URL + SERVER.ROUTES.singerVideoList + this.singerId, options)
             .then((res) => {
               this.videoCnt = res.data[0].b_cnt
@@ -90,7 +89,10 @@ export default {
               })
               setTimeout(() => { this.videos.push(...res.data) }, 500) 
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})
         } else {
           // all
           const options = {
@@ -110,7 +112,10 @@ export default {
               })
               setTimeout(() => { this.videos.push(...res.data) }, 500) 
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})            
         }
       },
 
@@ -128,8 +133,11 @@ export default {
             this.videoCnt = res.data[0].b_cnt
             setTimeout(() => { this.videos.push(...res.data) }, 500) 
           })
-          .catch(err => console.log(err))
-      },
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})
+        },
       // Pagination
       infiniteHandler($state){
         if(!this.searchFlag){
@@ -155,7 +163,10 @@ export default {
                     $state.loaded()
                   }, 500);
                 })
-                .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})  
             } else{
               $state.complete()
             }
@@ -181,7 +192,10 @@ export default {
                     $state.loaded()
                   }, 500);
                 })
-                .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})            
             } else{
               $state.complete()
             }
@@ -207,7 +221,10 @@ export default {
                     $state.loaded()
                   }, 500);
                 })
-                .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})            
             } else{
               $state.complete()
             }

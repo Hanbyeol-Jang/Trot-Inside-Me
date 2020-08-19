@@ -83,8 +83,10 @@ export default {
               this.isWaiting = false
             }
           })
-          .catch(err => console.log(err))
-      },
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})      },
       // Pagination
       infiniteHandler($state){
         if (parseInt(this.videoCnt / 5) + 1 >= this.page){
@@ -104,7 +106,10 @@ export default {
                 $state.loaded()
               }, 500);
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})
         } else{
           $state.complete()
         }
