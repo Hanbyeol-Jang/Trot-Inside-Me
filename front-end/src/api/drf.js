@@ -11,6 +11,8 @@ export default{
         kakaoOff: '/user/kakao/unlink',
         getUserInfo: '/user/getUserInfo',
 
+        // test
+
         // singer
         singerList: '/board/singerlist',
         singerDetail: '/board/singerdetail/',
