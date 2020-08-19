@@ -173,7 +173,7 @@ export default {
         //     return this.community.userimg
         // },
         communityimg(){
-            return '/img/' + this.community.co_img
+            return '/images/' + this.community.co_img
         },
     },
     created(){

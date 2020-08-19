@@ -133,8 +133,13 @@ export default new Vuex.Store({
 
       commit('SET_TOKEN', null)
       cookies.remove('auth-token')
+
       router.push({ name: 'Home' })
-      // 로그아웃 확인 버튼
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: '로그아웃 되었습니다!',
+      })
     },
     kakaoOff({ getters, commit }) { 
       axios.post(SERVER.URL + SERVER.ROUTES.kakaoOff, null, getters.config)

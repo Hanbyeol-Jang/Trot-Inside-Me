@@ -100,7 +100,7 @@ export default {
     },
     computed: {
         communImg() {
-            return '/img/' + this.communityImg
+            return '/images/' + this.communityImg
         }
     },
     methods: {
