@@ -84,9 +84,9 @@ export default {
                 this.show_image='/img/'+reaponse.data.co_img
                 this.getuser()
             })
-            .catch((err)=>{
-                console.error(err)
-            })
+        .catch(() => {
+          this.$router.push({name:"PageNotFound"})
+        })
         },
 
         updateCommunity(){
