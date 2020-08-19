@@ -57,18 +57,24 @@
   </v-card>
     <br>
     <br>
+    <transition name="fade">
+      <ScrollTopButton v-if="scrolled"/>
+    </transition>
     </div>
 </template>
 
 <script>
-import CommentList from '@/components/community/CommentList.vue'
 import axios from 'axios'
 import SERVER from '@/api/drf'
+
+import ScrollTopButton from '@/components/main/ScrollTopButton'
+import CommentList from '@/components/community/CommentList.vue'
 
 export default {
     name:"CommunityDetailView",
     components:{
         CommentList,
+        ScrollTopButton,
     },
     data(){
         return{
@@ -88,12 +94,13 @@ export default {
                 headers:{
                     token : `${this.$cookies.get('auth-token')}`
                 },
-            }
+            },
+            scrolled: false,
         }
     },
     computed: {
         communImg() {
-            return '/img/' + this.communityImg
+            return '/images/' + this.communityImg
         }
     },
     methods: {
@@ -144,9 +151,9 @@ export default {
                 this.communityImg = reaponse.data.co_img
                 this.getuser()
             })
-            .catch((err)=>{
-                console.error(err)
-            })
+        .catch(() => {
+          this.$router.push({name:"PageNotFound"})
+        })
         },
 
 
@@ -212,20 +219,21 @@ export default {
 
         deleteComment(){
             this.commentCnt -= 1
-        }
+        },
+        detectWindowScrollY() {
+        this.scrolled = window.scrollY > 0
+      }
     },
-    // computed:{
-    //     userimg(){
-    //         return this.userImg
-    //     },
-    //     communityimg(){
-    //         return this.communityImg
-    //     },
-    // },
     created(){
         this.checkLogin(),
         this.getCommunity()
     },
+    mounted() {
+      window.addEventListener('scroll', this.detectWindowScrollY)
+    },
+    beforeDestory() {
+      window.removeEventListener('scroll', this.detectWindowScrollY)
+    } 
 }
 </script>
 

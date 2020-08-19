@@ -29,7 +29,9 @@
           <infinite-loading v-if="communities.length" @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
         </div>
       </div>    
-    <ScrollTopButton />   
+    <transition name="fade">
+      <ScrollTopButton v-if="scrolled"/>
+    </transition>    
   </div>
 </template>
 
@@ -56,6 +58,7 @@ export default {
         no:1,
         communityNum:null,
         changeFlag:true,
+        scrolled: false,
       }
     },
     computed: {
@@ -159,6 +162,9 @@ export default {
                 console.log(err)
             })
         },
+        detectWindowScrollY() {
+          this.scrolled = window.scrollY > 0
+        }
 
     },
       created(){
@@ -166,8 +172,13 @@ export default {
         if (this.isLoggedIn) {
           this.getRecentCommunity()
         }
-        
       },
+      mounted() {
+        window.addEventListener('scroll', this.detectWindowScrollY)
+        },
+      beforeDestory() {
+        window.removeEventListener('scroll', this.detectWindowScrollY)
+      }
     }
 </script>
 

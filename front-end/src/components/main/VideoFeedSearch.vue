@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex flex-row">
-        <v-col cols="10" class="row text-center mx-auto">
+        <v-col class="row text-center mx-auto">
           <v-text-field
             label="검색어를 입력해주세요."
             single-line

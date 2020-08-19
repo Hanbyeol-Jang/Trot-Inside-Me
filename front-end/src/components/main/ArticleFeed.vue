@@ -14,7 +14,9 @@
                 </h2>
               </div>
             </v-col>
-            <ScrollTopButton />
+            <transition name="fade">
+              <ScrollTopButton v-if="scrolled"/>
+            </transition>
             <v-col cols="12">
               <infinite-loading v-if="articles.length" 
                 @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
@@ -42,6 +44,7 @@ export default {
             page: 1,
             mediaType: 2,
             articleCnt: 0,
+            scrolled: false,
         }
     },
     components: {
@@ -72,7 +75,10 @@ export default {
               this.articleCnt = res.data[0].b_cnt
               setTimeout(() => { this.articles.push(...res.data) }, 500) 
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})
         } else {
           // all
           const options = {
@@ -84,8 +90,11 @@ export default {
               this.articleCnt = res.data[0].b_cnt
               setTimeout(() => { this.articles.push(...res.data) }, 500) 
             })
-            .catch(err => console.log(err))
-        }
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})
+          }
       }, 
       infiniteHandler($state){
         if (this.routeSingerId) {
@@ -102,7 +111,10 @@ export default {
                   $state.loaded()
                 }, 500);
               })
-              .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})
           } else{
             $state.complete()
           }
@@ -120,16 +132,28 @@ export default {
                   $state.loaded()
                 }, 500);
               })
-              .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})
           } else{
             $state.complete()
           }
         }
       },
+      detectWindowScrollY() {
+        this.scrolled = window.scrollY > 0
+      }
     },
     created() {
         this.fetchArticleData()
     },
+    mounted() {
+      window.addEventListener('scroll', this.detectWindowScrollY)
+      },
+    beforeDestory() {
+      window.removeEventListener('scroll', this.detectWindowScrollY)
+    }
 
 }
 </script>

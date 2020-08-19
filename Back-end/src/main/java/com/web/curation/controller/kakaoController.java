@@ -25,7 +25,7 @@ public class kakaoController {
 	@Autowired
 	private KakaoAPI kakaoAPI;
 	@Autowired
-	KakaoService kakaoService;
+	private KakaoService kakaoService;
 	@Autowired
 	private UserService userService;
 	@Value("${KAKAO_API_KEY}")

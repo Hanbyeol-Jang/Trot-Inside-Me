@@ -13,7 +13,9 @@
           잠시만 기다려 주세요!
         </h2> 
       </div>
-      <ScrollTopButton /> 
+      <transition name="fade">
+        <ScrollTopButton v-if="scrolled"/>
+      </transition> 
       <infinite-loading 
         v-if="videos.length" @infinite="infiniteHandler" spinner="waveDots">
       </infinite-loading>
@@ -44,6 +46,7 @@ export default {
         videoCnt: 0,
         searchFlag:false,
         keyword:'',
+        scrolled: false,
       }
     },
     components: {
@@ -86,7 +89,10 @@ export default {
               })
               setTimeout(() => { this.videos.push(...res.data) }, 500) 
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})
         } else {
           // all
           const options = {
@@ -106,7 +112,10 @@ export default {
               })
               setTimeout(() => { this.videos.push(...res.data) }, 500) 
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})            
         }
       },
 
@@ -124,8 +133,11 @@ export default {
             this.videoCnt = res.data[0].b_cnt
             setTimeout(() => { this.videos.push(...res.data) }, 500) 
           })
-          .catch(err => console.log(err))
-      },
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})
+        },
       // Pagination
       infiniteHandler($state){
         if(!this.searchFlag){
@@ -138,12 +150,23 @@ export default {
               }
               axios.get(SERVER.URL + SERVER.ROUTES.singerVideoList + this.singerId, options)
                 .then(res => {
+                  res.data.forEach(item => {
+                    const parser = new DOMParser()
+                    const doc = parser.parseFromString(item.b_title, 'text/html')
+                    item.b_title = doc.body.innerText
+                    if (item.b_title.length > 40) {
+                      item.b_title = item.b_title.slice(0, 40) + '...'
+                    }
+                  })
                   setTimeout(() => {
                     this.videos.push(...res.data)
                     $state.loaded()
                   }, 500);
                 })
-                .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})  
             } else{
               $state.complete()
             }
@@ -156,12 +179,23 @@ export default {
               }
               axios.get(SERVER.URL + SERVER.ROUTES.mainList + this.mediaType, options)
                 .then(res => {
+                  res.data.forEach(item => {
+                    const parser = new DOMParser()
+                    const doc = parser.parseFromString(item.b_title, 'text/html')
+                    item.b_title = doc.body.innerText
+                    if (item.b_title.length > 40) {
+                      item.b_title = item.b_title.slice(0, 40) + '...'
+                    }
+                  })
                   setTimeout(() => {
                     this.videos.push(...res.data)
                     $state.loaded()
                   }, 500);
                 })
-                .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})            
             } else{
               $state.complete()
             }
@@ -174,20 +208,40 @@ export default {
               }
               axios.get(SERVER.URL + "/board/videolist/search", options)
                 .then(res => {
+                  res.data.forEach(item => {
+                    const parser = new DOMParser()
+                    const doc = parser.parseFromString(item.b_title, 'text/html')
+                    item.b_title = doc.body.innerText
+                    if (item.b_title.length > 40) {
+                      item.b_title = item.b_title.slice(0, 40) + '...'
+                    }
+                  })
                   setTimeout(() => {
                     this.videos.push(...res.data)
                     $state.loaded()
                   }, 500);
                 })
-                .catch(err => console.log(err))
+            .catch(err => {
+              if(err.message==="Request failed with status code 404"){
+                this.$router.push({name:"PageNotFound"})
+              }})            
             } else{
               $state.complete()
             }
         }
       },
+      detectWindowScrollY() {
+        this.scrolled = window.scrollY > 0
+      }
     },
     created() {
       this.fetchVideoData()
     },
+    mounted() {
+      window.addEventListener('scroll', this.detectWindowScrollY)
+      },
+    beforeDestory() {
+      window.removeEventListener('scroll', this.detectWindowScrollY)
+    }
 }
 </script>

@@ -43,15 +43,6 @@ export default {
   computed: {
     ...mapState(['user']),
     ...mapGetters(['isLoggedIn']),
-    // bottomNav() {
-    //   let routeName = this.$route.name
-    //   if (routeName === 'Home' || routeName === 'SingerSearchView'
-    //     || routeName === 'VoteView' || routeName === 'CommunityIndexView') {
-    //       return true
-    //     } else {
-    //       return false
-    //     }
-    // },
   },
   methods: {
     ...mapActions(['getUser']),
@@ -65,40 +56,45 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: 'Jua', sans-serif !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  /* text-align: center; */
-  color: #2c3e50;
-}
-.my-dialog .vc-text {
-  font-size: 200%;
-  margin: 0;
-}
-.my-dialog .vc-container {
-  width: 300px;
-  background-color: whitesmoke;
-}
-.my-dialog .vc-btn {
-  color: whitesmoke;
-  background-color: #e91e63;
-  font-size: 150%;
-}
+  #app {
+    font-family: 'Jua', sans-serif !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    color: #2c3e50;
+  }
+  .my-dialog .vc-text {
+    font-size: 200%;
+    margin: 0;
+  }
+  .my-dialog .vc-container {
+    width: 300px;
+    background-color: whitesmoke;
+  }
+  .my-dialog .vc-btn {
+    color: whitesmoke;
+    background-color: #e91e63;
+    font-size: 150%;
+  }
 
-.my-dialog .left {
-  color: #e91e63;
-  background-color: whitesmoke;
-  font-size: 150%;
-}
-.swal2-popup {
-  font-family: 'Jua', sans-serif !important;
-}
-.swal2-content{
-  font-size: 200% !important;
-  margin: 0;
-}
-.swal2-styled.swal2-confirm{
-  background-color: #e91e63 !important;
-}
+  .my-dialog .left {
+    color: #e91e63;
+    background-color: whitesmoke;
+    font-size: 150%;
+  }
+  .swal2-popup {
+    font-family: 'Jua', sans-serif !important;
+  }
+  .swal2-content{
+    font-size: 200% !important;
+    margin: 0;
+  }
+  .swal2-styled.swal2-confirm{
+    background-color: #e91e63 !important;
+  }
+  .fade-enter-active, .fade-leave-active {
+      transition: opacity .9sss;
+    }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
 </style>

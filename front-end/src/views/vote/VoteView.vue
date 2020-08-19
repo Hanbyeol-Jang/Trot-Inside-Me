@@ -23,9 +23,11 @@
       src="https://public.tableau.com/views/trot/1?:language=ko&:display_count=y&publish=yes&:origin=viz_share_link:showVizHome=no&:embed=true"
       width="100%" height="1400px">
     <!-- <VoteMoving /> -->
-    <ScrollTopButton /> 
+    <transition name="fade">
+      <ScrollTopButton v-if="scrolled"/>
+    </transition>
   </div>
-</template>
+</template> 
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
@@ -39,6 +41,11 @@ import ScrollTopButton from '@/components/main/ScrollTopButton'
 
 export default {
   name: 'VoteView',
+  data() {
+    return{
+      scrolled: false,
+    }
+  },
   computed: {
     ...mapState(['user']),
     ...mapState(['checkvote']),
@@ -98,6 +105,9 @@ export default {
         showConfirmButton: false,
         timer: 2000
       })
+    },
+    detectWindowScrollY() {
+      this.scrolled = window.scrollY > 0
     }
   },
   created(){
@@ -105,6 +115,12 @@ export default {
     if (this.isLoggedIn) {
       this.getUser()
       }
+  },
+  mounted() {
+      window.addEventListener('scroll', this.detectWindowScrollY)
+    },
+  beforeDestory() {
+    window.removeEventListener('scroll', this.detectWindowScrollY)
   }
   }
 </script>

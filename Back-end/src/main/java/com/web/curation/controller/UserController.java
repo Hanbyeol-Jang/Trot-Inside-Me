@@ -32,7 +32,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	//.마이페이지 팔로우 리스트
+	// .마이페이지 팔로우 리스트
 	@ApiOperation("마이페이지 팔로우 리스트")
 	@GetMapping("/followlist")
 	public ResponseEntity<List<FollowDto>> followlist(HttpServletRequest request) {
@@ -45,19 +45,24 @@ public class UserController {
 		}
 	}
 
-	//마이페이지 팔로우 리스트(이메일)
+	// 마이페이지 팔로우 리스트(이메일)
 	@ApiOperation("마이페이지 팔로우 리스트(이메일)")
 	@GetMapping("/followlist/{u_email}")
 	public ResponseEntity<List<FollowDto>> followlistEmail(@PathVariable String u_email) {
 		try {
 			List<FollowDto> list = userService.getFollowList(u_email);
+			UserDto userDto = userService.getUserInfo(u_email);
+			if (userDto == null)
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			if (list.size() == 0)
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			return new ResponseEntity<List<FollowDto>>(list, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
 
-	//마이페이지 영상 리스트"
+	// 마이페이지 영상 리스트"
 	@ApiOperation("마이페이지 영상 리스트")
 	@GetMapping("/videolist")
 	public ResponseEntity<List<BoardDto>> videolist(@RequestParam("page") int page, HttpServletRequest request) {
@@ -88,7 +93,7 @@ public class UserController {
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 
-	//마이페이지 기사  리스트
+	// 마이페이지 기사 리스트
 	@ApiOperation("마이페이지 기사  리스트")
 	@GetMapping("/articlelist")
 	public ResponseEntity<List<BoardDto>> articlelist(@RequestParam("page") int page, HttpServletRequest request) {
@@ -96,7 +101,7 @@ public class UserController {
 		if (dto.getU_name().equals("F")) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
-		
+
 		GoodDto gdto = new GoodDto();
 		gdto.setB_type(2);
 		gdto.setU_email(dto.getU_email());
@@ -121,7 +126,7 @@ public class UserController {
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 
-	//이메일 영상 리스트
+	// 이메일 영상 리스트
 	@ApiOperation("이메일 영상 리스트")
 	@GetMapping("/videolist/{u_email}")
 	public ResponseEntity<List<BoardDto>> videolistEmail(@PathVariable String u_email, @RequestParam("page") int page) {
@@ -129,12 +134,16 @@ public class UserController {
 			GoodDto gdto = new GoodDto();
 			gdto.setB_type(1);
 			gdto.setU_email(u_email);
+			UserDto userDto = userService.getUserInfo(u_email);
+			if (userDto == null)
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			List<BoardDto> list = userService.myBoardList(gdto);
-
+			if (list.size() == 0)
+				return new ResponseEntity<>(list, HttpStatus.OK);
 			for (int i = 0; i < list.size(); i++) {
 				System.out.println(list.get(i));
 			}
-			
+
 			List<BoardDto> showList = new ArrayList<>();
 			int lastPageRemain = list.size() % 5;
 			int lastPage = list.size() - lastPageRemain;
@@ -156,7 +165,7 @@ public class UserController {
 		}
 	}
 
-	//이메일 기사  리스트
+	// 이메일 기사 리스트
 	@ApiOperation("이메일 기사  리스트")
 	@GetMapping("/articlelist/{u_email}")
 	public ResponseEntity<List<BoardDto>> articlelistEmail(@PathVariable String u_email,
@@ -165,8 +174,13 @@ public class UserController {
 			GoodDto gdto = new GoodDto();
 			gdto.setB_type(2);
 			gdto.setU_email(u_email);
+			UserDto userDto = userService.getUserInfo(u_email);
+			if (userDto == null)
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			List<BoardDto> list = userService.myBoardList(gdto);
 
+			if (list.size() == 0)
+				return new ResponseEntity<>(list, HttpStatus.OK);
 			List<BoardDto> showList = new ArrayList<>();
 			int lastPageRemain = list.size() % 5;
 			int lastPage = list.size() - lastPageRemain;
@@ -188,7 +202,7 @@ public class UserController {
 		}
 	}
 
-	//팔로우 등록
+	// 팔로우 등록
 	@ApiOperation("팔로우 등록 ")
 	@GetMapping("/follow/{s_idx}")
 	public ResponseEntity<Integer> followApply(@PathVariable int s_idx, HttpServletRequest request,
@@ -204,7 +218,7 @@ public class UserController {
 				if (userService.followDelete(dto)) {
 					isfollow = 0;
 				}
-			} else { 
+			} else {
 				if (userService.followApply(dto)) {
 					isfollow = 1;
 				}
@@ -235,6 +249,8 @@ public class UserController {
 	public ResponseEntity<HashMap<String, Object>> getUserInfoEmail(@PathVariable String u_email) {
 		try {
 			UserDto userDto = userService.getUserInfo(u_email);
+			if (userDto == null)
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			HashMap<String, Object> map = new HashMap<>();
 			map.put("userInfo", userDto);
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);

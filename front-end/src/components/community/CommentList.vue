@@ -1,25 +1,24 @@
 <template>
  <v-card-text>
    <hr>
-        <v-col cols="10" class="row text-center mx-auto">
-          <v-text-field
-            label="댓글을 작성해주세요."
-            single-line
-            v-model="commentData.content" 
-            @keypress.enter="commentCreate"
-          ></v-text-field>
-          <v-btn icon class="d-flex align-self-center">
-              <i class="far fa-paper-plane fa-lg my-auto" @click="commentCreate"></i>
-          </v-btn>
-        </v-col>
+    <v-col class="row text-center mx-auto">
+      <v-text-field
+        label="댓글을 작성해주세요."
+        single-line
+        v-model="commentData.content" 
+        @keypress.enter="commentCreate"
+      ></v-text-field>
+      <v-btn icon class="d-flex align-self-center">
+          <i class="far fa-paper-plane fa-lg my-auto" @click="commentCreate"></i>
+      </v-btn>
+    </v-col>
     <div v-for="comment in comments" :key="comment.id">
       <CommentListItem class="mb-3" @delete-comment2="commentDelete" :comment="comment" :currentUser="currentUser"/>
     </div>
-      <br>
-      <!-- <p class="text-center" v-if="!comments.length">No results :( </p> -->
-      <infinite-loading  @infinite="infiniteHandler"></infinite-loading>
-      <ScrollTopButton />
-</v-card-text>
+    <br>
+    <!-- <p class="text-center" v-if="!comments.length">No results :( </p> -->
+    <infinite-loading  @infinite="infiniteHandler"></infinite-loading>
+  </v-card-text>
 </template>
 
 <script>
@@ -27,15 +26,12 @@ import axios from 'axios'
 import CommentListItem from '@/components/community/CommentListItem'
 import InfiniteLoading from 'vue-infinite-loading'
 import SERVER from '@/api/drf'
-import ScrollTopButton from '@/components/main/ScrollTopButton'
-
 
 export default {
   name: 'CommentList',
   components: {
     CommentListItem,
     InfiniteLoading,
-    ScrollTopButton,
   },
   props:{
     commentCnt:Number,
@@ -118,8 +114,9 @@ export default {
             },
             params: {page: this.page}
         }
-      if (!this.commentData.content){
+      if (!this.commentData.content.trim()){
         this.$alert('내용을 작성해주세요')
+        this.commentData.content =''
       } else{
         if (!this.$cookies.isKey('auth-token')){
             this.$confirm(

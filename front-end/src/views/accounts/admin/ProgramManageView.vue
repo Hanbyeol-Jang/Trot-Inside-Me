@@ -23,7 +23,7 @@
                 size="60">
                 <img
                   v-if="program.a_img"
-                  :src="'/img/' + program.a_img"
+                  :src="'/images/' + program.a_img" 
                   alt="Program Default"
                 >
                 <img
