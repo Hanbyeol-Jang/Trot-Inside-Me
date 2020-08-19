@@ -38,15 +38,19 @@
         <span v-if="routeName === 'ArticleDetailView'">기사 상세 보기</span>
         <span v-if="routeName === 'About'">서비스 소개</span>
         <span v-if="routeName === 'CommunityDetailView'">상세 보기</span>
+        <span v-if="routeName === 'UserSettingView'">설정</span>
         <span v-if="routeName === 'UserLikeSingerView'">
           <span v-if="this.$route.params.userId === user.u_email">내 가수 보기</span>
           <span v-else>찜한 가수</span>
         </span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn v-if="navBool" icon @click="goUserDetail"><i class="fas fa-user fa-lg"></i></v-btn>
-      <v-btn v-else icon @click="goHome"><i class="fas fa-home fa-lg"></i></v-btn>
+      <v-btn v-if="navUser" icon @click="goUserDetail"><i class="fas fa-user fa-lg"></i></v-btn>
+      <!-- <v-btn v-if="navHome" icon @click="goHome"><i class="fas fa-home fa-lg"></i></v-btn> -->
       <v-btn v-if="navSetting" icon @click="goSettings"><i class="fas fa-cog fa-lg"></i></v-btn>
+
+      <!-- <v-btn v-if="navSetting" icon @click="goSettings"><i class="fas fa-cog fa-lg"></i></v-btn> -->
+      <v-btn v-if="navNone" icon></v-btn>
     </v-app-bar>
   </div>
 </template>
@@ -74,14 +78,46 @@ export default {
         return this.$route.name
       },
       navBool() {
-        if (this.$route.name === 'Home'){
+        if (this.$route.name === 'Home' 
+            || this.$route.name === 'ErrorView' 
+            || this.$route.name === 'PageNotFound'){
           return true
         } else {
           return false
         }
       },
+      navBack() {
+        if (this.$route.name === 'UserDetailView'){
+          return true
+        } else {
+          return false
+        }
+      },
+      navUser() {
+        if ( this.$route.name === 'UserDetailView' 
+          || this.$route.name === 'VoteCreateView'
+          || this.$route.name === 'VoteLocalSelectView'
+          || this.$route.name === 'UserSettingView'
+          || this.$route.name === 'About'
+          ){
+          return false
+        } else {
+          return true
+        }
+      },
       navSetting() {
-         if (this.$route.name === 'UserDetailView'){
+        if (this.$route.name === 'UserDetailView' 
+            && this.$route.params.userId === this.user.u_email){
+              if(this.user.u_isAdmin === 1) {
+                return false
+              }
+          return true
+        } else {
+          return false
+        }
+      },
+      navNone() {
+        if (this.$route.name === 'UserSettingView'){
           return true
         } else {
           return false

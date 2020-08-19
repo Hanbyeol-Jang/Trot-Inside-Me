@@ -25,7 +25,7 @@
                 size="60">
                 <img
                   v-if="singer.s_img"
-                  :src="'/img/' + singer.s_img"
+                  :src="'/images/' + singer.s_img"
                   alt="Singer Default"
                 >
                 <img

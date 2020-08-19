@@ -81,25 +81,29 @@ export default {
             .then((reaponse)=>{
                 this.content=reaponse.data.co_content,
                 this.user=reaponse.data.co_name,
-                this.show_image='/img/'+reaponse.data.co_img
+                this.show_image='/images/'+reaponse.data.co_img
                 this.getuser()
             })
-            .catch((err)=>{
-                console.error(err)
-            })
+        .catch(() => {
+          this.$router.push({name:"PageNotFound"})
+        })
         },
 
         updateCommunity(){
+            if(!this.content.trim() && !this.image){
+            this.$alert("입력 된 값이 없습니다.")
+            this.content = ''
+          }else{
             const axiosConfig2={
               headers:{
-                token : `${this.$cookies.get('auth-token')}`,
-                'Content-Type': 'multipart/form-data'
+              token : `${this.$cookies.get('auth-token')}`,
+              'Content-Type': 'multipart/form-data'
               }
             }
             const data = new FormData()
             data.append('co_idx',this.$route.params.communityId)
             data.append('co_content',this.content)
-            if (this.$refs.file.$refs.input.files[0]!==undefined){
+            if (this.$refs.file.files[0]!==undefined){
               data.append('co_img',this.image)
             }
             axios.put(`${SERVER.URL}/community/update`,data,axiosConfig2)
@@ -109,6 +113,7 @@ export default {
             .catch((err)=>{
                 console.log(err)
             })
+          }
         },
 
         deleteArticle2(){
