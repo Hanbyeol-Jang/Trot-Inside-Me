@@ -58,7 +58,6 @@ export default {
       menuItems: [
         { id: 1, title: '가수 관리하기', icon: 'fas fa-music'},
         { id: 2, title: '편성표 관리하기', icon: 'fas fa-table'},
-        { id: 3, title: 'About 내 안의 트롯', icon: 'fas fa-info-circle'},
       ],
     }
   },

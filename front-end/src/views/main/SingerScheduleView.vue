@@ -22,7 +22,14 @@
         <SingerScheduleList :singerPrograms="singerPrograms"/>
       </v-timeline>
     </div>
-    <div v-else class="mt-5">아직 등록된 스케줄이 없습니다 :(</div>
+    <div class="mt-10" v-else>
+        <div class="text-center">
+          <img src="@/assets/image/trot_logo.png" alt="My Trot" width="200px">
+        </div>
+        <h2 class="text-center mt-4">
+          등록된 스케줄이 없습니다 :(
+        </h2>
+    </div>
     <transition name="fade">
       <ScrollTopButton v-if="scrolled"/>
     </transition>
