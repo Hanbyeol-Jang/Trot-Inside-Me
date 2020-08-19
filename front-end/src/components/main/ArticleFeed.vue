@@ -14,7 +14,9 @@
                 </h2>
               </div>
             </v-col>
-            <ScrollTopButton />
+            <transition name="fade">
+              <ScrollTopButton v-if="scrolled"/>
+            </transition>
             <v-col cols="12">
               <infinite-loading v-if="articles.length" 
                 @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
@@ -42,6 +44,7 @@ export default {
             page: 1,
             mediaType: 2,
             articleCnt: 0,
+            scrolled: false,
         }
     },
     components: {
@@ -126,10 +129,19 @@ export default {
           }
         }
       },
+      detectWindowScrollY() {
+        this.scrolled = window.scrollY > 0
+      }
     },
     created() {
         this.fetchArticleData()
     },
+    mounted() {
+      window.addEventListener('scroll', this.detectWindowScrollY)
+      },
+    beforeDestory() {
+      window.removeEventListener('scroll', this.detectWindowScrollY)
+    }
 
 }
 </script>

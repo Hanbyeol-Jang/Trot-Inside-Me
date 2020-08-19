@@ -37,6 +37,7 @@
         <span v-if="routeName === 'VideoDetailView'">영상 상세 보기</span>
         <span v-if="routeName === 'ArticleDetailView'">기사 상세 보기</span>
         <span v-if="routeName === 'About'">서비스 소개</span>
+        <span v-if="routeName === 'CommunityDetailView'">상세 보기</span>
         <span v-if="routeName === 'UserLikeSingerView'">
           <span v-if="this.$route.params.userId === user.u_email">내 가수 보기</span>
           <span v-else>찜한 가수</span>

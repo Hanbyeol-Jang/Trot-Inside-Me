@@ -19,7 +19,8 @@
         <v-icon
           color="pink">
           mdi-heart
-        </v-icon><span class="subheading mx-2">{{ followCnt }} 명</span>
+        </v-icon>
+        <div class="subheading ma-2 like-count">{{ followCnt }} 명</div>
         </div>
     </div>
     <v-container>
@@ -145,7 +146,10 @@ export default {
 </script>
 
 <style scoped>
-.menu-title{
+.menu-title {
   font-size: 25px;
+}
+.like-count {
+  display: inline-block;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-row">
-        <v-col cols="10" class="row text-center mx-auto">
+        <v-col class="row text-center mx-auto">
           <v-text-field
             label="가수 이름 검색"
             single-line

@@ -6,16 +6,16 @@
         hide-delimiters
         cycle
         >
-        <CarouselItem 
-          v-for="(item,i) in items"
-          :key="i"
-          :imgSrc="item.src"/>
         <v-carousel-item>
           <VoteThisWeek />
         </v-carousel-item>
         <v-carousel-item>
           <VoteLastWeek />
         </v-carousel-item>
+        <CarouselItem 
+          v-for="(item,i) in items"
+          :key="i"
+          :imgSrc="item.src"/>
       </v-carousel>
       <v-container class="mt-4">
         <v-row no-gutters>
@@ -126,7 +126,7 @@ export default {
 </script>
 
 <style scoped>
-.menu-title{
-  font-size: 25px;
-}
+  .menu-title{
+    font-size: 25px;
+  }
 </style>
