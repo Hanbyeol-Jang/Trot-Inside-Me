@@ -38,11 +38,14 @@ public class AdminController {
 	@Autowired
 	private AdminServcie adminService;
 	static String serverUrl = "/home/ubuntu/img/";
+
 	// 관리자 로그인
 	@ApiOperation("관리자 로그인")
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody UserDto user, HttpServletRequest request) {
-		UserDto dto = userService.getUserInfo(user.getU_email());
+		UserDto dto = adminService.adminLogin(user);
+		if (dto == null)
+			return new ResponseEntity<String>("FAIL", HttpStatus.OK);
 		String token = userService.createToken(dto);
 
 		return new ResponseEntity<>(token, HttpStatus.OK);
@@ -80,7 +83,7 @@ public class AdminController {
 			dto.setA_img(up.getImg().getOriginalFilename());
 		}
 		dto.setA_broadName(up.getName());
-		if(up.getUrl()!=null) {
+		if (up.getUrl() != null) {
 			dto.setA_broadUrl(up.getUrl());
 		}
 		if (adminService.addBroadSchedule(dto)) {
@@ -96,7 +99,7 @@ public class AdminController {
 	public ResponseEntity<String> DeleteBroadSchedule(@PathVariable int a_idx) {
 		// 이미지 처리
 		String imgurl = serverUrl + adminService.getTVImgUrl(a_idx);
-		if (imgurl != null) { 
+		if (imgurl != null) {
 			File file = new File(imgurl);
 			file.delete();
 		}
@@ -132,7 +135,7 @@ public class AdminController {
 			up.getImg().transferTo(file);
 			dto.setS_img(up.getImg().getOriginalFilename());
 		}
-		if(up.getUrl()!=null) {
+		if (up.getUrl() != null) {
 			dto.setS_cafeUrl(up.getUrl());
 		}
 		if (adminService.addSinger(dto)) {
@@ -147,8 +150,8 @@ public class AdminController {
 	@DeleteMapping("/singerdelete/{s_idx}")
 	public ResponseEntity<String> deleteSinger(@PathVariable int s_idx) {
 		// 이미지 처리
-		String imgurl =serverUrl + adminService.getSingerImgUrl(s_idx);
-		if (imgurl != null) { 
+		String imgurl = serverUrl + adminService.getSingerImgUrl(s_idx);
+		if (imgurl != null) {
 			File file = new File(imgurl);
 			file.delete();
 		}
