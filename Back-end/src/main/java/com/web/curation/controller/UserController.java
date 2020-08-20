@@ -55,7 +55,7 @@ public class UserController {
 			if (userDto == null)
 				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			if (list.size() == 0)
-				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
 			return new ResponseEntity<List<FollowDto>>(list, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
