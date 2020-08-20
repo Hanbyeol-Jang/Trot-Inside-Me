@@ -85,17 +85,21 @@ export default {
 
         communityImage(){
           this.image = this.$refs.file.files[0]
-          this.change_image = URL.createObjectURL(this.image)
-          var fileName = document.getElementById("file").value;
-          var idxDot = fileName.lastIndexOf(".") + 1;
-          var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
-          console.log(extFile)
-          if (extFile=="jpg" || extFile=="jpeg" || extFile=="png"){
-              //TO DO
+          if(this.image){
+            var fileName = document.getElementById("file").value;
+            var idxDot = fileName.lastIndexOf(".") + 1;
+            var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+            if (extFile=="jpg" || extFile=="jpeg" || extFile=="png"){
+                //TO DO
+            }else{
+                this.$alert("jpg/jpeg,png 이미지만 가능해요!");
+            }  
+            this.change_image = URL.createObjectURL(this.image)
+            this.flag = true
           }else{
-              this.$alert("Only jpg/jpeg and png files are allowed!");
-          }  
-          this.flag = true
+            this.change_image = null
+            this.flag =false
+          }
         },
     },
     created(){

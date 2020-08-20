@@ -1,9 +1,6 @@
 <template>
   <div>
-      <div class="d-flex justify-space-between px-4 mb-5">
-        <img src="@/assets/image/trot_logo.png" alt=""
-                    
-            width="120px" class="mt-4">
+      <div class="d-flex flex-row-reverse px-4 mb-5">
         <v-btn rounded 
                     
           color="pink" 
