@@ -130,7 +130,7 @@ export default {
       },
     },
     created() {
-      if (this.isLoggedIn && !this.user.u_isAdmin) {
+      if (this.isLoggedIn && !this.$cookies.get('auth-admin')) {
         this.$alert("잘못된 접근입니다.")
         this.$router.push({ name: 'Home' })
       }
