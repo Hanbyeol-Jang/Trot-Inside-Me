@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.web.curation.dto.AdminDto;
 import com.web.curation.dto.SingerDto;
+import com.web.curation.dto.UserDto;
 
 @Repository
 public class AdminDaoImpl implements AdminDao {
@@ -54,6 +55,11 @@ public class AdminDaoImpl implements AdminDao {
 	@Override
 	public String getSingerImgUrl(int s_idx) {
 		return session.selectOne(ns + "getSingerImgUrl", s_idx);
+	}
+
+	@Override
+	public UserDto adminLogin(UserDto userDto) {
+		return session.selectOne(ns+"adminLogin",userDto);
 	}
 
 }

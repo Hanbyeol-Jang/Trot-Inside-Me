@@ -27,11 +27,7 @@
             {{communityDate.slice(0,10)}}
         </v-card-text>
     <v-img v-if="communityImg" :src="communImg" height=100%></v-img>
-    <v-card-text>
-        <h1>
-            {{communityContent}}
-        </h1>
-    </v-card-text>
+    <v-card-text class="community-content">{{communityContent}}</v-card-text>
     <hr>
     <v-card-actions class="d-flex justify-space-around">
 
@@ -237,6 +233,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.community-content {
+    font-size: 25px !important;
+    line-height: 28px;
+}
 
 </style>

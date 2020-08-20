@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.web.curation.dao.AdminDao;
 import com.web.curation.dto.AdminDto;
 import com.web.curation.dto.SingerDto;
+import com.web.curation.dto.UserDto;
 
 @Service
 public class AdminServiceImpl implements AdminServcie {
@@ -53,6 +54,11 @@ public class AdminServiceImpl implements AdminServcie {
 	@Override
 	public String getSingerImgUrl(int s_idx) {
 		return admindao.getSingerImgUrl(s_idx);
+	}
+
+	@Override
+	public UserDto adminLogin(UserDto userDto) {
+		return admindao.adminLogin(userDto);
 	}
 
 }

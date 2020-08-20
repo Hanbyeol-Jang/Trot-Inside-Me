@@ -1,42 +1,63 @@
 <template>
   <div class="mt-6">
-    <v-row>
-      <v-col 
-        cols="12"
-        class="d-flex justify-space-around">
-        <v-avatar
-          class="ma-3 elevation-4"
-          size="120"
-          >
-          <v-img 
-            v-if="userDetail.u_profileImg"
-            :src="userDetail.u_profileImg">
-          </v-img>
-          <v-img
-            v-else
-            src="@/assets/image/user_default.png">
-          </v-img>
-        </v-avatar>
-        <div class="d-flex align-center">
-          <div class="d-flex flex-column">
-            <div>{{ userDetail.u_name }}</div>
-            <v-btn 
-              v-if="user.u_email === userDetail.u_email"
-              text
-              @click="userLogout(user.u_isAdmin)">
-              <i class="fas fa-sign-out-alt mr-1"></i>로그아웃
-            </v-btn>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
+    <v-container class="mt-4">
+      <v-row no-gutters>
+        <template>
+          <v-col>
+            <v-card
+              class="pa-2"
+              outlined
+              tile
+              color="white"
+            >
+            <div class="text-center">
+              <v-avatar
+                class="ma-3 elevation-4"
+                size="120"
+                >
+                <v-img 
+                  v-if="userDetail.u_profileImg"
+                  :src="userDetail.u_profileImg">
+                </v-img>
+                <v-img
+                  v-else
+                  src="@/assets/image/user_default.png">
+                </v-img>
+              </v-avatar>
+            </div>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card
+              class="pa-2"
+              outlined
+              tile
+              color="white"
+            >
+            <div class="text-center mt-10">
+              <div class="username"><i class="fas fa-user mr-2"></i>{{ userDetail.u_name }}</div>
+              <div v-if="user.u_isAdmin === 1">
+                <v-btn 
+                  v-if="user.u_email === userDetail.u_email"
+                  text
+                  @click="userLogout(user.u_isAdmin)">
+                  <i class="fas fa-sign-out-alt mr-1"></i>로그아웃
+                </v-btn>
+              </div>
+            </div>
+            </v-card>
+          </v-col>
+        </template>
+      </v-row>
+    </v-container>
     <v-container>
       <v-row dense>
-        <v-col 
+        <v-col
           v-for="menu in menuItems"
           :key="menu.id"
           cols="12">
           <v-card
+            v-if="userId !== 'admin@admin.com'"
             color="#FCE4EC"
             raised
             @click="goMenuDetail(menu.id)"
@@ -48,6 +69,7 @@
           v-if="user.u_isAdmin === 1"
           cols="12">
           <v-card
+            v-if="userId === 'admin@admin.com'"
             color="#FCE4EC"
             raised
             @click="goMenuDetail(4)"
@@ -105,6 +127,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.username {
+  font-size: 20px;
+}
 </style>
