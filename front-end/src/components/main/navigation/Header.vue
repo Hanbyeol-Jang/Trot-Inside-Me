@@ -99,6 +99,7 @@ export default {
           || this.$route.name === 'VoteLocalSelectView'
           || this.$route.name === 'UserSettingView'
           || this.$route.name === 'About'
+          || this.$route.name === 'Login'
           ){
           return false
         } else {
