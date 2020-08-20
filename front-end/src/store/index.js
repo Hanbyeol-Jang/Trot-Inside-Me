@@ -13,7 +13,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
-    isAdmin: 0,
+    isAdmin: cookies.get('auth-admin'),
     user: {},
     userDetail: {},
     singers: [],
@@ -54,9 +54,6 @@ export default new Vuex.Store({
     SET_USER_DETAIL(state, userInfo) {
       state.userDetail = userInfo
     },
-    SET_ADMIN(state, isAdmin) {
-      state.isAdmin = isAdmin
-    },
     SET_SINGERS(state, singers) {
       state.singers = singers
     },
@@ -96,9 +93,20 @@ export default new Vuex.Store({
     login({ dispatch, commit }, loginData) {
       axios.post(SERVER.URL + SERVER.ROUTES.login, loginData)
         .then(res => {
-          commit('SET_TOKEN', res.data)
-          dispatch('getUser')
-          router.push({ name: 'AdminView' })
+          if(res.data==="FAIL"){
+            Swal.fire({
+              position: 'center',
+              icon: 'error',
+              text: '입력정보를 다시 확인해주세요.',
+              showConfirmButton: false,
+              timer: 1000
+            })
+          }else{
+            commit('SET_TOKEN', res.data)
+            cookies.set('auth-admin', 1)
+            dispatch('getUser')
+            router.push({ name: 'AdminView' })
+          }
         })
         .catch(err => console.log(err))
     },
@@ -107,6 +115,7 @@ export default new Vuex.Store({
         .then(() => {
           commit('SET_TOKEN', null)
           cookies.remove('auth-token')
+          cookies.remove('auth-admin')
           router.push({ name: 'Home' })
         })
         .catch(err => console.log(err))
@@ -154,7 +163,7 @@ export default new Vuex.Store({
     },
     getUser({ getters, commit, dispatch }) {
       axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo, getters.config)
-        .then(res => { 
+        .then(res => {
           commit('SET_USER', res.data)
           if(!res.data) {
             dispatch('kakaoLogout')
