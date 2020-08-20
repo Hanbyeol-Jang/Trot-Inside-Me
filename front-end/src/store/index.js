@@ -96,9 +96,19 @@ export default new Vuex.Store({
     login({ dispatch, commit }, loginData) {
       axios.post(SERVER.URL + SERVER.ROUTES.login, loginData)
         .then(res => {
-          commit('SET_TOKEN', res.data)
-          dispatch('getUser')
-          router.push({ name: 'AdminView' })
+          if(res.data==="FAIL"){
+            Swal.fire({
+              position: 'center',
+              icon: 'error',
+              text: '입력정보를 다시 확인해주세요.',
+              showConfirmButton: false,
+              timer: 1000
+            })
+          }else{
+            commit('SET_TOKEN', res.data)
+            dispatch('getUser')
+            router.push({ name: 'AdminView' })
+          }
         })
         .catch(err => console.log(err))
     },
