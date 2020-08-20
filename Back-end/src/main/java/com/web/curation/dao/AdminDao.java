@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.web.curation.dto.AdminDto;
 import com.web.curation.dto.SingerDto;
+import com.web.curation.dto.UserDto;
 
 public interface AdminDao {
 
@@ -30,5 +31,8 @@ public interface AdminDao {
 
 	// 가수 이미지 출력
 	String getSingerImgUrl(int s_idx);
+
+	// 관리자 로그인
+	UserDto adminLogin(UserDto userDto);
 
 }

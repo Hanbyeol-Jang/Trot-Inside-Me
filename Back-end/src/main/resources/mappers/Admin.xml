@@ -53,5 +53,13 @@
 		from Singer
 		where s_idx = #{s_idx}
 	</select>
+	
+	<!-- 관리자 로그인 -->
+	<select id="adminLogin" resultType="UserDto">
+		select * from UserInfo
+		where 1=1
+		and u_email = #{u_email} 
+		and u_pw = #{u_pw}
+	</select>
  </mapper>
         

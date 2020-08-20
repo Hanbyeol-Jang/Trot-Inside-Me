@@ -78,10 +78,12 @@ public class BroadCastingSchedule {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
-		
+	}
+
+	// 하루에 한번 스케쥴 넣기
+	@Scheduled(cron = "0 0 0 * * ?")
+	public void insertSingerSchedule() throws Exception {
 		// db 가수 리스트 받아옴.
-		System.out.println("메소드 시작");
 		List<SingerDto> dsList = timeService.selectSinger();
 		for (int i = 1; i < dsList.size(); i++) {
 			if (dsList.get(i).getS_cafeUrl() == null) {
@@ -95,18 +97,11 @@ public class BroadCastingSchedule {
 
 		// 크롤링시작.
 		System.setProperty("webdriver.chrome.driver", "src/main/resources/driver/chromedriver.exe");
-		System.out.println();
-		System.out.println("크롤링 셀레니움 ");
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
 		ChromeOptions optins = new ChromeOptions();
 		optins.addArguments("headless");
 		WebDriver driver = new ChromeDriver(optins); // Driver 생성
 		List<BroadCastingDto> slist = new ArrayList<>();
 		for (int i = 1; i < dsList.size(); i++) {
-			System.out.println(dsList.get(i).getS_name());
 			driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 			driver.get(dsList.get(i).getS_cafeUrl());
 
@@ -144,13 +139,6 @@ public class BroadCastingSchedule {
 
 		// 가수 리스트 디비 저장
 		timeService.insertSingerSchedule(slist);
-		
-	}
-
-	// 하루에 한번 스케쥴 넣기
-	@Scheduled(cron = "30 50 10 * * ?")
-	public void insertSingerSchedule() throws Exception {
-		System.out.println("dsklafnkl;fl;ebwl;wefablwef;bwef;");
 	}
 
 }

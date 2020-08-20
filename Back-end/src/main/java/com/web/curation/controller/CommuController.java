@@ -41,7 +41,8 @@ public class CommuController {
 	private UserService userService;
 	@Autowired
 	private CommuService commuService;
-
+	
+	static String serverUrl = "/home/ubuntu/img/";
 	// 게시글 전체 리스트 출력
 	@ApiOperation("게시글 전체 리스트 출력")
 	@GetMapping("/list")
@@ -93,7 +94,7 @@ public class CommuController {
 		} else {
 			CommuDto dto = new CommuDto();
 			if(up.getCo_img()!=null) {
-				String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getCo_img().getOriginalFilename();
+				String saveUrl = serverUrl + up.getCo_img().getOriginalFilename();
 				File file = new File(saveUrl);
 				up.getCo_img().transferTo(file);
 				dto.setCo_img(up.getCo_img().getOriginalFilename());
@@ -123,7 +124,7 @@ public class CommuController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
 			//이미지 처리 
-			String imgurl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + commuService.getImgUrl(co_idx);
+			String imgurl = serverUrl + commuService.getImgUrl(co_idx);
 			if(imgurl!=null) {
 				File file = new File(imgurl);
 				file.delete();
@@ -172,7 +173,8 @@ public class CommuController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} else {
 			//이미지 처리 
-			String imgurl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + commuService.getImgUrl(co_idx);
+//			String imgurl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + commuService.getImgUrl(co_idx);
+			String imgurl = serverUrl + commuService.getImgUrl(co_idx);
 			if(imgurl!=null) {
 				File file = new File(imgurl);
 				file.delete();
@@ -243,13 +245,13 @@ public class CommuController {
 			CommuDto dto = new CommuDto();
 			dto.setCo_idx(up.getCo_idx());
 			if(up.getCo_img()!=null) { //이미지 수정이라면 
-				String imgurl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + commuService.getImgUrl(up.getCo_idx());
+				String imgurl = serverUrl + commuService.getImgUrl(up.getCo_idx());
 				if(imgurl!=null) { //이미지 찾아서 삭제 
 					File file = new File(imgurl);
 					file.delete();
 				}
 				
-				String saveUrl = "/home/ubuntu/s03p13b202/front-end/dist/img/" + up.getCo_img().getOriginalFilename();
+				String saveUrl = serverUrl + up.getCo_img().getOriginalFilename();
 				File file = new File(saveUrl);
 				up.getCo_img().transferTo(file);
 				dto.setCo_img(up.getCo_img().getOriginalFilename());
