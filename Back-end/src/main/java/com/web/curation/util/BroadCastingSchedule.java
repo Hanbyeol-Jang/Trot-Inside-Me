@@ -101,7 +101,8 @@ public class BroadCastingSchedule {
 		options.addArguments("headless");
 		options.addArguments("no-sandbox");
 		options.addArguments("disable-dev-shm-usage");
-		WebDriver driver = new ChromeDriver(optins); // Driver 생성
+		WebDriver driver = new ChromeDriver(options); // Driver 생성
+
 		
 		List<BroadCastingDto> slist = new ArrayList<>();
 		for (int i = 1; i < dsList.size(); i++) {
