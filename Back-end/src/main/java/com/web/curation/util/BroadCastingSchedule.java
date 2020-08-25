@@ -96,15 +96,18 @@ public class BroadCastingSchedule {
 		timeService.deleteSingerSchedule();
 
 		// 크롤링시작.
-		System.setProperty("webdriver.chrome.driver", "src/main/resources/driver/chromedriver.exe");
-		ChromeOptions optins = new ChromeOptions();
-		optins.addArguments("headless");
+		System.setProperty("webdriver.chrome.driver", "src/main/resources/driver/chromedriver");
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("headless");
+		options.addArguments("no-sandbox");
+		options.addArguments("disable-dev-shm-usage");
 		WebDriver driver = new ChromeDriver(optins); // Driver 생성
+		
 		List<BroadCastingDto> slist = new ArrayList<>();
 		for (int i = 1; i < dsList.size(); i++) {
 			driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 			driver.get(dsList.get(i).getS_cafeUrl());
-
+			
 			List<WebElement> schedule_detail_list = driver.findElements(By.className("schedule_detail"));
 			for (WebElement web : schedule_detail_list) {
 				String txt_day = web.findElement(By.className("txt_day")).getText();
