@@ -119,8 +119,6 @@ export default {
                   this.communities.push(...response.data)
                 })
                 .catch((err) => {
-                  console.log('err')
-                  this.getUser()
                   console.log(err)
                   })
             },
