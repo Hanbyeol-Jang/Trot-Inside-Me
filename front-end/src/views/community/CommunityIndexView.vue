@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import CommunityDetailItem from '@/components/community/CommunityDetailItem.vue'
 import InfiniteLoading from 'vue-infinite-loading'
@@ -62,24 +62,25 @@ export default {
       ...mapGetters(['isLoggedIn']),
     },
     methods:{
+      ...mapActions(['getUser']),
       checkLogin(){
             if (!(this.$cookies.get('auth-token'))){
-            this.$confirm(
-                {
-                message: `로그인 해주세요.`,
-                button: {
-                    yes: '로그인 하기',
-                    no: '돌아가기',
-                },
-                callback: confirm => {
-                    if (confirm) {
-                      this.$router.push({ name: 'Login'})
-                    }
-                }})
-            this.$router.push({name:'Home'})                
+              this.getUser()
+              this.$confirm(
+                  {
+                  message: `로그인 해주세요.`,
+                  button: {
+                      yes: '로그인 하기',
+                      no: '돌아가기',
+                  },
+                  callback: confirm => {
+                      if (confirm) {
+                        this.$router.push({ name: 'Login'})
+                      }
+                  }})
+              this.$router.push({name:'Home'})                
             }
         },
-
       createCommunity(){
             this.$router.push({ name: 'CommunityCreateView' })
           },
@@ -117,7 +118,9 @@ export default {
                   this.communityNum = response.data[0].co_cnt
                   this.communities.push(...response.data)
                 })
-                .catch((err) => {console.log(err)})
+                .catch((err) => {
+                  console.log(err)
+                  })
             },
 
       infiniteHandler($state){

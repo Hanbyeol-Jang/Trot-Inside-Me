@@ -108,8 +108,8 @@ export default {
                     }
                     axios.post(SERVER.URL+`/vote`,voteDto)
                     .then(()=>{
-                      this.$router.push({ name: 'VoteView' })
                       this.$alert('투표가 완료되었습니다!')
+                      this.$router.push({ name: 'VoteView' })
                     })
                     .catch((err) => {console.log(err)})                
                     }
