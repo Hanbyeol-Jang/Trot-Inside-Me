@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 var today = new Date()
 
 export default {
@@ -126,6 +126,7 @@ export default {
       },
     },
     methods: {
+      ...mapActions(['getUser']),
       goBack() {
           history.back()
       },
@@ -146,7 +147,8 @@ export default {
       },
       goUserDetail() {
         if(this.isLoggedIn && this.$route.name !== 'UserDetailView') {
-            this.$router.push({ name: 'UserDetailView', params: { userId: this.user.u_email } }).catch(()=>{})
+          this.getUser()
+          this.$router.push({ name: 'UserDetailView', params: { userId: this.user.u_email } }).catch(()=>{})
         } else {
           this.$router.push({ name: 'Login' })
         }
