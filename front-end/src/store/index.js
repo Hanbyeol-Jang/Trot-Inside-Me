@@ -161,15 +161,32 @@ export default new Vuex.Store({
           console.error('errrrrrrrrrr')
           console.error(err) }) 
     },
-    getUser({ getters, commit, dispatch }) {
+    getUser({ getters, commit, state }) {
       axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo, getters.config)
         .then(res => {
           commit('SET_USER', res.data)
-          if(!res.data) {
-            dispatch('kakaoLogout')
+          if(res.data.u_email == 'Expired' || state.authToken !== cookies.get('auth-token')) {
+            commit('SET_TOKEN', null)
+            cookies.remove('auth-token')
+            Swal.fire({
+              position: 'center',
+              icon: 'warning',
+              title: '세션이 만료되었습니다. 다시 로그인해 주세요.',
+            })
+            router.push({name:"Login"})
           }
         })
-        .catch((err)=>{ console.error(err) })
+        .catch((err)=>{ 
+          console.error(err)
+          commit('SET_TOKEN', null)
+          cookies.remove('auth-token')
+          Swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: '세션이 만료되었습니다. 다시 로그인해 주세요.',
+          })
+          router.push({name:"Login"})
+        })
     },
     getUserDetail({ commit }, userId) {
       axios.get(SERVER.URL + SERVER.ROUTES.getUserInfo + `/${userId}`)

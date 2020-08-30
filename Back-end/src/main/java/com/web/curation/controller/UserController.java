@@ -237,7 +237,9 @@ public class UserController {
 		}
 		UserDto dto = userService.getTokenInfo(request); // 헤더에서 유저정보 추출
 		if (dto.getU_name().equals("F")) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			UserDto valid =  new UserDto();
+			valid.setU_email("Expired");
+			return new ResponseEntity<>(valid, HttpStatus.NOT_FOUND);
 		} else {
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		}
