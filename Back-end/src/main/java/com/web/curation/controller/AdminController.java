@@ -76,6 +76,7 @@ public class AdminController {
 	@PostMapping("/tvadd")
 	public ResponseEntity<String> broadSchedule(SingerTVUpload up) throws IllegalStateException, IOException {
 		AdminDto dto = new AdminDto();
+
 		if (up.getImg() != null) {
 			String saveUrl = serverUrl + up.getImg().getOriginalFilename();
 			File file = new File(saveUrl);
