@@ -71,7 +71,6 @@ public class AdminController {
 		}
 	}
 
-	// TIM-1 test
 	// 관리자 - 편성표 주소 추가
 	@ApiOperation("편성표 주소 추가")
 	@PostMapping("/tvadd")
